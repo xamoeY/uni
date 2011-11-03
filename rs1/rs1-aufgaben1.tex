@@ -1,0 +1,79 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\author{Sven-Hendrik Haase}
+\title{RS1 HA zum 28.10.11}
+\date{\today}
+\begin{document}
+\maketitle
+
+\section{Aufgabe 1.1}
+Auf Ebene \(i = 1\):
+\[n(n*k)))\]
+Auf Ebene \(i = 2\):
+\[n(n(n*k)))\]
+Auf Ebene \(i = 3\):
+\[n(n(n(n*k)))\]
+
+\section{Aufgabe 1.2}
+\subsection{(a)}
+\begin{itemize}
+\item Das Ablegen von Programmen und Daten im Speicher führt zu schnelleren
+Zugriffszeiten.
+\item Durch das Selbstmodifizieren werden Tricks wie Selbstoptimierung und
+Kompression möglich.
+\item Viren können sich selbst modifizieren, um für Virenscanner schwerer sichtbar zu werden.
+\end{itemize}
+\subsection{(b)}
+\begin{itemize}
+\item Es könnten Sicherheitsprobleme durch das Selbstmodifizieren auftreten, denn
+schließlich läuft danach ein Programm anders als ursprünglich programmiert.
+\item Aus dem gleiche Grund könnten Stabilitätsprobleme auftreten.
+\item Es wird ein intelligenter Speichermanager benötigt, um zu entscheiden, welche
+Programme sinnvoll im Speicher zu bewahren sind und welche nicht, um aktiven Programmen bessere Leistung zu ermöglichen.
+\end{itemize}
+
+\section{Aufgabe 1.3}
+\subsection{(a)}
+\[y = ( a * b ) - ( a * c )\]
+\[5 + 1 + 5 = 11 ns\]
+\\
+\[y = a * ( b - c)\]
+\[5 + 1 =  6 ns\]
+
+\subsection{(b)}
+Klassisch:
+\[y = ( a * x^5 + b * x^4 + c * x^3 + d * x^2 + e * x + f )\]
+\[5 + 20 + 1 + 5 + 15 + 1 + 5 + 10 + 1 + 5 + 5 + 1 + 5 + 1  = 80 ns\]
+Horner:
+\[y = ((((( x * a + b ) * x + c ) * x + d ) * x + e ) * x + f ) \]
+\[5 + 1 + 5 + 1 + 5 + 1 + 5 + 1 + 5 + 1 = 30ns\]
+
+\newpage
+\section{Aufgabe 1.4}
+\subsection{(a)}
+Wenn diese Aufzeichnungen in falsche Hände gelangen sollten, könnte dies
+katastrophale folgen für das Privatleben und/oder die Karriere des Betroffenen
+haben. Dennoch könnte so eine Aufzeichnung auch Vorteile haben: Z.B. als
+Beweismaterial bei einem Überfall oder bei Verkehrsunfällen und auch bei
+mündlichen Abkommen.
+Auch als Studienmaterial für soziale Interaktionen oder als
+Selbstverbesserungsmethode für Zeitmanagement.
+\\
+Sicherlich sollte es eine Methode geben, die Daten im Notfall zu löschen, denn
+sonst könnten sich die oben genannten Probleme ergeben. In jedem Fall sollten
+die Daten extrem vertraulich behandelt werden.
+
+\subsection{(b)}
+Pro Tag:
+    \[(5 MB / sec) * (60 * 60 * 24 sec) = 432 GB\]
+Pro Jahr:
+    \[(5 MB / sec) * (60 * 60 * 24 * 365 sec) = 157,680 TB\]
+Für ein Leben:
+    \[(5 MB / sec) * (60 * 60 * 24 * 365 * 80 sec) = 12,61 PB\]
+
+\subsection{(c)}
+    \[1500 GB * (1,45^x) = 12,61 PB =~ 24 (Jahre)\]
+
+\subsection{(d)}
+    \[16 GB * (1,55^x) = 12,61 PB =~ 31 (Jahre)\]
+\end{document}
