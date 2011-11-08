@@ -1,0 +1,77 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 10./11. November 2011}
+
+\title{\titleinfo}
+\author{Elena Noll, Sven-Hendrik Haase, Arne Feil}
+\date{\today}
+\ihead{EN, SHH, AF}
+\chead{\titleinfo}
+\ohead{\today}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\maketitle
+\begin{enumerate}[1.]
+\item
+\begin{enumerate}[a)]
+\item
+\begin{enumerate}[(i)]
+\item $177 \not\equiv 18 (mod 5)$ da $13 \nmid 159$
+\item $177 \equiv 18 (mod 5)$ da $5 \mid 195$
+\item $-89\not\equiv -12 (mod 6)$ da $6 \nmid -77$
+\item $-123 \equiv 33 (mod 13)$ da $13 \mid -156$
+\item $39 \equiv -1 (mod 40)$ da $40 \mid 40$
+\item $77 \equiv 0 (mod 11)$ da $11 \mid 77$
+\item $2^{51} \not\equiv 51 (mod 2)$ da $2 \nmid 2^{51}-51$\\
+\end{enumerate}
+\item
+$ggT(7293,378) \\
+7293 = 19 \cdot 378 + 111 \\
+378 = 3 \cdot 111 + 45 \\
+111 = 2 \cdot 45 + 21 \\
+45 = 2 \cdot 21 + 3 \\
+21 = 7 \cdot 3 + 0 \\ \\
+ggT(7293,378)=3$\\
+\item
+$\lceil\sqrt{7}\rceil = 3 \quad \lfloor\sqrt{7}\rfloor = 2 \quad \lceil7.1\rceil = 8 \quad \lfloor7.1\rfloor = 7 \\
+\lceil-7.1\rceil = -7 \quad \lfloor-7.1\rfloor = -8 \quad \lceil-7\rceil = -7 \lfloor-7\rfloor = -7$\\
+\end{enumerate}
+\item
+\begin{enumerate}
+\item[(2)]
+Aus $b_1 \mid a_1$ und $b_2 \mid a_2$ folgt $b_1 \cdot b_2 \mid a_1 \cdot a_2$ \\
+\begin{enumerate}
+\item[I] $a_1 = b_1 \cdot c_1$
+\item[II] $a_2 = b_2 \cdot c_2$\\
+\item[I*II] $ a_1 \cdot a_2 = b_1 \cdot b_2 \cdot c_1 \cdot c_2 \quad c_1 \cdot c_2 = c_3\\
+a_1 \cdot a_2 = b_1 \cdot b_2 \cdot c_3 \qed$
+\end{enumerate}
+\item[(3)]
+Aus $ c \cdot b \mid c \cdot a$ (für $c \ne	0$) folgt $b \cdot a$\\
+$c \cdot a = c \cdot b \cdot c \quad | \div c\\
+a = b \cdot c \qed$
+\item[(4)]
+Aus $b \mid a_1$ und $b \mid a_2$ folgt $b \mid c_1 \cdot a_1 + c_2 \cdot a_2$ für beliebige ganze Zahlen $c_1$ und $c_2$.\\
+\begin{enumerate}
+\item[I] $a_1 = b \cdot d_1 \quad | \cdot c_1\\
+a_1 \cdot c_1 = b \cdot d_1 \cdot c_1$
+\item[II] $a_2 = b \cdot d_2 \quad | \cdot c_2\\
+a_2 \cdot c_2 = b \cdot d_2 \cdot c_2$
+\item[I+II] $a_1 \cdot c_1 + a_2 \cdot c_2 = b \cdot d_1 \cdot c_1 + b \cdot d_2 \cdot c_2\\
+a_1 \cdot c_1 + a_2 \cdot c_2 = b(c_1 \cdot d_1 + c_2 \cdot d_2) \quad | c_1 \cdot d_1 + c_2 \cdot d_2 = c_3\\
+a_1 \cdot c_1 + a_2 \cdot c_2 = b \cdot c_3 \qed$ 
+\end{enumerate}
+%Ende von Aufgabe 2
+\end{enumerate}
+%Ende von allen Aufgaben
+\end{enumerate} 
+\end{document}
