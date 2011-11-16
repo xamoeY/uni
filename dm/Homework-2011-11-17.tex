@@ -20,5 +20,99 @@
 
 \begin{document}
 \maketitle
-
+\begin{enumerate}[1.]
+\item
+\begin{enumerate}[a)]
+\item
+%Es gibt für die Abbildung $g:X \rightarrow Y$ genau $7^5=16807$ Möglichkeiten $X$ 
+%auf $Y$ abzubilden. Da für wir 5 mal aus einer 7-elementigen Menge ziehen und $g$ 
+%und für ein mehrere Elemente aus $X$ das selbe Element aus $Y$ haben dürfen. 
+%und es nicht unwichtig ist, ob ${1,2}$ gezogen wurden oder ${2,1}$.
+%Wenn $g$ injektiv sein soll, ist es als würde man 5 mal aus einer 7-elementigen 
+%Menge ziehen ohne wieder zurückzulegen. 
+\item
+${49 \choose 6}=13 983 816$
+\item
+$|M|=1000 \quad  997 \leq k \leq 1000 \\
+{1000 \choose 997}+{1000 \choose 998}+{1000 \choose 999}+1=166 217 951$
+\end{enumerate}
+\item
+\begin{enumerate}[a)]
+\item
+Der Koeffizient von $x^5y^{11}$ in $(x+y)^{16}$ lautet: ${16 \choose 5,11}= 
+\frac{16!}{5!11!}=4368$ \\
+Der Koeffizient von $x^3y^5z^2$ in $(x+y+z)^{10}$ lautet: ${10 \choose 3,5,2}= 
+\frac{10!}{3!5!2!}=2520$
+\item
+$C_1 A P_1 P_2 U C_2 C_3 I N O$
+$\frac{10!}{3!\cdot 2!}=302400$\\
+$MANGOLAS_1S_2I
+\frac{10!}{2!}=1 814 400$\\
+$SE_1LTE_2R_1WAS_1S_2E_3R_2
+\frac{12!}{2!\cdot 3!\cdot 2!}=19 958 400$
+\item
+Das Füllen der Kiste betrachten wir als Ziehen mit Zurücklegen ungeordnet von 
+$k=6$ Flaschen aus $n=10$ Sorten.\\
+${k+n-1 \choose k}={15 \choose 6}=5005$
+\end{enumerate}
+\item
+Induktionanfang:\\
+$n=3\\
+{3 \choose 0}=1={4 \choose 4}$\\
+Induktionannahme:\\
+$\displaystyle \sum_{i=3}^{n}{i \choose i-3}={n+1 \choose 4}$\\
+Induktionsschritt:\\
+$\displaystyle \sum_{i=3}^{n+1}{i \choose i-3}=\sum_{i=3}^{n}{i \choose i-3}+
+{n+1 \choose n-2}$\\
+Durch Verwenden der Induktionsannahme erhalten wir:\\
+$\displaystyle {n+1 \choose 4}+{n+1 \choose n-2}={n+1 \choose 4}+{n+1 \choose 
+n+1-(n-2)}={n+1 \choose 4}+{n+1 \choose 3}={n+2 \choose 4} \qed$
+\item
+\begin{enumerate}[a)]
+\item
+Es sei $S = \{k \in \mathbb{N}: 1\leq k \leq 2000\}$. Es soll die Anzahl derjenigen 
+$k \in S$ bestimmt werden, die weder durch 3, noch durch 5, noch durch 7 teilbar 
+sind.\\
+Es sei $A_1 = \{k \in S:3|k\},~A_2=\{k \in S :5|k\},~A_3=\{k \in S:7:k\}$. Es folgt 
+$N = |S| = 2000$ sowie $|A_1|=\lfloor \frac{2000}{3} \rfloor = 666,~A_2=
+\frac{2000}{5}=400,~A_3=\lfloor \frac{2000}{7} \rfloor=285$\\
+Ferner haben wir $A_1 \cap A_2 = \{k \in S :15|k\},~A_2 \cap A_3=\{k \in S :35|k\},~
+A_1 \cap A_3=\{k \in S:21| k\}$ und $A_1 \cap A_2 \cap A_3 = \{k \in S : 105 |k\}$. 
+$|A_1 \cap A_2| = \lfloor \frac{2000}{15} \rfloor=133,~|A_2 \cap A_3|=\lfloor 
+\frac{2000}{35}\rfloor=57,~|A_1 \cap A_3|=\lfloor \frac{2000}{21} \rfloor = 95,~
+|A_1 \cap A_2 \cap A_3|=\lfloor \frac{2000}{105} \rfloor=19$.\\
+Insgesamt erhält man $|S \backslash (A_1 \cup A_2 \cup A_3)| = 2000 - (666+400+285) + 133 
++ 57 +95 - 19 = 915$.
+\item
+$S= \{k \in \mathbb{N}: 1 \leq k \leq 1000\}$. Es soll die Anzahl derjenigen 
+$k \in S$ bestimmt werden, die weder durch 3, noch durch 5, noch durch 7, noch 
+durch 11 teilbar sind.\\
+$A_1=\{k \in S:3|k\} \\
+ A_2=\{k \in S:5|k\} \\
+ A_3=\{k \in S:7|k\} \\
+ A_4=\{k \in S:11|k\} \\
+|A_1| = \lfloor \frac{1000}{3} \rfloor=333 \quad 
+|A_2| = \frac{1000}{5} =200 \quad
+|A_3| = \lfloor \frac{1000}{7} \rfloor = 142 \\
+|A_4| = \lfloor \frac{1000}{11} \rfloor = 90 \\ \\
+A_1 \cap A_2 = \{k \in S : 15|k\} \quad
+A_2 \cap A_3 = \{k \in S : 35|k\} \quad
+A_3 \cap A_4 = \{k \in S : 77|k\} \\
+A_1 \cap A_3 = \{k \in S : 21|k\} \quad
+A_2 \cap A_4 = \{k \in S : 55|k\} \quad
+A_1 \cap A_4 = \{k \in S : 33|k\} \\
+A_1 \cap A_2 \cap A_3 \cap A_4 = \{k \in S : 1155|k\} \\ \\
+|A_1 \cap A_2| = \lfloor \frac{1000}{15} \rfloor = 66 \quad
+|A_2 \cap A_3| = \lfloor \frac{1000}{35} \rfloor = 28 \quad
+|A_3 \cap A_4| = \lfloor \frac{1000}{77} \rfloor = 12 \\
+|A_1 \cap A_3| = \lfloor \frac{1000}{21} \rfloor = 47 \quad
+|A_2 \cap A_4| = \lfloor \frac{1000}{55} \rfloor = 18 \quad
+|A_1 \cap A_4| = \lfloor \frac{1000}{33} \rfloor = 30 \\
+|A_1 \cap A_2 \cap A_3 \cap A_4 = \lfloor \frac{1000}{1155} = 0 \\ \\
+|S \backslash (A_1 \cup A_2 \cup A_3 \cup A_4)| = 1000 - (333+200+142+90) + 66
++ 28 + 12 + 47 + 18 + 30 - 0 = 438
+$
+\end{enumerate}
+% Ende aller Aufgaben
+\end{enumerate}
 \end{document}
