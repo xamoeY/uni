@@ -1,0 +1,339 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 24./25. November 2011}
+
+\title{\titleinfo}
+\author{Elena Noll, Sven-Hendrik Haase, Arne Feil}
+\date{\today}
+\ihead{EN, SHH, AF}
+\chead{\titleinfo}
+\ohead{\today}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\maketitle
+\begin{enumerate}
+\item[\textbf{1.}]
+\begin{enumerate}[a)]
+\item
+\begin{tikzpicture}[overlay,
+every node/.style={fill, circle, inner sep=2pt}]
+
+\node[label=above:$a$] (A) at (0,0) {};
+\node[label=above:$b$] (B) at (2,0) {};
+\node[label=above:$c$] (C) at (4,0) {};
+\node[label=above:$d$] (D) at (6,0) {};
+\node[label=above:$e$] (E) at (8,0) {};
+\node[label=above:$f$] (F) at (10,0) {};
+
+\draw[->] (A) to (B);
+\draw[->] (B) to (C);
+\draw[->] (C) to (D);
+\draw[->] (B) to[bend right=30] (E);
+\draw[->] (E) to (F);
+\end{tikzpicture}\\
+\\
+\\
+\\
+\begin{tabular}[t]{c|cccccc}
+  & a & b & c & d & e & f \\
+\hline
+a & 0 & 1 & 0 & 0 & 0 & 0 \\
+b & 0 & 0 & 1 & 0 & 1 & 0 \\
+c & 0 & 0 & 0 & 1 & 0 & 0 \\
+d & 0 & 0 & 0 & 0 & 0 & 0 \\
+e & 0 & 0 & 0 & 0 & 0 & 1 \\
+f & 0 & 0 & 0 & 0 & 0 & 0
+\end{tabular}\\
+\item
+$(a,a),(b,b),(c,c),(d,d),(e,e),(f,f),(a,c),(b,d),(a,d),(b,f),(a,e),(a,f)$
+\item
+$~~~$
+\begin{tikzpicture}[overlay,
+every node/.style={fill, circle, inner sep=2pt}]
+\node[label=left:$f$] (F) at (0,0) {};
+\node[label=right:$d$] (D) at (2,0) {};
+\node[label=left:$e$] (E) at (0,-1) {};
+\node[label=right:$c$] (C) at (2,-1) {};
+\node[label=left:$b$] (B) at (1,-2) {};
+\node[label=left:$a$] (A) at (1,-3) {};
+
+\draw (A) -- (B);
+\draw (B) -- (E);
+\draw (B) -- (C);
+\draw (E) -- (F);
+\draw (C) -- (D);
+\end{tikzpicture}\\
+\\
+\\
+\\
+\\
+\\
+\\
+\item
+$(a,a),(b,b),(c,c),(d,d),(e,e),(f,f),(a,c),(b,d),(a,d),(b,f),(a,e),(a,f),
+(b,a),(c,b),\\(e,b),(f,e),(c,a),(d,b),(d,a),(f,b),(e,a),(f,a)$\\
+\end{enumerate}
+\item[\textbf{2.}]
+\begin{enumerate}[a)]
+\item
+\begin{tikzpicture}[overlay, 
+every node/.style={fill, circle, inner sep=2pt}]
+\node[label=$a$] (A) at (0,0) {};
+\node[label=$b$] (B) at (2,0) {};
+\node[label=$c$] (C) at (4,0) {};
+\node[label=$d$] (D) at (6,0) {};
+\node[label=$e$] (E) at (8,0) {};
+\node[label=$f$] (F) at (10,0) {};
+
+\draw[->] (A) to (B);
+\draw[->] (B) to[bend right=30] (D);
+\draw[->] (E) to (F);
+\end{tikzpicture}\\
+\\
+\\
+\begin{tabular}[t]{c|cccccc}
+  & a & b & c & d & e & f\\
+\hline
+a & 0 & 1 & 0 & 0 & 0 & 0\\
+b & 0 & 0 & 0 & 1 & 0 & 0\\
+c & 0 & 0 & 0 & 0 & 0 & 0\\
+d & 0 & 0 & 0 & 0 & 0 & 0\\
+e & 0 & 0 & 0 & 0 & 0 & 1\\
+f & 0 & 0 & 0 & 0 & 0 & 0
+\end{tabular}\\
+\item
+$(a,a),(b,b),(c,c),(d,d),(e,e),(f,f),(a,d)$
+\item
+$~~~$
+\begin{tikzpicture}[overlay, 
+every node/.style={fill, circle, inner sep=2pt}]
+\node[label=left:$d$] (D) at (0,0) {};
+\node[label=left:$b$] (B) at (0,-1) {};
+\node[label=right:$f$] (F) at (2,-1) {};
+\node[label=left:$a$] (A) at (0,-2) {};
+\node[label=right:$e$] (E) at (2,-2) {};
+\node[label=left:$c$] (C) at (1,-3) {};
+
+\draw (A) -- (B);
+\draw (B) -- (D);
+\draw (E) -- (F);
+\end{tikzpicture}\\
+\\
+\\
+\\
+\\
+\\
+\\
+\item
+$(a,a),(b,b),(c,c),(d,d),(e,e),(f,f),(a,d),(b,a),(d,b),(f,e),(d,a)$
+\end{enumerate}
+
+\item[\textbf{3.}]
+\begin{enumerate}[a)]
+\item
+$R=\Big\{(a,a),(b,b),(c,c),(d,d),(a,d),(d,a)\Big\}$ \\
+\\
+\\
+\begin{tikzpicture}[overlay, 
+every node/.style={fill, circle, inner sep=2pt}]
+
+\node[label=below:$a$] (A) at (0,0) {};
+\node[label=below:$b$] (B) at (1,0) {};
+\node[label=below:$c$] (C) at (2,0) {};
+\node[label=below:$d$] (D) at (3,0) {};
+
+\draw[->] (A) to[loop] (A);
+\draw[->] (B) to[loop] (B);
+\draw[->] (C) to[loop] (C);
+\draw[->] (D) to[loop] (D);
+\draw[->] (A) to[bend left=50] (D);
+\draw[->] (D) to[bend left=50] (A);
+\end{tikzpicture}\\
+\\
+\\
+\item
+$R=\Big\{(a,a),(b,b),(c,c),(d,d),(a,b),(b,c),(a,c)\Big\}$\\
+\\
+\\
+\begin{tikzpicture}[overlay, 
+every node/.style={fill, circle, inner sep=2pt}]
+
+\node[label=below:$a$] (A) at (0,0) {};
+\node[label=below:$b$] (B) at (1,0) {};
+\node[label=below:$c$] (C) at (2,0) {};
+\node[label=below:$d$] (D) at (3,0) {};
+
+\draw[->] (A) to[loop] (A);
+\draw[->] (B) to[loop] (B);
+\draw[->] (C) to[loop] (C);
+\draw[->] (D) to[loop] (D);
+\draw[->] (A) to[bend right=50] (C);
+\draw[->] (A) to (B);
+\draw[->] (B) to (C);
+\end{tikzpicture}\\
+\\
+\\
+\item
+$R=\Big\{(a,b),(b,c),(a,c),(b,a),(c,b),(c,a)\Big\}$\\
+\\
+\\
+\begin{tikzpicture}[overlay, 
+every node/.style={fill, circle, inner sep=2pt}]
+
+\node[label=below:$a$] (A) at (0,0) {};
+\node[label=below:$b$] (B) at (1,0) {};
+\node[label=below:$c$] (C) at (2,0) {};
+\node[label=below:$d$] (D) at (3,0) {};
+
+\draw[->] (A) to[bend right=20] (B);
+\draw[->] (B) to[bend right=20] (A);
+\draw[->] (B) to[bend right=20] (C);
+\draw[->] (C) to[bend right=20] (B);
+\draw[->] (A) to[bend right=50] (C);
+\draw[->] (C) to[bend right=50] (A);
+\end{tikzpicture}\\
+\\
+\\
+\end{enumerate}
+
+\item[\textbf{4.}]
+\begin{enumerate}[a)]
+\item
+$R=\Big\{(1,1),(1,2),(1,3),(1,4),(1,5),(1,6),(2,2),(2,4),(2,6),(3,3),(3,6),
+(4,4),(5,5),(6,6)\Big\}$\\
+\\
+\\
+\begin{tikzpicture}[overlay, 
+every node/.style={fill, circle, inner sep=2pt}]
+
+\node[label=below:$1$] (1) at (0,0) {};
+\node[label=below:$2$] (2) at (1,0) {};
+\node[label=below:$3$] (3) at (2,0) {};
+\node[label=below:$4$] (4) at (3,0) {};
+\node[label=below:$5$] (5) at (4,0) {};
+\node[label=below:$6$] (6) at (5,0) {};
+
+\draw[->] (1) to[loop] (1);
+\draw[->] (2) to[loop] (2);
+\draw[->] (3) to[loop] (3);
+\draw[->] (4) to[loop] (4);
+\draw[->] (5) to[loop] (5);
+\draw[->] (6) to[loop] (6);
+\draw[->] (1) to (2);
+\draw[->] (1) to[bend left=20] (3);
+\draw[->] (1) to[bend left=30] (4);
+\draw[->] (1) to[bend left=40] (5);
+\draw[->] (1) to[bend left=50] (6);
+\draw[->] (2) to[bend right=20] (4);
+\draw[->] (2) to[bend right=50] (6);
+\draw[->] (3) to[bend right=40] (6);
+\end{tikzpicture}\\
+\\
+\\
+\\
+\begin{tikzpicture}[overlay, 
+every node/.style={fill, circle, inner sep=2pt}]
+\node[label=right:$6$] (6) at (2,0) {};
+\node[label=left:$4$] (4) at (1,-1) {};
+\node[label=left:$5$] (5) at (0,-2) {};
+\node[label=left:$2$] (2) at (1,-2) {};
+\node[label=right:$3$] (3) at (2,-2) {};
+\node[label=left:$1$] (1) at (1,-3) {};
+
+\draw (1) -- (2);
+\draw (1) -- (5);
+\draw (1) -- (3);
+\draw (2) -- (4);
+\draw (3) -- (6);
+\draw (2) -- (6);
+\end{tikzpicture}\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\item
+\begin{tikzpicture}[overlay, 
+every node/.style={fill, circle, inner sep=2pt}]
+
+\node[label=below:$\emptyset$] (0) at (0,0) {};
+\node[label=below:$\{1\}$] (1) at (1,0) {};
+\node[label=below:$\{2\}$] (2) at (2,0) {};
+\node[label=right:$\{1{,}2\}$] (12) at (3,0) {};
+
+\draw[->] (0) to[loop] (0);
+\draw[->] (1) to[loop] (1);
+\draw[->] (2) to[loop] (2);
+\draw[->] (12) to[loop] (12);
+\draw[->] (0) to (1);
+\draw[->] (0) to[bend left=20] (2);
+\draw[->] (0) to[bend left=30] (12);
+\draw[->] (1) to[bend right=20] (12);
+\draw[->] (2) to (12);
+\end{tikzpicture}\\
+\\
+\\
+\\
+\begin{tikzpicture}[overlay, 
+every node/.style={fill, circle, inner sep=2pt}]
+
+\node[label=left:$\{1{,}2\}$] (12) at (1,0) {};
+\node[label=left:$\{1\}$] (1) at (0,-1) {};
+\node[label=right:$2$] (2) at (2,-1) {};
+\node[label=left:$\emptyset$] (0) at (1,-2) {};
+
+\draw (0) -- (1);
+\draw (0) -- (2);
+\draw (1) -- (12);
+\draw (2) -- (12);
+\end{tikzpicture}\\
+\\
+\\
+\\
+\\
+\item
+$A=\mathcal{P}(M)=\Big\{\emptyset,\{1\},\{2\},\{3\},\{1,2\},\{1,3\},\{2,3\},
+\{1,2,3\}\Big\}$\\
+\\
+\begin{tikzpicture}[overlay, 
+every node/.style={fill, circle, inner sep=2pt}]
+
+\node[label=left:$\{1{,}2{,}3\}$] (123) at (2,0) {};
+\node[label=left:$\{1{,}2\}$] (12) at (0,-2) {};
+\node[label=left:$\{1{,}3\}$] (13) at (2,-2) {};
+\node[label=right:$\{2{,}3\}$] (23) at (4,-2) {};
+\node[label=left:$\{1\}$] (1) at (0,-4) {};
+\node[label=left:$\{2\}$] (2) at (2,-4) {};
+\node[label=right:$\{3\}$] (3) at (4,-4) {};
+\node[label=left:$\emptyset$] (0) at (2,-6) {};
+
+\draw (0) -- (1);
+\draw (0) -- (2);
+\draw (0) -- (3);
+\draw (1) -- (12);
+\draw (1) -- (13);
+\draw (2) -- (12);
+\draw (2) -- (23);
+\draw (3) -- (13);
+\draw (3) -- (23);
+\draw (12) -- (123);
+\draw (13) -- (123);
+\draw (23) -- (123);
+
+\end{tikzpicture}
+\end{enumerate}
+%Ende aller Aufgaben
+\end{enumerate}
+\end{document}
