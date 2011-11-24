@@ -1,12 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb,amsmath}
-<<<<<<< HEAD
-\usepackage{textcomp} 
-=======
 \usepackage{hyperref}
-\usepackage{textcomp}
->>>>>>> 57f5d65c7a549c8aca978ac760976c3df3a682c3
 \author{Claas Jaehrling, Sven-Hendrik Haase}
 \title{RS1 HA zum 25.11.11}
 \date{\today}
@@ -53,25 +48,25 @@ Für diesen Bereich von UTF-8 werden 24bit pro Zeichen benötigt:
 \section{Aufgabe 4.3}
 \subsection{(a)}
 \begin{align}
-&y = 18 * x\\
+y &= 18 * x\\
 &= (2^4) * x + (2^1) * x\\
 &= (x << 4) + (x << 1)
 \end{align}
 \subsection{(b)}
 \begin{align}
-&y = 14 * x\\
+y &= 14 * x\\
 &= (2^4) * x - (2^1) * x\\
 &= (x << 4) - (x << 1)
 \end{align}
 \subsection{(c)}
 \begin{align}
-&y = -56 * x\\
+y &= -56 * x\\
 &= (2^3) * x - (2^6) * x\\
 &= (x << 3) - (x << 6)
 \end{align}
 \subsection{(d)}
 \begin{align}
-&y = 62 * (x + 2)\\
+y &= 62 * (x + 2)\\
 &= 62 * x + 124\\
 &= (2^6) * x - (2^1) * x + 124\\
 &= (x << 6) - (x << 1) + 124
@@ -79,37 +74,43 @@ Für diesen Bereich von UTF-8 werden 24bit pro Zeichen benötigt:
 
 \section{Aufgabe 4.4}
 \subsection{(a)}
-\begin{align}
-public int bitNand(int x,int y)\\
-&// das, was nicht die Schnittmenge von x und y ist\\
-&// (x\& y)  = ~ (x | y)\\
-&// = (~ x | ~ y)\\
-&return  ~ x | ~ y
-\end{align}
+\begin{verbatim}
+bitNand(x, y) {
+    // Ansich: ~(a && b), aber:
+    return ((~x) || (~y)); // De Morgan'sches Gesetze
+}
+\end{verbatim}
 
 \subsection{(b)}
-\begin{align}
-&public int bitXnor(int x,int y)\\
-&// das, was nicht die Schnittmenge von x und y ist\\
-&// (x\& y)  = ~ (x | y)\\
-&= (~ x | ~ y)\\
-&return x | y
-\end{align}
+\begin{verbatim}
+bitXnor(x, y) {
+    // Ansich: (a && b) || (~a && ~b), aber:
+    return ~(~x || ~y) || ~(x || y); // De Morgan'sches Gesetze
+}
+\end{verbatim}
 
 \subsection{(c)}
-\begin{align}
-&public int getByte(x,n)\\
-&return
-\end{align}
-\subsection{(d)}
-\begin{align}
-&public int rotateLeft(x,n)
-\end{align}
-\subsection{(e)}
-\begin{align}
-&public int abs(x)
-\end{align}
+\begin{verbatim}
+getByte(x, n) {
+    // Wir setzen eine 32-bit Architektur vorraus.
+    // Ins kleinste Byte schieben und mit & herausholen.
+    return (x >> (8*n)) & 0xff;
+}
+\end{verbatim}
 
+\subsection{(d)}
+\begin{verbatim}
+rotateLeft(x, n) {
+    return ;
+}
+\end{verbatim}
+
+\subsection{(e)}
+\begin{verbatim}
+abs(x) {
+    return ;
+}
+\end{verbatim}
 
 \section{Aufgabe 4.5}
 \subsection{(a)}
