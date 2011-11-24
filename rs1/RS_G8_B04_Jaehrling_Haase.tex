@@ -1,6 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb,amsmath}
+\usepackage{textcomp} 
 \author{Claas Jaehrling, Sven-Hendrik Haase}
 \title{RS1 HA zum 25.11.11}
 \date{\today}
@@ -16,21 +17,67 @@
 
 \section{Aufgabe 4.3}
 \subsection{(a)}
-\[y = 18 * x\]
-\[= (2^4) * x + (2^1) * x\]
-\[= (x << 4) + (x << 1)\]
+\begin{align}
+&y = 18 * x\\
+&= (2^4) * x + (2^1) * x\\
+&= (x << 4) + (x << 1)
+\end{align}
 \subsection{(b)}
-\[y = 14 * x\]
-\[= (2^4) * x - (2^1) * x\]
-\[= (x << 4) - (x << 1)\]
+\begin{align}
+&y = 14 * x\\
+&= (2^4) * x - (2^1) * x\\
+&= (x << 4) - (x << 1)
+\end{align}
 \subsection{(c)}
-\[y = -56 * x\]
-\[= (2^3) * x - (2^6) * x\]
-\[= (x << 3) - (x << 6)\]
+\begin{align}
+&y = -56 * x\\
+&= (2^3) * x - (2^6) * x\\
+&= (x << 3) - (x << 6)
+\end{align}
 \subsection{(d)}
-\[y = 62 * (x + 2)\]
-\[= 62 * x + 124\]
-\[= (2^6) * x - (2^1) * x + 124\]
-\[= (x << 6) - (x << 1) + 124\]
+\begin{align}
+&y = 62 * (x + 2)\\
+&= 62 * x + 124\\
+&= (2^6) * x - (2^1) * x + 124\\
+&= (x << 6) - (x << 1) + 124
+\end{align}
 
+\section{Aufgabe 4.4}
+\subsection{(a)}
+\begin{align}
+public int bitNand(int x,int y)\\
+&// das, was nicht die Schnittmenge von x und y ist\\
+&// (x\& y)  = ~ (x | y)\\
+&// = (~ x | ~ y)\\
+&return  ~ x | ~ y
+\end{align}
+
+\subsection{(b)}
+\begin{align}
+&public int bitXnor(int x,int y)\\
+&// das, was nicht die Schnittmenge von x und y ist\\
+&// (x\& y)  = ~ (x | y)\\
+&= (~ x | ~ y)\\
+&return x | y
+\end{align}
+
+\subsection{(c)}
+\begin{align}
+&public int getByte(x,n)\\
+&return
+\end{align}
+\subsection{(d)}
+\begin{align}
+&public int rotateLeft(x,n)
+\end{align}
+\subsection{(e)}
+\begin{align}
+&public int abs(x)
+\end{align}
+
+
+\section{Aufgabe 4.5}
+\subsection{(a)}
+\begin{align}
+\end{align}
 \end{document}
