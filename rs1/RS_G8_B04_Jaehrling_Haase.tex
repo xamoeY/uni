@@ -1,6 +1,8 @@
 \documentclass[12pt]{article}
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb,amsmath}
+\usepackage{hyperref}
+\usepackage{textcomp}
 \author{Claas Jaehrling, Sven-Hendrik Haase}
 \title{RS1 HA zum 25.11.11}
 \date{\today}
@@ -9,9 +11,39 @@
 \maketitle
 
 \section{Aufgabe 4.1}
-
+Das Problem hierbei ist, dass dieser Vergleich nur bei Zahlen, die Nahe bei
+einander liegen, funktioniert.
+\\
+Es handelt sich um ein komplexes Problem, dass in großer Breite hier
+(\url{http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm}) und hier (\url{http://stackoverflow.com/questions/3667932/why-use-float-floattointbits-in-java-float-comparisons}) diskutiert wird.
+\\
+Der Konsenz scheint zu sein, dass ein Epsilon eine unzuverlässige Wahl ist, während Epsilon in Kombination mit relativem Fehlerwert ein besserer Weg ist:
+\begin{verbatim}
+return Math.abs(a - b) < EPSILON * Math.max(Math.abs(a), Math.abs(b))
+\end{verbatim}
 
 \section{Aufgabe 4.2}
+\subsection{(a)}
+ISO-8859-1 verwendet 8-bit Koderierung, also: \[500000 * 8bit = 500000byte\]
+Direkte Unicode-Kodierung basiert auf 16-bit, also: \[500000 * 16bit = 1000000byte\]
+Für UTF-8 benötigen wir die Anzahl der Sonderzeichen, da diese mit 16-bit Kodiert werden, die regulären Zeichen aber über 8-bit.
+\\
+Anzahl der Sonderzeichen:
+\[0.0056 * 500000 + 0.00287 * 500000 + 0.00616 * 500000 + 0.00308 * 500000 = 8855 \]
+Anzahl der regulären Zeichen:
+\[500000 - 8855 = 491145\]
+Also ergibt sich:
+\[491145 * 8bit + 8855 * 16bit = 508855byte\]
 
+\subsection{(b)}
+Anzahl der Symbole:
+\[0x4BDF-0x3400+0x9FCF-0x4E00 = 27054\]
+
+\subsection{(c)}
+Wir haben bei direkter Unicode-Kodierung wieder:
+\[500000 * 16bit = 1000000byte\]
+
+Für diesen Bereich von UTF-8 werden 24bit pro Zeichen benötigt:
+\[500000 * 24bit = 1500000byte\]
 
 \end{document}
