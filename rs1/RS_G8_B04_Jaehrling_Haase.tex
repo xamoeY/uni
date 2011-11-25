@@ -76,16 +76,16 @@ y &= 62 * (x + 2)\\
 \subsection{(a)}
 \begin{verbatim}
 bitNand(x, y) {
-    // Ansich: ~(a && b), aber:
-    return ((~x) || (~y)); // De Morgan'sches Gesetze
+    // Ansich: ~(a & b), aber:
+    return ((~x) | (~y)); // De Morgan'sches Gesetze
 }
 \end{verbatim}
 
 \subsection{(b)}
 \begin{verbatim}
 bitXnor(x, y) {
-    // Ansich: (a && b) || (~a && ~b), aber:
-    return ~(~x || ~y) || ~(x || y); // De Morgan'sches Gesetze
+    // Ansich: (a & b) | (~a & ~b), aber:
+    return ~(~x | ~y) | ~(x | y); // De Morgan'sches Gesetze
 }
 \end{verbatim}
 
@@ -101,7 +101,11 @@ getByte(x, n) {
 \subsection{(d)}
 \begin{verbatim}
 rotateLeft(x, n) {
-    return ;
+    // Wir setzen eine 32-bit Architektur vorraus.
+    // Geht nur mit unsigned ints.
+    // Links rausgeschobene bits werden durch den Ausdruck auf der
+    // rechten Seite des ORs wieder rechts reingeholt.
+    return (x << n) | (x >> (32 - n));
 }
 \end{verbatim}
 
@@ -113,7 +117,8 @@ abs(x) {
 \end{verbatim}
 
 \section{Aufgabe 4.5}
-\subsection{(a)}
+
+
 \begin{align}
 \end{align}
 \end{document}
