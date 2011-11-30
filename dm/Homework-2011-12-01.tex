@@ -77,38 +77,175 @@ Vierte Spalte von AB: $\begin{pmatrix}
 \item[\textbf{2.}]
 \begin{enumerate}[a)]
 \item
-\begin{align}
-A(B_1+B_2)
-& = A\begin{pmatrix}
+\begin{align*}
+B_1 + B_2 =
+\begin{pmatrix}
+1 & 2 \\
+3 & 6
+\end{pmatrix}
++
+\begin{pmatrix}
+1 & -2 \\
+3 & 2
+\end{pmatrix}
+=
+\begin{pmatrix}
 2 & 0 \\
 6 & 8
-\end{pmatrix}\\ 
-& = \begin{pmatrix}
+\end{pmatrix}
+\end{align*}
+
+\begin{align*}
+A*(B_1 + B_2) =
+\begin{pmatrix}
+5 & 7 \\
+9 & -1 \\
+8 & 2
+\end{pmatrix}
+*
+\begin{pmatrix}
+2 & 0 \\
+6 & 8
+\end{pmatrix}
+=
+\begin{pmatrix}
 52 & 56 \\
-12 & -8 \\
+2 & -8 \\
 28 & 16
 \end{pmatrix}
-\end{align}
+\end{align*}
 
-\[
-AB_1 = \begin{pmatrix}
+\begin{align*}
+A*B_1 =
+\begin{pmatrix}
+5 & 7 \\
+9 & -1 \\
+8 & 2
+\end{pmatrix}
+*
+\begin{pmatrix}
+1 & 2 \\
+3 & 6
+\end{pmatrix}
+=
+\begin{pmatrix}
 26 & 52 \\
 6 & 12 \\
 14 & 28
 \end{pmatrix}
-\]
+\end{align*}
 
-\[
-AB_2 = \begin{pmatrix}
+\begin{align*}
+A*B_2 =
+\begin{pmatrix}
+5 & 7 \\
+9 & -1 \\
+8 & 2
+\end{pmatrix}
+*
+\begin{pmatrix}
+5 & 7 \\
+9 & -1 \\
+8 & 2
+\end{pmatrix}
+=
+\begin{pmatrix}
 26 & 4 \\
 6 & -20 \\
 14 & -12
 \end{pmatrix}
-\]
+\end{align*}
 
-\[AB_1+AB_2=A(B_1+B_2)\]
+\begin{align*}
+A*B_1+A*B_2 =
+\begin{pmatrix}
+26 & 52 \\
+6 & 12 \\
+14 & 28
+\end{pmatrix}
++
+\begin{pmatrix}
+26 & 4 \\
+6 & -20 \\
+14 & -12
+\end{pmatrix}
+=
+\begin{pmatrix}
+52 & 56 \\
+12 & -8 \\
+28 & 16
+\end{pmatrix}
+\end{align*}
 
+\begin{align*}
+\Rightarrow A*(B_1 + B_2) = A*B_1+A*B_2
+\end{align*}
+
+\item
+\begin{align*}
+A*B =
+\begin{pmatrix}
+1 & 3 \\
+2 & 6
+\end{pmatrix}
+*
+\begin{pmatrix}
+2 & -1 & 5 \\
+3 & 2 & 4
+\end{pmatrix}
+=
+\begin{pmatrix}
+11 & 5 & 17 \\
+22 & 10 & 34
+\end{pmatrix}
+\end{align*}
+\begin{align*}
+(A*B)^T =
+\begin{pmatrix}
+11 & 22 \\
+5 & 10 \\
+17 & 34
+\end{pmatrix}
+\end{align*}
+\begin{align*}
+A^T =
+\begin{pmatrix}
+1 & 2 \\
+3 & 6
+\end{pmatrix}
+\end{align*}
+\begin{align*}
+B^T =
+\begin{pmatrix}
+2 & 3 \\
+-1 & 2 \\
+5 & 4 
+\end{pmatrix}
+\end{align*}
+\begin{align*}
+B^T*A^T =
+\begin{pmatrix}
+2 & 3 \\
+-1 & 2 \\
+5 & 4 
+\end{pmatrix}
+*
+\begin{pmatrix}
+1 & 2 \\
+3 & 6
+\end{pmatrix}
+=
+\begin{pmatrix}
+11 & 22 \\
+5 & 10 \\
+17 & 34
+\end{pmatrix}
+\end{align*}
+\begin{align*}
+\Rightarrow (A*B)^T = B^T*A^T
+\end{align*}
 \end{enumerate}
+
 \item[\textbf{3.}]
 
 \item[\textbf{4.}]
@@ -123,3 +260,4 @@ Also gilt $b\in B'$
 %Ende aller Aufgaben
 \end{enumerate}
 \end{document}
+
