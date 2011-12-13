@@ -38,7 +38,34 @@
 \end{enumerate}
 \item[\textbf{3.}]
 \begin{enumerate}[a)]
-\item
+\item Graph
+\item Die Anzahl der Kanten von G lässt sich mit folgener Gleich berechnen \\
+\[\binom{n}{2}+\frac{3}{2}n+n^2\]
+Wobei \[\binom{n}{2}\] für die Anzahl der Kantn im vollständigen Graphen H2 steht,
+\[\frac{3}{2}n\] für die Anzahl der Kanten von H1 steht und \[n^2\] für die Anzahl
+der Verbindungskanten. \\
+\\
+Nun zeigen wir duch Umformung, dass unsere Gleichung der gegeben Gleichung
+\[\frac{3}{2}n^2+n\] entspricht.
+\[\binom{n}{2}+\frac{3}{2}n+n^2\]
+\[\Rightarrow \frac{n^{\underline{2}}}{2!}+\frac{3}{2}n+n^2\]
+\[\Rightarrow \frac{n(n-1)}{2 * 1} + \frac{3}{2}n + n^2\]
+\[\Rightarrow \frac{n^2 - n}{2} + \frac{3}{2}n + n^2\]
+\[\Rightarrow \frac{n^2 - n}{2} + \frac{3}{2}n + \frac{2n^2}{2}\]
+\[\Rightarrow \frac{3n^2 - n}{2} + \frac{3n}{2}\]
+\[\Rightarrow \frac{3}{2}n^2 + \frac{2n}{2}\]
+\[\Rightarrow \frac{3}{2}n^2 + n\]
+Da wir wissen, dass unsere aufgestellte Gleichung rictig ist, und wir gezeigt haben,
+dass die beiden Gleichungen gleich sind, haben wir auch gezeigt, dass die gegebene 
+Gleichung richtig ist.
+\item Graph
+\item G besitzt keine Eulersche Linie, da der Grad der Punkte von H1 immer ungerade ist.
+Dies kann man dadurch begründen, dass der Grad der Punkte in H1 Anfangs immer 3 ist. 
+Beim Verbinden von H1 und H2 zu G addiert man n zum bisherigen Grad 3 hinzu.
+Da n immer eine gerade Zahl sein muss und eine ungerade Zahl plus eine gerade Zahl
+immer eine ungerade Zahl ergibt, ist der Grad der Punkte von H1 in G auch immer ungerade.
+Somit kann es sich um keine Eulersche Linie handeln, da die Voraussetzung für eine solche ist, dass jeder Punkt in einem Graphen einen geraden Grad hat.
+
 \end{enumerate}
 \item[\textbf{4.}]
 \begin{enumerate}[a)]
