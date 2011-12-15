@@ -2,6 +2,7 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amssymb,amsmath}
 \usepackage{hyperref}
+\usepackage{graphicx}
 \author{Claas Jaehrling, Sven-Hendrik Haase}
 \title{RS1 HA zum 16.12.11}
 \date{\today}
@@ -18,8 +19,10 @@
 \end{align}
 \subsection{(b)}
 \begin{align}
-&f(x_3,x_2,x_1) = (\overline {x_3} \lor (x_2 \overline {x_1})) (\overline {x_1} \lor (x_2 \overline {x_1})\\
-&f_{NOR}(x_3,x_2,x_1) = ((x_3 \overline \lor x_3) \overline \lor (x_2 \overline \lor x_2 \overline \lor x_1)) \overline \lor x_1
+&f(x_3,x_2,x_1) = (\overline {x_3} \lor (x_2 \overline {x_1}))
+(\overline {x_1} \lor (x_2 \overline {x_1})\\
+&f_{NOR}(x_3,x_2,x_1) = ((x_3 \overline \lor x_3) \overline \lor 
+(x_2 \overline \lor x_2 \overline \lor x_1)) \overline \lor x_1
 \end{align}
 
 \section{Aufgabe 7.2}
@@ -31,12 +34,48 @@
 \subsection{(b)}
 
 \section{Aufgabe 7.4}
-
+\includegraphics{Schaltnetz}
 \subsection{(a)}
-\subsection{(b)}
-\subsection{(c)}
-\subsection{(d)}
+\begin{tabular} {rlll|l}
+x0 & x1 & x2 & x3 & y \\ \hline 
+0 & 0 & 0 & 0 & 0 \\
+0 & 0 & 0 & 1 & 0 \\
+0 & 0 & 1 & 0 & 0 \\
+0 & 0 & 1 & 1 & 0 \\
+0 & 1 & 0 & 0 & 0 \\
+0 & 1 & 0 & 1 & 1 \\
+0 & 1 & 1 & 0 & 0 \\
+0 & 1 & 1 & 1 & 1 \\
+1 & 0 & 0 & 0 & 0 \\
+1 & 0 & 0 & 1 & 0 \\
+1 & 0 & 1 & 0 & 0 \\
+1 & 0 & 1 & 1 & 1 \\
+1 & 1 & 0 & 0 & 1 \\
+1 & 1 & 0 & 1 & 1 \\
+1 & 1 & 1 & 0 & 1 \\
+1 & 1 & 1 & 1 & 1
+\end{tabular}
 
+\subsection{(b)}
+\includegraphics{KV-Diagramm}
+
+\subsection{(c)}
+(siehe (b))\\
+Schleife 1 (hellgrau):
+\begin{align}
+x_1 \land x_3
+\end{align}
+Schleife 2 (dunkelgrau):
+\begin{align}
+x_0((x_2 \land x_3) \lor x_1)
+\end{align}
+disjunktive Schaltfunktion:
+\begin{align}
+y = x_0 (x_2 x_3 \lor x_1) \lor x_1 x_3
+\end{align}
+
+\subsection{(d)}
+\includegraphics{Schaltplan}
 
 \section{Aufgabe 7.5}
 
