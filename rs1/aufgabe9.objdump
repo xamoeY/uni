@@ -1,0 +1,15 @@
+
+aufgabe9.o:     file format elf64-x86-64
+
+
+Disassembly of section .text.startup:
+
+0000000000000000 <main>:
+   0:	48 83 ec 08          	sub    $0x8,%rsp
+   4:	be b1 cb 74 00       	mov    $0x74cbb1,%esi
+   9:	bf 00 00 00 00       	mov    $0x0,%edi
+   e:	31 c0                	xor    %eax,%eax
+  10:	e8 00 00 00 00       	callq  15 <main+0x15>
+  15:	31 c0                	xor    %eax,%eax
+  17:	48 83 c4 08          	add    $0x8,%rsp
+  1b:	c3                   	retq   
