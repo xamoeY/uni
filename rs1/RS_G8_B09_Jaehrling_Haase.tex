@@ -15,9 +15,37 @@
 
 \section{Aufgabe 9.1}
 \subsection{(a)}
+Der Hauptautomat zählt die Zustände Z0, Z1, Z2, Z6, Z7,
+Z8, Z9, Z0,... weiter, während ein trivialer Automat dazwischen eine
+Zählvariable hochzählt. \\
+Zusätzlich wird noch eine Variable t für den Taster benötigt, die
+erfasst, wann eine Fußgänger-Grünphase eingeleitet wird. \\
+Das System ähnelt damit dem Kontrollfluss in Java:
+t wird auf 0 gesetzt. \\
+Danach schaltet der Hauptautomat einen Zustand in einer
+Endlosschleife weiter, dabei wird die Zählmethode des Zählers
+aufgerufen und der aktuelle Zustand als Parameter übergeben.\\
+Hier wird eine im Sekundentakt zählende for-Schleife durchwandert,
+welche als Abbruchbedingung hat, dass die Zählvariable eine
+bestimmte Größe erreicht hat: \\
+einige Sekunden für Z1, Z2, Z7 und Z8 sowie für Z0 bei t = 1  \\
+bzw. 30 Sekunden für Z6 und Z9.
+Danach wird die Zählvariable auf 0 resettet und der Kontrollfluss
+geht zurück an den Hauptautomaten.
+
+Demnach gehen von allen durchlaufenen Zuständen und vom Taster t
+Leitungen zum Zählautomaten und auch immer zum folgenden
+durchlaufbaren Zustand zurück.
 \subsection{(b)}
+Dies ist bei meiner Interpretation des Automatensystems relativ egal,
+allerdings ist mein Zählautomat nicht allzu trivial...
+\subsection{(c)}
+
 
 \section{Aufgabe 9.2}
+\subsection{(a)}
+\subsection{(b)}
+\subsection{(c)}
 
 \section{Aufgabe 9.3}
 \begin{align}
@@ -29,19 +57,13 @@ AND-Gatter (a AND b), zwei OR-Gattern (c OR d bzw. e OR f), noch
 einem AND-Gatter ((c OR d) AND (e OR f)) sowie einem NOR-Gatter
 darstellen.
 \includegraphics{Schaltskizze93a}
-
 subsection{(b)}
 Dieses Komplexgatter benötigt 28 Transistoren, eine herkömmliche CMOS-Gatter-Realisierung dagegen nur 12.
-
 
 \section{Aufgabe 9.4}
 \subsection{(a)}
 \subsection{(b)}
 \subsection{(c)}
 \subsection{(d)}
-
-\section{Aufgabe 9.5}
-\subsection{(a)}
-\subsection{(b)}
 
 \end{document}
