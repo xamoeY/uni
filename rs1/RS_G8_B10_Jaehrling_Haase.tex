@@ -40,4 +40,50 @@ Befehlsindex | Offset
    0000 0000 | 0000 0000 0000 0000 0000 0000
 \end{verbatim}
 
+\section{Aufgabe 10.3}
+\subsection{(a)}
+\begin{tabular} {r|ll|ll}
+	& dezimal 		& binär 						& rot 		& imm8 \\ \hline
+(a) 	& 207 			& 11001111 						& 0000 	& 11001111 \\
+(b) 	& 398 			& 110001110 					& xxxx 	& xxxxxxxx \\
+(c) 	& 351 			& 101011111 					& xxxx 	& xxxxxxxx \\
+(d) 	& 2684354560 	& 10100000000000000000000000000000 	& 0010 	& 00001010 \\
+(e) 	& 1212416 		& 100101000000000000000 			& 0100 	& 10010100
+\end{tabular} \\\\\\
+(b) und (c) sind nicht auf diese Weise darstellbar, da 
+(b) das Bitmuster 11000111 aus 110001110 zwar genau \\
+8 bit breit ist, die am weitesten links stehende 1 jedoch nicht an einer geraden Stelle im  \\
+Muster steht.
+(c) das Bitmuster 101011111 breiter als 8 bit ist.
+\\\\\\\\\\\\\\\\
+
+\section{Aufgabe 10.4}
+\subsection{(a)}
+W = (A*B-C)/(D+E*F) \\\\
+\begin{tabular} {r|l|l|l|l}
+Schritt 	& 0-adress 	& 1-adress 	& 2-adress 	& 3-adress 		\\ \hline
+1		& PUSH A 	& LOAD E 	& MOV W,A 	& MUL W,A,B 	\\
+2		& PUSH B 	& MUL F 	& MUL W,B 	& SUB W,W,C 	\\
+3		& MUL 	& ADD D 	& SUB W,C 	& MUL J,E,F 		\\
+4		& PUSH C 	& STORE H	& MOV I,E 	& ADD J,J,D 		\\
+5		& SUB 	& LOAD A 	& MUL I,F 	& DIV W,W,J 		\\
+6		& PUSH E 	& MUL B	& ADD I,D 	& 		 	\\
+7		& PUSH F 	& SUB C 	& DIV W,I 	&  			\\
+8		& MUL 	& DIV W 	&  		&  			\\
+9		& PUSH D 	& STORE W	&  		& 		 	\\
+10		& ADD 	&  		&  		&  			\\
+11		& DIV 		& 	 	&  		&  			\\
+12		& POP W 	&		&  		& 
+\end{tabular}
+\\\\
+\subsection{(b)}
+\begin{tabular} {r|l|l|l|l}
+		& 0-adress 	& 1-adress 	& 2-adress 	& 3-adress 	\\ \hline
+4-bit		& 0		& 0		& 0		& 3		\\
+8-bit 		& 12		& 9		& 7		& 5		\\
+16-bit 		& 7		& 9		& 14		& 12		\\ \hline
+gesamt	& 208		& 216		& 280		& 244		\\
+\end{tabular}
+\\\\
+Die kompakteste Codierung für dieses Programm hat die 0-Adress-Maschine.
 \end{document}
