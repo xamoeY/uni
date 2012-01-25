@@ -1,0 +1,56 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb,amsmath}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{color}
+\definecolor{gray}{gray}{.75}
+\author{Claas Jaehrling, Sven-Hendrik Haase}
+\title{RS1 HA zum 27.01.12}
+\date{\today}
+\begin{document}
+\setcounter{secnumdepth}{0}
+\maketitle
+
+\section{Aufgabe 11.1}
+\subsection{(a)}
+addl \%ecx, (\%eax) \\
+MEM[0x100] = (\%eax) + \%ecx \\
+= 0x0000ABBA + 0x00000002 \\
+= 0x0000ABBC
+\subsection{(b)}
+subl \%edx, 4(\%eax) \\
+MEM[4(\%eax) = 4(\%eax) - \%edx \\
+MEM[0x100 + 0x004] = 0x000000DC - 0x0000000C \\
+MEM[0x104] = 0x0000000D0
+\subsection{(c)}
+imull \$16, (\%eax, \%edx) \\
+MEM[\%eax + \%edx] = (\%eax + \%edx) * 16 \\
+MEM[0x00000100 + 0x0000000C] = (0x00000100 + 0x0000000C) * 16 \\
+MEM[0x10C] = 0x00054321 << 16 \\
+= 0x00543210
+\subsection{(d)}
+incl 8(\%eax)
+MEM[0x108] = 0x000000EF + 1 \\
+= 0x000000F0
+\subsection{(e)}
+decl \%ecx
+\%ecx = 0x000000EF + 1 \\
+= 0x000000F0
+\subsection{(f)}
+subl \%edx, \%eax
+\%edx = \%edx - \%eax \\
+= 0x00000100 - 0x0000000C \\
+= 0x00000FF4
+
+\section{Aufgabe 11.2}
+
+\section{Aufgabe 11.3}
+
+\section{Aufgabe 11.4}
+
+\section{Aufgabe 11.5}
+
+\section{Aufgabe 11.6}
+
+\end{document}
