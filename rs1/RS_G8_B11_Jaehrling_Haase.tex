@@ -30,16 +30,16 @@ MEM[0x00000100 + 0x0000000C] = (0x00000100 + 0x0000000C) * 16 \\
 MEM[0x10C] = 0x00054321 * 16 \\
 = 0x00543210
 \subsection{(d)}
-incl 8(\%eax)
+incl 8(\%eax) \\
 MEM[0x108] = 0x000000EF + 1 \\
 = 0x000000F0
 \subsection{(e)}
-decl \%ecx
+decl \%ecx \\
 \%ecx = 0x00000002 - 1 \\
 = 0x00000001
 \subsection{(f)}
-subl \%edx, \%eax
-\%edx = \%edx - \%eax \\
+subl \%edx, \%eax \\
+\%eax = \%edx - \%eax \\
 = 0x00000100 - 0x0000000C \\
 = 0x00000FF4
 
