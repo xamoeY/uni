@@ -1,0 +1,118 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 12./13. Januar 2012}
+
+\title{\titleinfo}
+\author{Elena Noll, Sven-Hendrik Haase, Arne Struck}
+\date{\today}
+\ihead{EN, SHH, AF}
+\chead{\titleinfo}
+\ohead{\today}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}
+\item[\textbf{1.}]
+\begin{enumerate}[1)]
+\item
+
+\[1. Fall: x > -5 \Rightarrow Nenner positiv\]
+\begin{align}
+\frac 2 {x+5} \geq 3 & \Leftrightarrow 2 \leq 3x+15\\
+                   & \Leftrightarrow -13 \leq 3x\\
+                   & \Leftrightarrow -\frac {13} 3 \leq x
+\end{align} 
+
+\[2. Fall: x < -5 \Rightarrow Nenner negativ\]
+\begin{align}
+\frac 2 {x-5} \geq 3 & \Leftrightarrow 2 \geq 3x+15\\
+                   & \Leftrightarrow -13 \geq 3x\\
+                   & \Leftrightarrow -\frac {13} 3 \geq x
+\end{align}
+
+\[L = (-5, -\frac {13} 3]\]
+
+\newpage
+\item
+\[|3x-4| \geq 2 : x \in \mathbb{R} \] 
+\[1. Fall: 3 > \frac 4 3\]
+\begin{align}
+|3x-4| \geq 2 & \Leftrightarrow 3x-4 \geq 2\\
+              & \Leftrightarrow 3x \geq 6\\
+              & \Leftrightarrow x \geq 2
+\end{align}
+
+\[2. Fall: x < \frac 4 3 \]
+\begin{align}
+|3x-4| \geq 2 & \Leftrightarrow -(3x-4) \geq 2\\
+              & \Leftrightarrow -3x+4 \geq 2\\
+              & \Leftrightarrow -3x \geq -2\\
+              & \Leftrightarrow x \leq \frac 2 3
+\end{align}
+
+\[L = (-\infty, \frac 2 3] \cup [2, +\infty) \]
+
+
+\item
+\begin{enumerate}[a)]
+\item
+\begin{align}
+|a_n - a| \Leftrightarrow | \frac {3n+2} {n+4} -3 | & = | \frac {3n+2-3n-12} {n+4} | \\
+&= | -\frac {10} {n+4} | = \frac {10} {n+4}
+\end{align}
+
+\item
+\[ | a_n - a | < \epsilon \]
+\begin{align}
+&\Leftrightarrow \frac {10} {n+4} < \epsilon\\
+&\Leftrightarrow \frac {10} \epsilon < n+4\\
+&\Leftrightarrow \frac {10} \epsilon -4 < n\\
+&\Rightarrow N > \frac {10} \epsilon -4
+\end{align}
+
+\item
+\begin{align}
+&\epsilon = \frac 1 5 : N > 10*5-4 = 46 \Rightarrow N = 47\\
+&\epsilon = \frac 1 {100} : N > 1000-4 = 996 \Rightarrow N = 997\\
+&\epsilon = \frac 1 {1000} : N > 10000-4 = 9996 \Rightarrow N = 9997 
+\end{align}
+\end{enumerate}
+
+\newpage
+\item
+Nachweis der Beschränktheit.
+
+Induktionsanfang:
+\[1 \leq 1 < 2\]
+
+Induktionsannahme:
+Für ein beliebiges aber fest gewähltes \( n \in \mathbb{N}\) gilt:
+\[ a_{n+1} = (\frac {a_n} 2)^2 + 1\]
+\[ 1 \leq a_{n+1} < 2 \]
+
+Induktionsschritt:
+\[a_{(n+1)+1} =  ( \frac {a_{n+1}} 2 )^2 + 1 =^{IA} (\frac {(\frac {a_n} 2)^2 + 1} 2)^2 + 1 \]
+
+Daraus folgt:
+
+Nach Induktionsannahme ist der Zähler < 2. Hierraus folgt: Bruch < 1.
+Aus alledem folgt, dass die Gleichung < 2 sein muss.
+
+
+\end{enumerate}
+%Ende aller Aufgaben
+\end{enumerate}
+\end{document}
+
