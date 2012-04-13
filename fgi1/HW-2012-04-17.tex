@@ -1,0 +1,53 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 12.04.2012}
+\newcommand{\aufgabe}[1]{\item[\textbf{#1}]}
+
+\title{\titleinfo}
+\author{Arne Feil}
+\date{\today}
+\ihead{FGI1}
+\chead{Arne Feil, Sven-Hendrik Haase, Christian Darsow-Fromm}
+\ohead{\today}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+\everymath{\displaystyle}
+\begin{document}
+%\maketitle
+\begin{enumerate}
+\aufgabe{2.3}
+NFA:\\
+\begin{tikzpicture}[->, auto, node distance=3cm, >=latex]
+    \tikzstyle{every initial by arrow}=[initial text=,->, >=stealth]
+  
+    \node[initial, state] (A) {$q_1$};
+    \node[accepting, state] (B) [right of=A] {$q_2$};
+    \node[accepting, state] (C) [right of=B] {$q_3$};
+    
+    \draw (A) edge [bend left] node {b} (B);
+    \draw (B) edge [loop above] node {a,b} (B);
+    \draw (B) edge [bend left] node {c} (C);
+    \draw (C) edge [loop above] node {c} (C);
+    \draw (C) edge [bend left] node {d} (B);
+\end{tikzpicture}
+\aufgabe{2.4}
+$w \in \{0,1\}* \quad L=\Big\{w\overline{w} | w \in \{0,1\}* \Big\} \\
+w = w^n \overline{w}^n \quad \quad |w| \geq n \\
+w = uvw' \quad \quad |uv| \leq n \\
+w = w^m \quad \quad m \in \mathbb{N} \quad \quad 1 \leq m \leq n \\
+w^{n-m}w^m\overline{w}^n \in L \quad m>0 \\
+w^{n-m} w^m w^m \overline{w}^n = w^{n+m}\overline{w}^m \notin L$
+
+\aufgabe{2.5}
+\end{enumerate}
+\end{document}
