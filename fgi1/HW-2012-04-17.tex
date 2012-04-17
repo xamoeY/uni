@@ -49,16 +49,25 @@ w^{n-m}w^m\overline{w}^n \in L \quad m>0 \\
 w^{n-m} w^m w^m \overline{w}^n = w^{n+m}\overline{w}^m \notin L$
 
 \aufgabe{2.5}
+\begin{enumerate}[1.]
+\item
+% Wozu ein Beispiel?
 Beispiel: \\
 \(\Sigma = \{0, 1\}\) \\
 Sei \(a = 1\). \\
 Einige Worte aus \(L: w_1 = 11111, w_2 = 11011, w_3 = 00101, w_4 = 1, w_5 = 10\) \\
 Einige Worte aus \((L\%a)\) mit der beschriebenen Kondition\(: v_1 = 1111, v_2 = 11101, v_3 = 0010, v_4 = \{\}, v_5 = \{\}\) \\
 \\
-\(L \subseteq \Sigma*\) ist eine reguläre Sprache, weil alle ihre Worte mit
-dem regulären Ausdruck \(\{\Sigma*\}\) beschrieben werden können. \(L\%a\) ist
+\(L \subseteq \Sigma^*\) ist eine reguläre Sprache, weil alle ihre Worte mit
+dem regulären Ausdruck \(\{\Sigma^*\}\) beschrieben werden können. \(L\%a\) ist
 eine reguläre Sprache, weil alle ihre Worte mit dem regulären Ausdruck (0|1)*(?=1)
 beschrieben werden können. Außerdem gilt \((L\%a) \subseteq L \).\\
-Allgemein ist also der reguläre Ausdruck für \((L\%a)\): \(\Sigma*(?=a)\).
+Allgemein ist also der reguläre Ausdruck für \((L\%a)\): \(\Sigma^*(?=a)\).
+
+\item
+$(KW) \subseteq L$ \\
+Da $L$ regulär ist, ist es eine endliche Teilmenge von $\Sigma^*$. $KW$ ist als 
+Teilmenge von $L$ auch endlich und somit auch eine reguläre Sprache.
+\end{enumerate}
 \end{enumerate}
 \end{document}
