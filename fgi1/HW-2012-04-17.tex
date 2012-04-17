@@ -35,7 +35,7 @@ NFA:\\
     \node[accepting, state] (C) [right of=B] {$q_3$};
     
     \draw (A) edge [bend left] node {b} (B);
-    \draw (B) edge [loop above] node {a,b} (B);
+    \draw (B) edge [loop above] node {a,b,d} (B);
     \draw (B) edge [bend left] node {c} (C);
     \draw (C) edge [loop above] node {c} (C);
     \draw (C) edge [bend left] node {d} (B);
