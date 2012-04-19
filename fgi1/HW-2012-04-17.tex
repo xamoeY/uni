@@ -29,11 +29,11 @@
 NFA:\\
 \begin{tikzpicture}[->, auto, node distance=3cm, >=latex]
     \tikzstyle{every initial by arrow}=[initial text=,->, >=stealth]
-  
+
     \node[initial, state] (A) {$q_1$};
     \node[accepting, state] (B) [right of=A] {$q_2$};
     \node[accepting, state] (C) [right of=B] {$q_3$};
-    
+
     \draw (A) edge [bend left] node {b} (B);
     \draw (B) edge [loop above] node {a,b} (B);
     \draw (B) edge [bend left] node {c} (C);
@@ -66,7 +66,7 @@ Allgemein ist also der reguläre Ausdruck für \((L\%a)\): \(\Sigma^*(?=a)\).
 
 \item
 $(KW) \subseteq L$ \\
-Da $L$ regulär ist, ist es eine endliche Teilmenge von $\Sigma^*$. $KW$ ist als 
+Da $L$ regulär ist, ist es eine endliche Teilmenge von $\Sigma^*$. $KW$ ist als
 Teilmenge von $L$ auch endlich und somit auch eine reguläre Sprache.
 \end{enumerate}
 \end{enumerate}
