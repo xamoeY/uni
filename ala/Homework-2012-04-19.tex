@@ -1,0 +1,152 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 19. April 2012}
+
+\title{\titleinfo}
+\author{Elena Noll, Sven-Hendrik Haase, Arne Struck}
+\date{\today}
+\ihead{EN, SHH, AS}
+\chead{\titleinfo}
+\ohead{\today}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\maketitle
+
+\begin{enumerate}
+\item[\textbf{1.}]
+\begin{enumerate}[(i)]
+
+\item
+\begin{align}
+\frac {-3n^4+2n^2+n+1} {-7n^4+25} &= \frac {n^4} {n^4}* \frac {-3+2 \frac {n^2} {n^4} + \frac n {n^4} + \frac 1 {n^4}} {-7 + \frac {25} {n^4}} \\
+								  &= 1* \frac {-3 + 0 + 0 + 0} {-7 + 0}\\
+								  &= \frac {-3} {-7}
+\end{align}
+
+\item
+\begin{align}
+\frac {-3n^4+2n^2+n+1} {-7n^4+25} &= \frac {n^4} {n^5}* [...] \\
+								  &= 0 * [...] = 0
+\end{align}
+
+\item
+\begin{align}
+\frac {-3n^4+2n^2+n+1} {-7n^4+25} &= \frac {n^5} {n^4}* [...] \\
+								  &= \infty * [...] = \infty
+\end{align}
+
+\item
+\begin{align}
+& \frac {6n^3+2n-3} {9n^2+2} - \frac {2n^3+5n^2+7} {3n^2+3}\\
+=& \frac {(6n^3-2n-3)*(3n^2+3)-(2n^3+5n^2+7)*(9n^2+2)} {(9n^2+2)*(3n^2+3)}\\
+=& \frac {18n^5+6n^3-9n^2+18n^3+6n-9-(18n^5+45n^4+63n^2+4n^3+10n^2+14)} {27n^4+6n^2+27n^2+6}\\
+=& \frac {18n^5+6n^3-9n^2+18n^3+6n-9-18n^5-45n^4-63n^2-4n^3-10n^2-14} {27n^4+6n^2+27n^2+6}\\
+=& \frac {-45n^4+20n^3-82n^2+6n-23} {27n^4+33n^2+6} = \frac {-n^4} {n^4}*[...] = -\infty
+\end{align}
+
+\item
+\begin{align}
+&\frac {\sqrt{9n^4+n^2+1}-2n^2+3} {\sqrt{2n^2+1}*\sqrt{2n^2+n+1}}
+=\frac {\sqrt{n^4(9+\frac {n^2} {n^4} + \frac 1 {n^4})}-2n^2+3} {\sqrt{n^2(2+\frac 1 {n^2})}*\sqrt{n^2(2+n+\frac 1 {n^2}})}\\
+=&\frac {n^2\sqrt{9+\frac {n^2} {n^4} + \frac 1 {n^4}}-2n^2+3} {n\sqrt{2+\frac 1 {n^2}}*n\sqrt{2+n+\frac 1 {n^2}}}
+=\frac {n^2} {n^2}*\frac {\sqrt{9+\frac {n^2} {n^4} + \frac 1 {n^4}}-2+\frac 3 {n^2}} {\sqrt{2+\frac 1 {n^2}}*\sqrt{2+n+\frac 1 {n^2}}}\\
+=&\frac {n^2} {n^2}*\frac {\sqrt{9+\frac {n^2} {n^4} + \frac 1 {n^4}}-2+\frac 3 {n^2}} {\sqrt{(2+\frac 1 {n^2})(2+n+\frac 1 {n^2})}}
+= [...]
+\end{align}
+\end{enumerate}
+
+\item[\textbf{2.}]
+\begin{enumerate}[a)]
+\item
+\begin{enumerate}[(i)]
+\item
+\begin{align}
+a_0 &= 1                & s_0 &= 1 \\
+a_1 &= \frac 2 5        & s_1 &= \frac 7 5 \\
+a_2 &= \frac 4 {25}     & s_2 &= \frac {34} {25} \\
+a_3 &= \frac 8 {125}    & s_3 &= \frac {203} {125} \\
+a_4 &= \frac {16} {625} & s_4 &= \frac {1031} {625}
+\end{align}
+Konvergiert gegen \(\frac 5 3\).
+
+\item
+\begin{align}
+a_0 &= 1                & s_0 &= 1 \\
+a_1 &= \frac 5 2        & s_1 &= \frac 7 5 \\
+a_2 &= \frac {25} 4     & s_2 &= \frac {39} {4} \\
+a_3 &= \frac {125} 8    & s_3 &= \frac {203} {8} \\
+a_4 &= \frac {625} {16} & s_4 &= \frac {1031} {16}   
+\end{align}
+Konvergiert nicht.
+
+\item
+\begin{align}
+a_0 &= 1                & s_0 &= 1 \\
+a_1 &= -\frac 2 5       & s_1 &= \frac 3 7 \\
+a_2 &= \frac 4 {25}     & s_2 &= \frac {19} {25} \\
+a_3 &= -\frac 8 {125}   & s_3 &= \frac {87} {125} \\
+a_4 &= \frac {16} {625} & s_4 &= \frac {451} {625}   
+\end{align}
+Konvergiert gegen \(\frac 5 7\).
+\end{enumerate}
+
+
+\item[\textbf{3.}]
+\begin{enumerate}[(i)]
+\item
+Die Reihe ist konvergent. Dies lässt sich mit dem Satz über monoton-beschränkte Folgen zeigen.\\
+Monotonie: Zahlen \((\frac 3 7)^i\) sind positiv, also ist die Folge monoton-wachsend.
+
+\item
+ka
+
+\item
+Die Reihe oszilliert zwischen 1 und 0. Beispiel aus der Folge: 
+\[-1 + 1 - 1 + 1 ... \]
+Daraus folgt, dass sie nicht konvergieren kann.\\
+Die Folge der Koeffizienten konvergiert nicht gegen 0. Sie ist immer entweder
+1 oder -1. Somit ist die Reihe divergent.
+
+\item
+Die Reihe ist konvergent. Dies lässt sich mit dem Satz über monoton-beschränkte Folgen zeigen.\\
+Monotonie: Zahlen \(\frac 1 {i(i+1)}\) sind positiv, also ist die Folge monoton-wachsend.
+\end{enumerate}
+
+\item[\textbf{3.}]
+\begin{enumerate}[(i)]
+\item
+\begin{align}
+&(1+\frac 1 n)^n*(1+\frac 1 n)^1\\
+=& e*(1+0)^1=e
+\end{align}
+
+\item
+\begin{align}
+&(1+\frac 1 n)^{2n}\\
+=& \left((1+\frac 1 n)^n\right)^2\\
+=& e^2
+\end{align}
+
+\item
+\begin{align}
+\left(1-\frac 1 n\right)^n = \frac 1 e
+\end{align}
+\end{enumerate}
+\end{enumerate}
+
+
+\end{enumerate}
+%Ende aller Aufgaben
+\end{document}
+
