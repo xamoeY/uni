@@ -27,10 +27,62 @@
 \begin{enumerate}
 
 \aufgabe{3.3}
+\begin{enumerate}[1.]
+ \item
+ % Muss hier unbedingt eine \epsilon-Verbindung enthalten sein?
+ \begin{tikzpicture}[->, auto, node distance=2.2cm, >=latex]
+	\tikzstyle{every initial by arrow}=[initial text=,->, >=stealth]
+
+    \node[initial, state] (A) {$q_1$};
+    \node[state] (B) [right of=A] {$q_2$};
+    \node[state] (C) [right of=B] {$q_3$};
+    \node[accepting, state] (D) [right of=C] {$q_4$};
+
+    \draw (A) edge [bend left] node {0} (B);
+    \draw (B) edge [bend left] node {1} (C);
+    \draw (C) edge [bend left] node {0} (D);
+ \end{tikzpicture}
+
+ \item
+ \begin{tikzpicture}[->, auto, node distance=2.2cm, >=latex]
+	\tikzstyle{every initial by arrow}=[initial text=,->, >=stealth]
+
+    \node[initial, state] (A) {$q_1$};
+    \node[state] (B) [right of=A] {$q_2$};
+    \node[state] (C) [right of=B] {$q_3$};
+    \node[accepting, state] (D) [right of=C] {$q_4$};
+
+    \draw (A) edge [bend left] node {$\epsilon$} (B);
+    \draw (B) edge [loop above] node {0} (B);
+    \draw (B) edge [bend left] node {$\epsilon$} (C);
+    \draw (C) edge [loop above] node {0,1} (C);
+    \draw (C) edge [bend left] node {0} (D);
+ \end{tikzpicture}
+
+ \item
+ \begin{tikzpicture}[->, auto, node distance=2.2cm, >=latex]
+	\tikzstyle{every initial by arrow}=[initial text=,->, >=stealth]
+
+    \node[initial, state] (A) {$q_1$};
+    \node[state] (B) [right of=A] {$q_2$};
+    \node[state] (C) [right of=B] {$q_3$};
+    \node[accepting, state] (D) [right of=C] {$q_4$};
+
+    \draw (A) edge [bend left] node {$\epsilon$} (B);
+    \draw (B) edge [loop above] node {0} (B);
+    \draw (B) edge [bend left] node {$\epsilon$} (C);
+    \draw (C) edge [bend left] node {1} (D);
+    \draw (D) edge [loop above] node {0,1} (D);
+    \draw (D) edge [bend left] node {0} (C);
+ \end{tikzpicture}
+
+\end{enumerate}
+
 
 \aufgabe{3.4}
-%########### TEST ###############
+
 \aufgabe{3.5}
+
 
 \end{enumerate}
 \end{document}
