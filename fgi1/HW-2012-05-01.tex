@@ -37,13 +37,14 @@
     \node[accepting, state] (C) [right of=B] {$q_3$};
 
     % Hat jemand ne Ahnung, was man machen kann, damit die Beschriftung wirklich in einer neuen Zeile landet?
-    \draw (A) edge [loop above] node {$a,A|AA$\\
+    % Jop
+    \draw (A) edge [loop above] node[text width=2cm,align=center] {$a,A|AA$\\
 									  $a,B|AB$\\
 									  $a,\bot|A\bot$\\
 									  $b,A|BA$\\
 									  $b,B|BB$\\
 									  $b,\bot|B\bot$} (A);
-    \draw (A) edge [bend left] node {$a,A|AA$\\
+    \draw (A) edge [bend left] node[text width=2cm,align=center, below] {$a,A|AA$\\
 									  $a,B|AB$\\
 									  $a,\bot|A\bot$\\
 									  $b,A|BA$\\
@@ -51,9 +52,9 @@
 									  $b,\bot|B\bot$\\
 									  $a,*|*$\\ % ändert nichts am Keller.
 									  $b,*|*$} (B);
-    \draw (B) edge [loop above] node {$a,A|\epsilon$\\
+    \draw (B) edge [loop above] node[text width=2cm,align=center] {$a,A|\epsilon$\\
 									  $b,B|\epsilon$} (B);
-    \draw (B) edge [bend left] node {$\epsilon,\bot|\epsilon$} (C);
+    \draw (B) edge [bend left] node[text width=2cm,align=center, below] {$\epsilon,\bot|\epsilon$} (C);
 \end{tikzpicture}
 
 Im Zustand $q_1$ wird jeder Buchstabe in den Keller geschrieben.
