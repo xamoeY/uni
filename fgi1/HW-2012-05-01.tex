@@ -29,6 +29,8 @@
 \aufgabe{4.3}
 \begin{enumerate}[1.]
  \item
+ $X \in \{A,B,\bot\}$\\
+ $X$ steht für ein beliebiges der drei möglichen Zeichen im Keller.\\
  \begin{tikzpicture}[->, auto, node distance=3cm, >=latex]
     \tikzstyle{every initial by arrow}=[initial text=,->, >=stealth]
 
@@ -36,22 +38,12 @@
     \node[state] (B) [right of=A] {$q_2$};
     \node[accepting, state] (C) [right of=B] {$q_3$};
 
-    % Hat jemand ne Ahnung, was man machen kann, damit die Beschriftung wirklich in einer neuen Zeile landet?
-    % Jop
-    \draw (A) edge [loop above] node[text width=2cm,align=center] {$a,A|AA$\\
-									  $a,B|AB$\\
-									  $a,\bot|A\bot$\\
-									  $b,A|BA$\\
-									  $b,B|BB$\\
-									  $b,\bot|B\bot$} (A);
-    \draw (A) edge [bend left] node[text width=2cm,align=center, below] {$a,A|AA$\\
-									  $a,B|AB$\\
-									  $a,\bot|A\bot$\\
-									  $b,A|BA$\\
-									  $b,B|BB$\\
-									  $b,\bot|B\bot$\\
-									  $a,*|*$\\ % ändert nichts am Keller.
-									  $b,*|*$} (B);
+    \draw (A) edge [loop above] node[text width=2cm,align=center] {$a,X|AX$\\
+									  $b,X|BX$} (A);
+    \draw (A) edge [bend left] node[text width=2cm,align=center, below] {$a,X|AX$\\
+									  $b,X|BX$\\
+									  $a,X|X$\\ % ändert nichts am Keller.
+									  $b,X|X$} (B);
     \draw (B) edge [loop above] node[text width=2cm,align=center] {$a,A|\epsilon$\\
 									  $b,B|\epsilon$} (B);
     \draw (B) edge [bend left] node[text width=2cm,align=center, below] {$\epsilon,\bot|\epsilon$} (C);
