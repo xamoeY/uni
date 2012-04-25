@@ -27,6 +27,46 @@
 \begin{enumerate}
 
 \aufgabe{4.3}
+\begin{enumerate}[1.]
+ \item
+ \begin{tikzpicture}[->, auto, node distance=3cm, >=latex]
+    \tikzstyle{every initial by arrow}=[initial text=,->, >=stealth]
+
+    \node[initial, state] (A) {$q_1$};
+    \node[state] (B) [right of=A] {$q_2$};
+    \node[accepting, state] (C) [right of=B] {$q_3$};
+
+    % Hat jemand ne Ahnung, was man machen kann, damit die Beschriftung wirklich in einer neuen Zeile landet?
+    \draw (A) edge [loop above] node {$a,A|AA$\\
+									  $a,B|AB$\\
+									  $a,\bot|A\bot$\\
+									  $b,A|BA$\\
+									  $b,B|BB$\\
+									  $b,\bot|B\bot$} (A);
+    \draw (A) edge [bend left] node {$a,A|AA$\\
+									  $a,B|AB$\\
+									  $a,\bot|A\bot$\\
+									  $b,A|BA$\\
+									  $b,B|BB$\\
+									  $b,\bot|B\bot$\\
+									  $a,*|*$\\ % ändert nichts am Keller.
+									  $b,*|*$} (B);
+    \draw (B) edge [loop above] node {$a,A|\epsilon$\\
+									  $b,B|\epsilon$} (B);
+    \draw (B) edge [bend left] node {$\epsilon,\bot|\epsilon$} (C);
+\end{tikzpicture}
+
+Im Zustand $q_1$ wird jeder Buchstabe in den Keller geschrieben.
+Der Wechsel zu $q_2$ kann mit jedem Kellerinhalt passieren, entweder mit dem letzten Buchstaben der ersten Worthälfte oder mit dem mittleren Buchstaben.
+Bei einer geraden Buchstabenzahl wird er bei dem Übergang in den Keller geschrieben, bei einer ungeraden nicht.
+Die Schleife bei $q_2$ läuft so lange, bis der Keller leer ist. Wenn er zu früh leer ist, erreicht er keinen Endzustand.
+Das Schlusszeichen $\bot$ wird mit dem letzten $\epsilon$-Übergang zu $q_2$ aus dem Keller geholt. Wenn das alles erfolgreich war, erreicht der Automat dort seinen Endzustand.
+
+\item
+
+
+\end{enumerate}
+
 
 \aufgabe{4.4}
 
