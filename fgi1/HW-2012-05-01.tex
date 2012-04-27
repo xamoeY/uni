@@ -56,14 +56,31 @@ Die Schleife bei $q_2$ läuft so lange, bis der Keller leer ist. Wenn er zu frü
 Das Schlusszeichen $\bot$ wird mit dem letzten $\epsilon$-Übergang zu $q_2$ aus dem Keller geholt. Wenn das alles erfolgreich war, erreicht der Automat dort seinen Endzustand.
 
 \item
+\begin{align*}
+ L &= \{a^n b^m c^n\};\ n,m\in\mathbb{N};\ n\geq 1;\ m\geq 0\\
+ G &= (\Sigma,N,P,S)\\
+ \Sigma &= \{a,b,c\}\\ %Muss hier auch das \epsilon auftauchen?
+ N &= \{S,T\}\\
+ P &= \{
+   S\to aSc,\
+   S\to aTc,\
+   T\to bT,\
+   T\to \epsilon
+ \}
+\end{align*}
 
+% TODO Der Inklusionsbeweis fehlt noch.
 
 \end{enumerate}
 
 
 \aufgabe{4.4}
 
+% TODO Chomsky-Normalform.
+
 \aufgabe{4.5}
+
+% TODO Bonusaufgabe.
 
 \end{enumerate}
 \end{document}
