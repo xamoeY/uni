@@ -58,29 +58,61 @@ Das Schlusszeichen $\bot$ wird mit dem letzten $\epsilon$-Übergang zu $q_2$ aus
 
 \item
 \begin{align*}
- L &= \{a^n b^m c^n\};\ n,m\in\mathbb{N};\ n\geq 1;\ m\geq 0\\
+ L &= \{a^n b^m c^n\};\ n,m\in\mathbb{N};\ n,m\geq 0\\
  G &= (\Sigma,N,P,S)\\
  \Sigma &= \{a,b,c\}\\ %Muss hier auch das \epsilon auftauchen?
  N &= \{S,T\}\\
  P &= \{
+   S\to \epsilon,\
    S\to aSc,\
    S\to aTc,\
    T\to bT,\
    T\to \epsilon
- \}
+ \}\\
+ S &= S
 \end{align*}
 
-% TODO Der Inklusionsbeweis fehlt noch.
+\paragraph{Beweis von $L(G)=L$}
+
+\subparagraph{$L(G)\subseteq L$}
+
+Das leere Wort ist in $L(G)$ enthalten. Da die Sprache $L$ mit $\{\dots\}^*$ definiert ist, enthält sie auch $\epsilon$. \\
+Die weiteren Möglichkeiten von $S$ sind:
+
+\begin{description}
+\item[$S\to aSc$]\
+gleiche Anzahl von $a$ und $c$ mit noch Unbekanntem in der Mitte. Die bisherigen Terminale sind in $L$ enthalten.
+
+\item[$S\to aTc$]\
+es kommt ein neues $a$ an den Anfangsblock und ein $c$ an den Endblock. Auch hier sind die Terminale in $L$.
+\end{description}
+
+Nun geht es mit $T$ weiter. $T\to bT$ erzeugt eine beliebig lange Reihe $\{b\}^*$ und bricht mit $T\to \epsilon$ ab.
+Die Reihe von $b$ innerhalb der $a$ und $c$ ist auch in der Sprache enthalten. Damit stimmt die Aussage $L(G)\subseteq L$.
+
+\subparagraph{$L\subseteq L(G)$}
+
+In $L$ sind am Anfang beliebig viele ($n$) $a$ und am Ende genauso viele $c$.
+Für $n=0$ gibt es $S\to \epsilon$.
+
+Die $a$ und $c$ lassen sich mit $S\to aSc$ erzeugen und sind damit in $L(G)$.
+Nach dem Wechsel über $S\to aTc$ lassen sich mit $T\to bT$ beliebig viele $b$ erzeugen.
+Diese sind in der Mitte des Wortes und damit an der richtigen Position.
+$T\to \epsilon$ sorgt dafür, dass nicht unbedingt ein $b$ existieren muss und die Schleife beendet werden kann.
+
+Damit sind alle erforderlichen Bedingungen von $L(G)$ erfüllt und es gilt $L=L(G)$.
 
 \end{enumerate}
 
 
-\aufgabe{4.4}
+\aufgabe{4.4}\begin{description}
+              \item[]
+             \end{description}
 
 % Chomsky-Normalform.
 \begin{enumerate}[1.]
 \item
-$\epsilon$-frei machen \\ 
+$\epsilon$-frei machen \\
 $
 S \rightarrow BCD~|~BC~|~BD~|~B~|~a \\
 A \rightarrow aBD~|~aDb~|~CSSD~|~aB~|~ab~|~CSS~|~SSD \\
@@ -91,7 +123,7 @@ $
 
 \item
 Reduzieren \\
-Es sind keine unproduktiven Terminal enthalten.
+Es sind keine unproduktiven Terminale enthalten.
 
 \item
 Kettenregeln entfernen \\
@@ -135,7 +167,7 @@ D \rightarrow AC~|~\terminal{a}\terminal{BD}~|~\terminal{\terminal{a}D}\terminal
 $
 
 \item
-% Ob die Begründung formuliert wie es erwartet wird, weiß ich nicht, sie stimmt aber ;) 
+% Ob die Begründung formuliert wie es erwartet wird, weiß ich nicht, sie stimmt aber ;)
 Wiederherstellen der ursprünglichen Sprache durch evtl. Hinzunahme einer $\epsilon$-Regel \\
 Es muss keine $\epsilon$-Regel hinzugefügt werden, da in der Sprache keine leeres Wort erzeugt werden konnte. \\
 $
