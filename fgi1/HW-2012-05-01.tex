@@ -21,6 +21,7 @@
 \ohead{\today}
 \setheadsepline{1pt}
 \newcommand{\qed}{\quad \square}
+\newcommand{\terminal}[1]{\langle #1 \rangle }
 \everymath{\displaystyle}
 \begin{document}
 %\maketitle
@@ -76,7 +77,72 @@ Das Schlusszeichen $\bot$ wird mit dem letzten $\epsilon$-Übergang zu $q_2$ aus
 
 \aufgabe{4.4}
 
-% TODO Chomsky-Normalform.
+% Chomsky-Normalform.
+\begin{enumerate}[1.]
+\item
+$\epsilon$-frei machen \\ 
+$
+S \rightarrow BCD~|~BC~|~BD~|~B~|~a \\
+A \rightarrow aBD~|~aDb~|~CSSD~|~aB~|~ab~|~CSS~|~SSD \\
+B \rightarrow bB~|~aC~|~bD~|~a~|~b \\
+C \rightarrow Cc~|~c \\
+D \rightarrow AC~|~A
+$
+
+\item
+Reduzieren \\
+Es sind keine unproduktiven Terminal enthalten.
+
+\item
+Kettenregeln entfernen \\
+$
+S \rightarrow BCD~|~BC~|~BD~|~bB~|~aC~|~bD~|~a~|~b \\
+A \rightarrow aBD~|~aDb~|~CSSD~|~aB~|~ab~|~CSS~|~SSD \\
+B \rightarrow bB~|~aC~|~bD~|~a~|~b \\
+C \rightarrow Cc~|~c \\
+D \rightarrow AC~|~aBD~|~aDb~|~CSSD~|~aB~|~ab~|~CSS~|~SSD
+$
+
+\item
+Ersetzen langer Terminalregeln \\
+$
+S \rightarrow BCD~|~BC~|~BD~|~\terminal{b}B~|~\terminal{a}C~|~\terminal{b}D~|~a~|~b \\
+A \rightarrow \terminal{a}BD~|~\terminal{a}D\terminal{b}~|~CSSD~|~\terminal{a}B~|~\terminal{a}\terminal{b}~|~CSS~|~SSD \\
+B \rightarrow \terminal{b}B~|~\terminal{a}C~|~\terminal{b}D~|~a~|~b \\
+C \rightarrow C\terminal{c}~|~c \\
+D \rightarrow AC~|~\terminal{a}BD~|~\terminal{a}D\terminal{b}~|~CSSD~|~\terminal{a}B~|~\terminal{a}\terminal{b}~|~CSS~|~SSD \\
+\terminal{a} \rightarrow a \\
+\terminal{b} \rightarrow b \\
+\terminal{c} \rightarrow c
+$
+
+\item
+Verkürzen zu langer Regeln \\
+$
+S \rightarrow \terminal{BC}D~|~BC~|~BD~|~\terminal{b}B~|~\terminal{a}C~|~\terminal{b}D~|~a~|~b \\
+A \rightarrow \terminal{a}\terminal{BD}~|~\terminal{\terminal{a}D}\terminal{b}~|~\terminal{CS}\terminal{SD}~|~\terminal{a}B~|~\terminal{a}\terminal{b}~|~\terminal{CS}S~|~S\terminal{SD} \\
+B \rightarrow \terminal{b}B~|~\terminal{a}C~|~\terminal{b}D~|~a~|~b \\
+C \rightarrow C\terminal{c}~|~c \\
+D \rightarrow AC~|~\terminal{a}\terminal{BD}~|~\terminal{\terminal{a}D}\terminal{b}~|~CSSD~|~\terminal{a}B~|~\terminal{a}\terminal{b}~|~\terminal{CS}S~|~S\terminal{SD} \\
+\terminal{a} \rightarrow a \\
+\terminal{b} \rightarrow b \\
+\terminal{c} \rightarrow c \\
+\terminal{BC} \rightarrow BC \\
+\terminal{BD} \rightarrow BD \\
+\terminal{\terminal{a}D} \rightarrow \terminal{a}D \\
+\terminal{CS} \rightarrow CS \\
+\terminal{SD} \rightarrow SD
+$
+
+\item
+% Ob die Begründung formuliert wie es erwartet wird, weiß ich nicht, sie stimmt aber ;) 
+Wiederherstellen der ursprünglichen Sprache durch evtl. Hinzunahme einer $\epsilon$-Regel \\
+Es muss keine $\epsilon$-Regel hinzugefügt werden, da in der Sprache keine leeres Wort erzeugt werden konnte. \\
+$
+S \rightarrow BCD $ mit $C \rightarrow \epsilon$, $D \rightarrow \epsilon$ und $B \rightarrow bB~|aC~|bD$ \\
+$S$ wird also mindestens auf $a$, oder $b$ abgeleitet.
+\end{enumerate}
+
 
 \aufgabe{4.5}
 
