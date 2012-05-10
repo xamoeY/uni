@@ -60,6 +60,14 @@ f(x) &= \arcsin(\sqrt{x}) \\
 f'(x) &= \frac{1}{\sqrt{1-\sqrt{x^2}}} \\
 f(x) &= \frac{1}{\sqrt{1-x}}
 \end{align}
+\item
+\begin{align}
+f(x) &= (x^3-1)^{\arctan(x)} \\
+&= e^{\ln((x^3-1)^{\arctan (x)}} \\
+&= e^{{\arctan (x)}*\ln((x^3-1)}\\
+f'(x) &= e^{{\arctan (x)}*\ln((x^3-1)} * (\frac{1}{1+x^2}*\ln(x^3-1)+\arctan(x)*\frac{1}{x^3-1}*3x^2)\\
+&= (x^3-1)^{\arctan(x)}*(\frac{ln(x^3-1)}{1+x^2}+\frac{3x^2*\arctan(x)}{x^3-1}
+\end{align}
 \end{enumerate}
 
 
@@ -98,7 +106,7 @@ Bereiche:\\
 \(f'(x) < 0 \forall x \in (1,\infty)\)
 
 
-\(f''(x) < 0 \forall x \in (-\infty,\sqrt 3)\)\\
+\(f''(x) < 0 \forall x \in (-\infty,-\sqrt 3)\)\\
 \(f''(x) > 0 \forall x \in (-\sqrt 3,0)\)\\
 \(f''(x) < 0 \forall x \in (0, \sqrt 3)\)\\
 \(f''(x) > 0 \forall x \in (\sqrt 3, \infty)\)
@@ -120,7 +128,7 @@ f(x) & -0.0997506 & -0.19802 & -0.19802 & -1 & 0 & 1 & 0.384615 & 0.19802 & 0.09
 
 Skizze:\\
 \hspace*{-1.5in}
-\includegraphics[scale=0.6]{Homework-2012-05-03-2.pdf}\\
+\includegraphics[scale=0.6]{Homework-2012-05-10-2.pdf}\\
 Blau: \(f(x)\)\\
 Rot: \(f'(x)\)\\
 Grün: \(f''(x)\)
