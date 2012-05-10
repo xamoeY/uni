@@ -55,15 +55,29 @@
 
   \textbf{unerfüllbar, falsifizierbar}
   $$((A\vee B)\wedge(A\Leftrightarrow B)\wedge\neg A)$$
-  %TODO Begründung
+  Wegen $(A\Leftrightarrow B)$ muss $A=B$ sein. Da $A$ (und auch $B$) wegen $(\neg A)$ negativ sein muss, kann die erste Teilformel dann nicht mehr erfüllt sein.
 
   $$((A\vee B)\Leftrightarrow(\neg A\wedge\neg B))$$
-  %TODO Begründung
+  Wenn $A$ oder $B$ wahr sind, ist der zweite Teil der Formel auf jeden Fall falsch. Wenn $A=B=0$ ist, ist der zweite Teil wahr und damit die Biimplikation immer unerfüllt.
 
   $$((A\vee B)\wedge(\neg B\Leftrightarrow A)\wedge(A\Leftrightarrow B))$$
-  %TODO Begründung
+  Wegen dem letzten Term muss $A=B$ sein um die Formel zu erfüllen. Der zweite Term ist aber nur erfüllt, wenn $A\neq B$, daher ist die Formel unerfüllbar.
 
   \item
+
+  \begin{enumerate}[a)]
+   \item
+   $$((A\Rightarrow B)\Rightarrow(C\Rightarrow D))\equiv ((B\Rightarrow A)\Rightarrow(D\Rightarrow C))$$
+   Lässt sich widerlegen mit: $A=0,\ B=0,\ C=0,\ D=1$\\
+   Dann ist die linke Seite $0$ und die rechte ist $1$.
+
+   \item
+   $$((A\vee(B\vee C))\wedge(D\vee(E\vee F))) \equiv ((A\wedge D)\vee ((B\wedge E)\vee(C\wedge F)))$$
+   Lässt sich widerlegen mit: $A=1,\ B=0,\ C=0,\ D=0,\ E=1,\ F=0$\\
+   Dann ist die linke Seite $1$ und die rechte Seite ist $0$.
+
+  \end{enumerate}
+
 \end{enumerate}
 
 \aufgabe{6.4}
