@@ -1,0 +1,75 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 15.05.2012}
+\newcommand{\aufgabe}[1]{\item[\textbf{#1}]}
+
+\title{\titleinfo}
+\author{Arne Feil}
+\date{\today}
+\ihead{FGI1}
+\chead{Arne Feil, Sven-Hendrik Haase, Christian Darsow-Fromm}
+\ohead{\today}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+\newcommand{\terminal}[1]{\langle #1 \rangle }
+\everymath{\displaystyle}
+\begin{document}
+%\maketitle
+\begin{enumerate}
+
+\aufgabe{6.3}
+\begin{enumerate}[1.]
+ \item
+
+  \textbf{allgemeingültig, erfüllbar}
+
+  $$((A\vee B))\vee (A\Rightarrow A))$$
+  Da die Teilformel $(A\Rightarrow A)$ offensichtlich allgemeingültig und mit \textit{oder} zum anderen Teil verknüpft ist, ist die gesamte Formel allgemeingültig.
+
+  $$((A\vee B)\vee\neg B)$$
+  $B$ oder $\neg B$ muss immer wahr sein.
+
+  $$(A\vee B)\Rightarrow(A\vee\neg A))$$
+  $(A\vee\neg A)$ ist immer wahr, daher auch die ganze Formel.
+
+  \textbf{kontingent, erfüllbar, falsifizierbar}
+
+  $$((A\vee B)\wedge(A\Rightarrow B))$$
+  Mit z.B. $A=0$ und $B=0$ ist die Formel unerfüllt und mit $A=1$ und $B=1$ ist sie erfüllt.
+
+  $$((A\vee B)\Rightarrow(\neg A\wedge \neg A))$$
+  Mit $A=1$ und $B=1$ ist sie unerfüllt und mit $A=0$ und $B=0$ erfüllt.
+
+  $$((A\vee B)\wedge(B\Leftrightarrow A))$$
+  Mit $A=0$ und $B=1$ ist sie unerfüllt und mit $A=1$ und $B=0$ erfüllt.
+
+  \textbf{unerfüllbar, falsifizierbar}
+  $$((A\vee B)\wedge(A\Leftrightarrow B)\wedge\neg A)$$
+  %TODO Begründung
+
+  $$((A\vee B)\Leftrightarrow(\neg A\wedge\neg B))$$
+  %TODO Begründung
+
+  $$((A\vee B)\wedge(\neg B\Leftrightarrow A)\wedge(A\Leftrightarrow B))$$
+  %TODO Begründung
+
+  \item
+\end{enumerate}
+
+\aufgabe{6.4}
+
+\aufgabe{6.5}
+
+
+\end{enumerate}
+\end{document}
