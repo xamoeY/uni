@@ -82,6 +82,30 @@
 
 \aufgabe{6.4}
 
+\begin{enumerate}[1.]
+ \item
+  $$((A\Leftrightarrow B)\Leftrightarrow C)$$
+
+  Elimination von $\Leftrightarrow$:
+  $$(((A\wedge B)\vee(\neg B\wedge\neg A))\Leftrightarrow C)$$
+  $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C)\vee(\neg C\wedge\neg((A\wedge B)\vee(\neg B\wedge\neg A))) )$$
+
+  de Morgan:
+  $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge(\neg(A\wedge B)\wedge\neg(\neg B\wedge\neg A))))$$
+  nochmal de Morgan:
+  $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(\neg\neg B\vee\neg\neg A))))$$
+  doppelte Negation entfernen:
+  $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
+
+  KNF bilden: % TODO Konjunktionen nach außen treiben.
+  $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
+
+  DNF bilden: % TODO Disjunktionen nach außen treiben.
+  $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
+
+\end{enumerate}
+
+
 \aufgabe{6.5}
 
 
