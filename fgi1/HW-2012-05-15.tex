@@ -1,4 +1,4 @@
-\documentclass[a4paper]{scrartcl}
+\documentclass[a4paper,10pt]{scrartcl}
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -65,6 +65,7 @@
 
   \item
 
+  % Das muss noch ausführlicher...
   \begin{enumerate}[a)]
    \item
    $$((A\Rightarrow B)\Rightarrow(C\Rightarrow D))\equiv ((B\Rightarrow A)\Rightarrow(D\Rightarrow C))$$
@@ -100,9 +101,48 @@
   KNF bilden: % TODO Konjunktionen nach außen treiben.
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
 
-  DNF bilden: % TODO Disjunktionen nach außen treiben.
+  DNF bilden: % DONE nur noch nicht getexed.
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
+  [Distributivität]
+  $$ ((A \wedge B) \wedge C) \vee ((\neg A \wedge \neg B) \wedge C) \vee (((\neg A \wedge (A \vee B)) \vee (\neg B \wedge ( A \vee B))) \wedge \neg C) $$
+  $$ ((A \wedge B) \wedge C) \vee ((\neg A \wedge \neg B) \wedge C) \vee (((\neg A \wedge A) \vee (\neg A \wedge B) \vee ((\neg B \wedge A) \vee (\neg B \wedge B)) \wedge \neg C) $$
+  [Unerfüllbarkeitsregeln]
+  $$ ((A \wedge B) \wedge C) \vee ((\neg A \wedge \neg B) \wedge C) \vee ((( \neg A \wedge B) \vee (\neg B \wedge A)) \wedge \neg C) $$
+  [Distributivität]
+  $$ ((A \wedge B) \wedge C) \vee ((\neg A \wedge \neg B) \wedge C) \vee ((( \neg A \wedge B) \wedge \neg C) \vee (( \neg B \wedge A) \wedge \neg C) $$
+  DNF:
+  $$ (A \wedge B \wedge C) \vee (\neg A \wedge \neg B \wedge C) \vee (\neg A \wedge B \wedge \neg C) \vee (\neg B \wedge A \wedge \neg C) $$
 
+	\item{}
+	$$((A\Leftrightarrow B)\Leftrightarrow C) \quad \quad D\equiv (A \Leftrightarrow B)$$
+	
+	\begin{tabular}[t]{c|c|c||c|c}
+		$A$ & $B$ & $C$ & $D$ & $D \Leftrightarrow C$ \\\hline
+		0&0&0&1&0 \\
+		0&0&1&1&1\\
+		0&1&0&0&1\\
+		0&1&1&0&0\\
+		1&0&0&0&1\\
+		1&0&1&0&0\\
+		1&1&0&1&0\\
+		1&1&1&1&1\\
+	\end{tabular}
+	
+	$$ DNF: \quad  D \equiv (A \wedge B) \quad  E \equiv (D \wedge C) \quad F \equiv (\neg A \wedge \neg B) \quad G \equiv (F \wedge C) $$
+	$$ H \equiv (\neg A \wedge B) \quad I \equiv (H \wedge \neg C) \quad J \equiv (\neg B \wedge A) \quad K \equiv (J \wedge \neg C) $$
+	$$ L \equiv (E \vee G) \quad M \equiv (I \vee K) \quad DNF \equiv (L \vee M)$$
+	
+	\begin{tabular}[t]{c|c|c||c|c|c|c|c|c|c|c|c|c|c|c|c||c}
+		$A$&$B$&$C$&$\neg A$&$\neg B$&$\neg C$&$D$&$E$&$F$&$G$&$H$&$I$&$J$&$K$&$L$&$M$&$DNF$\\\hline
+		0&0&0&1&1&1&0&0&1&0&0&0&0&0&0&0&0\\
+		0&0&1&1&1&0&0&0&1&1&0&0&0&0&1&0&1\\
+		0&1&0&1&0&1&0&0&0&0&1&1&0&0&0&1&1\\
+		0&1&1&1&0&0&0&0&0&0&1&0&0&0&0&0&0\\
+		1&0&0&0&1&1&0&0&0&0&0&0&1&1&0&1&1\\
+		1&0&1&0&1&0&0&0&0&0&0&0&1&0&0&0&0\\
+		1&1&0&0&0&1&1&0&0&0&0&0&0&0&0&0&0\\
+		1&1&1&0&0&0&1&1&0&0&0&0&0&0&1&0&1\\
+	\end{tabular}
 \end{enumerate}
 
 
