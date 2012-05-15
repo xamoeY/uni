@@ -68,13 +68,23 @@
   % Das muss noch ausführlicher...
   \begin{enumerate}[a)]
    \item
-   $$((A\Rightarrow B)\Rightarrow(C\Rightarrow D))\equiv ((B\Rightarrow A)\Rightarrow(D\Rightarrow C))$$
-   Lässt sich widerlegen mit: $A=0,\ B=0,\ C=0,\ D=1$\\
-   Dann ist die linke Seite $0$ und die rechte ist $1$.
-
+   $((A\Rightarrow B)\Rightarrow(C\Rightarrow D))\equiv ((B\Rightarrow A)\Rightarrow(D\Rightarrow C))$ \\
+   Lässt sich widerlegen mit: $A=0,\ B=0,\ C=0,\ D=1$\\ \\
+   Wenn $A$ und $B$ falsch sind und $A$ impliziert $B$, dann ist diese Implikation ($I_1$) wahr. Wenn $C$ falsch, $D$ wahr ist 
+   und $C$ impliziert $D$, dann ist diese Implikation ($I_2$) auch wahr. Wenn die $I_1$, $I_2$ wahr sind und $I_1$ impliziert $I_2$, dann
+   ist diese Implikation wahr. \\
+   Wenn $B$ $A$ impliziert, dann ist diese Implikation ($I_3$) wahr. Die Implikation ($I_4$), $D$ impliziert $C$, ist falsch. $I_3$ impliziert $I_4$ 
+   ist also falsch. \\
+   $A,B,C$ sind falsch und $D$ ist wahr, ist ein Modell für die linke Seite der Äquivalenzbehauptung, aber nicht für die Rechte. Damit sind die beiden
+   Formeln nicht äquivalent.
+  
    \item
-   $$((A\vee(B\vee C))\wedge(D\vee(E\vee F))) \equiv ((A\wedge D)\vee ((B\wedge E)\vee(C\wedge F)))$$
-   Lässt sich widerlegen mit: $A=1,\ B=0,\ C=0,\ D=0,\ E=1,\ F=0$\\
+   $((A\vee(B\vee C))\wedge(D\vee(E\vee F))) \equiv ((A\wedge D)\vee ((B\wedge E)\vee(C\wedge F)))$ \\
+   Lässt sich widerlegen mit: $A=1,\ B=0,\ C=0,\ D=0,\ E=1,\ F=0$\\ \\
+   Wenn $B$ und $C$ falsch sind, ist die Disjunktion dieser auch falsch, dies disjungiert mit $A$, welches wahr ist, ist dann wahr ($D_{1}$).
+   Wenn $E$ wahr und $F$ falsch ist, ist die Disjunktion dieser wahr und disjungt mit $D$, wechles falsch ist, auch wieder wahr ($D_{2}$).
+   Konjungiert man $D_{1}$ und $D_{2}$, dann ist diese Konjunktion wahr. \\
+   Die Konjunktionen $A$ und $D$, $B$ und $E$, $C$ und $F$
    Dann ist die linke Seite $1$ und die rechte Seite ist $0$.
 
   \end{enumerate}
@@ -101,7 +111,7 @@
   KNF bilden: % TODO Konjunktionen nach außen treiben.
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
 
-  DNF bilden: % DONE nur noch nicht getexed.
+  DNF bilden: 
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
   [Distributivität]
   $$ ((A \wedge B) \wedge C) \vee ((\neg A \wedge \neg B) \wedge C) \vee (((\neg A \wedge (A \vee B)) \vee (\neg B \wedge ( A \vee B))) \wedge \neg C) $$
