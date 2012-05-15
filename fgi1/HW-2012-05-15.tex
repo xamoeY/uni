@@ -65,8 +65,7 @@
 
   \item
 
-  % Das muss noch ausführlicher...
-  \begin{enumerate}[a)]
+ \begin{enumerate}[a)]
    \item
    $((A\Rightarrow B)\Rightarrow(C\Rightarrow D))\equiv ((B\Rightarrow A)\Rightarrow(D\Rightarrow C))$ \\
    Lässt sich widerlegen mit: $A=0,\ B=0,\ C=0,\ D=1$\\ \\
@@ -108,10 +107,7 @@
   doppelte Negation entfernen:
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
 
-  KNF bilden: % TODO Konjunktionen nach außen treiben.
-  $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
-
-  DNF bilden:
+ DNF bilden:
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
   [Distributivität]
   $$ ((A \wedge B) \wedge C) \vee ((\neg A \wedge \neg B) \wedge C) \vee (((\neg A \wedge (A \vee B)) \vee (\neg B \wedge ( A \vee B))) \wedge \neg C) $$
@@ -163,6 +159,22 @@
  % In 6.5.2 b) steht, dass TAUSCH() angewendet auf eine KNF eine DNF liefert.
  % Verstehe ich die Aufgabe hier nicht oder ist es echt nur das Wiederholen
  % der Definition ein paar Zeilen darüber? ~Sven
+ 
+ Behauptung: Wird TAUSCH auf eine konjunktive Normalform angewendet, erzeugt dies eine disjunktive Normalform. \\
+ \\
+ Induktionsanfang: $F$ ist eine KNF, da jede atomare Formel sowohl eine DNF als auch eine KNF ist. 
+ $\text{TAUSCH}(F) = \neg F$ ist eine DNF. \\
+ \\
+ Induktionsannahme: $G$ und $H$ sind KNFs, dann ist ($G \wedge H$) auch eine KNF, die nach Anwendung von TAUSCH zu
+ einer DNF wird. \\
+ \\
+ Induktionsschritt: \\
+	$(G \wedge H) = (\overset{n}{\underset{i=1}{\wedge}} (\overset{mi}{\underset{k=1}{\vee}} L_{i,k})) \wedge  
+	(\overset{p}{\underset{j=1}{\wedge}} (\overset{uj}{\underset{x=1}{\vee}} L_{j,x}))\quad \quad $ [Def. KNF] \\ \\
+	$\text{TAUSCH}((G\wedge H)) = \text{TAUSCH}(\overset{n}{\underset{i=1}{\wedge}} (\overset{mi}{\underset{k=1}{\vee}} L_{i,k})) \vee \text{TAUSCH}(\overset{p}{\underset{j=1}{\wedge}} (\overset{uj}{\underset{x=1}{\vee}} L_{j,x}))$ \\ \\
+	$\equiv (\overset{n}{\underset{i=1}{\vee}} \text{TAUSCH}(\overset{mi}{\underset{k=1}{\vee}} L_{i,k})) \vee (\overset{p}{\underset{j=1}{\vee}} \text{TAUSCH}(\overset{uj}{\underset{x=1}{\vee}} L_{j,x}))$ \\ \\
+	$\equiv (\overset{n}{\underset{i=1}{\vee}} (\overset{mi}{\underset{k=1}{\wedge}} \text{TAUSCH}(L_{i,k}))) \vee (\overset{p}{\underset{j=1}{\vee}} (\overset{uj}{\underset{x=1}{\wedge}} \text{TAUSCH}(L_{j,x})))$ \\ \\
+	$\rightarrow $ Das ist eine DNF.
 
  \item
  % Wenn F bereits eine KNF ist und dann noch mal KNF() darauf angewendet wird
@@ -180,7 +192,8 @@
  Mit diesem Gegenbeispiel lässt sich Peters Argumentation widerlegen, wenn man
  $A=B=C=0$ einsetzt.\\
  Dann ist $(A\vee B)=0$ und $((A\vee B)\wedge C)=0$ folglich auch.\\
- Auf der anderen Seite ergibt das dann $(\neg A\wedge\neg B)=1$ und $((\neg A\wedge\neg B)\vee\neg C)=1$.\\
+ Auf der anderen Seite ergibt das dann \\
+ $(\neg A\wedge\neg B)=1$ und $((\neg A\wedge\neg B)\vee\neg C)=1$.\\
  Dieses Beispiel zeigt, dass die Tauschformel im Allgemeinen keine DNF zu der ursprünglichen KNF bildet.
 
 
