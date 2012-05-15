@@ -70,14 +70,14 @@
    \item
    $((A\Rightarrow B)\Rightarrow(C\Rightarrow D))\equiv ((B\Rightarrow A)\Rightarrow(D\Rightarrow C))$ \\
    Lässt sich widerlegen mit: $A=0,\ B=0,\ C=0,\ D=1$\\ \\
-   Wenn $A$ und $B$ falsch sind und $A$ impliziert $B$, dann ist diese Implikation ($I_1$) wahr. Wenn $C$ falsch, $D$ wahr ist 
+   Wenn $A$ und $B$ falsch sind und $A$ impliziert $B$, dann ist diese Implikation ($I_1$) wahr. Wenn $C$ falsch, $D$ wahr ist
    und $C$ impliziert $D$, dann ist diese Implikation ($I_2$) auch wahr. Wenn die $I_1$, $I_2$ wahr sind und $I_1$ impliziert $I_2$, dann
    ist diese Implikation wahr. \\
-   Wenn $B$ $A$ impliziert, dann ist diese Implikation ($I_3$) wahr. Die Implikation ($I_4$), $D$ impliziert $C$, ist falsch. $I_3$ impliziert $I_4$ 
+   Wenn $B$ $A$ impliziert, dann ist diese Implikation ($I_3$) wahr. Die Implikation ($I_4$), $D$ impliziert $C$, ist falsch. $I_3$ impliziert $I_4$
    ist also falsch. \\
    $A,B,C$ sind falsch und $D$ ist wahr, ist ein Modell für die linke Seite der Äquivalenzbehauptung, aber nicht für die Rechte. Damit sind die beiden
    Formeln nicht äquivalent.
-  
+
    \item
    $((A\vee(B\vee C))\wedge(D\vee(E\vee F))) \equiv ((A\wedge D)\vee ((B\wedge E)\vee(C\wedge F)))$ \\
    Lässt sich widerlegen mit: $A=1,\ B=0,\ C=0,\ D=0,\ E=1,\ F=0$\\ \\
@@ -111,7 +111,7 @@
   KNF bilden: % TODO Konjunktionen nach außen treiben.
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
 
-  DNF bilden: 
+  DNF bilden:
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
   [Distributivität]
   $$ ((A \wedge B) \wedge C) \vee ((\neg A \wedge \neg B) \wedge C) \vee (((\neg A \wedge (A \vee B)) \vee (\neg B \wedge ( A \vee B))) \wedge \neg C) $$
@@ -125,7 +125,7 @@
 
 	\item{}
 	$$((A\Leftrightarrow B)\Leftrightarrow C) \quad \quad D\equiv (A \Leftrightarrow B)$$
-	
+
 	\begin{tabular}[t]{c|c|c||c|c}
 		$A$ & $B$ & $C$ & $D$ & $D \Leftrightarrow C$ \\\hline
 		0&0&0&1&0 \\
@@ -137,11 +137,11 @@
 		1&1&0&1&0\\
 		1&1&1&1&1\\
 	\end{tabular}
-	
+
 	$$ DNF: \quad  D \equiv (A \wedge B) \quad  E \equiv (D \wedge C) \quad F \equiv (\neg A \wedge \neg B) \quad G \equiv (F \wedge C) $$
 	$$ H \equiv (\neg A \wedge B) \quad I \equiv (H \wedge \neg C) \quad J \equiv (\neg B \wedge A) \quad K \equiv (J \wedge \neg C) $$
 	$$ L \equiv (E \vee G) \quad M \equiv (I \vee K) \quad DNF \equiv (L \vee M)$$
-	
+
 	\begin{tabular}[t]{c|c|c||c|c|c|c|c|c|c|c|c|c|c|c|c||c}
 		$A$&$B$&$C$&$\neg A$&$\neg B$&$\neg C$&$D$&$E$&$F$&$G$&$H$&$I$&$J$&$K$&$L$&$M$&$DNF$\\\hline
 		0&0&0&1&1&1&0&0&1&0&0&0&0&0&0&0&0\\
@@ -163,14 +163,27 @@
  % In 6.5.2 b) steht, dass TAUSCH() angewendet auf eine KNF eine DNF liefert.
  % Verstehe ich die Aufgabe hier nicht oder ist es echt nur das Wiederholen
  % der Definition ein paar Zeilen darüber? ~Sven
- 
+
  \item
  % Wenn F bereits eine KNF ist und dann noch mal KNF() darauf angewendet wird
  % und auf die ganze Suppe dann nochmal TAUSCH() angewendet wird, dann
  % resultiert daraus doch keine DNF mehr, oder?
  %
  % Wenn diese Überlegung Dummsinn ist, wieso irrt sich Peter dann?
- % Wir sehen an 6.5.2 b), dass TAUSCH(KNF) eine DNF ergibt. 
+ % Wir sehen an 6.5.2 b), dass TAUSCH(KNF) eine DNF ergibt.
+ Gegenbeispiel:
+ \begin{align*}
+  \text{KNF}(F) &= ((A\vee B)\wedge C)\\
+  \text{TAUSCH}(\text{KNF}(F)) &= ((\neg A\wedge\neg B)\vee\neg C)\\
+  ((A\vee B)\wedge C) &\stackrel{?}{\equiv} ((\neg A\wedge\neg B)\vee\neg C)
+ \end{align*}
+ Mit diesem Gegenbeispiel lässt sich Peters Argumentation widerlegen, wenn man
+ $A=B=C=0$ einsetzt.\\
+ Dann ist $(A\vee B)=0$ und $((A\vee B)\wedge C)=0$ folglich auch.\\
+ Auf der anderen Seite ergibt das dann $(\neg A\wedge\neg B)=1$ und $((\neg A\wedge\neg B)\vee\neg C)=1$.\\
+ Dieses Beispiel zeigt, dass die Tauschformel im Allgemeinen keine DNF zu der ursprünglichen KNF bildet.
+
+
 \end{enumerate}
 
 \end{enumerate}
