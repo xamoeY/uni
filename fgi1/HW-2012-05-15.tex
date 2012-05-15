@@ -106,8 +106,15 @@
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(\neg\neg B\vee\neg\neg A))))$$
   doppelte Negation entfernen:
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
+  \textbf{KNF bilden:} (Distributivität)
+  $$((((A\wedge B)\vee(\neg B\wedge\neg A))\vee (\neg C\wedge((\neg A\vee\neg B)\wedge(B\vee A)))) \wedge (V\vee(\neg C\wedge((\neg A\vee\neg B)\wedge(B\vee A)))))$$
+  $$((((A\wedge B)\vee\neg B)\wedge((A\wedge B)\vee\neg A)) \wedge ((C\vee \neg C)\wedge(C\vee((\neg A\vee\neg B))\wedge(B\vee A))))$$
+  Distributivität, Tautologien
+  $$(((A\vee\neg B)\wedge(B\vee\neg A)) \wedge ((C\vee(\neg A\vee\neg B))\wedge(C\vee(B\vee A))))$$
+  DNF:
+  $$(((A\vee\neg B)\wedge(B\vee\neg A)) \wedge ((C\vee\neg A\vee\neg B)\wedge(C\vee B\vee A))))$$
 
- DNF bilden:
+ \textbf{DNF bilden:}
   $$((((A\wedge B)\vee(\neg B\wedge\neg A))\wedge C) \vee(\neg C\wedge((\neg A\vee \neg B)\wedge(B\vee A))))$$
   [Distributivität]
   $$ ((A \wedge B) \wedge C) \vee ((\neg A \wedge \neg B) \wedge C) \vee (((\neg A \wedge (A \vee B)) \vee (\neg B \wedge ( A \vee B))) \wedge \neg C) $$
@@ -159,17 +166,17 @@
  % In 6.5.2 b) steht, dass TAUSCH() angewendet auf eine KNF eine DNF liefert.
  % Verstehe ich die Aufgabe hier nicht oder ist es echt nur das Wiederholen
  % der Definition ein paar Zeilen darüber? ~Sven
- 
+
  Behauptung: Wird TAUSCH auf eine konjunktive Normalform angewendet, erzeugt dies eine disjunktive Normalform. \\
  \\
- Induktionsanfang: $F$ ist eine KNF, da jede atomare Formel sowohl eine DNF als auch eine KNF ist. 
+ Induktionsanfang: $F$ ist eine KNF, da jede atomare Formel sowohl eine DNF als auch eine KNF ist.
  $\text{TAUSCH}(F) = \neg F$ ist eine DNF. \\
  \\
  Induktionsannahme: $G$ und $H$ sind KNFs, dann ist ($G \wedge H$) auch eine KNF, die nach Anwendung von TAUSCH zu
  einer DNF wird. \\
  \\
  Induktionsschritt: \\
-	$(G \wedge H) = (\overset{n}{\underset{i=1}{\wedge}} (\overset{mi}{\underset{k=1}{\vee}} L_{i,k})) \wedge  
+	$(G \wedge H) = (\overset{n}{\underset{i=1}{\wedge}} (\overset{mi}{\underset{k=1}{\vee}} L_{i,k})) \wedge
 	(\overset{p}{\underset{j=1}{\wedge}} (\overset{uj}{\underset{x=1}{\vee}} L_{j,x}))\quad \quad $ [Def. KNF] \\ \\
 	$\text{TAUSCH}((G\wedge H)) = \text{TAUSCH}(\overset{n}{\underset{i=1}{\wedge}} (\overset{mi}{\underset{k=1}{\vee}} L_{i,k})) \vee \text{TAUSCH}(\overset{p}{\underset{j=1}{\wedge}} (\overset{uj}{\underset{x=1}{\vee}} L_{j,x}))$ \\ \\
 	$\equiv (\overset{n}{\underset{i=1}{\vee}} \text{TAUSCH}(\overset{mi}{\underset{k=1}{\vee}} L_{i,k})) \vee (\overset{p}{\underset{j=1}{\vee}} \text{TAUSCH}(\overset{uj}{\underset{x=1}{\vee}} L_{j,x}))$ \\ \\
