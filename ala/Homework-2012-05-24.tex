@@ -6,8 +6,10 @@
 \usepackage{amssymb}
 \usepackage{amsmath}
 \usepackage{enumerate}
+\usepackage{pgfplots}
 \usepackage{scrpage2}\pagestyle{scrheadings}
 \usepackage{tikz}
+\usetikzlibrary{patterns}
 
 \newcommand{\titleinfo}{Hausaufgaben zum 24. Mai 2012}
 
@@ -26,8 +28,128 @@
 \begin{enumerate}
 
 \item[\textbf{1.}]
+\begin{enumerate}
+\item
+Es gilt: \(x_i = \frac {i(b-a)} n\) sowie \(\sum\limits_{i=1}^\infty i^3 = \frac {n^2(n+1)^2} 4\).
+\begin{align}
+O_n =& \frac {b-a} n \cdot \sum\limits_{i=1}^n f(x_i) \\
+    =& \frac {b-a} n \cdot \sum\limits_{i=1}^n f\Bigg(\frac {i(b-a)} n\Bigg) \\
+    =& \frac 3 n \sum\limits_{i=1}^n f\Bigg(\frac {3i} n \Bigg)^3 \\
+    =& \frac {27} {n^3} \cdot \frac 3 n \sum\limits_{i=1}^n i^3 \\
+    =& \frac {81} {n^4} \cdot \frac {n^2(n+1)^2} 4 \\
+    =& \frac {81n^4+2n+1} {4n^4} \\
+    =& \lim\limits_{n\to\infty} \Bigg(\frac {81n^4+2n+1} {4n^4}\Bigg) \\
+    =& \lim\limits_{n\to\infty} \Bigg(\frac {n^4(81+\frac {2n} {n^4}+\frac 1 {n^4})} {n^4 (4)}\Bigg) \\
+    =& \frac {81} 4
+\end{align}
+
+\item
+\begin{align}
+F(x) &= \frac 1 4 x^4 \\
+\int_0^3 f(x)dx &= F(b) - F(a) \\
+&= \Bigg(\frac 1 4 \cdot 3^4\Bigg) - \Bigg(\frac 1 4 \cdot 0^4\Bigg) \\
+&= \frac {81} 4
+\end{align}
+\end{enumerate}
 
 \item[\textbf{2.}]
+\begin{enumerate}[(i)]
+
+\item
+~\\
+\begin{align}
+f(x) &= x^2-x-6 \\
+F(x) &= \frac 1 3 x^3 - \frac 1 2 x^2 - 6x \\
+\int_1^3 f(x) dx &= F(3) - F(1) \\
+&= (\frac 1 3 \cdot 3^3 - \frac 1 2 \cdot 3^2 - 6 \cdot 2) \\
+&= (9 - \frac 9 2 - 18) - (- \frac {37} 6) \\
+&= - \frac {22} 3
+\end{align}
+\centerline{
+\begin{tikzpicture}
+  \begin{axis}[xmin=0, xmax=4, 
+    xlabel=$x$,
+    ylabel={$f(x) = x^2 - x - 6$}
+  ] 
+    \addplot[fill=blue,fill opacity=0.3,domain=1:3]{x^2 - x - 6} \closedcycle;
+    \addplot[smooth]{x^2 - x - 6};
+  \end{axis}
+\end{tikzpicture}
+}
+
+\newpage
+\item
+~\\
+\begin{align}
+f(x) &= \sqrt[3]{x} = x^{\frac 1 3} \\
+F(x) &= \frac 3 4 x^{\frac 4 3} \\
+\int_1^3 f(x) f(x) dx &= F(3) - F(1) \\
+&= (\frac 3 4 x^{\frac 4 3}) - (\frac 3 4 \cdot 1^{\frac 4 3}) \\
+&\approx 2.495
+\end{align}
+\centerline{
+\begin{tikzpicture}
+  \begin{axis}[xmin=0, xmax=4, 
+    xlabel=$x$,
+    ylabel={$f(x) = \sqrt[3]{x}$}
+  ] 
+    \addplot[fill=blue,fill opacity=0.3,domain=1:3]{x^(1/3)} \closedcycle;
+    \addplot[smooth]{x^(1/3)};
+  \end{axis}
+\end{tikzpicture}
+}
+
+\newpage
+\item
+~\\
+\begin{align}
+f(x) &= \frac 1 {1+x^2} = 1 \cdot (1+x^2)^{-1} \\
+F(x) &= \tan^{-1}(x) \\
+\int_1^3 f(x) dx &= F(3) - F(1) \\
+&= \tan^{-1}(3) - tan^{-1}(1) \\
+&\approx 26.565
+\end{align}
+\centerline{
+\begin{tikzpicture}
+  \begin{axis}[xmin=0, xmax=4, 
+    xlabel=$x$,
+    ylabel={$f(x) = \frac 1 {1+x^2}$}
+  ] 
+    \addplot[fill=blue,fill opacity=0.3,domain=1:3]{1/(1+x^2)} \closedcycle;
+    \addplot[smooth]{1/(1+x^2)};
+  \end{axis}
+\end{tikzpicture}
+}
+
+\item
+~\\
+\centerline{
+\begin{tikzpicture}
+  \begin{axis}[xmin=0, xmax=4, 
+    xlabel=$x$,
+    ylabel={$f(x) = ln(x)$}
+  ] 
+    \addplot[fill=blue,fill opacity=0.3,domain=1:3]{ln x} \closedcycle;
+    \addplot[smooth]{ln x};
+  \end{axis}
+\end{tikzpicture}
+}
+
+\item
+~\\
+\centerline{
+\begin{tikzpicture}
+  \begin{axis}[xmin=0, xmax=4, 
+    xlabel=$x$,
+    ylabel={$f(x) = e^{-x}$}
+  ] 
+    \addplot[fill=blue,fill opacity=0.3,domain=1:3]{e^(-x)} \closedcycle;
+    \addplot[domain=0:4]{e^(-x)};
+  \end{axis}
+\end{tikzpicture}
+}
+
+\end{enumerate}
 
 \item[\textbf{3.}]
 
