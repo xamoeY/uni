@@ -234,9 +234,68 @@ Probe:
 	&=x^2 e^x
 \end{align}
 \end{enumerate}
-\newpage
 
+\newpage
 \item[\textbf{4.}]
+\begin{enumerate}[(i)]
+\item
+Substitutionen:\\
+Sei:\\
+\(u=\frac{1}{3}x +2\\ 
+\Rightarrow \ u'=\frac{1}{3}\ \land \ du=\frac{1}{3}dx\ \Leftrightarrow\ dx=3du\)\\
+ \\
+Daraus folgt:
+\begin{align}
+\int e^{\sqrt{\frac{1}{3}x+2}}dx &=\int e^{\sqrt{u}} dx\\
+	&=3\int e^{\sqrt{u}} du
+\end{align}
+Sei:\\
+\(v=\sqrt{u}=u^{\frac{1}{2}}\\
+\Rightarrow \ v'=\frac{1}{2} u^{-\frac{1}{2}}\ \land \ du=\frac{1}{2} u^{-\frac{1}{2}} du\ \Leftrightarrow \ dv=2 \sqrt{u}\ dv\)\\
+\\
+Daraus folgt:
+\begin{align}
+3\int e^{\sqrt{u}}\ du &=3\int e^v\ du\\
+	&=3\int e^v 2\sqrt{u}\ dv\\	
+	&=6 \int e^v v\ dv
+\end{align}
+Integration:
+\begin{align}
+6\int e^v v\ dv &= e^v v- \int 1e^v\ dv\\
+	&= 6(e^v v-e^v)\\
+	&= 6e^v(v-1)
+\end{align}
+Resubstitutionen:
+\begin{align}
+6e^v(v-1) &= 6e^{\sqrt{u}}(\sqrt{u}-1)\\
+	&=6e^{\sqrt{\frac{1}{3}x+2}}\bigg(\sqrt{\frac{1}{3}x+2}-1\bigg)
+\end{align}
+\newpage
+\item
+Substitution:\\
+Sei:\\
+\(u=\sqrt[3]{x}=x^{\frac{1}{3}}\\
+\Rightarrow \ u'=\frac{1}{3}x^{-\frac{2}{3}} \ \land \ du=\frac{1}{3}x^{-\frac{2}{3}}\ dx \Leftrightarrow \ dx=3 \sqrt[3]{x^2}\ du\)
+\begin{align}
+\int e^{\sqrt[3]{x}}\ dx &=\int e^u\ dx\\
+	&=\int e^u\ 3\sqrt[3]{x^2}du\\
+	&=3\int e^u u^2\ du
+\end{align}
+Integration:\\
+\begin{align}
+3\int e^u\ u^2\ du &=3\Big(e^u\ u^2 - 2\int e^u\ u\ du\Big)\\
+\int e^u\ u\ du &=e^u\ u-\int e^u\ du\\
+	&=e^u\ u-e^u\\
+3\int e^u\ u^2\ du &=3(e^u\ u^2 - 2(e^u\ u-e^u))\\
+	 &=3(e^u\ u^2 - 2e^u\ u+2e^u)\\
+	 	&=3e^u(u^2-2u+2)
+\end{align}
+Resubstitution:\\
+\begin{align}
+3e^u(u^2-2u+2)&=3e^{\sqrt[3]{x}}(\sqrt[3]{x^2}-2\sqrt[3]{x}+2)
+\end{align}
+\end{enumerate}
+\newpage
 
 \item[\textbf{5.}]
 \(f:[0,3]\ \rightarrow \mathbb{R}\)\\
