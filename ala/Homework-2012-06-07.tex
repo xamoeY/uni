@@ -1,0 +1,116 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{pgfplots}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 7. Juni 2012}
+
+\title{\titleinfo}
+\author{Elena Noll, Sven-Hendrik Haase, Arne Struck}
+\date{\today}
+\ihead{EN, SHH, AS}
+\chead{\titleinfo}
+\ohead{\today}
+\setheadsepline{1pt}
+\setcounter{secnumdepth}{0}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\maketitle
+
+\section{1.}
+\subsection{(i)}
+lol
+\subsection{(ii)}
+\subsection{(iii)}
+
+\section{2.}
+\subsection{a)}
+\centerline{
+\begin{tikzpicture}[scale=1.5]
+  \begin{axis}[xmin=0, xmax=20,
+    xlabel=$x$,
+    ylabel={$f(x) = e^{-x}$}
+  ]
+    \addplot[smooth,domain=0:20,samples=40]{e^(-x)};
+  \end{axis}
+\end{tikzpicture}
+}
+Keine Wendepunkte vorhanden.\\
+
+\centerline{
+\begin{tikzpicture}[scale=1.5]
+  \begin{axis}[xmin=0, xmax=40,
+    xlabel=$x$,
+    ylabel={$g(x) = \frac 1 {1+x}$}
+  ]
+    \addplot[smooth,domain=0:40,samples=40]{1/(1+x)};
+  \end{axis}
+\end{tikzpicture}
+}
+Keine Wendepunkte vorhanden.\\
+
+\centerline{
+\begin{tikzpicture}[scale=1.5]
+  \begin{axis}[xmin=0, xmax=20,
+    xlabel=$x$,
+    ylabel={$h(x) = \frac 1 {1+x^2}$}
+  ]
+    \addplot[smooth,domain=0:20, samples=40]{1/(1+x^2)};
+    \addplot[color=red,mark=*] coordinates {(1/sqrt(3), 3/4)};
+  \end{axis}
+\end{tikzpicture}
+}
+Wendepunkt bei \(x=\frac 1 {\sqrt{3}}\)\\
+
+\subsection{b)}
+
+
+\subsection{c)}
+\centerline{
+\begin{tikzpicture}[scale=1.5]
+  \begin{axis}[xmin=-1, xmax=1,
+    xlabel=$x$,
+    ylabel={$h(x) = \frac 1 {\sqrt{1-x^2}}$}
+  ]
+    \addplot[smooth,domain=-2:2,samples=1000]{1/(sqrt(1-x^2))};
+  \end{axis}
+\end{tikzpicture}
+}
+
+\section{3.}
+
+\section{4.}
+\subsection{a)}
+\subsection{b)}
+\subsection{c)}
+\centerline{
+\begin{tikzpicture}[scale=1.5]
+  \begin{axis}[xmin=0, xmax=24,
+    xlabel=$x$,
+    ylabel={$f(x) = 9t \cdot e^{-\frac 1 3 t}$}
+  ]
+    \addplot[smooth,domain=0:24,samples=100]{9*x*e^(-1*x/3)};
+    \addplot[color=red,mark=*] coordinates {(6, 7.308105295)};
+  \end{axis}
+\end{tikzpicture}
+}
+Der gesuchte Punkt des stärksten Abbaus (Wendepunkt) liegt bei \(x = 6\).
+
+\section{5.}
+\subsection{a)}
+\subsection{b)}
+\subsection{c)}
+\subsection{d)}
+
+
+\end{document}
+
