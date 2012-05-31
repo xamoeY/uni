@@ -28,9 +28,111 @@
 
 \section{1.}
 \subsection{(i)}
-lol
+
+\[\int \frac{x+1}{x^2 -x-6}\ dx\]\\
+0-Wertbestimmung des Nenners (Bestimmung der rationalen Nullstellen):
+\[0=x^2 -x-6\]\\
+pq-Formel:
+\begin{align}
+p=-1\ q=-6\\
+x_{1/2}&=\frac{1}{2}\pm \sqrt{\Big(\frac{1}{2}\Big)^2 +6}\\
+  &=\frac{1}{2}\pm \frac{5}{2}\\
+	\Rightarrow & x_1 =-2 \land x_2 =3\\
+	\Rightarrow & x^2-x-6=(x-3)(x+2)
+\end{align}
+\begin{align}
+\frac{x+1}{x^2 -x-6}&= \frac{A}{x-3}+\frac{B}{x+2}\\
+	&=\frac{A(x+2)+B(x-3)}{(x-3)(x+2)}\\
+	&=\frac{Ax+2A+Bx-3B}{x^2 -x-6}\\
+	&=\frac{(A+B)x+2A-3B}{x^2 -x-6}
+\end{align}
+Daraus folgt:
+\begin{align}
+A+B &= 1 \Leftrightarrow A=1-B\\
+2A-3B &= 1\\
+\Rightarrow 1&=2(1-B)-3B\\
+	\Leftrightarrow 1&=2-5B\\
+	\Leftrightarrow 1&=5B\\
+	\Leftrightarrow \frac{1}{5} &= B\\
+	\Rightarrow A&=-\frac{1}{5}+1\\
+	\Rightarrow A&=\frac{4}{5}
+\end{align}
+A und B einsetzen:
+\begin{align}
+\frac{x+1}{x^2 -x-6}&=\frac{4}{5}\cdot \frac{1}{x-3}+\frac{1}{5}\cdot\frac{1}{x+2}\\
+\Rightarrow	\int \frac{x+1}{x^2 -x-6}\ dx &=\frac{4}{5}\int\frac{1}{x-3}\ dx+\frac{1}{5}\int\frac{1}{x+2}\ dx\\
+	&=\frac{4}{5}\ln |x-3|+\frac{1}{5}\ln |x+2|
+\end{align}
+Probe:
+\begin{align}
+\Big(\frac{4}{5}\ln |x-3|+\frac{1}{5}\ln |x+2|\Big)'&= \frac{4}{5}\Big(\ln |x-3|\Big)'+\frac{1}{5}\Big(\ln |x+2|\Big)'\\
+	&=\frac{4}{5}\cdot\frac{1}{x-3}+\frac{1}{5}\cdot\frac{1}{x+2}\\
+	&=\frac{4}{5}\cdot\frac{x+2}{(x-3)(x+2)}+\frac{1}{5}\cdot\frac{x-3}{(x+2)(x-3)}\\
+	&=\frac{4(x+2)+x-3}{5(x^2 -x-6)}\\
+	&=\frac{5x+5}{5(x^2 -x-6)}\\
+	&=\frac{5(x+1)}{5(x^2 -x-6)}\\
+	&=\frac{x+1}{x^2 -x-6}
+\end{align}
 \subsection{(ii)}
+\begin{align}
+\int \frac{2x+1}{x^2 -4x+4}\ dx &= \int \frac{2x-4 +1 +4}{x^2 -4x+4}\ dx\\
+	&=\int \frac{2x-4}{x^2 -4x+4}\ dx +\int \frac{5}{x^2 -4x+4}\ dx\\
+	&=\ln |x^2 -4x+4| + 5\int \frac{1}{x^2 -4x+4}\ dx\\
+	&=\ln |(x-2)^2 | + 5\int \frac{1}{(x-2)^2}\ dx\\
+\end{align}
+Nebenrechnung:\\
+Substitution:\\
+Sei: \(u=x-2\)\\
+\(\Rightarrow \ u'=1\ \land \ du=dx\)\\
+\begin{align}
+\int \frac{1}{(x-2)^2}\ dx &= \int \frac{1}{u^2}\ du\\
+	&=\int u^{-2}\ du\\
+	&= -u^{-1}\\
+	&= -\frac{1}{(x-2)}
+\end{align}
+\begin{align}
+\Rightarrow \int \frac{2x+1}{x^2 -4x+4}\ dx &= \ln|(x-2)^2 |+5 \int \frac{1}{(x-2)^2}\\
+	&=\ln|(x-2)^2 |- \frac{5}{(x-2)}\\
+\end{align}
+\newpage
+Probe:\\
+\begin{align}
+\Big(\ln|(x-2)^2 |- \frac{5}{(x-2)}\Big)'&=(\ln |(x-2)^2|)'-\Big(\frac{5}{(x-2)}\Big)'\\
+	&=\frac{2x-4}{(x^2 -4x+4)}-5\Big(\frac{1}{(x-2)}\Big)'|Sei: u=(x-2)\\
+	&=\frac{2x-4}{(x^2 -4x+4)}-5\Big(\frac{1}{u}\Big)'\\
+	&=\frac{2x-4}{(x^2 -4x+4)}-5\cdot-\frac{1}{u^2}\\
+	&=\frac{2x-4}{(x^2 -4x+4)}+\frac{5}{(x-2)^2}\\
+	&=\frac{2x-4}{(x^2 -4x+4)}+\frac{5}{(x^2 -4x+4)}\\
+	&=\frac{2x+1}{(x^2 -4x+4)}
+\end{align}
 \subsection{(iii)}
+\begin{align}
+\int \frac{4x+1}{x^2+4x+8}\ dx&=2\int \frac{2x+\frac{1}{2}}{x^2+4x+8}\ dx\\
+ &=2\int \frac{2x+4+\frac{1}{2}-4}{x^2+4x+8}\ dx\\
+ &=2\int \frac{2x+4}{x^2+4x+8}\ dx+\int \frac{\frac{1}{2}-4}{x^2+4x+8}\ dx\\
+ &=2\ln |x^2+4x+8| -\frac{7}{2}\int \frac{1}{x^2+4x+8}\ dx\\
+ &=2\ln |x^2+4x+8| -\frac{7}{2}\int \frac{1}{(x+2)^2+4}\ dx\\
+ &=2\ln |x^2+4x+8| -\frac{7}{2*4}\int \frac{1}{\Big(\frac{x+2}{2}\Big)^2+1}\ dx\\
+\end{align}
+\newpage
+\[Substitution\ von:\ \int \frac{1}{\Big(\frac{x+2}{2}\Big)^2+1}\ dx\]\\
+Sei:\\
+\(u=\frac{x+2}{2}\)\\ 
+\(\Rightarrow u'=\frac{1}{2}\ \land\ dx=2\ du\)\\
+\[2\int \frac{1}{u^2+1}\ dx =2\arctan(u)\]\\
+\[Resubstitution: 2\arctan \Big(\frac{x+2}{2}\Big)\]
+\begin{align}
+\Rightarrow \int \frac{4x+1}{x^2+4x+8}\ dx&=2\ln(x^2+4x+8) -\frac{7\cdot 2}{8}\int\frac{1}{\Big(\frac{x+2}{2}\Big)^2+1}\ dx\\
+	&=2\ln(x^2+4x+8) -\frac{7}{4}\arctan \Big(\frac{x+2}{2}\Big)\\
+\end{align}
+Probe:\\
+\begin{align}
+\Big(2\ln |x^2+4x+8| -\frac{7}{4}\arctan\Big(\frac{x+2}{2}\Big)\Big)'&=\Big(2\ln |x^2+4x+8|\Big)'-\frac{7}{4}\Big(\arctan\Big(\frac{x+2}{2}\Big)'\\
+	&=2\cdot\bigg(\frac{2x+4}{x^2+4x+8}\bigg) - \frac{7}{4}\cdot\Bigg(\frac{1}{\Big(\frac{x+2}{2}\Big)+1}\Bigg)\\
+	&=\frac{4x+8}{x^2+4x+8}-\frac{7}{(x+2)^2+4}\\
+	&=\frac{4x+8}{x^2+4x+8}-\frac{7}{x^2+4x+8}\\
+	&=\frac{4x+1}{x^2+4x+8}
+\end{align}
 
 \section{2.}
 \subsection{a)}
@@ -71,8 +173,37 @@ Keine Wendepunkte vorhanden.\\
 }
 Wendepunkt bei \(x=\frac 1 {\sqrt{3}}\)\\
 
-\subsection{b)}
 
+\newpage
+\subsection{b)}
+um den Flächeninhalt der Funktionen zu berechnen, werden Beträge uneigentlicher Integrale benötigt, daher:
+\subparagraph{für \(f(x)=e^{-x}\):}
+\begin{align}
+\lim_{a\rightarrow \infty}\int_0^a f(x)\ dx &=\lim_{a\rightarrow \infty} \int_0^a e^{-x}\ dx\\ 
+  &=\Big[e^{-x}\Big]_0^a &|für\ a\rightarrow\infty\\
+	&=e^{-a}-e^0\\
+	&=e^{-a}-1\\
+	&=-1
+\end{align}
+\(\Rightarrow\) Der Flächeninhalt von f(x) ist gleich dem Betrag von -1, also 1.
+\subparagraph{für \(g(x)=\frac{1}{x+1}\):}
+\begin{align}
+\lim_{b\rightarrow \infty} \int_0^b g(x)\ dx&=\lim_{b\rightarrow \infty} \int_0^b \frac{1}{x+1}\ dx\\
+	&=\Big[\ln |x+1|\Big]_0^b &|für\ b\rightarrow\infty\\
+	&=\ln |b|-\ln |0|
+	&=\infty - (-\infty)
+	&=\infty
+\end{align}
+\(\Rightarrow\) g(x) hat keinen endlichen Flächeninhalt.
+\subparagraph{für \(h(x)=\frac{1}{x^2+1}\):}
+\begin{align}
+\lim_{c\rightarrow \infty} \int_0^c h(x)\ dx&=\lim_{x\rightarrow \infty} \int_0^c\frac{1}{x^2+1}\ dx\\
+	&=\Big[\arctan(x)\Big]_0^c &|für c\rightarrow\infty
+	&=\arctan(c)-\arctan(0)\\
+	&=\frac{\pi}{2}-0\\
+	&=\frac{\pi}{2}
+\end{align}
+\(\Rightarrow\) Der Flächeninhalt von h(x) beträgt \(\frac{\pi}{2}\).
 
 \subsection{c)}
 \centerline{
@@ -85,12 +216,20 @@ Wendepunkt bei \(x=\frac 1 {\sqrt{3}}\)\\
   \end{axis}
 \end{tikzpicture}
 }
+Der Flächeninhalt von \(f(x)\) ist der Betrag von \(\int_{-1}^1 f(x)\ dx\).
+\begin{align}
+\int_{-1}^1 \frac{1}{\sqrt{1-x^2}}\ dx &= \Big[\arcsin(x)\Big]_{-1}^1\\
+  &=\arcsin(1)-\arcsin(-1)\\
+	&=\pi
+\end{align}
+\(\Rightarrow\) Der  Flächeninhalt von \(f(x):[-1,1]\rightarrow \mathbb{R}\) ist \(\pi\).
 
 \section{3.}
 
 \section{4.}
 \subsection{a)}
 \subsection{b)}
+\newpage
 \subsection{c)}
 \centerline{
 \begin{tikzpicture}[scale=1.5]
