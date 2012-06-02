@@ -137,7 +137,7 @@ Probe:\\
 \section{2.}
 \subsection{a)}
 \centerline{
-\begin{tikzpicture}[scale=1.5]
+\begin{tikzpicture}[scale=1.2]
   \begin{axis}[xmin=0, xmax=20,
     xlabel=$x$,
     ylabel={$f(x) = e^{-x}$}
@@ -149,7 +149,7 @@ Probe:\\
 Keine Wendepunkte vorhanden.\\
 
 \centerline{
-\begin{tikzpicture}[scale=1.5]
+\begin{tikzpicture}[scale=1.2]
   \begin{axis}[xmin=0, xmax=40,
     xlabel=$x$,
     ylabel={$g(x) = \frac 1 {1+x}$}
@@ -161,7 +161,7 @@ Keine Wendepunkte vorhanden.\\
 Keine Wendepunkte vorhanden.\\
 
 \centerline{
-\begin{tikzpicture}[scale=1.5]
+\begin{tikzpicture}[scale=1.2]
   \begin{axis}[xmin=0, xmax=20,
     xlabel=$x$,
     ylabel={$h(x) = \frac 1 {1+x^2}$}
@@ -251,9 +251,55 @@ Der Flächeninhalt von \(f(x)\) ist der Betrag von \(\int_{-1}^1 f(x)\ dx\).
 \newpage
 \section{4.}
 \subsection{a)}
+\[f(t)=9te^{-\frac 1 3 t}\]
+Ableitungen berechnen:
+\begin{align}
+f'(t) &= 9t(-\frac 1 3 e^{-\frac 1 3 t}) + 9e^{-\frac 1 3 t} \\
+      &= -3te^{-\frac 1 3 t} + 9e^{-\frac 1 3 t} \\
+      &= e^{-\frac 1 3 t} (-3t+9) \\
+f''(t) &= (-3te^{-\frac 1 3 t})' + (9e^{-\frac 1 3 t})' \\
+       &= -3t (-\frac 1 3 e^{-\frac 1 3 t}) + (-3)e^{-\frac 1 3 t} + 9(-\frac 1 3 e^{-\frac 1 3 t}) \\
+       &= te^{-\frac 1 3 t} - 6e^{-\frac 1 3 t} \\
+       &= e^{-\frac 1 3 t} (t-6)
+\end{align}
+
+Maximum finden:
+\begin{align}
+ f'(t) &= 0 \\
+\Leftrightarrow e^{-\frac 1 3 t}(-3t+9) &= 0 \\
+\Leftrightarrow -3te^{-\frac 1 3 t} + 9e^{-\frac 1 3 t} &= 0 \\
+\Leftrightarrow 9e^{-\frac 1 3 t} &= 3te^{-\frac 1 3 t} \\
+\Leftrightarrow 3 &= t
+\end{align}
+Test für Maximum/Minimum mittels 2. Ableitung:
+\[e^{-\frac 1 3 \cdot 3}(3-6) \approx -1.1\]
+Ergebnis ist negative, also ist Maximum gefunden. \\
+Das Maximum von ca. 9.93 Milligram pro Liter liegt bei \(t=3\).
 \subsection{b)}
-\newpage
+Berechnen des unbestimmten Integrals:
+\begin{align}
+f(t) &= 9te^{-\frac 1 3 t} \\
+F(t) &= -3e^{-\frac 1 3 t} \cdot 9t - \int-3e^{-\frac 1 3 t} \cdot t\ dt \\
+     &= -27te^{-\frac 1 3 t} + 27(-3)e^{-\frac 1 3 t} \\
+     &= -27te^{-\frac 1 3 t} -81e^{-\frac 1 3 t} \\
+     &= -27e^{-\frac 1 3 t} (t+3)
+\end{align}
+Jetzt Mittelwert mittels \(m=\frac 1 {b-a} \int^b_a f(x)\ dx \) berechnen:
+\begin{align}
+ &\frac 1 {12-0}[-27e^{-\frac 1 3 t} (t+3)]_0^{12} \\
+=& \frac 1 {12-0}\Big(-27e^{-\frac 1 3 12}(12 + 3)-(-27e^{-\frac 1 3 0}(0 + 3))\Big) \\
+\approx& 6.131
+\end{align}
+Der Mittelwert beträgt ca. 6.131.
+
 \subsection{c)}
+Finden des Wendepunkts:
+\begin{align}
+f''(t) &= 0 \\
+te^{-\frac 1 3 t} - 6e^{-\frac 1 3 t} &= 0 \\
+te^{-\frac 1 3 t} &= 6e^{-\frac 1 3 t} \\
+t &= 6
+\end{align}
 \centerline{
 \begin{tikzpicture}[scale=1.5]
   \begin{axis}[xmin=0, xmax=24,
