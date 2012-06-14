@@ -29,10 +29,34 @@
 
 \section{1.}
 \subsection{a)}
+Nach Wurzelkriterium:
+\[ \lim_{i\to\infty} \sqrt[i]{\bigg| \frac{i}{2^i} \bigg|} = 1/2 * \sqrt[i]{i} = \frac{1} {2} < 1 \]
+Also konvergiert die Summe.
+
 \subsection{b)}
 \subsection{c)}
+\subsubsection{(i)}
+\begin{align}
+&\lim_{i\to\infty} \bigg| \frac{(i+1)^2 * 2^{(i+1)} * x^{(i+1)}} {i^2 * 2^i * x^i} \bigg| \\
+= &\lim_{i\to\infty} \bigg| \frac{(i+1)^2} {i^2} * 2x \bigg| \\
+= &\lim_{i\to\infty} \bigg| \frac{(i+1)^2} {i^2} \bigg| * |2x| \\
+=& 2|x| * \lim_{i\to\infty} \bigg| \frac{i^2 + 2i + 2} {i^2} \bigg| \\
+=& 2|x|
+\end{align}
+Daraus folgt: 
+\[2|x| < 1 \Leftrightarrow |x| < \frac{1}{2}\]
+\[2|x| > 1 \Leftrightarrow |x| >s \frac{1}{2}\]
+Daraus folgt: \\
+\[R = \frac{1}{2}\]
 
-\section{2.}
+\subsubsection{(ii)}
+\[lim_{i\to\infty} \sqrt[i]{|i^2 * 2^i * x^i} = 2|x| * lim_{i\to\infty} \sqrt[i]{i^2} = 2|x|\]
+Daraus folgt: 
+\[2|x| < 1 \Leftrightarrow |x| < \frac{1}{2}\]
+\[2|x| > 1 \Leftrightarrow |x| >s \frac{1}{2}\]
+Daraus folgt: \\
+\[R = \frac{1}{2}\]
+\section{2.}s
 \subsection{(i)}
 Nach Quotientenkriterium:
 \[ \lim_{i\to\infty} \bigg|\frac {-1} {2^{i+2}} \cdot \frac {2^{i+1}} {-1}\bigg| = \frac 1 2 < 1 \]
