@@ -34,14 +34,22 @@ Nach Wurzelkriterium:
 Also konvergiert die Summe.
 
 \subsection{b)}
+Nach Quotientenkriterium:
+\begin{align}
+&\lim_{i\to\infty} \bigg| \frac{(-1)^{(i+1)} * (i+1)! * i^i} {(i+1)^{(i+1)} * (-1)^i * i!} \bigg| \\
+&\lim_{i\to\infty} \bigg| - \frac{(i+1)!} {(i+1)^{(i+1)}} * \frac{i^i} {i!} \bigg|
+\end{align}
+Da \(\lim_{i\to\infty} \frac{(i+1)!} {(i+1)^{(i+1)}} = 0\) gilt, ist auch der Limes der ganzen Gleichung 0. \\
+Somit ist der Limes < 1 und es ist gezeigt, dass Konvergenz vorliegt. 
+
 \subsection{c)}
 \subsubsection{(i)}
 \begin{align}
-&\lim_{i\to\infty} \bigg| \frac{(i+1)^2 * 2^{(i+1)} * x^{(i+1)}} {i^2 * 2^i * x^i} \bigg| \\
+  &\lim_{i\to\infty} \bigg| \frac{(i+1)^2 * 2^{(i+1)} * x^{(i+1)}} {i^2 * 2^i * x^i} \bigg| \\
 = &\lim_{i\to\infty} \bigg| \frac{(i+1)^2} {i^2} * 2x \bigg| \\
 = &\lim_{i\to\infty} \bigg| \frac{(i+1)^2} {i^2} \bigg| * |2x| \\
-=& 2|x| * \lim_{i\to\infty} \bigg| \frac{i^2 + 2i + 2} {i^2} \bigg| \\
-=& 2|x|
+= & 2|x| * \lim_{i\to\infty} \bigg| \frac{i^2 + 2i + 2} {i^2} \bigg| \\
+= & 2|x|
 \end{align}
 Daraus folgt: 
 \[2|x| < 1 \Leftrightarrow |x| < \frac{1}{2}\]
@@ -56,7 +64,7 @@ Daraus folgt:
 \[2|x| > 1 \Leftrightarrow |x| >s \frac{1}{2}\]
 Daraus folgt: \\
 \[R = \frac{1}{2}\]
-\section{2.}s
+\section{2.}
 \subsection{(i)}
 Nach Quotientenkriterium:
 \[ \lim_{i\to\infty} \bigg|\frac {-1} {2^{i+2}} \cdot \frac {2^{i+1}} {-1}\bigg| = \frac 1 2 < 1 \]
