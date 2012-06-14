@@ -1,4 +1,4 @@
-	\documentclass[a4paper]{scrartcl}
+\documentclass[a4paper]{scrartcl}
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -30,14 +30,14 @@
 \section{1.}
 \subsection{a)}
 Nach Wurzelkriterium:
-\[ \lim_{i\to\infty} \sqrt[i]{\bigg| \frac{i}{2^i} \bigg|} = 1/2 * \sqrt[i]{i} = \frac{1} {2} < 1 \]
+\[ \lim_{i\to\infty} \sqrt[i]{\bigg| \frac{i}{2^i} \bigg|} = 1/2 \cdot \sqrt[i]{i} = \frac{1} {2} < 1 \]
 Also konvergiert die Summe.
 
 \subsection{b)}
 Nach Quotientenkriterium:
 \begin{align}
-&\lim_{i\to\infty} \bigg| \frac{(-1)^{(i+1)} * (i+1)! * i^i} {(i+1)^{(i+1)} * (-1)^i * i!} \bigg| \\
-&\lim_{i\to\infty} \bigg| - \frac{(i+1)!} {(i+1)^{(i+1)}} * \frac{i^i} {i!} \bigg|
+&\lim_{i\to\infty} \bigg| \frac{(-1)^{(i+1)} \cdot (i+1)! \cdot i^i} {(i+1)^{(i+1)} \cdot (-1)^i \cdot i!} \bigg| \\
+&\lim_{i\to\infty} \bigg| - \frac{(i+1)!} {(i+1)^{(i+1)}} \cdot \frac{i^i} {i!} \bigg|
 \end{align}
 Da \(\lim_{i\to\infty} \frac{(i+1)!} {(i+1)^{(i+1)}} = 0\) gilt, ist auch der Limes der ganzen Gleichung 0. \\
 Somit ist der Limes < 1 und es ist gezeigt, dass Konvergenz vorliegt. 
@@ -45,10 +45,10 @@ Somit ist der Limes < 1 und es ist gezeigt, dass Konvergenz vorliegt.
 \subsection{c)}
 \subsubsection{(i)}
 \begin{align}
-  &\lim_{i\to\infty} \bigg| \frac{(i+1)^2 * 2^{(i+1)} * x^{(i+1)}} {i^2 * 2^i * x^i} \bigg| \\
-= &\lim_{i\to\infty} \bigg| \frac{(i+1)^2} {i^2} * 2x \bigg| \\
-= &\lim_{i\to\infty} \bigg| \frac{(i+1)^2} {i^2} \bigg| * |2x| \\
-= & 2|x| * \lim_{i\to\infty} \bigg| \frac{i^2 + 2i + 2} {i^2} \bigg| \\
+  &\lim_{i\to\infty} \bigg| \frac{(i+1)^2 \cdot 2^{(i+1)} \cdot x^{(i+1)}} {i^2 \cdot 2^i \cdot x^i} \bigg| \\
+= &\lim_{i\to\infty} \bigg| \frac{(i+1)^2} {i^2} \cdot 2x \bigg| \\
+= &\lim_{i\to\infty} \bigg| \frac{(i+1)^2} {i^2} \bigg| \cdot |2x| \\
+= & 2|x| \cdot \lim_{i\to\infty} \bigg| \frac{i^2 + 2i + 2} {i^2} \bigg| \\
 = & 2|x|
 \end{align}
 Daraus folgt: 
@@ -58,7 +58,7 @@ Daraus folgt: \\
 \[R = \frac{1}{2}\]
 
 \subsubsection{(ii)}
-\[lim_{i\to\infty} \sqrt[i]{|i^2 * 2^i * x^i} = 2|x| * lim_{i\to\infty} \sqrt[i]{i^2} = 2|x|\]
+\[lim_{i\to\infty} \sqrt[i]{|i^2 * 2^i \cdot x^i} = 2|x| \cdot lim_{i\to\infty} \sqrt[i]{i^2} = 2|x|\]
 Daraus folgt: 
 \[2|x| < 1 \Leftrightarrow |x| < \frac{1}{2}\]
 \[2|x| > 1 \Leftrightarrow |x| >s \frac{1}{2}\]
