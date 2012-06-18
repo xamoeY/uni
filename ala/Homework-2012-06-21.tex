@@ -27,29 +27,128 @@
 \maketitle
 \notag
 
+
 \section{1.}
 \subsection{a)}
+Der Wert von \(T_7=0,5403023\) für \(f(x)=\cos(x)\) ist bereits aus den Präsenzaufgaben bereits bekannt, deswegen kann dieser Wert im folgenden verwendet werden.
+\begin{align}
+T_8 &= \sum_{k=0}^8\frac{f^{(k)}(0)\ x^k}{k!}\\
+  &=0,5403023+\frac{\cos(0)\ x^8}{8!}\\
+	&=0,5403023+\frac{x^8}{8!}\\
+\end{align}
+\begin{align}
+T_9 &=\sum_{k=0}^9\frac{f^{(k)}(0)\ x^k}{k!}\\
+	&=0,5403023+\frac{x^8}{8!}+\frac{0\cdot x^9}{9!}\\
+	&=0,5403023+\frac{x^8}{8!}\\
+\end{align}
+\begin{align}
+T_{10}&=\sum_{k=0}^{10}\frac{f^{(k)}(0)\ x^k}{k!}\\
+	&=0,5403023+\frac{x^8}{8!}+\frac{(-1)\cdot x^{10}}{10!}\\
+	&=0,5403023+\frac{x^8}{8!}-\frac{x^{10}}{10!}\\
+\end{align}
+\begin{align}
+T_{11}&=\sum_{k=0}^{11}\frac{f^{(k)}(0)\ x^k}{k!}\\
+	&=0,5403023+\frac{x^8}{8!}-\frac{x^{10}}{10!}+\frac{\sin(x)\ x^{11}}{11!}\\
+	&=0,5403023+\frac{x^8}{8!}-\frac{x^{10}}{10!}\\
+\end{align}
+\begin{align}
+T_{12}&=\sum_{k=0}^{12}\frac{f^{(k)}(0)\ x^k}{k!}\\
+	&=0,5403023+\frac{x^8}{8!}-\frac{x^{10}}{10!}+\frac{\cos(0)\ x^{12}}{12!}\\
+	&=0,5403023+\frac{x^8}{8!}-\frac{x^{10}}{10!}+\frac{x^{12}}{12!}\\
+\end{align}
+\begin{align}
+T_{13}&=\sum_{k=0}^{13}\frac{f^{(k)}(0)\ x^k}{k!}\\
+	&=0,5403023+\frac{x^8}{8!}-\frac{x^{10}}{10!}+\frac{x^{12}}{12!}+\frac{-\sin(x)\ x^{13}}{13!}\\
+	&=0,5403023+\frac{x^8}{8!}-\frac{x^{10}}{10!}+\frac{x^{12}}{12!}\\
+\end{align}
+\begin{align}
+\cos(T_9(1))&\approx 0,540327102\\
+\cos(T_{11}(1))&\approx 0,540326826\\
+\cos(T_{13}(1))&\approx 0,540326828\\
+\end{align}
 \subsection{b)}
+\begin{align}
+&g(x)=\frac{1}{\sqrt[3]{x+1}}\\
+&g'(x)=-\frac{1}{3(x+1)^{\frac{4}{3}}}\\
+&g''(x)=\frac{4}{9(x+1)^{\frac{7}{3}}}\\
+&g'''(x)=-\frac{28}{27(x+1)^{\frac{10}{3}}}\\
+&g''''(x)=\frac{280}{81(x+1)^{\frac{13}{3}}}
+\end{align}
+\begin{align}
+T_0(x)&=\frac{f(0)\ x^0}{0!}=1\\
+T_1(x)&=1-\frac{x}{3\cdot 1!}\\
+	&=1-\frac{x}{3}\\
+T_2(x)&=1-\frac{x}{3}+\frac{4x^2}{9\cdot 2!}\\
+	&=1-\frac{x}{3}+\frac{2x^2}{9}\\
+T_3(x)&=1-\frac{x}{3}+\frac{2x^2}{9}-\frac{28x^3}{27\cdot 3!}\\
+	&=1-\frac{x}{3}+\frac{2x^2}{9}-\frac{14x^3}{81}\\
+T_4(x)&=1-\frac{x}{3}+\frac{2x^2}{9}-\frac{14x^3}{81}+\frac{280x^4}{81\cdot 4!}\\
+	&=1-\frac{x}{3}+\frac{2x^2}{9}-\frac{14x^3}{81}+\frac{35x^4}{243}\\
+\end{align}
 \subsection{c)}
-
+\newpage
 \section{2.}
 \subsection{(i)}
+\[\lim_{x\to 1}\bigg(\frac{x^3-3x^2+x+2}{x^2-5x+6}\bigg)=\frac{1}{2}\]
 \subsection{(ii)}
+\begin{align}
+\lim_{x\to 2}\bigg(\frac{x^3-3x^2+x+2}{x^2-5x+6}\bigg)\stackrel{de\ l'Hospital}{=} \lim_{x\to 2}\bigg(\frac{3x^2-6x+1}{2x-5}\bigg)=-1\\
+\end{align}
 \subsection{(iii)}
+\begin{align}
+\lim_{x\to 0}\Big((1+3x)^{\frac{1}{2x}}\Big)&=e^{\lim\limits_{x\to 0}\Big(\frac{\ln(1+3x)}{2x}\Big)}\\
+	&=e^{\lim\limits_{x\to 0}\frac{1}{2}\Big(\frac{\ln(1+3x)}{x}\Big)}\\
+	&=e^{\lim\limits_{x\to 0}\frac{1}{2}\Big(\frac{3}{3x+1}\Big)}\\	
+	&=e^{\lim\limits_{x\to 0}\frac{3}{2}\Big(\frac{1}{3x+1}\Big)}\\
+	&=e^{\lim\limits_{x\to 0}\frac{3}{2}\cdot(1)}\\
+	&=e^{\frac{3}{2}}
+\end{align}
+\newpage
 \subsection{(iv)}
-
+\begin{align}
+\lim\limits_{x\to 0}\bigg(\frac{1}{e^x-1}-\frac{1}{\sin(x)}\bigg)&=\lim\limits_{x\to 0}\bigg(\frac{\sin(x)}{(e^x-1)\sin(x)}-\frac{e^x-1}{(e^x-1)\sin(x)}\bigg)\\
+	&=\lim\limits_{x\to 0}\bigg(\frac{\sin(x)-(e^x-1)}{(e^x-1)\sin(x)}\bigg)\\
+	&=\lim\limits_{x\to 0}\bigg(\frac{\cos(x)-e^x}{\cos(x)(e^x-1)+e^x\sin(x)}\bigg)\\
+	&=\lim\limits_{x\to 0}\bigg(\frac{-\sin(x)-e^x}{\sin(x)+2e^x\cos(x)}\bigg)\\
+	&=-\frac{1}{2}
+\end{align}
 \section{3.}
 \subsection{a)}
 \subsection{b)}
 \subsection{c)}
-
+\newpage
 \section{4.}
 \subsection{a)}
+Mit: \(f(x)=a^x |a>1\ \ g(x)=x^n\) für \(n\in \mathbb{N}\)\\
+Zu Zeigen: \(\lim\limits_{x\to\infty}\bigg(\frac{a^x}{x^n}\bigg)=\infty\)\\
+Nach de l'Hospital:
+\begin{align}
+\lim\limits_{x\to\infty}\bigg(\frac{a^x}{x^n}\bigg)&=\lim\limits_{x\to\infty}\bigg(\frac{x\cdot a^{x-1}}{n\cdot x^{n-1}}\bigg)\\
+	&=\lim\limits_{x\to\infty}\bigg(\frac{(x^2-x)\cdot a^{x-2}}{(n^2-n)\cdot x^{n-2}}\bigg)\\
+\end{align}
+Würde dieses Verfahren \(n\) mal durchgeführt werden, wäre der Exponent von \(x\) im Nenner gleich 0. Daraus folgt, dass im Nenner nur noch Konstanten übrig blieben. Der Zähler wäre währenddessen \(a^{x-n}\) multipliziert mit einem Konstantenterm (welcher hier irrelevant ist). Da \(x\) gegen  \(\infty\) läuft und \(f(x)=a^x|a>1\) gilt, läuft \(f(x)\) ebenfalls gegen \(\infty\).\\
+Damit wäre gezeigt, dass \(\lim\limits_{x\to\infty}\bigg(\frac{a^x}{x^n}\bigg)=\infty\) gilt.\(\qed\)
 \subsection{b)}
+\(g(x)=x^r|r\in\mathbb{R^+}\)\\
+\(h(x)=\ln ^k(x)|k\in\mathbb{N}\)\\
+Zu Zeigen:\\
+\(\lim\limits_{x\to\infty}\bigg(\frac{x^r}{\ln ^k(x)}\bigg)=\infty\)\\
+Da \(r\) und \(k\) innerhalb ihrer Zahlenbereiche frei wählbar sind, muss gezeigt werden, dass \(g(x)\) stärker steigt, als \(h(x)\), wenn \(r\) sehr klein gewählt ist (also knapp über 0) und \(k\) sehr groß gewählt wird, während \(x\) gegen \(\infty\) tendiert. Somit wäre der kritischste Fall abgedeckt. Wenn dies gelten sollte, wäre \(\lim\limits_{x\to\infty}\bigg(\frac{x^r}{\ln ^k(x)}\bigg)=\infty\) für sämtliche anderen Kombinationen der \(r\)- und \(k\)-Wahl auch belegt.\\
+Durch Tests kann dieser Fall allerdings widerlegt werden:\\
+\(x=1.000.000.000,\ r=0,0000001,\ k=10\):
+\begin{align}
+\frac{1.000.000.000^{0,0000001}}{\ln ^{10}(1.000.000.000)}\approx 6,845717\cdot 10^{-14}
+\end{align}
+\(x=10.000.000.000,\ r=0,0000001,\ k=10\):
+\begin{align}
+\frac{10.000.000.000^{0,0000001}}{\ln ^{10}(10.000.000.000)}\approx 2,386954\cdot 10^{-14}
+\end{align}
+Damit wurde gezeigt, dass \(\lim\limits_{x\to\infty}\bigg(\frac{x^r}{\ln ^k(x)}\bigg)=\infty\) nicht allgemein gilt\(\qed\).
 \subsection{c)}
 \subsection{(i)}
+Der Beweis aus a) bleibt bestehen, auch wenn \(g(x)=x^r|r\in\mathbb{R^+}\) gilt, nur dass die Regel von de l'Hospital nicht \(n\)  mal angewendet werden kann, sondern \(\infty\) oft, wobei \(r\) irgendwann negativ wird. Dies hat zur Folge, dass \(x^{r-(r+b)}|b\in\mathbb{R^+}\) den Zähler vergrößert.
+Damit wäre gezeigt, dass \(\lim\limits_{x\to\infty}\bigg(\frac{a^x}{x^r}\bigg)=\infty\) gilt.\(\qed\) 
 \subsection{(ii)}
-
 
 
 \end{document}
