@@ -170,11 +170,16 @@ T_3(x)& = 1 + \frac 1 5 x - \frac 1 {50} x^2 + \frac 1 {125} x^3
 = &-\frac{1}{5}
 \end{align}
 \subsection{c)}
+\[\lim_{x\to 0} \frac {\ln(2x^2 + 1)} {x}\] \\
+Nebenrechnung: 
 \begin{align}
-&\lim_{x\to 0} \frac {ln(2x^2 + 1)} {x} \\
-&Nebenrechnung: (ln(2x^2 + 1))' = \frac{1}{2x^2 + 1} * 4x = \frac{4x}{2x^2 +1} \\
-= &\lim_{x\to 0} \frac{4x} {2x^2 + 1} \\
-= &0
+(\ln(2x^2 + 1))' &= \frac{1}{2x^2 + 1} \cdot 4x\\ 
+	&= \frac{4x}{2x^2 +1} \\
+\end{align}
+Nach de l'Hospital:
+\begin{align}
+\lim_{x\to 0} \bigg(\frac {\ln(2x^2 + 1)} {x}\bigg) &= \lim_{x\to 0} \bigg(\frac{4x} {2x^2 + 1}\bigg) \\
+	&= 0
 \end{align}
 \newpage
 \section{4.}
