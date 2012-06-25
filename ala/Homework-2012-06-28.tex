@@ -1,0 +1,72 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{pgfplots}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 28. Juni 2012}
+
+\title{\titleinfo}
+\author{Elena Noll, Sven-Hendrik Haase, Arne Struck}
+\date{\today}
+\ihead{EN, SHH, AS}
+\chead{\titleinfo}
+\ohead{\today}
+\setheadsepline{1pt}
+\setcounter{secnumdepth}{0}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\maketitle
+\notag
+
+
+\section{1.}
+\subsection{(i)}
+\begin{align}
+f(x,y) &= 2x^2y^2-3xy+4x+2 \\
+\frac {\partial f} {\partial x} &= 4xy^2 - 3y+4 \\
+\frac {\partial f} {\partial y} &= 4x^2y - 3x
+\end{align}
+
+\subsection{(ii)}
+\begin{align}
+f(x,y) &= \cos(x^2 y)e^{xy} \\
+\frac {\partial f} {\partial x} &= -\sin(x^2 y) \cdot 2xy e^{xy} + \cos(x^2 y) \cdot ye^{xy} \\
+\frac {\partial f} {\partial y} &= -\sin(x^2 y) \cdot ye^{xy} + \cos(x^2 y) \cdot xe^{xy}
+\end{align}
+
+\subsection{(iii)}
+\begin{align}
+f(x,y) &= \frac {\sin(x) + \cos(y)} {x^2+y^2} \\
+\frac {\partial f} {\partial x} &= \frac {(\sin(x) + \cos(y)) \cdot 2x - \cos(x) \cdot (x^2+y^2)} {(x^2+y^2)^2} \\
+\frac {\partial f} {\partial x} &= \frac {(\sin(x) + \cos(y)) \cdot 2y + \sin(y) \cdot (x^2+y^2)} {(x^2+y^2)^2}
+\end{align}
+
+\subsection{(iv)}
+\begin{align}
+f(x,y) &= \sqrt{1-x^2-y^2} = (1-x^2-y^2)^{\frac 1 2} \\
+\frac {\partial f} {\partial x} &= \frac 1 2 (1-x^2-y^2)^{- \frac 1 2} \cdot (-2x) \\
+\frac {\partial f} {\partial y} &= \frac 1 2 (1-x^2-y^2)^{- \frac 1 2} \cdot (-2y)
+\end{align}
+
+
+\section{2.}
+\begin{align}
+f(x,y) &= x^2y^3+ye^{x^2 y} \\
+\frac {\partial f} {dx} &= 2xy^3 + 2xy^2 e^{x^2 y} \\
+\frac {\partial ^2f} {\partial x^2} &= 2y^3 + 2y^2e^{x^2 y} + 4x^2y^3e^{x^2 y} \\
+\frac {\partial f} {\partial y} &= 3x^2y^2 + e^{x^2 y} + x^2 y e^{x^2 y} \\
+\frac {\partial ^2f} {\partial y^2} &= 6x^2y + 2x^2e^{x^2 y} + x^4ye^{e^2 y} \\
+\frac {\partial ^2} {\partial x\partial y} &= 6xy^2 + 4xye^{x^2 y} + 2x^3y^2e^{x^2 y} \\
+\frac {\partial ^2} {\partial y\partial x} &= 6xy^2 + 4xye^{x^2 y} + 2x^3y^2e^{x^2 y} = \frac {\partial ^2} {\partial x\partial y}
+\end{align}
+
+\end{document}
