@@ -32,41 +32,169 @@
 \subsection{(i)}
 \begin{align}
 f(x,y) &= 2x^2y^2-3xy+4x+2 \\
-\frac {\partial f} {\partial x} &= 4xy^2 - 3y+4 \\
-\frac {\partial f} {\partial y} &= 4x^2y - 3x
+\frac {\partial f} {\partial x}(x,y) &= 4xy^2 - 3y+4 \\
+\frac {\partial f} {\partial y}(x,y) &= 4x^2y - 3x
 \end{align}
 
 \subsection{(ii)}
 \begin{align}
 f(x,y) &= \cos(x^2 y)e^{xy} \\
-\frac {\partial f} {\partial x} &= -\sin(x^2 y) \cdot 2xy e^{xy} + \cos(x^2 y) \cdot ye^{xy} \\
-\frac {\partial f} {\partial y} &= -\sin(x^2 y) \cdot ye^{xy} + \cos(x^2 y) \cdot xe^{xy}
+\frac {\partial f} {\partial x}(x,y) &= -\sin(x^2 y) \cdot 2xy e^{xy} + \cos(x^2 y) \cdot ye^{xy} \\
+\frac {\partial f} {\partial y}(x,y) &= -\sin(x^2 y) \cdot ye^{xy} + \cos(x^2 y) \cdot xe^{xy}
 \end{align}
 
 \subsection{(iii)}
 \begin{align}
 f(x,y) &= \frac {\sin(x) + \cos(y)} {x^2+y^2} \\
-\frac {\partial f} {\partial x} &= \frac {(\sin(x) + \cos(y)) \cdot 2x - \cos(x) \cdot (x^2+y^2)} {(x^2+y^2)^2} \\
-\frac {\partial f} {\partial x} &= \frac {(\sin(x) + \cos(y)) \cdot 2y + \sin(y) \cdot (x^2+y^2)} {(x^2+y^2)^2}
+\frac {\partial f} {\partial x}(x,y) &= \frac {(\sin(x) + \cos(y)) \cdot 2x - \cos(x) \cdot (x^2+y^2)} {(x^2+y^2)^2} \\
+\frac {\partial f} {\partial x}(x,y) &= \frac {(\sin(x) + \cos(y)) \cdot 2y + \sin(y) \cdot (x^2+y^2)} {(x^2+y^2)^2}
 \end{align}
 
 \subsection{(iv)}
 \begin{align}
 f(x,y) &= \sqrt{1-x^2-y^2} = (1-x^2-y^2)^{\frac 1 2} \\
-\frac {\partial f} {\partial x} &= \frac 1 2 (1-x^2-y^2)^{- \frac 1 2} \cdot (-2x) \\
-\frac {\partial f} {\partial y} &= \frac 1 2 (1-x^2-y^2)^{- \frac 1 2} \cdot (-2y)
+\frac {\partial f} {\partial x}(x,y) &= \frac 1 2 (1-x^2-y^2)^{- \frac 1 2} \cdot (-2x) \\
+\frac {\partial f} {\partial y}(x,y) &= \frac 1 2 (1-x^2-y^2)^{- \frac 1 2} \cdot (-2y)
 \end{align}
 
-
+\newpage
 \section{2.}
 \begin{align}
 f(x,y) &= x^2y^3+ye^{x^2 y} \\
-\frac {\partial f} {dx} &= 2xy^3 + 2xy^2 e^{x^2 y} \\
-\frac {\partial ^2f} {\partial x^2} &= 2y^3 + 2y^2e^{x^2 y} + 4x^2y^3e^{x^2 y} \\
-\frac {\partial f} {\partial y} &= 3x^2y^2 + e^{x^2 y} + x^2 y e^{x^2 y} \\
-\frac {\partial ^2f} {\partial y^2} &= 6x^2y + 2x^2e^{x^2 y} + x^4ye^{e^2 y} \\
-\frac {\partial ^2} {\partial x\partial y} &= 6xy^2 + 4xye^{x^2 y} + 2x^3y^2e^{x^2 y} \\
-\frac {\partial ^2} {\partial y\partial x} &= 6xy^2 + 4xye^{x^2 y} + 2x^3y^2e^{x^2 y} = \frac {\partial ^2} {\partial x\partial y}
+\frac {\partial f} {\partial x}(x,y) &= 2xy^3 + 2xy^2 e^{x^2 y} \\
+\frac {\partial ^2f} {\partial x^2}(x,y) &= 2y^3 + 2y^2e^{x^2 y} + 4x^2y^3e^{x^2 y} \\
+\frac {\partial f} {\partial y}(x,y) &= 3x^2y^2 + e^{x^2 y} + x^2 y e^{x^2 y} \\
+\frac {\partial ^2f} {\partial y^2}(x,y) &= 6x^2y + 2x^2e^{x^2 y} + x^4ye^{e^2 y} \\
+\frac {\partial ^2} {\partial x\partial y}(x,y) &= 6xy^2 + 4xye^{x^2 y} + 2x^3y^2e^{x^2 y} \\
+\frac {\partial ^2} {\partial y\partial x}(x,y) &= 6xy^2 + 4xye^{x^2 y} + 2x^3y^2e^{x^2 y} = \frac {\partial ^2} {\partial x\partial y}
 \end{align}
+
+\newpage
+\section{3.}
+\subsection{i)}
+\[f(x,y)=-xy+x^2+y^2-y+5\] \\
+\begin{align}
+\frac{\partial f}{\partial x}(x,y) &= -y + 2x \\
+\frac{\partial ^2 f}{\partial x^2}(x,y) &= 2 \\
+\frac{\partial f}{\partial y}(x,y) &= -x + 2y -1 \\
+\frac{\partial ^2 f}{\partial y^2}(x,y)  &= 2 \\
+\frac{\partial ^2 f}{\partial x \partial y}(x,y) &= -1 \\ 
+\end{align}
+Daraus folgt: \\
+I: \ \(0 = -y + 2x \Leftrightarrow 2x = y\) \\
+II: \(0 = -x +2y -1 \) \\
+\\
+I in II:\\ 
+\begin{align}
+1 &= -x +4x \\
+\Leftrightarrow 1 &= 3x \\
+\Leftrightarrow \frac{1}{3} &= x \\
+\end{align}
+Rückeinsetzen in I: \\
+\(\frac{2}{3} = y \Rightarrow\) Der kritische Punkt ist \(\Big(\frac{1}{3},\frac{2}{3}\Big)\) \\
+\[H_f\Big(\frac{1}{3},\frac{2}{3}\Big) = \begin{pmatrix}
+ 2 & -1 \\
+-1 &  2 
+\end{pmatrix}\] \\
+\[\triangle_1 = 2\quad \triangle_2 = 2^2-1 = 3\] \\
+\(\Rightarrow\ f\) ist positiv definit \(\Leftrightarrow\) der kritische Punkt ist ein Minimum. \\
+
+\subsection{ii)}
+\[f(x,y)=xy-y^2x+y+3\] \\
+\begin{align}
+\frac{\partial f}{\partial x}(x,y) &= y+1 \\
+\frac{\partial ^2 f}{\partial x^2}(x,y) &= 0 \\
+\frac{\partial f}{\partial y}(x,y) &= x-2y+1 \\
+\frac{\partial ^2 f}{\partial y^2}(x,y) &= -2 \\
+\frac{\partial ^2 f}{\partial x\partial y}(x,y) &= 1
+\end{align}
+Daraus folgt: \\
+I: \ \(0=y+1\Leftrightarrow y=1\) \\
+II: \(0=x-2y+1\) \\
+I in II: \\
+\\
+\[x=1\] \\
+\(\Rightarrow\) die kritische Stelle ist (1,1) \\
+\[H_f(1,1)=\begin{pmatrix}
+0 & 1 \\
+1 & -2
+\end{pmatrix}\] \\
+\[\triangle_1 = 0\quad \triangle_2 = -1\] \\
+\(\Rightarrow f\) ist indefinit \(\Leftrightarrow (1,1)\) ist keine Extremstelle. 
+
+\newpage
+\subsection{iii)}
+\[f(x,y) = x^3+y^3-12x-3y+5\] \\
+\begin{align}
+\frac{\partial f}{\partial x}(x,y) &= 3x^2-12 \\
+\frac{\partial ^2 f}{\partial x^2}(x,y) &= 6x \\
+\frac{\partial f}{\partial y}(x,y) &= 3y^2-3 \\
+\frac{\partial ^2 f}{\partial y^2}(x,y) &= 6y \\
+\frac{\partial ^2 f}{\partial x\partial  y}(x,y) &= 0 \\
+\end{align}
+\begin{align}
+3x^2-12 &= 0 \Leftrightarrow x^2 = 4 \\
+3y^2-3 &= 0 \Leftrightarrow y^2 = 1 \\
+\end{align}
+Daraus folgt: \\
+\begin{align}
+x_1 = -2\ &\vee\ x_2 = 2 \\
+y_1 = -1\ &\vee\ y_2 =1 \\
+\end{align}
+\(\Rightarrow\) es existieren die kritischen Stellen \((-2,-1)\,,\,(-2,1)\,,\,(2,-1)\,,\,(2,1)\) \\
+\newpage
+\begin{align}
+H_f(x,y) &= \begin{pmatrix}
+6x & 0 \\
+0 & 6y
+\end{pmatrix} \\
+H_f(-2,-1) &= \begin{pmatrix}
+-12 & 0 \\
+0 & -6
+\end{pmatrix} \\
+\triangle_1 &= -12 \\
+\triangle_2 &= -12 \cdot (-6) -0 \\
+	&= 72 
+\end{align}
+\(\Rightarrow H_f(-2,-1)\) ist negativ definit \(\Leftrightarrow (-2,-1)\) ist ein lokales Maximum. \\
+\begin{align}
+H_f(-2,1) &= \begin{pmatrix}
+-12 & 0 \\
+0 & 6
+\end{pmatrix} \\
+\triangle_1 &= -12 \\
+\triangle_2 &= -12 \cdot 6 -0 \\
+	&= -72 
+\end{align}
+\(\Rightarrow H_f(-2,1)\) ist indefinit \(\Leftrightarrow (-2,1)\) ist keine Extremstelle. \\
+\begin{align}
+H_f(2,-1) &= \begin{pmatrix}
+12 & 0 \\
+0 & -6
+\end{pmatrix} \\
+\triangle_1 &= 12 \\
+\triangle_2 &= 12 \cdot (-6) -0 \\
+	&= -72 
+\end{align}
+\(\Rightarrow H_f(2,-1)\) ist indefinit \(\Leftrightarrow (2,-1)\) ist keine Extremstelle. \\
+\begin{align}
+H_f(2,1) &= \begin{pmatrix}
+12 & 0 \\
+0 & 6
+\end{pmatrix} \\
+\triangle_1 &= 12 \\
+\triangle_2 &= 12 \cdot 6 -0 \\
+	&= 72 
+\end{align}
+\(\Rightarrow H_f(2,1)\) ist positiv definit \(\Leftrightarrow (2,1)\) ist ein lokales Minimum. \\
+
+
+\newpage
+\section{4.}
+\subsection{a)}
+
+\subsection{b)}
+
+\subsection{c)}
 
 \end{document}
