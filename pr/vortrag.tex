@@ -38,13 +38,23 @@
 \end{frame}
 
 \section{Bilderkennung}
-\subsection{Prozesse}
-\begin{frame}{Bilderkennung}{Prozesse}
+\subsection{Erkennung mittels geometrischer Relationen}
+\begin{frame}{Bilderkennung}{Erkennung mittels geometrischer Relationen}
 \begin{enumerate}
-    \item Farbkalibrierung und -segmentierung
+    \item Farbkalibrierung und -segmentierung im YUV-Farbraum
     \item Erkennung des Horizonts
     \item Extraktion Torpfostenpixel
     \item Modellierung des Tors durch einfach geometrische Formen
+\end{enumerate}
+\end{frame}
+
+\subsection{Erkennung mittels Farbe, Ecken und Hough-Transformation}
+\begin{frame}{Bilderkennung}{Erkennung mittels Farbe, Ecken und Hough-Transformation}
+\begin{enumerate}
+    \item Farbfilterung im HSV-Farbraum
+    \item Eckenfilter für Torkonturen
+    \item Hough-Transformation erkennt Torsegmente
+    \item Aufspannung des Tormodells durch Eckpunkte
 \end{enumerate}
 \end{frame}
 
