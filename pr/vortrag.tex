@@ -1,28 +1,76 @@
 \documentclass{beamer}
-\usetheme{default}
+\usepackage[ngerman]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\pdfmapfile{+sansmathaccent.map}
+\usetheme{Warsaw}
 \begin{document}
 
-\begin{frame}{A sample slide}
+\title{Erkennung von Toren beim RoboCup}
+\date{2012-07-03}
+\author{Elena Noll \and Sven-Hendrik Haase}
 
-A displayed formula:
+\begin{frame}
+    \titlepage
+\end{frame}
 
-\[
-  \int_{-\infty}^\infty e^{-x^2} \, dx = \sqrt{\pi}
-\]
+\section*{Gliederung}
+\begin{frame}{Gliederung}
+    \tableofcontents
+\end{frame}
 
-An itemized list:
-
+\section{Tore im RoboCup}
+\subsection{Geschichte}
+\begin{frame}{Tore im RoboCup}{Geschichte}
 \begin{itemize}
-  \item itemized item 1
-  \item itemized item 2
-  \item itemized item 3
+    \item STL: seit 2012 erstmals gleichfarbige Tore (gelb)
+    \item HL: unterschiedliche Farben (gelb/blau)
+    \item MSL: weisse Tore
 \end{itemize}
+\end{frame}
 
-\begin{theorem}
-  In a right triangle, the square of hypotenuse equals
-  the sum of squares of two other sides.
-\end{theorem}
+\subsection{Probleme}
+\begin{frame}{Tore im RoboCup}{Probleme}
+\begin{itemize}
+    \item Deformation je nach Perspektive
+    \item Probleme bei Lokalisation durch gleichfarbige Tore
+    \item Netze können als Feldlinien erkannt werden
+    \item Teile vom Tor können verdeckt sein
+    \item Torwart im Tor
+\end{itemize}
+\end{frame}
 
+\section{Bilderkennung}
+\subsection{Erkennung mittels geometrischer Relationen}
+\begin{frame}{Bilderkennung}{Erkennung mittels geometrischer Relationen}
+\begin{enumerate}
+    \item Farbkalibrierung und -segmentierung im YUV-Farbraum
+    \item Erkennung des Horizonts
+    \item Extraktion Torpfostenpixel
+    \item Modellierung des Tors durch einfach geometrische Formen
+\end{enumerate}
+\end{frame}
+
+\subsection{Erkennung mittels Farbe, Ecken und Hough-Transformation}
+\begin{frame}{Bilderkennung}{Erkennung mittels Farbe, Ecken und Hough-Transformation}
+\begin{enumerate}
+    \item Farbfilterung im HSV-Farbraum
+    \item Eckenfilter für Torkonturen
+    \item Hough-Transformation erkennt Torsegmente
+    \item Aufspannung des Tormodells durch Eckpunkte
+\end{enumerate}
+\end{frame}
+
+\section*{Quellenverzeichnis}
+\begin{frame}{Quellenverzeichnis}
+\begin{tiny}
+\begin{itemize}
+    \item Official RoboCup Standard Platform League Rules for 2010/2011/2012  (http://wiki.robocup.org/wiki/Standard\_Platform\_League\#Rules)
+    \item Official RoboCup Humanoid League Rules for 2009/2010/2011/2012 (http://wiki.robocup.org/wiki/Humanoid\_League\#Rules)
+    \item Official RoboCup Middle Size League Rules for 2009/2010/2011/2012 (http://wiki.robocup.org/wiki/Middle\_Size\_League\#Rules)
+    \item Recognition of Standard Platform RoboCup Goals (http://gsyc.es/jmplaza/papers/jopha-2010.pdf)
+\end{itemize}
+\end{tiny}
 \end{frame}
 
 \end{document}
