@@ -192,9 +192,63 @@ H_f(2,1) &= \begin{pmatrix}
 \newpage
 \section{4.}
 \subsection{a)}
+Gewinn: \(G(x,y) = 15x + 9y - C(x,y) \) \\
+\begin{align}
+&G(x,y) = -0.004x^2 - 0.01xy - 0.01y^2 + 11x + 7y - 500 \\
+&\frac {\partial G} {\partial x} (x,y) = -0.08x - 0.01y + 11 \\
+&\frac {\partial G} {\partial y} (x,y) = -0.01x - 0.02y + 7
+\end{align}
 
+\begin{align}
+-0.08x - 0.01y + 11 &= 0 \Leftrightarrow y = -8x + 1100 \\
+-0.01x - 0.02y + 7 &= 0
+\end{align}
+I in II
+
+\begin{align}
+-0.01x - 0.02(-8x+1100) + 7 &= 0 \\
+\Leftrightarrow x + 2(-8x+1.100) - 700 &= 0 \\
+\Leftrightarrow x - 16x + 1500 &=0\\
+\Leftrightarrow x &= 150 \\
+\Rightarrow y &= -8 \cdot 100 + 1100 \\
+y &= 300
+\end{align}
+
+Kritische Stelle: (100, 300) \\
+\[ \triangle (x,y)= -8 \cdot (-2) = 16 \]
+\[ \triangle (100,300) = 16 > 0 \land \frac {\partial^2 f} {\partial x^2}(x,y) = -8 < 0 \]
+\( \Rightarrow (100, 300) \) ist ein Maximum. 
+
+
+\newpage
 \subsection{b)}
+\begin{align}
+y &= 320 -x \\
+G(x,y) &= -0.04x^2 - 0.01 xy - 0.01y^2 + 12x + 7y - 500
+\end{align}
+
+I in II:
+\begin{align}
+G(x) &= -0.04x^2 - 0.01x(320-x)-0.01(320-x)^2 + 11x + 7(320-x) - 500 \\
+&= -0.04x^2 - 3.2x + 0.01x^2 - 1024 + 6.4x - 0.01x^2 + 11x + 2240 - 7x - 500 \\\
+&= -0.04x^2 + x + 7.2x + 716 \\
+&= x^2 - 180x - 17900 \\
+G'(x) &= 2x - 180 = 0 \\
+x &= 90 \\
+y &= 320 -90 \\
+  &= 230 \\
+G''(x) &= -0.08x^2 < 0\
+\end{align}
+\(\Rightarrow (90,230)\) ist ein Maximum.\\
+\(\Rightarrow\) es müssen 90 Einheiten A und 230 Einheiten B produziert werden.
 
 \subsection{c)}
+\begin{align}
+G(x,y) &= -0.04x^2 -0.01xy - 0.01y^2 +12x + 7y - 500 \\
+G(100,300) &= -0.04 \cdot 100^2 - 0.01 \cdot 100 \cdot 300 - 0.01 \cdot 300^2 + 11 \cdot 100 + 7 \cdot 300 - 500 \\
+&=  1100\\
+G(90,230) &= -0.04 \cdot 90^2 - 0.01 \cdot 90 \cdot 230 - 0.01\cdot 230^2 + 11 \cdot 90 + 7 \cdot 230 - 500 \\
+&= 1040
+\end{align}
 
 \end{document}
