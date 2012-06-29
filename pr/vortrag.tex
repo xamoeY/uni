@@ -4,6 +4,7 @@
 \usepackage{amsmath,amsfonts,amssymb}
 \pdfmapfile{+sansmathaccent.map}
 \usetheme{Warsaw}
+\usepackage{graphicx}
 \begin{document}
 
 \title{Erkennung von Toren beim RoboCup}
@@ -23,16 +24,16 @@
 \subsection{Geschichte}
 \begin{frame}{Tore im RoboCup}{Geschichte}
 \begin{itemize}
-    \item STL: seit 2012 erstmals gleichfarbige Tore (gelb)
-    \item HL: unterschiedliche Farben (gelb/blau)
-    \item MSL: weisse Tore
+    \item Standard Platform League: seit 2012 erstmals gleichfarbige Tore (gelb)
+    \item Humanoid League: unterschiedliche Farben (gelb/blau)
+    \item Middle Size League: weisse Tore
 \end{itemize}
 \end{frame}
 
 \subsection{Probleme}
 \begin{frame}{Tore im RoboCup}{Probleme}
 \begin{itemize}
-    \item Deformation je nach Perspektive
+    \item Deformation der Tore je nach Perspektive
     \item Probleme bei Lokalisation durch gleichfarbige Tore
     \item Netze können als Feldlinien erkannt werden
     \item Teile vom Tor können verdeckt sein
@@ -46,19 +47,101 @@
 \begin{enumerate}
     \item Farbkalibrierung und -segmentierung im YUV-Farbraum
     \item Erkennung des Horizonts
-    \item Extraktion Torpfostenpixel
-    \item Modellierung des Tors durch einfach geometrische Formen
+    \item Extraktion der Torpfostenpixel
+    \item Modellierung des Tors durch einfache geometrische Formen
 \end{enumerate}
 \end{frame}
 
-\subsection{Erkennung mittels Farbe, Ecken und Hough-Transformation}
-\begin{frame}{Bilderkennung}{Erkennung mittels Farbe, Ecken und Hough-Transformation}
+\subsubsection{Farbkalibrierung und -segmentierung im YUV-Farbraum}
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Farbkalibrierung und -segmentierung im YUV-Farbraum}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.3]{Barn-yuv.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Farbkalibrierung und -segmentierung im YUV-Farbraum}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.9]{segmented-view2.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Farbkalibrierung und -segmentierung im YUV-Farbraum}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.4]{training-tool.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Farbkalibrierung und -segmentierung im YUV-Farbraum}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.5]{segmented-view.png}
+\end{figure}
+\end{frame}
+
+\subsubsection{Erkennung des Horizonts}
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Erkennung des Horizonts}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.6]{geometric-plane.png}
+\end{figure}
+\end{frame}
+
+\subsubsection{Extraktion der Torpfosten und Modellierung}
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Extraktion der Torpfosten und Modellierung}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.6]{goal-blobs.png}
+\end{figure}
+\end{frame}
+
+\subsubsection{Beispiele}
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Beispiele}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.45]{example-detection1.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Beispiele}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.5]{example-detection2.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Beispiele}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.5]{example-detection3.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Beispiele}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.5]{example-detection4.png}
+\end{figure}
+\end{frame}
+
+\subsection{Erkennung mittels Hough-Transformation}
+\begin{frame}{Bilderkennung}{Erkennung mittels Hough-Transformation}
 \begin{enumerate}
     \item Farbfilterung im HSV-Farbraum
     \item Eckenfilter für Torkonturen
     \item Hough-Transformation erkennt Torsegmente
     \item Aufspannung des Tormodells durch Eckpunkte
 \end{enumerate}
+\end{frame}
+
+\subsubsection{Beispiel}
+\begin{frame}{Erkennung mittels Hough-Transformation}{Beispiel}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.5]{hough-transformation-method.png}
+\end{figure}
 \end{frame}
 
 \section*{Quellenverzeichnis}
@@ -73,6 +156,7 @@
     \item YUV-Farbmodell (http://de.wikipedia.org/wiki/YUV-Farbmodell)
     \item RGB-Farbraum (http://de.wikipedia.org/wiki/RGB-Farbraum)
     \item HSV-Farbraum (http://de.wikipedia.org/wiki/HSV-Farbraum)
+    \item k-Means-Algorithmus (http://de.wikipedia.org/wiki/K-Means-Algorithmus)
 \end{itemize}
 \end{tiny}
 \end{frame}
