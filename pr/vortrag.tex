@@ -21,17 +21,35 @@
 \end{frame}
 
 \section{Tore im RoboCup}
-\subsection{Geschichte}
-\begin{frame}{Tore im RoboCup}{Geschichte}
-\begin{itemize}
-    \item Standard Platform League: seit 2012 erstmals gleichfarbige Tore (gelb)
-    \item Humanoid League: unterschiedliche Farben (gelb/blau)
-    \item Middle Size League: weisse Tore
-\end{itemize}
+
+\subsection{Middle Size League}
+\begin{frame}{Tore im RoboCup}{Middle Size League}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.65]{middlesize-goal.png}
+\end{figure}
 \end{frame}
 
+\subsection{Humanoid League}
+\begin{frame}{Tore im RoboCup}{Humanoid League}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.45]{humanoid-kidsize-goal.png}
+\includegraphics[scale=0.45]{humanoid-adultsize-goal.png}
+\end{figure}
+\end{frame}
+
+\subsection{Standard Platform League}
+\begin{frame}{Tore im RoboCup}{Standard Platform League}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.4]{spl-goal.png}
+\end{figure}
+\end{frame}
+
+\section{Bilderkennung}
 \subsection{Probleme}
-\begin{frame}{Tore im RoboCup}{Probleme}
+\begin{frame}{Bilderkennung}{Probleme}
 \begin{itemize}
     \item Deformation der Tore je nach Perspektive
     \item Probleme bei Lokalisation durch gleichfarbige Tore
@@ -41,7 +59,6 @@
 \end{itemize}
 \end{frame}
 
-\section{Bilderkennung}
 \subsection{Erkennung mittels geometrischer Relationen}
 \begin{frame}{Bilderkennung}{Erkennung mittels geometrischer Relationen}
 \begin{enumerate}
@@ -167,7 +184,11 @@
 \end{frame}
 
 \begin{frame}{Erkennung mittels Hough-Transformation}{Beispiel}
-    \href{http://www.activovision.com/octavi/doku.php?id=hough_transform}{Applet}
+    \begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.4]{hough-transformation.png}
+	\end{figure}
+	 \href{http://www.activovision.com/octavi/doku.php?id=hough_transform}{Applet}
 \end{frame}
 
 \againframe{hough}
