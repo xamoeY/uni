@@ -34,6 +34,37 @@
 \subsection{a)}
 \subsection{b)}
 \subsection{c)}
+\begin{align}
+z_1&=\sqrt{2}(\cos\big(\frac{\pi}{4}\big)+i\sin\big(\frac{\pi}{4}\big)) \\
+  &=\sqrt{2}\cos\big(\frac{\pi}{4}\big)+i\sqrt{2}\sin\big(\frac{\pi}{4}\big) \\
+	&=\sqrt{2}\frac{1}{\sqrt{2}}+i\sqrt{2}\frac{1}{\sqrt{2}} \\
+	&=1+i \\ \\
+z_2&=-1+i \\ \\
+z_3&=z_1\cdot z_2 \\
+	&=(1+i)\cdot(-1+i) \\
+	&=-1+i-i+i^2 \\
+	&=-1-1+0i \\
+	&=-2+0i \\ \\
+z_4&=\bar{z_2} \\ 
+	&=-1-i \\
+\end{align}
+\begin{center}
+\begin{tikzpicture}[scale=2][domain=0:2] % Zeichenbereich
+% Achsen zeichnen
+\draw[->] (-2.5,0) -- (2.5,0) node[right] {$\Re$};
+\draw[->] (0,-1.5) -- (0,1.5) node[above] {$\Im$};
+%Achsenbeschriftung zeichnen
+\foreach \x in {-2,-1,1,2}
+\draw (\x,-.1) -- (\x,.1) node[below=10pt] {$\scriptstyle\x$};
+\foreach \y in {-1,1}
+\draw (-.1,\y) -- (.1,\y) node[left=10pt] {$\scriptstyle\y$};
+% Funktionen zeichnen
+\draw[thick,blue][->] (0,0) -- (1,1) node[right] {$z_1$};
+\draw[thick,orange][->] (0,0) -- (-1,1) node[left] {$z_2$};
+\draw[thick,red][->] (0,0) -- (-2,0) node[above] {$z_3$};
+\draw[thick,green][->] (0,0) -- (-1,-1) node[left] {$z_4$};
+\end{tikzpicture}
+\end{center}
 \subsection{d)}
 
 \section{3.}
