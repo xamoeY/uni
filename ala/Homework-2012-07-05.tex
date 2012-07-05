@@ -28,8 +28,68 @@
 \notag
 \section{1.}
 \subsection{a)}
+\begin{align}
+&f(x,y,z) = 2x^2 + y^2 + 4z^2 - 2yz - 2x - 6y + 8 \\
+&gradf(x,y,z) = (4x - 2, 2y - 2z - 6, 8z - 2y) \\
+&gradf(0,0,0)
+\end{align}
+\begin{align}
+4x - 2 &= 0 \\
+2y - 2z - 6 &= 0 \\
+8z - 2y &= 0 \\
+\\
+\text{I nach x auflösen} \\
+\Rightarrow x &= \frac{1}{2} \\
+\\
+\text{III nach z auflösen} \\
+\Rightarrow z &= \frac{1}{4}y \\
+\\
+\text{z in II einsetzen und nach y auflösen} \\
+\Rightarrow y &= 4 \\
+\\
+\text{y in III einsetzen} \\
+\Rightarrow z &= 1 \\
+\\
+\Rightarrow (x,y,z) = (\frac{1}{2},4,1)&
+\end{align}
+\begin{align}
+\text{Partielle Ableitungen 1. und 2. Grades bilden} \\
+f_x &= 4x - 2 \\
+f_{xx} &= 4 \\
+f_{xy} &= 0 \\
+f_{xz} &= 0 \\
+\\
+f_y &= 2y - 2z - 6 \\
+f_{yx} &= 4 \\
+f_{yy} &= 4 \\
+f_{yz} &= 4 \\
+\\
+f_z &= 8z - 2y \\
+f_{zx} &= 4 \\
+f_{zy} &= 4 \\
+f_{zz} &= 4
+\end{align}
+\begin{align}
+\text{Hesse-Matrix aufstellen} \\
+\\
+\begin{pmatrix}
+4 & 0 & 0 \\
+0 & 2 & -2 \\
+0 & -2 & 8 
+\end{pmatrix}
+\end{align}
+Es handelt sich um eine positive Matrix. \\
+\(\Rightarrow\) An der Stelle \((\frac{1}{2}, 4, 1)\) liegt ein strenges lokales Minimum vor.
 \subsection{b)}
-
+Die Temperatur steigt am stärksten in Richtung des positiven Gradienten. \\
+\\
+\begin{align}
+gradf(x,y,z) &= (4x - 2, 2y - 2z - 6, 8z - 2y) \\
+\text{für} (x,y,z) &= (1,1,1) \\
+\Rightarrow gradf &= (2,0,6) \\
+\end{align}
+\\
+In Richtung des Vektors (2, 0, 6) steigt die Temperatur am stärksten.
 \section{2.}
 \subsection{a)}
 \subsection{b)}
@@ -39,7 +99,6 @@
 \section{3.}
 \subsection{a)}
 \subsection{b)}
-
 \section{4.}
 
 \end{document}
