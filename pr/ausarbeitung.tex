@@ -1,0 +1,54 @@
+\documentclass[a4paper,12pt]{article} 
+\usepackage{german} 
+\usepackage[T1]{fontenc} 
+\usepackage[latin1]{inputenc} 
+\begin{document}
+
+\begin{titlepage}
+\author{Elena Noll\\
+		Sven-Hendrik Haase}
+\title{Erkennung von Toren beim RoboCup} 
+\date{\today} 
+\maketitle
+\thispagestyle{empty}
+\end{titlepage}
+
+\tableofcontents
+
+\newpage
+
+\section{Tore im RoboCup}
+\cite{lamport94}
+\subsection{Middle Size League}
+\subsection{Humanoid League}
+\subsection{Standard Platform League}
+
+\section{Bilderkennung}
+\subsection{Probleme}
+\subsection{Erkennung mittels geometrischer Relationen}
+\subsubsection{Farbkalibrierung und -segmentierung im YUV-Farbraum}
+\subsubsection{Erkennung des Horizons}
+\subsubsection{Extraktion der Torpfosten und Modellierung}
+\subsubsection{Beispiele}
+
+\subsection{Erkennung mittels Hough-Transformation}
+\subsubsection{Farbfilterung im HSV-Farmraum}
+\subsubsection{Zielsetzung der Hough-Transformation}
+\subsubsection{Beispiel}
+\subsubsection{Eigenschaften der Hough-Transformation}
+
+\section{Fazit}
+
+\bibliography{general}
+\begin{thebibliography}{9}
+
+\bibitem{lamport94}
+  Leslie Lamport,
+  \emph{\LaTeX: A Document Preparation System}.
+  Addison Wesley, Massachusetts,
+  2nd Edition,
+  1994.
+
+\end{thebibliography}
+
+\end{document}
