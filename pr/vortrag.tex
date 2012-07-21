@@ -21,17 +21,35 @@
 \end{frame}
 
 \section{Tore im RoboCup}
-\subsection{Geschichte}
-\begin{frame}{Tore im RoboCup}{Geschichte}
-\begin{itemize}
-    \item Standard Platform League: seit 2012 erstmals gleichfarbige Tore (gelb)
-    \item Humanoid League: unterschiedliche Farben (gelb/blau)
-    \item Middle Size League: weisse Tore
-\end{itemize}
+
+\subsection{Middle Size League}
+\begin{frame}{Tore im RoboCup}{Middle Size League}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.65]{middlesize-goal.png}
+\end{figure}
 \end{frame}
 
+\subsection{Humanoid League}
+\begin{frame}{Tore im RoboCup}{Humanoid League}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.45]{humanoid-kidsize-goal.png}
+\includegraphics[scale=0.45]{humanoid-adultsize-goal.png}
+\end{figure}
+\end{frame}
+
+\subsection{Standard Platform League}
+\begin{frame}{Tore im RoboCup}{Standard Platform League}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.4]{spl-goal.png}
+\end{figure}
+\end{frame}
+
+\section{Bilderkennung}
 \subsection{Probleme}
-\begin{frame}{Tore im RoboCup}{Probleme}
+\begin{frame}{Bilderkennung}{Probleme}
 \begin{itemize}
     \item Deformation der Tore je nach Perspektive
     \item Probleme bei Lokalisation durch gleichfarbige Tore
@@ -41,14 +59,12 @@
 \end{itemize}
 \end{frame}
 
-\section{Bilderkennung}
 \subsection{Erkennung mittels geometrischer Relationen}
 \begin{frame}{Bilderkennung}{Erkennung mittels geometrischer Relationen}
 \begin{enumerate}
     \item Farbkalibrierung und -segmentierung im YUV-Farbraum
     \item Erkennung des Horizonts
-    \item Extraktion der Torpfostenpixel
-    \item Modellierung des Tors durch einfache geometrische Formen
+    \item Extraktion der Torpfosten und Modellierung
 \end{enumerate}
 \end{frame}
 
@@ -64,6 +80,13 @@
 \begin{figure}[htp]
 \centering
 \includegraphics[scale=0.9]{segmented-view2.png}
+\end{figure}
+\end{frame}
+
+\begin{frame}{Erkennung mittels geometrischer Relationen}{Farbkalibrierung und -segmentierung im YUV-Farbraum}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.7]{region-growing.png}
 \end{figure}
 \end{frame}
 
@@ -136,12 +159,51 @@
 \end{enumerate}
 \end{frame}
 
+\subsubsection{Farbfilterung im HSV-Farbraum}
+\begin{frame}{Erkennung mittels Hough-Transformation}{Farbfilterung im HSV-Farbraum}
+\begin{figure}[htp]
+\centering
+\includegraphics[scale=0.3]{750px-HSV_cone.png}
+\end{figure}
+\end{frame}
+
+\subsubsection{Zielsetzung der Hough-Transformation}
+\begin{frame}{Bilderkennung}{Zielsetzung der Hough-Transformation}
+\begin{itemize}
+    \item Finden von vorgegebenen geometrischen Strukturen in einem (segmentierten) Bild
+    \item Überprüft wird, ob einzelne Segmente der Referenzstruktur ähnlich sind
+\end{itemize}
+\end{frame}
+
 \subsubsection{Beispiel}
-\begin{frame}{Erkennung mittels Hough-Transformation}{Beispiel}
+\begin{frame}[label=hough]{Erkennung mittels Hough-Transformation}{Beispiel}
 \begin{figure}[htp]
 \centering
 \includegraphics[scale=0.5]{hough-transformation-method.png}
 \end{figure}
+\end{frame}
+
+\begin{frame}{Erkennung mittels Hough-Transformation}{Beispiel}
+    \begin{figure}[htbp]
+	\centering
+	\includegraphics[scale=0.4]{hough-transformation.png}
+	\end{figure}
+	 \href{http://www.activovision.com/octavi/doku.php?id=hough_transform}{Applet}
+\end{frame}
+
+\againframe{hough}
+
+\subsubsection{Eigenschaften der Hough-Transformation}
+\begin{frame}{Bilderkennung}{Eigenschaften der Hough-Transformation}
+\begin{itemize}
+    \item Robust gegenüber Rauschen und systematischen Fehlern
+    \item Erkennt auch teilweise verdeckte (unvollständige) Strukturen
+\end{itemize}
+\end{frame}
+
+\section*{Fragen}
+\begin{frame}{Fragen}
+Noch Fragen?
 \end{frame}
 
 \section*{Quellenverzeichnis}
@@ -157,6 +219,7 @@
     \item RGB-Farbraum (http://de.wikipedia.org/wiki/RGB-Farbraum)
     \item HSV-Farbraum (http://de.wikipedia.org/wiki/HSV-Farbraum)
     \item k-Means-Algorithmus (http://de.wikipedia.org/wiki/K-Means-Algorithmus)
+    \item Die Hough-Transformation (http://page.mi.fu-berlin.de/alt/vorlesungen/sem04/10\_6Die\%20Hough.doc)
 \end{itemize}
 \end{tiny}
 \end{frame}

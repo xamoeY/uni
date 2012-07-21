@@ -1,0 +1,266 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{pgfplots}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 5. Juli 2012}
+
+\title{\titleinfo}
+\author{Elena Noll, Sven-Hendrik Haase, Arne Struck}
+\date{\today}
+\ihead{EN, SHH, AS}
+\chead{\titleinfo}
+\ohead{\today}
+\setheadsepline{1pt}
+\setcounter{secnumdepth}{0}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\maketitle
+\notag
+\section{1.}
+\subsection{a)}
+\begin{align}
+&f(x,y,z) = 2x^2 + y^2 + 4z^2 - 2yz - 2x - 6y + 8 \\
+&gradf(x,y,z) = (4x - 2, 2y - 2z - 6, 8z - 2y) \\
+&gradf(0,0,0)
+\end{align}
+\begin{align}
+4x - 2 &= 0 \\
+2y - 2z - 6 &= 0 \\
+8z - 2y &= 0 \\
+\\
+\text{I nach x auflösen} \\
+\Rightarrow x &= \frac{1}{2} \\
+\\
+\text{III nach z auflösen} \\
+\Rightarrow z &= \frac{1}{4}y \\
+\\
+\text{z in II einsetzen und nach y auflösen} \\
+\Rightarrow y &= 4 \\
+\\
+\text{y in III einsetzen} \\
+\Rightarrow z &= 1 \\
+\\
+\Rightarrow (x,y,z) = (\frac{1}{2},4,1)&
+\end{align}
+\begin{align}
+\text{Partielle Ableitungen 1. und 2. Grades bilden} \\
+f_x &= 4x - 2 \\
+f_{xx} &= 4 \\
+f_{xy} &= 0 \\
+f_{xz} &= 0 \\
+\\
+f_y &= 2y - 2z - 6 \\
+f_{yx} &= 4 \\
+f_{yy} &= 4 \\
+f_{yz} &= 4 \\
+\\
+f_z &= 8z - 2y \\
+f_{zx} &= 4 \\
+f_{zy} &= 4 \\
+f_{zz} &= 4
+\end{align}
+\begin{align}
+\text{Hesse-Matrix aufstellen} \\
+\\
+\begin{pmatrix}
+4 & 0 & 0 \\
+0 & 2 & -2 \\
+0 & -2 & 8 
+\end{pmatrix}
+\end{align}
+Es handelt sich um eine positive Matrix. \\
+\(\Rightarrow\) An der Stelle \((\frac{1}{2}, 4, 1)\) liegt ein strenges lokales Minimum vor.
+\subsection{b)}
+Die Temperatur steigt am stärksten in Richtung des positiven Gradienten. \\
+\\
+\begin{align}
+gradf(x,y,z) &= (4x - 2, 2y - 2z - 6, 8z - 2y) \\
+\text{für} (x,y,z) &= (1,1,1) \\
+\Rightarrow gradf &= (2,0,6) \\
+\end{align}
+\\
+In Richtung des Vektors (2, 0, 6) steigt die Temperatur am stärksten.
+\newpage %Provisorium, löschen bei Endformatierung
+\section{2.}
+\subsection{a)}
+\[
+A=\begin{pmatrix}
+i & 1 \\
+2 & -i
+\end{pmatrix},\ 
+B=\begin{pmatrix}
+i & -i
+\end{pmatrix},\ 
+C=\begin{pmatrix}
+-i \\
+1
+\end{pmatrix}
+\] \\
+\(AB\) existiert nicht, da \(A\) eine \(2\times 2\) Matrix und \(B\) eine \(1\times 2\) Matrix ist. Zur Multiplikation müsste, vorausgesetzt \(A\) und \(B\) sind \(m\times n\) -Matrizen, \(n_A=m_B\) sein.
+\begin{align}
+AC&=
+\begin{pmatrix}
+i & 1 \\
+2 & -i
+\end{pmatrix}\cdot
+\begin{pmatrix}
+i & -i
+\end{pmatrix}=
+\begin{pmatrix}
+1+i \\
+-2i+1
+\end{pmatrix} \\
+BC&=
+\begin{pmatrix}
+i & -i
+\end{pmatrix}\cdot
+\begin{pmatrix}
+-i \\
+1
+\end{pmatrix}=
+1-i \\
+CB&=
+\begin{pmatrix}
+-i \\
+1
+\end{pmatrix}
+\cdot
+\begin{pmatrix}
+i & -i
+\end{pmatrix}=
+\begin{pmatrix}
+1 \\
+-i
+\end{pmatrix}
+\end{align}
+
+\subsection{b)}
+\begin{align}
+\bar{z}&=a-ib \\
+	&=\frac{3+4i}{2-3i} \\
+	&=\frac{3+4i}{2-3i}\cdot\frac{2+3i}{2+3i} \\
+	&=\frac{6+9i+8i-12}{4+6i-6i-9} \\
+	&=\frac{-6+17i}{-5} \\
+	&=\frac{6}{5}-\frac{17}{5}i \\ \\
+\Rightarrow z&=\frac{6}{5}+\frac{17}{5}i \\ \\
+\Rightarrow a&=\frac{6}{5} \\
+	b&=\frac{17}{5}
+\end{align}
+
+\newpage
+\subsection{c)}
+\begin{align}
+z_1&=\sqrt{2}(\cos\big(\frac{\pi}{4}\big)+i\sin\big(\frac{\pi}{4}\big)) \\
+	&=\sqrt{2}\cos\big(\frac{\pi}{4}\big)+i\sqrt{2}\sin\big(\frac{\pi}{4}\big) \\
+	&=\sqrt{2}\frac{1}{\sqrt{2}}+i\sqrt{2}\frac{1}{\sqrt{2}} \\
+	&=1+i \\ \\
+z_2&=-1+i \\ \\
+z_3&=z_1\cdot z_2 \\
+	&=(1+i)\cdot(-1+i) \\
+	&=-1+i-i+i^2 \\
+	&=-1-1+0i \\
+	&=-2+0i \\ \\
+z_4&=\bar{z_2} \\ 
+	&=-1-i \\
+\end{align}
+\begin{center}
+\begin{tikzpicture}[scale=2.3][domain=0:2] % Zeichenbereich
+% Achsen zeichnen
+\draw[->] (-2.5,0) -- (2.5,0) node[right] {$\Re$};
+\draw[->] (0,-1.5) -- (0,1.5) node[above] {$\Im$};
+%Achsenbeschriftung zeichnen
+\foreach \x in {-2,-1,1,2}
+\draw (\x,-.1) -- (\x,.1) node[below=10pt] {$\scriptstyle\x$};
+\foreach \y in {-1,1}
+\draw (-.1,\y) -- (.1,\y) node[left=10pt] {$\scriptstyle\y$};
+% Funktionen zeichnen
+\draw[thick,blue][->] (0,0) -- (1,1) node[right] {$z_1$};
+\draw[thick,orange][->] (0,0) -- (-1,1) node[left] {$z_2$};
+\draw[thick,red][->] (0,0) -- (-2,0) node[above] {$z_3$};
+\draw[thick,green][->] (0,0) -- (-1,-1) node[left] {$z_4$};
+\end{tikzpicture}
+\end{center}
+\newpage
+\subsection{d)}
+\subsubsection{(i)}
+\(M_1=\Big\{z\in\mathbb{C}:|z-(3+2i)|=2 \Big\}\) \\
+\(z-(3+2i)\) beschreibt die Differenz zweier komplexer Zahlen. In der Gaußschen Zahlenebene werden diese als Vektoren aufgefasst, also ist das Ergebnis dieser Subtraktion ein neuer Vektor.
+Der Betrag eines Vektors beschreibt seine Länge, welche in diesem Fall 2 beträgt. \\
+Man kann einen bestimmten Vektor auch als Teil einer Geraden auffassen, wobei der Vektor noch eine Richtung impliziert. Da die Länge eines Vektors allerdings keine Richtung mehr impliziert, kann \(|z-(3+2i)|\) auch als Länge einer Strecke (begrenzte Gerade) aufgefasst werden.
+\subsubsection{(ii)}
+\(M_2=\Big\{z\in\mathbb{C}:|z-i|=|z-1| \Big\}\) \\
+Analog zu (i) beschreiben die beiden Beträge aus \(M_2\) Längen von Vektoren. Allerdings ist die Gleichung nur unter der Bedingung wahr, dass \(a=b\ |\ z=a+bi\) gilt.
+Also beschreibt \(M_2\) die erste Winkelhalbierende der Gaußschen Zahlenebene. \\
+
+\section{3}
+\subsection{a)}
+\(f(x,y)=-0,1x^2-0,2xy-0,2y^2+47x+48y-600\) \\ \\
+Nebenbedingung: \\
+\(g(x,y)=x+y-200\) \\
+\begin{align}
+\begin{pmatrix}
+\frac{\partial g}{\partial x}(x,y) & \frac{\partial g}{\partial y}(x,y) 
+\end{pmatrix}
+&=
+\begin{pmatrix}
+1 & 1
+\end{pmatrix}
+\end{align}
+\[L(x,y,\lambda)=-0,1x^2-0,2xy-0,2y^2+47x+48y-600+\lambda(x+y-200)\]
+\begin{align}
+\frac{\partial L}{\partial x}(x,y,\lambda)&=-0,2x-0,2y+47+\lambda \\
+\frac{\partial L}{\partial y}(x,y,\lambda)&=-0,2x-0,4y+48+\lambda \\
+\frac{\partial L}{\partial \lambda}(x,y,\lambda)&=x+y-200 \\
+\end{align}
+\newpage
+LGS: \\
+I:\quad\(-0,2x-0,2y+\lambda = -47\) \\
+II: \ \(-0,2x-0,4y+\lambda = -48\) \\
+III: \ \quad\quad\quad\quad\quad\(x+y =200\) \\ \\
+-5\(\cdot\)I-III:
+\begin{align}
+x-x+y-y-5\lambda &=235-200 \\
+\Leftrightarrow 	-5 \lambda &= 35 \\
+\Leftrightarrow 	\lambda &= -7 \\
+\end{align}
+-5\(\cdot\)II-III:
+\begin{align}
+x-x+2y-y-5\cdot -7 &= 240-200 \\
+\Leftrightarrow	y+35&=40 \\
+\Leftrightarrow	y&=5 \\
+\end{align}
+y in III:
+\begin{align}
+x+5&=200 \\
+\Leftrightarrow x &= 195
+\end{align}
+\(\Rightarrow\) die kritische Stelle ist \((195,5)\).
+\subsection{b)}
+\begin{align}
+\frac{\partial ^2L}{\partial x^2}(x,y,\lambda)&=-0,2 \\
+\frac{\partial ^2L}{\partial y^2}(x,y,\lambda)&=-0,4 \\
+\frac{\partial ^2L}{\partial x \partial y}(x,y,\lambda)&=-0,2 \\
+\end{align}
+\[\bar{H}_f(195,5)=
+\begin{pmatrix}
+0 & 1 & 1 \\
+1 & -0,2 & -0,2 \\
+1 & -0,2 & -0,4
+\end{pmatrix}
+\] \\
+\(det\ \bar{H}_f=0,2>0\) \\
+\(\Rightarrow (195,5)\) ist ein Maximum.
+\newpage
+\section{4.}
+
+\end{document}
