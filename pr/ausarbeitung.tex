@@ -35,7 +35,7 @@ der Tore genauer vorgestellt.
 \section{Tore im RoboCup}
 Die Tore im RoboCup haben genau wie beim "normalen" Fussball mit menschlichen
 Spielern die Funktion, Punkte zu werten.
-Allgemein bestehen alle Tore im Robo-Cup unabhängig von der Liga genau wie normale Fußballtore aus zwei Pfosten, einer Latte und einem Netz. Die Tore werden auf der Torlinie mittig zentriert aufgestellt, sodass die Torlinie und die Latte parallel zueinander sind.
+Allgemein bestehen alle Tore im RoboCup unabhängig von der Liga genau wie normale Fußballtore aus zwei Pfosten, einer Latte und einem Netz. Die Tore werden auf der Torlinie mittig zentriert aufgestellt, sodass die Torlinie und die Latte parallel zueinander sind.
 
 Der RoboCup besteht aus verschiedenen Ligen, die grob ihrer Größe nach
 gestaffelt sind. In jeder Liga können die Tore eine unterschiedliche Größe sowie Farbe haben. Das Tor jeder Liga kann sich zudem jedes Jahr unabhängig von den
@@ -131,7 +131,7 @@ vier Schritte ausgeführt:
 
 \subsubsection{Farbsegmentierung}
 
-\begin{figure}[H]s
+\begin{figure}[H]
 \includegraphics{segmented-view2.png}
 \caption{Farbsegementiertes Bild}
 \label{fig:color-seg}
@@ -195,55 +195,90 @@ vier Schritte ausgeführt:
 \end{figure}
 
 \subsection{Erkennung mittels Hough-Transformation}
-Ein weiterer Weg zur Torerkennung im Robo-Cup ist die Hough-Transformation
-Die Hough-Transformation wurde 1962 von P.V.C. Hough entworfen und von Ihm unter dem Namen „Method and Means for Recognizing Complex Patterns“ patentiert. Später wurde Sie von Duda und Hart weiterentwickelt und verbessert. \\
+Ein weiterer Weg zur Torerkennung im RoboCup ist die Hough-Transformation.
+Die Hough-Transformation wurde 1962 von P.V.C. Hough entworfen und von Ihm unter dem Namen
+„Method and Means for Recognizing Complex Patterns“ patentiert. Später wurde Sie von Duda und Hart weiterentwickelt und verbessert. \\
 \\
-Die Hough-Transformation stellt ein Verfahren zur Erkennung von beliebigen, vorgegebenen geometrischen Strukturen in einem Gradientenbild dar. Angewendet wird dieses Verfahren nicht nur im Robo-Cup sonder häufig auch zu industriellen Zwecken. Beispielsweise um bestimmte Arbeitsvorgänge von Maschinen zu automatisieren oder zu verbessern. \\
+Die Hough-Transformation stellt ein Verfahren zur Erkennung von beliebigen, vorgegebenen
+geometrischen Strukturen in einem Gradientenbild dar. Angewendet wird dieses Verfahren
+nicht nur im RoboCup sonder häufig auch zu industriellen Zwecken. Beispielsweise um bestimmte Arbeitsvorgänge von Maschinen zu automatisieren oder zu verbessern. \\
 \\
-Im Bezug auf die Torerkennung im Robo-Cup führt die Hough-Transformation alleine zu keinem Ergebnis. Zur endgültigen Erkennung des Tores mittels der Hough-Transformation sind 4 wesentliche Schritte nötig. Hat der Roboter ein Bild eingefangen finden zunächst 2 Schritte statt, dieses Bild auf die Hough-Transformation vorzubereiten. Der erste Schritt ist die Farbfilterung im HSV-Farbraum, der zweite Schritt ist die Anwendung eines Eckenfilters zum Erkennen der Torkonturen. Erst danach ist das Bild so weit aufgearbeitet und die eigentliche Hough-Transformation kommt zum Einsatz um die Torsegmente zu erkennen. Zuletzt wird das entstandene Tormodell anhand von Eckpunkten modelliert und aufgespannt. Im folgenden werden die einzelnen Schritte genauer erläutert.
+Im Bezug auf die Torerkennung im RoboCup führt die Hough-Transformation alleine zu keinem
+Ergebnis. Zur endgültigen Erkennung des Tores mittels der Hough-Transformation sind 4
+wesentliche Schritte nötig. Hat der Roboter ein Bild eingefangen finden zunächst 2
+Schritte statt, dieses Bild auf die Hough-Transformation vorzubereiten. Der erste Schritt
+ist die Farbfilterung im HSV-Farbraum, der zweite Schritt ist die Anwendung eines
+Eckenfilters zum Erkennen der Torkonturen. Erst danach ist das Bild so weit aufgearbeitet und die eigentliche Hough-Transformation kommt zum Einsatz um die Torsegmente zu erkennen. Zuletzt wird das entstandene Tormodell anhand von Eckpunkten modelliert und aufgespannt. Im folgenden werden die einzelnen Schritte genauer erläutert.
 
 \subsubsection{Der HSV-Farbraum}
 Im HSV-Farbraum werden Farben über drei Komponenten definiert.
-Die H (Hue) Komponente beschreibt den Farbton, die S (Saturation) Komponente bestimmt wie satt bzw. blass die Farben dargestellt werden und mit der V Komponente kann die Helligkeit definiert werden. \\
-\\
-Die drei Komponenten können folgende Werte annehmen:
-\begin{itemize}
-\item[-] Farbton als Farbwinkel H auf dem Farbkreis (z.B. 0 \degree = Rot, 120 \degree = Grün, 240 \degree = Blau)
-\item[-] Sättigung S in Prozent (0\% = Neutralgrau, 50\% = wenig gesättigte Farbe, 100\% = gesättigte, reine Farbe) bzw. in einem Intervall von Null bis Eins
-\item[-] Hellwert V als Prozentwert (0\% = keine Helligkeit, 100\% = volle Helligkeit) bzw. in einem Intervall von Null bis Eins, auch Dunkelstufe genannt.
-\end{itemize}
+Die H (Hue) Komponente beschreibt den Farbton, die S (Saturation) Komponente bestimmt wie satt bzw. blass die Farben dargestellt werden und mit der V Komponente kann die Helligkeit definiert werden.
+\begin{figure}[H]
+\includegraphics[scale=0.3]{hsv-farbraum.png}
+\caption{HSV-Farbraum als Kegel}
+\label{fig:hsv-farbraum}
+\end{figure}
 
 \paragraph{Farbfilterung im HSV-Farbraum}
 \subparagraph{Farbfilterung}
 Unter Farbfilterung versteht man ein Verfahren, das eine bestimmte Farbe in einem Bild erkennt und nur diese herausfiltert. Alles andere im Bild wird vernachlässigt und nach der Farbfilterung nicht mehr dargestellt.
 \subparagraph{Warum Farbfilterung im HSV-Farbraum?}
-Warum Farbfilterung im HSV-Farbraum?
 Probleme bei der Farbfilterung entstehen dadurch, dass die Farbe des Tores z.B. durch unterschiedlichen Lichteinfall, Schatten oder Verschmutzung unterschiedlich wahrgenommen werden. Genau dort liegt der große Vorteil des HSV-Farbraumes. Ein Farbton kann unabhängig von Schwankungen der Helligkeit geprüft werden, indem man nur den Farbton zur Farbfilterung verwendet und die Sättigung und den Hellwert vernachlässigt. Somit ist die Farbprüfung unabhängig von Schattenbildungen, Schmutz oder Schwankung in der Intensität einer Lichtquelle möglich.
-
-Abbildung 1.2 zeigt links zunächst ein vom Roboter eingefangenes Bild eines blauen Tores und rechts das selbe Bild nach Anwendung des Farbfilters.
+\begin{figure}[H]
+\includegraphics[scale=0.6]{farb-filterung.jpg}
+\caption{Bild nach Anwendung der Farbfilterung im HSV-Farbraum}
+\label{fig:farb-filterung}
+\end{figure}
 
 \subsubsection{Eckenfilter zum Erkennen von Torkonturen} 
 Das Bild ist nach Anwendung des Farbfilters teilweise für die Hough-Transformation vorbereitet. Nun müssen nur noch mittels eines Eckenfilters die Torkonturen ausgearbeitet werden, da nur diese später relevant sind.
 
-Das Erkennen der Konturen beruht auf der Tatsache, dass im Bereich einer Kontur eine sehr starke Helligkeits- bzw. Farbänderung vorliegt. In unserem Beispiel des blauen Tores, haben wir die blaue Farbe herausgefiltert und der Rest des Bildes wird schwarz dargestellt. Nun gehen wir mit Hilfe eines Algorithmus von einem blauen Pixel aus in eine beliebige Richtung solange, bis eine starke Farb- bzw. Helligkeitsveränderung festgestellt wird. An den Stellen, an denen eine Veränderung erkannt wird, muss eine Kante vorliegen. Die Kanten werden nachgezeichnet und als einfache Linien dargestellt. Nach der Durchführung der ersten beiden Schritte liegt uns nun ein segmentiertes Bild vor wie Abbildung 1.3 zeigt.
-
+Das Erkennen der Konturen beruht auf der Tatsache, dass im Bereich einer Kontur eine sehr starke Helligkeits- bzw. Farbänderung vorliegt. In unserem Beispiel des blauen Tores, haben wir die blaue Farbe herausgefiltert und der Rest des Bildes wird schwarz dargestellt. Nun gehen wir mit Hilfe eines Algorithmus von einem blauen Pixel aus in eine beliebige Richtung. Solange, bis eine starke Farb- bzw. Helligkeitsveränderung festgestellt wird. An den Stellen, an denen eine Veränderung erkannt wird, muss eine Kante vorliegen. Die Kanten werden nachgezeichnet und als einfache Linien dargestellt. Nach der Durchführung der ersten beiden Schritte liegt uns nun ein segmentiertes Bild vor.
+\begin{figure}[H]
+\includegraphics[scale=0.6]{eckenfilter.jpg}
+\caption{Bild nach Anwendung des Eckenfilters}
+\label{fig:eckenfilter}
+\end{figure}
 \subsubsection{Hough-Transformation zum Erkennen der Torsegmente}
-Nachdem das Bild nun fertig vor verarbeitet ist, können wir zum eigentlichen Schritt der Hough-Transformation selbst kommen. Ziel dieses Verfahrens ist es wie Anfangs schon erwähnt eine vorgegebene Referenzstruktur in einem Bild zu erkennen. In unserem Beispiel ist die Referenzstruktur eine Gerade, da das Tor aus Geraden (den zwei Pfosten und der Latte) besteht.
+Nachdem das Bild nun fertig vorverarbeitet ist, können wir zum eigentlichen Schritt der Hough-Transformation selbst kommen. Ziel dieses Verfahrens ist es wie Anfangs schon erwähnt eine vorgegebene Referenzstruktur in einem Bild zu erkennen. In unserem Beispiel ist die Referenzstruktur eine Gerade, da das Tor aus Geraden (den zwei Pfosten und der Latte) besteht.
 
 Geraden werden oft wie in der Schule schon gelernt durch die Form 
-y = m*x + b dargestellt. Die Idee hinter der Hough-Transformation ist es alle Punkte in einem Bild in einen anderen Raum, der als Dualraum oder auch Hough-Raum bezeichnet wir zu transformieren. Dazu müssen zunächst geeignete Parameter für eine Gerade gefunden werden. Dies ist in der Form
-y = m*x + b nur bedingt möglich. Aus diesem Grund wandelt man die Gerade erst in die Hessesche Normalform um. Liegt uns die Gerade in der Form 
-\(d = x*cos(\alpha) + y*sin(\alpha)\) vor wählen wir als unsere beiden Parameter den Abstand d und den Winkel \(\alpha\). Diese beiden Parameter dienen uns nun dazu, den neuen Raum aufzuspannen. Der Winkel wird die neue x-Achse und der Abstand die neue y-Achse wie auch in Abbildung 1.4 zu sehen ist.
-
-Nachdem geeignete Parameter gewählt wurden. Werden alle Punkte im Ausgangsbild in den neuen Raum transformiert. Dies funktioniert folgendermaßen. Es wird ein Punkt ausgewählt und von diesem aus für alle möglichen Winkel der dazugehörige Abstand berechnet. Für alle Winkel und die dazugehörigen Abstände trägt man die so entstehenden Punkte im Dualraum ein. Dadurch entsteht für jeden Punkt im Ausgangsbild eine Kurve im Dualraum. Jede dieser Kurven in unserem Hough-Raum repräsentiert also einen Punkt im Ausgangsbild. Der Hough-Algorithmus überträgt nach eben beschriebenem Verfahren alle Punkte in den Dualraum. Das Entscheidende ist nun, dass alle Kurven, die Punkte einer Geraden im Ausgangsbild repräsentieren sich in einem Punkt im Dualraum schneiden. Finden wir im Hough-Raum also solche Schnittstellen wissen wir, dass an diesen Stellen eine Gerade im Originalbild vorliegt. Dies ist auch in Abbildung 1.4 zu sehen. Die Kurven im rechten Bild repräsentieren Punkte im linken Bild. An zwei Stellen im linken Bild sieht man hellere Punkte, das sind die beiden Punkte an denen sich die Kurven schneiden und somit die Punkte, an denen Geraden vorliegen.
-
-Anders kann man das Transformieren in den Dualraum auch als Matrix und nicht grafisch darstellen. Dies Funktioniert genau wie oben beschrieben nur, dass man für alle Winkel und die dazugehörigen Abstände nicht ein Punkt im neuen Dualraum einträgt sondern in eine Matrix. Diesmal entsprechen die Spalten der Matrix den Winkeln und die Zeilen den Abständen. Ein Eintrag in der Matrix bedeutet, den Wert in der Matrix an dieser Stelle um eins zu erhöhen. Zu Beginn sind alle Felder der Matrix mit dem Wert Null initialisiert. Findet an einer Stelle ein Eintrag statt, wird der Wert auf Eins danach auf Zwei usw. erhöht. Aus diesem Grund wird die Matrix oft auch als Voting-Matrix bezeichnet. Hat man für alle Punkte gevotet findet man die Geraden dieses Mal nicht anhand der Schnittpunkte der Kurven sondern dadurch, dass alle Punkte die auf einer Geraden liegen ein gemeinsames Feld in der Matrix haben und dieses somit am höchsten gevotet wurde. Das Feld, welches die höchste Votingzahl hat repräsentiert also die Gerade im Ausgangsbild.
+\(y = m*x + b\) dargestellt. Die Idee hinter der Hough-Transformation ist es alle Punkte in einem Bild in einen anderen Raum, der als Dualraum oder auch Hough-Raum bezeichnet wird zu transformieren. Dazu müssen zunächst geeignete Parameter für eine Gerade gefunden werden. Dies ist in der Form
+\(y = m*x + b\) nur bedingt möglich. Aus diesem Grund wandelt man die Gerade erst in die Hessesche Normalform um. Liegt uns die Gerade in der Form 
+\(d = x*cos(\alpha) + y*sin(\alpha)\) vor wählen wir als unsere beiden Parameter den Abstand d und den Winkel \(\alpha\). Diese beiden Parameter dienen uns nun dazu, den neuen Raum aufzuspannen. Der Winkel wird die neue x-Achse und der Abstand die neue y-Achse wie auch in Abbildung \ref{fig:hough1} zu sehen ist.
+\begin{figure}[H]
+\includegraphics[scale=0.45]{hough1.png}
+\caption{Beispiel für eine Hough-Transformation}
+\label{fig:hough1}
+\end{figure}
+Nachdem geeignete Parameter gewählt wurden. Werden alle Punkte im Ausgangsbild in den neuen Raum transformiert. Dies funktioniert folgendermaßen. Es wird ein Punkt ausgewählt und von diesem aus für alle möglichen Winkel der dazugehörige Abstand berechnet. Für alle Winkel und die dazugehörigen Abstände trägt man die so entstehenden Punkte im Dualraum ein. Dadurch entsteht für jeden Punkt im Ausgangsbild eine Kurve im Dualraum. Jede dieser Kurven in unserem Hough-Raum repräsentiert also einen Punkt im Ausgangsbild. Der Hough-Algorithmus überträgt nach eben beschriebenem Verfahren alle Punkte in den Dualraum. Das Entscheidende ist nun, dass alle Kurven, die Punkte einer Geraden im Ausgangsbild repräsentieren sich in einem Punkt im Dualraum schneiden. Finden wir im Hough-Raum also solche Schnittstellen wissen wir, dass an diesen Stellen eine Gerade im Originalbild vorliegt. Dies ist auch in Abbildung 1.4 zu sehen. Die Kurven im rechten Bild repräsentieren Punkte im linken Bild. An zwei Stellen im linken Bild sieht man hellere Punkte, das sind die beiden Punkte an denen sich die Kurven schneiden und somit die Punkte, an denen Geraden vorliegen.\\
+\\
+Anders kann man das Transformieren in den Dualraum auch als Matrix und nicht grafisch darstellen. Dies Funktioniert genau wie oben beschrieben, nur dass man für alle Winkel und die dazugehörigen Abstände nicht ein Punkt im neuen Dualraum einträgt sondern in eine Matrix. Diesmal entsprechen die Spalten der Matrix den Winkeln und die Zeilen den Abständen. Ein Eintrag in der Matrix bedeutet, den Wert in der Matrix an dieser Stelle um Eins zu erhöhen. Zu Beginn sind alle Felder der Matrix mit dem Wert Null initialisiert. Findet an einer Stelle ein Eintrag statt, wird der Wert auf Eins danach auf Zwei usw. erhöht. Aus diesem Grund wird die Matrix oft auch als Voting-Matrix bezeichnet. Hat man für alle Punkte gevotet findet man die Geraden dieses Mal nicht anhand der Schnittpunkte der Kurven sondern dadurch, dass alle Punkte die auf einer Geraden liegen ein gemeinsames Feld in der Matrix haben und dieses somit am höchsten gevotet wurde. Das Feld, welches die höchste Votingzahl hat repräsentiert also die Gerade im Ausgangsbild.
 
 \subsubsection{Aufspannen des Tormodells}
-Im letzten Schritt geht es darum, das Ergebnis der Hough-Transformation auszuwerten und nach Häufungspunkten zu suchen. Denn wie oben beschrieben repräsentieren die Häufungspunkte die Geraden im Ausgangsbild. Wurden die Häufungspunkte gefunden, können diese wieder als Geraden dargestellt werden. Der Winkel und der Abstand können einfach abgelesen werden und die Gerade wieder im Ausgangsraum eingetragen werden. Ein Problem was sich nun ergibt ist, dass unser Tor nicht aus Geraden sondern aus endlichen Linien besteht. Mittels der Hough-Transformation werden aber nur die unendlichen Geraden erkannt und der Endpunkt unserer Linien kann nicht bestimmt werden. Um unser endgültiges Tormodell zu modellieren müssen die Eckpunkte der Tore gefunden werden. Dies kann dadurch realisiert werden, dass man die Schnittpunkte der gefundenen Geraden betrachtet und mithilfe derer die überflüssigen Teile der Geraden abschneidet und nur die für das Tormodell relevanten teile modelliert.
-
-
+Im letzten Schritt geht es darum, das Ergebnis der Hough-Transformation auszuwerten und nach Häufungspunkten zu suchen. Denn wie oben beschrieben repräsentieren die Häufungspunkte die Geraden im Ausgangsbild. Wurden die Häufungspunkte gefunden, können diese wieder als Geraden dargestellt werden. Der Winkel und der Abstand können einfach abgelesen werden und die Gerade wieder im Ausgangsraum eingetragen werden. Ein Problem was sich nun ergibt ist, dass unser Tor nicht aus Geraden sondern aus endlichen Linien besteht. Mittels der Hough-Transformation werden aber nur die unendlichen Geraden erkannt und der Endpunkt unserer Linien kann nicht bestimmt werden. Um unser endgültiges Tormodell zu modellieren müssen die Eckpunkte der Tore gefunden werden. Dies kann dadurch realisiert werden, dass man die Schnittpunkte der gefundenen Geraden betrachtet und mit Hilfe derer die überflüssigen Teile der Geraden abschneidet und nur die für das Tormodell relevanten teile modelliert.
+\begin{figure}[H]
+\includegraphics[scale=0.6]{aufspannen.jpg}
+\caption{Bild nach Anwendung der Hough-Transformation und dem Aufspannen des Tormodells}
+\label{fig:aufspannen}
+\end{figure}
+\subsubsection{Vorteile der Hough-Transformation an Hand von Beispielen}
+Wie zu Beginn erklärt, entstehen Probleme beim Erkennen des Tores z.B. dadurch, dass Teile des Tores verdeckt sind. Dies stellt wie das folgende Beispiel zeigt kein Problem dar. Das Tor wird mittels der Hough-Transformation tortzdem einwandfrei erkannt.
+\begin{figure}[H]
+\includegraphics[scale=0.5]{hough_beispiel.jpg}
+\caption{Transformation eines Teilweise verdeckten Tores in den Hough-Raum}
+\label{fig:houg-beispiel1}
+\end{figure}
+Abbildung \ref{fig:houg-beispiel1} zeigt wie ein Teilweise verdecktes Tor nach dem Transformieren in den Hough-Raum aussieht, die Häufungspunkte auf der linken Seite sind mit den 3 farbigen Punkten gekennzeichnet und im Ausgansbild sind die farbigen Geraden, die die Punkte repräsentieren eingezeichnet. Man kann sehr schön sehen, dass es kein Problem ist, dass der linke Pfosten nur teilweise zu sehen ist. Der Häufungpunkt wird trotzdem erkannt und der Torpfosten kann komplett modelliert werden. \\
+\\
+Ein weiteres Problem könnte eine schlechte Perspektive sein. Auch hiermit hat das Verfahren mittels Hough-Transformation keine Probleme. Abbildung \ref{fig:houg-beispiel2} zeigt erneut die Drei Geraden im Ausgansbild mit den zugehörigen Punkten im Hough-Raum farbig markiert. Auch hier ist zu sehen, dass die schlechte Perspektive kein Problem darstellt und das Tor erkannt und modelliert werden kann.
+\begin{figure}[H]
+\includegraphics[scale=0.5]{hough_beispiel2.jpg}
+\caption{Transformation eines Tores aus einem schlechten Blickwinkel in den Hough-Raum}
+\label{fig:houg-beispiel2}
+\end{figure}
 \section{Fazit}
+Das Thema Torerkennung im RoboCup ist und bleibt ein spannendes Thema und wird noch lange einen Schwerpunkt in der Forschung im Bezug auf den RoboCup darstellen. Vor allem die häufigen Regeländerungen machen es erforderlich nahezu jedes Jahr neue Mehtoden zu entwickeln oder alte zu verbessern. Mit zunehmender Verbesserung der Ressourcen wie die Rechenleistung werden auch die Verfahren immer effektiver werden. Man muss Versuchen auf die Eingangs erläuterten Probleme, wie teilweise verdeckte Tore oder den Blick aus einer schlechten Perspektive noch besser lösen. Vor allem aber muss man versuchen den Vorgang der Torerkennung zu beschleunigen.
 
 \newpage
 \bibliography{general}
@@ -281,8 +316,18 @@ Im letzten Schritt geht es darum, das Ergebnis der Hough-Transformation auszuwer
   
   \bibitem{hough}
   Die Hough-Transformation (http://page.mi.fu-berlin.de/alt/vorlesungen/sem04/10\_6Die\%20Hough.doc)
-
   
+  \bibitem{hough2}
+  Die Hough-Transformation (http://de.wikipedia.org/wiki/Hough-Transformation)
+
+  \bibitem{hough3}
+  Die Hough-Transformation (http://www.malerczyk.de/applets/Hough/Hough.html)
+  
+  \bibitem{hough4}
+  Die Hough-Transformation (http://www.erkenntnishorizont.de/ki/bildverarb/hough.c.php?screen=800)
+  
+  \bibitem{hough5}
+  Hough-Transformation Applett (http://www.activovision.com/octavi/doku.php?id=hough_transform)
 \end{thebibliography}
 
 \end{document}
