@@ -110,8 +110,17 @@ werden. Außerdem können Teile vom Tor verdeckt sein (z.B. von anderen Robotern
 Hindernisse in der Schussbahn stehen. Letzteres ist nicht direkt ein Problem der Torerkennung, aber
 es ist damit eng verbunden, denn ein Torschussversuch kann nur erfolgreich sein, wenn der Schuss
 nicht vorher blockiert wird. Der Roboter muss sich also bewusst sein, wie er sich positionieren
-muss, damit ein Schussversuch gelingen kann.
+muss, damit ein Schussversuch gelingen kann. \\
 
+Letztendlich muss die Lösung als Programm implementiert werden, welches auf der
+verwendeten Hardware des Roboters lauffähig ist. Diese Hardware ist häufig
+im Vergleich zu größeren Rechnern stark eingeschränkt, sodass die Lösung
+gut optimiert werden muss. Dies kann als versteckte Schwierigkeit aufgefasst
+werden, denn eine theoretische Lösung, die algorithmisch bzw. mathematisch 
+perfekt ist, läuft wahrscheinlich unpraktikabel langsam auf einem RoboCup
+Roboter.
+
+\newpage
 \subsection{Erkennung mittels geometrischer Relationen}
 Bei diesem Verfahren, das die geometrischen Sturkturen der Elemente im RoboCup ausnutzt, werden
 vier Schritte ausgeführt:
@@ -123,6 +132,18 @@ vier Schritte ausgeführt:
 \end{enumerate}
 
 \subsubsection{Farbkalibrierung YUV-Farbraum}
+Der YUV-Farbraum besteht aus drei Komponenten: Helligkeit und zwei Farbkomponenten.
+Er wurde ursprünglich für das analoge Farbfernsehen eingesetzt.
+Dies war aus zwei Gründen günstig: Zum einen war Kompatibilität zu alten
+Graustufen-Fernsehern gewährleistet, da lediglich die beiden neuen Farbkomponenten
+zum ursprünglichen Graustufenbild hinzukamen und zum anderen, da sich das menschliche
+Auge in diesem Farbraum besonders Fehlertolerant verhält, sodass selbst bei
+schlechten Lichtverhältnissen die wichtigen Details erkennbar sind.
+Der letzte Punkte ist ausschlaggebend für die Verwendung in diesem 
+Bilderkennungsverfahren, da auch Roboter von der seperaten
+Helligkeitskomponente profitieren und besser bei wenig Licht arbeiten können.
+\newpage
+Die folgende Grafik zeigt, wie sich ein Bild im YUV-Farbraum zusammensetzt:
 \begin{figure}[H]
 \includegraphics[scale=0.5]{Barn-yuv.png}
 \caption{Beispiel eines Bildes im YUV-Farbraum}
@@ -130,32 +151,68 @@ vier Schritte ausgeführt:
 \end{figure}
 
 \subsubsection{Farbsegmentierung}
+Bei der Farbsegmentierung geht es darum, Bereiche ähnlicher Farbe in einem Bild
+durch eine eindeutige Farbe zu markieren. Dies erleichtert die weitere
+Verarbeitung dieses Bildes enorm, da alle gleichfarbigen Bereiche in der
+Pixelmatrix nun den gleichen Wert haben. Wenn dieses Verfahren nicht angewendet
+würde, wären die Farbwerte selbst auf einem guten Bild nie eindeutig, da sich
+die Farbwerte sogar in einem Bild eines perfekt belichteten einfarbigen Gegenstandes
+unterscheiden.
 
-\begin{figure}[H]
-\includegraphics{segmented-view2.png}
-\caption{Farbsegementiertes Bild}
-\label{fig:color-seg}
-\end{figure}
-
+\newpage
+Ein bekannter und einfacher Algorithmus für das Finden von Bereichen ähnlicher
+Farbe ist der Region Growing-Algorithmus. Hierbei wird ein beliebiger Punkt in
+einer Figur eines Bildes selektiert (manuell oder automatisch) und als Startpunkt
+festgelegt. Die Farbwerte in dem Startpunkt werden festgestellt und gespeichert.
+In der nächsten Iteration des Algorithmus wächst der selektierte Bereich ab 
+Startpunkt um ein Pixel nach außen in alle Richtungen, solange der jeweilige 
+neue Pixel einen Farbwer aufweist, der einen beliebigen Toleranzwert nicht 
+übersteigt. Wenn der Toleranzwert an dieser Stelle überstiegen würde (z.B. durch
+starke Farb- oder Helligkeitsunterschiede), dann wird an dieser Stelle nicht
+weiter gewachsen. Dieser Algorithmus iteriert solange, bis es in einer Iteration
+nicht mehr möglich ist, ein einziges Mal zu wachsen. Ab dann ist diese Fläche
+zu ende markiert.
+\\
+Die folgende Grafik soll den Algorithmus veranschaulichen:
 \begin{figure}[H]
 \includegraphics[scale=0.9]{region-growing.png}
 \caption{Vorgang der Farbsegmentierungs-Algorithmus}
 \label{fig:color-seg-algo}
 \end{figure}
 
+\newpage
+Die folgende Grafik zeigt ein auf diese Weise markiertes Tor im RoboCup:
 \begin{figure}[H]
-\includegraphics[scale=0.6]{training-tool.png}
+\includegraphics{segmented-view2.png}
+\caption{Farbsegementiertes Bild eines RoboCup-Tores}
+\label{fig:color-seg}
+\end{figure}
+Es ist einfach zu sehen, dass das gesamte Tor einfarbig blau markiert wurde,
+wodurch die Weiterverarbeitung stark vereinfacht wird.
+
+\newpage
+Einige Programme existieren, um Robotern interaktiv verschiedene Farbflächen
+beizubringen. Dies erleichtert die Schwellenwertfindung und lädt zu Experimenten
+mit verschiedenen Lichtverhältnissen ein. Eines dieser Programme sieht so aus:
+\begin{figure}[H]
+\includegraphics[scale=0.5]{training-tool.png}
 \caption{Programm zur interaktiven Echtzeit-Farbsegmentierung}
 \label{fig:color-seg-tool}
 \end{figure}
 
+Das Ergebnis mit diesem Programm sieht wie folgt aus:
 \begin{figure}[H]
-\includegraphics[scale=0.6]{segmented-view.png}
+\includegraphics[scale=0.5]{segmented-view.png}
 \caption{Segmentiertes Kamerabild}
 \label{fig:color-seg-cam}
 \end{figure}
 
 \subsubsection{Erkennung des Horizons}
+Als nächstes folgt die geometrische Erkennung, bei der sich zu Nutze gemacht
+wird, dass alle Pixel oberhalb der Torlatte unbenötigte Informationen
+darstellen. Deshalb wird die Torlatte als obere Grenze und Horizont 
+festgelegt und das Bild darüber abgeschnitten. Zudem wird die Torlinie
+erkannt und als unterer Horizone gewertet.
 \begin{figure}[H]
 \includegraphics[scale=0.8]{geometric-plane.png}
 \caption{Geometrische Horizonterkennung}
@@ -163,6 +220,8 @@ vier Schritte ausgeführt:
 \end{figure}
 
 \subsubsection{Extraktion der Torpfosten und Modellierung}
+Mithilfe von Scanlinien wird das inzwischen markierte und eingeschränkte Tor
+extrahiert und mittels Rechtecken modelliert.
 \begin{figure}[H]
 \includegraphics[scale=0.8]{goal-blobs.png}
 \caption{Links: Extraktion; Rechts: Modellierung}
@@ -170,27 +229,30 @@ vier Schritte ausgeführt:
 \end{figure}
 
 \subsubsection{Beispiele}
+Nachfolgend ein paar anschauliche Beispiele der vier Schritte. Sie zeigen
+besonders die Stabilität und Verlässlichkeit des Algorithmus selbst bei 
+schlechten Bedingungen wie verdeckten Torpfosten und ungünstigen Perspektiven.
 \begin{figure}[H]
 \includegraphics[scale=0.8]{example-detection1.png}
-\caption{Beispiel 1 des Verfahrens}
+\caption{Beispiel des Verfahrens mit teils unsichtbarem Torpfosten}
 \label{fig:example1}
 \end{figure}
 
 \begin{figure}[H]
 \includegraphics[scale=0.8]{example-detection2.png}
-\caption{Beispiel 2 des Verfahrens}
+\caption{Beispiel des Verfahrens mit Bodenblick und wenig Torpfostenanteil im Bild}
 \label{fig:example2}
 \end{figure}
 
 \begin{figure}[H]
 \includegraphics[scale=0.8]{example-detection3.png}
-\caption{Beispiel 3 des Verfahrens}
+\caption{Beispiel des Verfahrens unter optimalen Bedingungen}
 \label{fig:example3}
 \end{figure}
 
 \begin{figure}[H]
 \includegraphics[scale=0.8]{example-detection4.png}
-\caption{Beispiel 3 des Verfahrens}
+\caption{Beispiel des Verfahrens mit ungünstiger Perspektive}
 \label{fig:example4}
 \end{figure}
 
@@ -327,7 +389,7 @@ Das Thema Torerkennung im RoboCup ist und bleibt ein spannendes Thema und wird n
   Die Hough-Transformation (http://www.erkenntnishorizont.de/ki/bildverarb/hough.c.php?screen=800)
   
   \bibitem{hough5}
-  Hough-Transformation Applett (http://www.activovision.com/octavi/doku.php?id=hough_transform)
+  Hough-Transformation Applett (http://www.activovision.com/octavi/doku.php?id=hough\_transform)
 \end{thebibliography}
 
 \end{document}
