@@ -1,0 +1,17 @@
+Antworten:
+Es gibt keine manpage für cd, weil die POISX Programmer's Manual nicht installiert ist. Da cd kein
+eigenständiges Programm ist, sondern ein Bash builtin, ist es in dieser Hinsicht etwas besonders im
+Vergleich zu beispielsweise tar oder cp. D.h., gibt man cd ein, wird das Kommando tatsächlich von
+der Shell selbst ausgeführt, nicht /usr/bin/cd (welches nicht vorhanden ist).
+
+Nach dem Aufruf von tar -cf testarchiv.tar testarchiv wird eine neue Datei "testarchiv.tar" erstellt,
+welche testarchiv beinhaltet. Diese Datei ist bei mir um 4kb größer als die "testarchiv" Datei. Das
+liegt daran, dass tar eine bestimmte innere Struktur hat, die etwas Platz in Ansruch nimmt.
+
+Mittels tar -czf testarchiv.tar.gz testarchiv ist es möglich, direkt ein gzip-tar-Archiv zu erstellen.
+
+Rückmeldung:
+Angemessene Fragen und Aufgaben. Bei Frage 2 weiß ich echt nicht, was mir besonderes auffallen soll.
+Man erstellt eben ein tar von einer Datei mit zufälligen Inhalt und macht ein tar daraus. tar hat
+keine Kompression und zufällige Datein kann man sowieso kaum Komprimieren. tar ist nur ein Archivformat,
+kein Kompressionsformat.
