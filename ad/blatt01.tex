@@ -11,7 +11,7 @@
 
 \ihead{AD}
 \chead{Aufgaben zum 22.10.12}
-\ohead{Arne Feil 6325495}
+\ohead{Elena Noll, Sven-Hendrik Haase}
 \pagestyle{scrheadings}
 \setheadsepline{1pt}
 \newcommand{\qed}{\quad \square}
@@ -19,16 +19,17 @@
 \begin{document}
 \section{Aufgabe}
 \begin{enumerate}[a)]
- \item $
+ \item Geordnet nach absteigender Geschwindigkeit \\
+ $
  10^{10} = O(1) \\
  \log(n^{10}) = O(\log N^{10}) \\
- \log^3(n) = O(\log^3 N) \\
+ \log^3(n) = O(\log^3 N) (log^3\ ist\ langsamer\ als\ log) \\
  \sqrt{n} = O(\sqrt{N}) \\
  n-\frac{n}{2} = O(N) \\
- 2^{\log n} = n = O(N) \\
  n \log^2 (n) = O(N \log N) \\
  n^3 = O(N^3) \\
- \left(\frac{3}{2}\right)^n = O\left(\left(\frac{3}{2}\right)^N\right) \\
+ 2^{\log n} = O(2^{log N)} \\
+ \left(\frac{3}{2}\right)^n = O\left(\left(\frac{3}{2}\right)^N\right) (die\ Rate\ des\ Wachstums\ bei\ log(N)\ ist\ geriner\ als\ bei\ N)\\
  n! = O(N!)
  $
  \item
@@ -37,8 +38,9 @@
   $n^k = O(n^l) $ für alle $ l\geq k$, Anwendung Regel 2: $ 10 \geq 1$
   \item
   $ \log_b(n) = \frac{\log(n)}{\log(b)} = \frac{1}{\log(b)} \cdot \log(n) = O(\log N)$
-  \item
-  \item
+  \item Wenn man einsetzt, ergibt sich eine Hintereinanderausführung von Funktionen. Der Wert ist in beiden Fällen der Gleiche.
+  Die Behauptung ist also wahr.
+  \item Die Summe wird gegen \(n=\infty\) größer als O(n). Der Ausdruck ist falsch.
  \end{enumerate}
 \item
 Zwei Schleifen werden geschachtelt N-mal durchlaufen. \\
@@ -51,9 +53,10 @@ ALG3() = $O(N\log N)$
 \section{Aufgabe}
 \begin{enumerate}
  \item[b)]
+ Erwartungswert:
+ \[\sum_{x=1}^n x \cdot \frac{1}{n}\]
  
 \end{enumerate}
 
 
 \end{document}
-
