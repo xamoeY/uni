@@ -1,0 +1,82 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb,amsmath}
+\usepackage{hyperref}
+\author{Sven-Hendrik Haase, Ingo Eibes, Alexander Bufe,\\Benjamin Wegner, Elena Noll}
+\title{GDB HA zum 25.10.12}
+\date{\today}
+\begin{document}
+\setcounter{secnumdepth}{0}
+\maketitle
+
+\section{Aufgabe 1}
+\subsection{(a)}
+Ein {\bf Informationssystem} besteht aus Menschen und Maschinen. Es gibt eine Kommunikation zwischen beiden.
+Menschen benötigen z.B. Informationen von der Maschine oder wollen welche auf dieser Speichern.
+Aufgaben eines rechnergestützen Informationssystems sind Erfassung, Speicherung und Transformation von Informationen.
+
+\subsection{(b)}
+{\bf Datenunabhängikeit} bedeutet, dass unterschiedlichen Anwendungen oder unterschiedlichen Nutzern eine bestimme Sicht auf
+die Daten ermöglicht wird und die Zugriffsrechte auf Daten individuell für jeden Benutzer und jede Anwendung festgelegt
+werden können. Zudem bedeutet es auch, dass ein Zugriff auf die Daten möglich ist, ohne dass der Nutzer die technische
+Realisierung der Datenspeicherung und des Datenzugriffs kennt. Man unterscheidet bei der Datenunabhängikeit zwischen
+physischer Datenunabnhängikeit, dies bedeutet, dass eine Änderungen an der physischen Speicher- oder der Zugriffsstruktur
+keine Auswirkungen auf die logische Struktur der Datenbank hat und dass eine Geräteunabhänigkeit gewährleistet wird und
+der logischen Datenunabhängikeit, bei der es darum geht, dass die logische Struktur der Daten unabhängig von den 
+Anwendungsprogrammen organisiert wird. Dies bedeutet, dass z.B logische Änderungen der Daten keine Auswirkungen auf 
+die benutzenden Programme haben. Allgemein versucht man durch die logische Datenunabhängigkeit eine Zugriffspfadunabhängigkeit
+und eine Datenstrukturunabhängigkeit herzustellen.
+
+\subsection{(c)}
+\subsubsection{Beispiel: Sportverein}
+Ein Verein hat verschiedene Mitglieder, die verschiedenen Abteilungen 
+angehören können und verschiedene Sportarten ausüben. Zudem gibt es
+Trainer oder Übungsgruppenleiter. Die einzelnen Sportarten können in einem Sportverband gemeldet sein und an Wettbwerben oder einem Saison-Betrieb teilnehmen. Die persönlichen Daten der Mitglieder und Trainer, sowie die Team- oder Abteilungsabhänigen Termine müssen erfasst und verwaltet werden.
+\\\\
+Typischen Anwenungen oder Abläufe sind z.B. das Abbuchen des Mitgleiderbeitrages. Das Aufnehmen eines neuen Mitgliedes,
+die Anmeldung einer Mannschaft oder eines Sportlers zu einem Wettkampf.
+
+\subsubsection{Beispiel: Krankenhaus}
+Es müssen Termine (Ankunft der Patienten, Behandlungen) und Räume (Bettenbelegung) verwaltet werden, sowie Informationen über die Patienten gespeichert und wieder aufgerufen werden.
+
+\section{Aufgabe 2}
+Für die Handhabung der Daten ergeben sich folgende Anforderungen. Es müssen
+mindestens folgende Tabellen in der Datenbank vorhanden sein:
+\begin{itemize}
+	\item Mitspieler (many-to-many-Beziehung zu Spielgemeinschaft, many-to-many-Beziehung zu Wettbewerbe, one-to-many-Beziehung zu Tipps)
+	\item Spielgemeinschaft (one-to-many-Beziehung zu Wettbewerbe)
+	\item Wettbewerbe (one-to-many-Beziehung zu Begegnungen)
+	\item Begegnungen (one-to-many-Beziehung zu Tipps)
+	\item Tipps
+\end{itemize}
+
+Zugriffskontrollbedinungen:
+\begin{itemize}
+	\item Mitspieler können sowohl Spielgemeinschaften eintragen als auch Tipps abgeben in Spielgemeinschaften in denen sie Mitglied sind.
+	\item Die Gründer von Spielgemeinschaften können sowohl Wettbewerbe als 
+	auch Begegnungen anlegen. Sie können auch Mitgliedschaften annehmen
+	oder ausschließen. Der Gründer trägt auch nach einer Begegnung ihr Ergebnis
+	ein.
+\end{itemize}
+
+Die von uns vorgeschlagene Datenbankstruktur orientiert sich sehr an den Vorteilen von relationalen Datenbanken.
+\begin{itemize}
+ \item Kontrolle über die operationalen Daten: In Folge dessen vermeiden wir
+ gezielt Inkosistzenzen so wie wiederholte Speicherung von Daten in unterschiedlicher Form oder an unterschiedlichen Orten. Eine mögliche Wiederholung der Daten
+ ergibt sich zwar, wenn 2 verschiedene Gründer von Tippgemeinschaften inhaltlich gleiche Wettbewerbe (z.B. 2 x 1. Fußball Bundesliga) eintragen. Diese Wiederholung ist 
+ allerdings auf Grund der vorgegebene Zugriffstruktur notwendig und durchaus sinnvoll.
+ \item Leichte handhabbarkeit der Daten: Das von uns vorgeschlagene Datenmodell ist nach unserem Ermessen das einfachste anwendbare Datenmodell der Spezifikation.
+\end{itemize}
+
+\newpage
+\section{Aufgabe 3}
+
+Bei einem Stromausfall an Zeitpunkt A kann es sein (muss aber nicht),
+dass die Änderung bereits auf die Platte geschrieben wurden und somit das Geld abgebucht,
+aber niemandem hinzugebucht wurde, also einfach weg ist.
+Bei einem Stromausfall an Zeitpunkt B passiert, wenn die Daten bereits auf die Platte geschrieben wurden, nichts "schlimmes" und es wird nur der Kontostand des belasteten Kontos nicht angezeigt.
+Wurden sie noch nicht auf die Platte geschrieben, kann es wieder sein, dass das Geld zwar abgebucht, aber nicht gutgeschrieben wurde oder dass das Geld noch nicht einmal abgebucht wurde und die Überweisung einfach überhaupt nicht ausgeführt wurde.
+
+Wird ein Datenbanksystem verwendet, erstellt dieses Sicherheitskopien und führt Protokolle über Änderungen der Daten, sodass der ordnungsgemäße Zustand anhand dieser wiederhergestellt werden kann. In diesem Fall hat der Stromausfall keine Auswirkungen. Außer, dass bei einem Stromausfall bei Zeitpunkt B wieder der Kontostand des belasteten Kontos nicht angezeigt wird
+
+\end{document}
