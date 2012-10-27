@@ -1,0 +1,17 @@
+askparams.c:99
+Fehler:
+55 muss 5 lauten, um den richtigen argV-Index zu benutzen. Dies hat im Programm dazu
+geführt, dass keine Abbruchbedingung vorhanden war und das Programm unendlich lange
+lief.
+
+partdiff-seq.c:90
+- muss + lauten, damit der richtige Speicherbereich beschrieben wird. Dies führt sonst
+zu allen möglichen Arten von Speicherzugriffsproblemen (bei mir z.B. zu einem glibc-Error bei fclose()).
+
+partdiff-seq.c:165
+free() an falscher Stelle. Dadurch ist der Pointer kaputt bevor die untergeordnete
+Struktur vernünftig gelöscht werden kann.
+
+partdiff-seq.c:232
+"Flüchtigkeitsfehler". Die Anordnung der Selektoren im Code wurde getauscht. Dies führt
+zu einem Speicherzugriffsfehler.

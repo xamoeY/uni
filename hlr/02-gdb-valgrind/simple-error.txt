@@ -1,0 +1,33 @@
+simple.c:12
+Fehler:
+Dieses Array geht kaputt, wenn der Scope beendet wird (also kurz nach dem return).
+Dadurch kann natürlich auf der anderen Seite der Funktion nicht mehr auf dieses Array
+zugegriffen werden. Das Array muss dynamisch allokiert werden.
+
+simple.c:25
+Fehler:
+Ein char ist 8 bit groß. Eine nicht weiter definierte Zahl in C ist ein 32 bit Integer.
+Weiter unten soll bei diesem Array auf Position 1 zugegriffen werden. Diese Position wird
+zu keinem Zeitpunkt beschrieben, denn das Array is zu klein, um Position 1 für 32 bit Integer
+zu haben. Damit wir nach Position 1 schreiben können, müssen
+wir das Array erweitern, sodass 2 Integer Platz haben. Die Position 0 bleibt dabei
+unbenutzt. 8 bit * 8 = 64 bit bzw. 8 byte, genug für 2 Integer.
+
+simple.c:33-34
+Fehler:
+mistake1_ ist sinnlos und die nächste Zeile ist übermäßig kompliziert. Wir können uns durch
+einen direkten Funktionsaufruf den Funktionspointer sparen.
+
+simple.c:43
+Fehler:
+Hier wurde die falsche Position des Arrays beschrieben. Dies führt weiter unten zu falschen
+Ergebnissen.
+
+simple.c:44
+Fehler:
+Das free() gehört hier nicht hin. Dadurch wird die Datenstruktur hier schon zerstört, aber
+weiter unten wird sie nochmal abgerufen.
+
+simple.c:59
+Fehler:
+free() mit falschem Pointer und ein bisschen Speicher wurde nicht gefreed.

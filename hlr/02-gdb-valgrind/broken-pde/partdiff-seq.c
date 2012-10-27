@@ -87,7 +87,7 @@ allocateMatrices (void)
       errorQuit ();
     }				/* quit if error   */
 
-  Matrix[1] = (double **) calloc ((N - 1), sizeof (double *));	/* allocate memory */
+  Matrix[1] = (double **) calloc ((N + 1), sizeof (double *));	/* allocate memory */
   if (Matrix[1] == 0)
     {
       errorQuit ();
@@ -162,11 +162,11 @@ initMatrices (void)
 void
 freeMatrices (void)
 {
-  free (Matrix);
   if (Matrix[1] != 0)
     free (Matrix[1]);
   if (Matrix[0] != 0)
     free (Matrix[0]);
+  free (Matrix);
 }
 
 
@@ -229,7 +229,7 @@ calculate (void)
 	      // mhhhh looks too complex for me, is this correct? - 
 	      star = -Matrix[m2][i - 1][j]
 		- Matrix[m2][i][j - 1] + 4 * Matrix[m2][i][j] -
-		Matrix[m2][i][j + 1] - Matrix[i + 1][m2][j]; 
+		Matrix[m2][i][j + 1] - Matrix[m2][i + 1][j];
 		
 	      residuum = getResiduum (i, j);
 	      korrektur = residuum;
