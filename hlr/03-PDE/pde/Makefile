@@ -1,8 +1,9 @@
 # Common definitions
 CC = gcc
+OPT ?= -O0
 
 # Compiler flags, paths and libraries
-CFLAGS = -std=c99 -pedantic -Wall -Wextra -g -O1
+CFLAGS = -std=c99 -pedantic -Wall -Wextra -g $(OPT)
 LFLAGS = $(CFLAGS)
 LIBS   = -lm
 

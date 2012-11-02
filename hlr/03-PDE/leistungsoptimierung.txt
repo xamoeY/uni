@@ -1,49 +1,106 @@
-== Gauss-Seidel-Verfahren ==
-
-=== Initielle Analyse ===
+== Initielle Analyse ==
 Nachfolgend stehen die Leistungsergebnisse vor der Optimierung.
 
 Hinweis: Ich habe alle Tests auf meinem schwach ausgelasteten Laptop gemacht.
 
+=== Gauss-Seidel-Verfahren ===
+==== Störfunktion 1 ====
 Ausführung: time ./partdiff-seq 1 1 400 1 2 10
 
 O-flag real
-    O0 5.072s
-    O1 2.911s
-    O2 2.182s
-    O3 1.275s
+    O0 4.410s
+    O1 1.502s
+    O2 1.277s
+    O3 1.242s
 
-Hinweis: Ofast hat eine Laufzeit von über 9s ergeben und wird dadurch hier vernachlässigt.
-Ofast mach das Programm auch absichtlich ungenau, weshalb es auch keine gute Wahl bei dieser
-Anwendung darstellt.
+==== Störfunktion 2 ====
+Ausführung: time ./partdiff-seq 1 1 400 2 2 10
 
-Cachegrind zeigt maximal 1% Cache miss-rate an. Das schätze ich als ganz ok ein.
+O-flag real
+    O0 32.814s
+    O1 27.574s
+    O2 30.582s
+    O3 28.344s
 
-Eine Laufzeitanalyse Callgrind und KCachegrind ergibt, dass die allermeiste Zeit in calculate() und
-seiner Unterfunktion getResiduum() verwendet wird. Diese Funktionen werden wir uns genauer anschauen.
+Cachegrind zeigt maximal 1% Cache miss-rate an. Das schätze ich als ganz ok ein, aber deutet vielleicht
+auf ein Problem hin.
 
-=== Optimierungen ===
-1. post increments nach pre increments umwandeln. Die post increments brauchen in der Regel eine
-Instruktion mehr als pre increments.
-2. Cachen von Matrizen.
-
-== Jacobi-Verfahren ==
-
-=== Initielle Analyse ===
+=== Jacobi-Verfahren ===
+==== Störfunktion 1 ====
 Ausführung: time ./partdiff-seq 1 2 400 1 2 10
 
 O-flag real
-    O0 5.035s
-    O1 2.834s
-    O2 2.639s
-    O3 0.884s
+    O0 4.385s
+    O1 1.393s
+    O2 1.272s
+    O3 0.819s
 
-Hinweis: Ofast hat eine Laufzeit von über 9s ergeben und wird dadurch hier vernachlässigt.
-Ofast mach das Programm auch absichtlich ungenau, weshalb es auch keine gute Wahl bei dieser
-Anwendung darstellt.
+==== Störfunktion 2 ====
+Ausführung: time ./partdiff-seq 1 2 400 2 2 10
+
+O-flag real
+    O0 32.673s
+    O1 28.622s
+    O2 28.517s
+    O3 29.134s
 
 Cachegrind zeigt maximal 2% Cache miss-rate an. Das ist etwas schlechter als beim Gauss-Seidel-Verfahren,
-aber noch nicht allzu schlecht.
+aber noch nicht allzu schlecht. Wir schauen uns das mal an.
 
 Eine Laufzeitanalyse Callgrind und KCachegrind ergibt, dass die allermeiste Zeit in calculate() und
 seiner Unterfunktion getResiduum() verwendet wird. Diese Funktionen werden wir uns genauer anschauen.
+
+== Optimierungen ==
+1. post increments nach pre increments umwandeln. Die post increments brauchen in der Regel eine
+Instruktion mehr als pre increments.
+2. Zwischenspeichern von Matrizen, um unnötige CPU-Cache Zugriffe zu vermeiden.
+3. Tauschen der Laufschleifen, um Cache-miss-rate zu reduzieren.
+4. Löschen eines unnötigen Vergleichs samt Zuweisung.
+5. static-machen von getResiduum(...), um Funktionsaufrufe zu reduzieren.
+
+== Abschließende Analyse ==
+Nachfolgend stehen die Leistungsergebnisse nach der Optimierung.
+
+Hinweis: Ich habe alle Tests auf meinem schwach ausgelasteten Laptop gemacht.
+
+=== Gauss-Seidel-Verfahren ===
+==== Störfunktion 1 ====
+Ausführung: time ./partdiff-seq 1 1 400 1 2 10
+
+O-flag real
+    O0 3.048s
+    O1 1.294s
+    O2 1.238s
+    O3 1.202s
+
+==== Störfunktion 2 ====
+Ausführung: time ./partdiff-seq 1 1 400 2 2 10
+
+O-flag real
+    O0 31.159s
+    O1 26.965s
+    O2 26.357s
+    O3 12.951s
+
+Cachegrind zeigt 0% Cache miss-rate an. Yay.
+
+=== Jacobi-Verfahren ===
+==== Störfunktion 1 ====
+Ausführung: time ./partdiff-seq 1 2 400 1 2 10
+
+O-flag real
+    O0 1.837s
+    O1 0.465s
+    O2 0.345s
+    O3 0.314s
+
+==== Störfunktion 2 ====
+Ausführung: time ./partdiff-seq 1 2 400 2 2 10
+
+O-flag real
+    O0 28.685s
+    O1 26.919s
+    O2 26.828s
+    O3 13.333s
+
+Cachegrind zeigt 0% Cache miss-rate an. Yay.
