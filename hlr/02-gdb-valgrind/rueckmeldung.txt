@@ -1,0 +1,8 @@
+Bearbeitungszeit: ca. 3 Std.
+Schwierigkeit: genau richtig
+Lehrreich: sehr
+Verständlichkeit: verständlich
+Kommentar: Gute Aufgabe, aber die Formatierung und allgemeine Qualität des Codes im
+broken-pde war eher fragwürdig. Ich kann ja verstehen, dass aufgrund der Herausforderung
+die Qualität des Codes absichtlich so gewählt wurde, aber die Formatierung macht einfach
+keinen Spaß zu lesen.

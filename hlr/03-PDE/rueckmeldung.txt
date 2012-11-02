@@ -1,0 +1,7 @@
+Bearbeitungszeit: ca. 5 Std.
+Schwierigkeit: genau richtig
+Lehrreich: etwas
+Verständlichkeit: verständlich
+Kommentar: Ich fand die Empfehlung für gprof in dieser Aufgabe eher hinderlich. valgrind ist
+meiner Meinung nach wesentlich besser für das Profilieren geeignet. Insbesondere mit
+kcachegrind finde ich es recht einfach, die Problemquellen zeilengenau ausfindig zu machen.
