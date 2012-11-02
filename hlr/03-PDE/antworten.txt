@@ -1,0 +1,13 @@
+1. Ein Batch-Queuing-System kümmert sich darum, jobs auf einem Cluster optimal zu verteilen.
+   Es kann Node-übergreifend jeweils eine oder mehrere CPUs auslasten.
+
+2. Oracle Grid Engine, Portable Batch System, LoadLeveler, Condor, OAR und das Simple Linux Utility for Resource Management, welches auch im DKRZ eingesetzt wird.
+
+3.1 SLURM
+
+3.2 Ja, mit scancel.
+
+4.1 Bei mehrmaliger Ausführung ändert sich die Ausführungszeit auf den jeweiligen Knoten willkürlich.
+
+4.2 Nein, denn das timescript läuft auf den jeweiligen Knoten. Es würde also eine Datei auf jedem
+    Knoten erzeugen, in der nur die eigene Zeit steht.
