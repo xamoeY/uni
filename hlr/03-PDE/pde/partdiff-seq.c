@@ -180,7 +180,7 @@ initMatrices (struct calculation_arguments* arguments, struct options* options)
 /* getResiduum: calculates residuum                                         */
 /* Input: x,y - actual column and row                                       */
 /* ************************************************************************ */
-double
+static double
 getResiduum (struct calculation_arguments* arguments, struct options* options, int x, int y, double star)
 {
 	if (options->inf_func == FUNC_F0)
@@ -217,51 +217,53 @@ calculate (struct calculation_arguments* arguments, struct calculation_results *
 	}
 	else
 	{
-		m1=0; m2=1;
-	}
+        m1=0; m2=1;
+    }
 
-	while (options->term_iteration > 0)
-	{
-		maxresiduum = 0;
+    while (options->term_iteration > 0)
+    {
+        maxresiduum = 0;
 
-		/* over all rows */
-		for (j = 1; j < N; j++)
-		{
-			/* over all columns */
-			for (i = 1; i < N; i++)
-			{
-				star = -Matrix[m2][i-1][j] - Matrix[m2][i][j-1] - Matrix[m2][i][j+1] - Matrix[m2][i+1][j] + 4.0 * Matrix[m2][i][j];
+        /* over all columns */
+        for (i = 1; i < N; ++i)
+        {
+            double* m1i_cache = Matrix[m1][i];
+            double* m2i_cache = Matrix[m2][i];
 
-				residuum = getResiduum(arguments, options, i, j, star);
-				korrektur = residuum;
-				residuum = (residuum < 0) ? -residuum : residuum;
-				maxresiduum = (residuum < maxresiduum) ? maxresiduum : residuum;
+            /* over all rows */
+            for (j = 1; j < N; ++j)
+            {
+                star = -(m2i_cache-1)[j] - m2i_cache[j-1] - m2i_cache[j+1] - (m2i_cache+1)[j] + 4.0 * m2i_cache[j];
 
-				Matrix[m1][i][j] = Matrix[m2][i][j] + korrektur;
-			}
-		}
+                residuum = getResiduum(arguments, options, i, j, star);
+                korrektur = residuum;
+                maxresiduum = (residuum < maxresiduum) ? maxresiduum : residuum;
 
-		results->stat_iteration++;
-		results->stat_precision = maxresiduum;
+                m1i_cache[j] = m2i_cache[j] + korrektur;
+            }
+        }
 
-		/* exchange m1 and m2 */
-		i=m1; m1=m2; m2=i;
+        results->stat_iteration++;
+        results->stat_precision = maxresiduum;
 
-		/* check for stopping calculation, depending on termination method */
-		if (options->termination == TERM_PREC)
-		{
-			if (maxresiduum < options->term_precision)
-			{
-				options->term_iteration = 0;
-			}
-		}
-		else if (options->termination == TERM_ITER)
-		{
-			options->term_iteration--;
-		}
-	}
+        /* exchange m1 and m2 */
+        i=m1; m1=m2; m2=i;
 
-	results->m = m2;
+        /* check for stopping calculation, depending on termination method */
+        if (options->termination == TERM_PREC)
+        {
+            if (maxresiduum < options->term_precision)
+            {
+                options->term_iteration = 0;
+            }
+        }
+        else if (options->termination == TERM_ITER)
+        {
+            options->term_iteration--;
+        }
+    }
+
+    results->m = m2;
 }
 
 /* ************************************************************************ */
@@ -271,71 +273,71 @@ static
 void
 displayStatistics (struct calculation_arguments* arguments, struct calculation_results *results, struct options* options)
 {
-	int N = arguments->N;
+    int N = arguments->N;
 
-	double time = (comp_time.tv_sec - start_time.tv_sec) + (comp_time.tv_usec - start_time.tv_usec) * 1e-6;
-	printf("Berechnungszeit:    %f s \n", time);
+    double time = (comp_time.tv_sec - start_time.tv_sec) + (comp_time.tv_usec - start_time.tv_usec) * 1e-6;
+    printf("Berechnungszeit:    %f s \n", time);
 
-	//Calculate Flops
-	// star op = 5 ASM ops (+1 XOR) with -O3, matrix korrektur = 1
-	double q = 6;
-	double mflops;
+    //Calculate Flops
+    // star op = 5 ASM ops (+1 XOR) with -O3, matrix korrektur = 1
+    double q = 6;
+    double mflops;
 
-	if (options->inf_func == FUNC_F0)
-	{
-		// residuum: checked 1 flop in ASM, verified on Nehalem architecture.
-		q += 1.0;
-	}
-	else
-	{
-		// residuum: 11 with O0, but 10 with "gcc -O3", without counting sin & cos
-		q += 10.0;
-	}
+    if (options->inf_func == FUNC_F0)
+    {
+        // residuum: checked 1 flop in ASM, verified on Nehalem architecture.
+        q += 1.0;
+    }
+    else
+    {
+        // residuum: 11 with O0, but 10 with "gcc -O3", without counting sin & cos
+        q += 10.0;
+    }
 
-	/* calculate flops  */
-	mflops = (q * (N - 1) * (N - 1) * results->stat_iteration) * 1e-6;
-	printf("Executed float ops: %f MFlop\n", mflops);
-	printf("Speed:              %f MFlop/s\n", mflops / time);
+    /* calculate flops  */
+    mflops = (q * (N - 1) * (N - 1) * results->stat_iteration) * 1e-6;
+    printf("Executed float ops: %f MFlop\n", mflops);
+    printf("Speed:              %f MFlop/s\n", mflops / time);
 
-	printf("Berechnungsmethode: ");
+    printf("Berechnungsmethode: ");
 
-	if (options->method == METH_GAUSS_SEIDEL)
-	{
-		printf("Gauss-Seidel");
-	}
-	else if (options->method == METH_JACOBI)
-	{
-		printf("Jacobi");
-	}
+    if (options->method == METH_GAUSS_SEIDEL)
+    {
+        printf("Gauss-Seidel");
+    }
+    else if (options->method == METH_JACOBI)
+    {
+        printf("Jacobi");
+    }
 
-	printf("\n");
-	printf("Interlines:         %d\n",options->interlines);
-	printf("Stoerfunktion:      ");
+    printf("\n");
+    printf("Interlines:         %d\n",options->interlines);
+    printf("Stoerfunktion:      ");
 
-	if (options->inf_func == FUNC_F0)
-	{
-		printf("f(x,y)=0");
-	}
-	else if (options->inf_func == FUNC_FPISIN)
-	{
-		printf("f(x,y)=2pi^2*sin(pi*x)sin(pi*y)");
-	}
+    if (options->inf_func == FUNC_F0)
+    {
+        printf("f(x,y)=0");
+    }
+    else if (options->inf_func == FUNC_FPISIN)
+    {
+        printf("f(x,y)=2pi^2*sin(pi*x)sin(pi*y)");
+    }
 
-	printf("\n");
-	printf("Terminierung:       ");
+    printf("\n");
+    printf("Terminierung:       ");
 
-	if (options->termination == TERM_PREC)
-	{
-		printf("Hinreichende Genaugkeit");
-	}
-	else if (options->termination == TERM_ITER)
-	{
-		printf("Anzahl der Iterationen");
-	}
+    if (options->termination == TERM_PREC)
+    {
+        printf("Hinreichende Genaugkeit");
+    }
+    else if (options->termination == TERM_ITER)
+    {
+        printf("Anzahl der Iterationen");
+    }
 
-	printf("\n");
-	printf("Anzahl Iterationen: %d\n", results->stat_iteration);
-	printf("Norm des Fehlers:   %e\n", results->stat_precision);
+    printf("\n");
+    printf("Anzahl Iterationen: %d\n", results->stat_iteration);
+    printf("Norm des Fehlers:   %e\n", results->stat_precision);
 }
 
 /* ************************************************************************ */
@@ -344,27 +346,27 @@ displayStatistics (struct calculation_arguments* arguments, struct calculation_r
 int
 main (int argc, char** argv)
 {
-	struct options options;
-	struct calculation_arguments arguments;
-	struct calculation_results results;
+    struct options options;
+    struct calculation_arguments arguments;
+    struct calculation_results results;
 
-	/* get parameters */
-	AskParams(&options, argc, argv);              /* ************************* */
+    /* get parameters */
+    AskParams(&options, argc, argv);              /* ************************* */
 
-	initVariables(&arguments, &results, &options);           /* ******************************************* */
+    initVariables(&arguments, &results, &options);           /* ******************************************* */
 
-	allocateMatrices(&arguments);        /*  get and initialize variables and matrices  */
-	initMatrices(&arguments, &options);            /* ******************************************* */
+    allocateMatrices(&arguments);        /*  get and initialize variables and matrices  */
+    initMatrices(&arguments, &options);            /* ******************************************* */
 
-	gettimeofday(&start_time, NULL);                   /*  start timer         */
-	calculate(&arguments, &results, &options);                                      /*  solve the equation  */
-	gettimeofday(&comp_time, NULL);                   /*  stop timer          */
+    gettimeofday(&start_time, NULL);                   /*  start timer         */
+    calculate(&arguments, &results, &options);                                      /*  solve the equation  */
+    gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
-	displayStatistics(&arguments, &results, &options);                                  /* **************** */
-	DisplayMatrix("Matrix:",                              /*  display some    */
-			arguments.Matrix[results.m][0], options.interlines);            /*  statistics and  */
+    displayStatistics(&arguments, &results, &options);                                  /* **************** */
+    DisplayMatrix("Matrix:",                              /*  display some    */
+            arguments.Matrix[results.m][0], options.interlines);            /*  statistics and  */
 
-	freeMatrices(&arguments);                                       /*  free memory     */
+    freeMatrices(&arguments);                                       /*  free memory     */
 
-	return 0;
+    return 0;
 }
