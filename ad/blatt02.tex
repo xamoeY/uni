@@ -1,0 +1,52 @@
+\documentclass[a4paper,fleqn]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{scrpage2}
+\usepackage{tikz}
+
+\ihead{AD Übung 2}
+
+\ohead{Arne Feil (6325495), Markus Deecke (6342721)}
+\pagestyle{scrheadings}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\section{Aufgabe}
+\begin{enumerate}[a)]
+ \item
+ \[ T(n):= \begin{cases}
+    c_0 & n < 3 \\ 
+    2T\left( \frac{n}{3} \right) N \cdot \log(n) + c_1 & \text{sonst}
+   \end{cases}\] \\
+   Begründung: \\
+ \item
+ \begin{enumerate}[(a)]
+  \item 
+  \item \[ T(n) = 16 \cdot T\left( \frac{n}{4} \right) + n^2 \]
+\[ a= 16 \quad b = 4 \]
+\[ f(n) \in \Theta \left( n^{\log_b a} \right) \]
+\[ n^2 \in \Theta \left( n^{\log_4 16=2} \right) \]
+\[ \Theta \left(n^2 \cdot \log(n)\right) \]
+ \end{enumerate}
+
+ \item 
+ \begin{enumerate}[1.]
+  \item 
+  \item $ n^{\log_b a} $
+ \end{enumerate}
+
+\end{enumerate}
+ 
+\section{Aufgabe}
+\begin{enumerate}[1.]
+\item vla
+\item vas 
+\end{enumerate}
+
+\end{document}
