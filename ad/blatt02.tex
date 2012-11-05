@@ -56,7 +56,29 @@ T(n) &= 16^i T(\frac n {4^i}) + i \cdot n^2\\
 \section{Aufgabe}
 \begin{enumerate}[1.]
 \item vla
-\item vas 
+\item Zu zeigen ist, dass der Algorithmus korrekt ist. Wir zeigen dies nach
+Cormen mit den 3 Schritten: "Initialization", "Maintenance", "Termination".
+Unsere Invariante ist: Das Subarray \(A[1..j-1]\) besteht aus den Elementen, die
+Ursprünglich in \(A[1..j-1]\), aber in sortierter Reihenfolge.
+\begin{enumerate}[(a)]
+\item Initilization: Zuerst prüfen wir, ob das Subarray \(A[1..i]\) vor der
+ersten Iteration aus dem originalen Array \(A^{orig}[1..i]\) besteht und
+nur sortiert ist.
+\[i = 1 \Rightarrow A[i] = A^{orig}[i] \Rightarrow Initilization\ ist\ korrekt\]
+\item Maintenance: Jetzt zeigen wir, dass der Algorithmus auch für weitere Schritte gilt.
+Der Körper der Schleifen des Sorts funktioniert so:
+\begin{enumerate}
+\item Das Element A[i] macht einen Schritt nach rechts.
+\item Das geht bis die gültige Position für A[i] gefunden ist.
+\item Dann besteht das Subarray A[1..i] aus den Elementen \(A^{orig}[1..i]\) (aber sortiert)
+\end{enumerate}
+\[\Rightarrow Maintenance\ ist\ korrekt\]
+\item Termination: Der Algorithmus terminiert, wenn \(i=A.length = n\).
+Dann ist \(A[1..i] = A[1..n] \geq A^{orig}[1..n]\), aber sortiert.
+\[\Rightarrow Termination\ ist\ korrekt\]
+\end{enumerate}
+Wenn alle drei Fälle korrekt sind, ist der Algorithmus korrekt.
+
 \end{enumerate}
 
 \end{document}
