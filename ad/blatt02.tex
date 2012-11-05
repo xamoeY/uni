@@ -36,9 +36,9 @@
 \begin{align*}
 T(n) &= 16^i T(\frac n {4^i}) + i \cdot n^2\\
      &\leq 16^{\log_4 n} \cdot T(1) + \log_4 n^2\\
-     &= 4^{\log_4 n} \cdot 4^{\log_4 n} \cdot c + \log_4 n n^2\\
+     &= 4^{\log_4 n} \cdot 4^{\log_4 n} \cdot c + \log_4 n \cdot n^2\\
      &= n \cdot n \cdot c + \log_4 n n^2\\
-     &= n^2 (c + \log_4 n) = O(n^2)
+     &= n^2 (c + \log_4 n) = O(n^2\log n)
 \end{align*}
 
 IA: $T(n) \leq n^2 \log_2 n + c$ \\
@@ -81,9 +81,9 @@ MERGE-SORT: $A[n]$ \\
 Laufzeit: $n\cdot \log(n)$
 
 \item Zu zeigen ist, dass der Algorithmus korrekt ist. Wir zeigen dies nach
-Cormen mit den 3 Schritten: "Initialization", "Maintenance", "Termination".
-Unsere Invariante ist: Das Subarray \(A[1..j-1]\) besteht aus den Elementen, die
-Ursprünglich in \(A[1..j-1]\), aber in sortierter Reihenfolge.
+Cormen mit den 3 Schritten: Initialization, Maintenance, Termination.
+Unsere Invariante ist: Das Subarray \(A[1..i]\) besteht aus den Elementen, die
+Ursprünglich in \(A[1..i]\), aber in sortierter Reihenfolge.
 \begin{enumerate}[(a)]
 \item Initilization: Zuerst prüfen wir, ob das Subarray \(A[1..i]\) vor der
 ersten Iteration aus dem originalen Array \(A^{orig}[1..i]\) besteht und
