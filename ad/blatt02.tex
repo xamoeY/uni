@@ -17,14 +17,16 @@
 \newcommand{\qed}{\quad \square}
 
 \begin{document}
-\section{Aufgabe}
+\subsection*{Aufgabe 1}
 \begin{enumerate}[a)]
  \item
  \[ T(n):= \begin{cases}
     c_0 & n < 3 \\ 
     2T\left( \frac{n}{3} \right) N \cdot \log(n) + c_1 & \text{sonst}
    \end{cases}\] \\
-   Begründung: \\
+   Begründung: Ist das Array kleiner 3, so wird 5 ausgegeben dieser Vorgang benötigt konstante Zeit $c_0$. \\
+   In den Zeilen 4 und 5 wird FUN für $\frac{1}{3}$ der Array-Länge, einmal für das erste Drittel und einmal für dritte Drittel $\Rightarrow 2\cdot T(\frac{n}{3}) $ \\
+   In Zeile 8 wird die Schleife über die Array-Länge ausgeführt, die benötigt die Zeit $n$, in dieser Schleife wird die zweite Schleife von $i+1$ bis zur Array-Länge durchlaufen, diese wird in jedem Schritt um $i-1$ kleiner $\Rightarrow \log(n)$, ist das Array wieder kleiner 3 wird wieder nur 5 ausgegeben $\Rightarrow c_1$.
  \item
  \begin{enumerate}[(a)]
   \item \[ T(n) = 16 T\Big(\frac n 4\Big) + n^2 \]
@@ -53,7 +55,7 @@ T(n) &= 16^i T(\frac n {4^i}) + i \cdot n^2\\
 
 \end{enumerate}
  
-\section{Aufgabe}
+\subsection*{Aufgabe 2}
 \begin{enumerate}[1.]
 \item vla
 \item Zu zeigen ist, dass der Algorithmus korrekt ist. Wir zeigen dies nach
@@ -79,6 +81,13 @@ Dann ist \(A[1..i] = A[1..n] \geq A^{orig}[1..n]\), aber sortiert.
 \end{enumerate}
 Wenn alle drei Fälle korrekt sind, ist der Algorithmus korrekt.
 
+\item
+Wenn ein Array schon vollkommen durchsortiert ist, dann benötigt INSERTION-SORT nur eine lineare Zeit, während MERGE-SORT weiterhin in der Laufzeitklasse von $O\left(n \cdot \log(n)\right)$ liegt. \\
+INSERTION-SORT: $A[n]$ \\
+Laufzeit:$(n-2)\cdot 3$ \\
+MERGE-SORT: $A[n]$ \\
+Laufzeit: $n\cdot \log(n)$
+\item vas 
 \end{enumerate}
 
 \end{document}
