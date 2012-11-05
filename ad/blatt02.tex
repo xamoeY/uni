@@ -27,7 +27,17 @@
    Begründung: \\
  \item
  \begin{enumerate}[(a)]
-  \item 
+  \item \[ T(n) = 16 T\Big(\frac n 4\Big) + n^2 \]
+\[ T(n) = 16 \Big[T(\frac {\frac n 4} 4) + (\frac n 4)^2 \Big] + n^2\]
+\[ T(n) = 16^i T(\frac n {4^i} + i \cdot n^2\]
+\[ \frac n {4^i} \leq 1 \Leftrightarrow n \leq 4^i \Leftrightarrow \log_4 n \leq i \]
+\begin{align*}
+T(n) &= 16^i T(\frac n {4^i}) + i \cdot n^2\\
+     &\leq 16^{\log_4 n} \cdot T(1) + \log_4 n^2\\
+     &= 4^{\log_4 n} \cdot 4^{\log_4 n} \cdot c + \log_4 n n^2\\
+     &= n \cdot n \cdot c + \log_4 n n^2\\
+     &= n^2 (c + \log_4 n) = O(n^2)
+\end{align*}
   \item \[ T(n) = 16 \cdot T\left( \frac{n}{4} \right) + n^2 \]
 \[ a= 16 \quad b = 4 \]
 \[ f(n) \in \Theta \left( n^{\log_b a} \right) \]
