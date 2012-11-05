@@ -40,6 +40,21 @@ T(n) &= 16^i T(\frac n {4^i}) + i \cdot n^2\\
      &= n \cdot n \cdot c + \log_4 n n^2\\
      &= n^2 (c + \log_4 n) = O(n^2)
 \end{align*}
+
+IA: $T(n) \leq n^2 \log_2 n + c$ \\
+1. Schritt $n=1$: \\
+$T(1) - c \leq 1^2 \cdot 0 + c \Rightarrow 0 \leq 0$ gilt. \\
+2. Schritt 
+\begin{align*}
+ T(4n) &= (4n)^2 + 16 T(n) \\
+       &= 16 n^2 + 16(16T\left(\frac{n}{4}\right) + n^2) \\
+       &\leq \text{IA} \leq 16(n^2 \log_2n +c)+16n^2 \\
+       &= (4n)^2(\log_2 n + c + 1) \\
+       &= (4n)^2\log_24n +c \qed
+\end{align*}
+
+
+
   \item \[ T(n) = 16 \cdot T\left( \frac{n}{4} \right) + n^2 \]
 \[ a= 16 \quad b = 4 \]
 \[ f(n) \in \Theta \left( n^{\log_b a} \right) \]
@@ -57,7 +72,13 @@ T(n) &= 16^i T(\frac n {4^i}) + i \cdot n^2\\
  
 \subsection*{Aufgabe 2}
 \begin{enumerate}[1.]
-\item vla
+\item
+Wenn ein Array schon vollkommen durchsortiert ist, dann benötigt INSERTION-SORT nur eine lineare Zeit, während MERGE-SORT weiterhin in der Laufzeitklasse von $O\left(n \cdot \log(n)\right)$ liegt. \\
+INSERTION-SORT: $A[n]$ \\
+Laufzeit:$(n-2)\cdot 3$ \\
+MERGE-SORT: $A[n]$ \\
+Laufzeit: $n\cdot \log(n)$
+
 \item Zu zeigen ist, dass der Algorithmus korrekt ist. Wir zeigen dies nach
 Cormen mit den 3 Schritten: "Initialization", "Maintenance", "Termination".
 Unsere Invariante ist: Das Subarray \(A[1..j-1]\) besteht aus den Elementen, die
@@ -80,14 +101,6 @@ Dann ist \(A[1..i] = A[1..n] \geq A^{orig}[1..n]\), aber sortiert.
 \[\Rightarrow Termination\ ist\ korrekt\]
 \end{enumerate}
 Wenn alle drei Fälle korrekt sind, ist der Algorithmus korrekt.
-
-\item
-Wenn ein Array schon vollkommen durchsortiert ist, dann benötigt INSERTION-SORT nur eine lineare Zeit, während MERGE-SORT weiterhin in der Laufzeitklasse von $O\left(n \cdot \log(n)\right)$ liegt. \\
-INSERTION-SORT: $A[n]$ \\
-Laufzeit:$(n-2)\cdot 3$ \\
-MERGE-SORT: $A[n]$ \\
-Laufzeit: $n\cdot \log(n)$
-\item vas 
 \end{enumerate}
 
 \end{document}
