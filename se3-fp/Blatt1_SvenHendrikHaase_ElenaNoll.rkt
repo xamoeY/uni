@@ -9,7 +9,9 @@
 
 ;;Aufgabe 1.2
 (define (my-acos a)
-  (radiant->degrees (atan (/ (sqrt (- 1 (* (cos (degrees->radiant a)) (cos (degrees->radiant a))))) (cos (degrees->radiant a))))))
+  (radiant->degrees (atan (/ (sqrt (- 1 (* (cos (degrees->radiant a))
+                                           (cos (degrees->radiant a)))))
+                             (cos (degrees->radiant a))))))
 
 ;;Aufgabe 1.3
 (define (nm->km x)
@@ -17,9 +19,11 @@
 
 ;;Aufgabe 2.1
 (define (distanzAB breite_a laenge_a breite_b laenge_b)
-  (nm->km (* 60 (radiant->degrees(acos(+
-                                       (* (sin (degrees->radiant breite_a)) (sin (degrees->radiant breite_b)))
-                                       (* (cos (degrees->radiant breite_a)) (sin (degrees->radiant breite_b)) (cos (- laenge_a laenge_b)))))))))
+  (nm->km (* 60 (radiant->degrees(acos (+ (* (sin (degrees->radiant breite_a))
+                                             (sin (degrees->radiant breite_b)))
+                                          (* (cos (degrees->radiant breite_a))
+                                             (sin (degrees->radiant breite_b))
+                                             (cos (degrees->radiant (- laenge_a laenge_b))))))))))
 
 ;;Aufgabe 2.2
 
