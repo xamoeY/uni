@@ -185,7 +185,6 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 {
 	int i, j;                                   /* local variables for loops  */
 	int m1, m2;                                 /* used as indices for old and new matrices       */
-	double star;                                /* four times center value minus 4 neigh.b values */
 	double residuum;                            /* residuum of current iteration                  */
 	double maxresiduum;                         /* maximum residuum value of a slave in iteration */
 
@@ -213,27 +212,33 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
 		maxresiduum = 0;
 
+        // Die Option wird ja schon gesetzt. Wir setzen sie hier tatsächlich ein.
+        omp_set_num_threads(options->number);
+
 		/* over all rows */
+        // Implizit ist nur i privat. Wir wollen aber auch, dass j privat wird.
+        #pragma omp parallel for private(i, j)
 		for (i = 1; i < N; i++)
 		{
 			/* over all columns */
 			for (j = 1; j < N; j++)
 			{
-				star = 0.25 * (Matrix_In[i-1][j] + Matrix_In[i][j-1] + Matrix_In[i][j+1] + Matrix_In[i+1][j]);
+                // Hier haben wir star entfernt, damit die Parallelisierung hinhaut.
+                // Dadurch, dass wir direkt in eine Matrix schreiben, können wir über die Threads
+                // teilen, weil nur jeweils eine Zelle von einem Thread beschrieben wird.
+				Matrix_Out[i][j] = 0.25 * (Matrix_In[i-1][j] + Matrix_In[i][j-1] + Matrix_In[i][j+1] + Matrix_In[i+1][j]);
 
 				if (options->inf_func == FUNC_FPISIN)
 				{
-					star += (0.25 * TWO_PI_SQUARE * h * h) * sin((PI * h) * (double)i) * sin((PI * h) * (double)j);
+					Matrix_Out[i][j] += (0.25 * TWO_PI_SQUARE * h * h) * sin((PI * h) * (double)i) * sin((PI * h) * (double)j);
 				}
 
 				if (options->termination == TERM_PREC || term_iteration == 1)
 				{
-					residuum = Matrix_In[i][j] - star;
+					residuum = Matrix_In[i][j] - Matrix_Out[i][j];
 					residuum = (residuum < 0) ? -residuum : residuum;
 					maxresiduum = (residuum < maxresiduum) ? maxresiduum : residuum;
 				}
-
-				Matrix_Out[i][j] = star;
 			}
 		}
 

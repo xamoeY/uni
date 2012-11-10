@@ -1,0 +1,106 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{pgfplots}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+\usetikzlibrary{patterns}
+
+\newcommand{\titleinfo}{Leistungsanalyse}
+
+\title{\titleinfo}
+\author{Sönke Kracht, Sven-Hendrik Haase}
+\date{\today}
+\chead{\titleinfo}
+\ohead{\today}
+\setheadsepline{1pt}
+\setcounter{secnumdepth}{0}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\maketitle
+\notag
+\section{Messung 1}
+
+\centerline{
+\begin{tikzpicture}[scale=1.5]
+  \begin{axis}[
+    xlabel=Kerne,
+    ylabel=Laufzeit in s
+  ]
+    \addplot[smooth,color=blue] coordinates {(1, 112.2)
+    									     (2, 59.9)
+    									     (3, 41.8)
+    									     (4, 32.0)
+    									     (5, 26.4)
+    									     (6, 21.8)
+    									     (7, 19.3)
+    									     (8, 16.6)
+    									     (9, 15.6)
+    									     (10, 14.8)
+    									     (11, 13.6)
+    									     (12, 11.8)};
+  \end{axis}
+\end{tikzpicture}
+}
+
+Wie man sieht, verlaüft der Speed-up in Relation zur Anzahl der Threads 
+logarithmisch. Das bedeutet, der Leistungsanstieg wird geringer desto mehr CPUs
+im Einsatz sind. Es wird sich kaum lohnen, weitere CPUs einzubinden. Wir sehen
+einen deutlichen Leistungsschub beim Schritt von 11 zu 12 Threads im Vergleich
+zu den verhergegangenen Schritten. Wir vermuten, dass dies an der
+ Hardwarebeschaffenheit des Systems liegt.
+
+\newpage
+\section{Messung 2}
+\centerline{
+\begin{tikzpicture}[scale=1.5]
+  \begin{axis}[
+    xlabel=Interlines,
+    ylabel=Laufzeit in s
+  ]
+    \addplot[smooth,color=blue] coordinates {(1, 0.005943)
+    									     (2, 0.010963)
+    									     (4, 0.027519)
+    									     (8, 0.061806)
+    									     (16, 0.227536)
+    									     (32, 0.866702)
+    									     (64, 3.972590)
+    									     (128, 14.796773)
+    									     (256, 55.043998)
+    									     (512, 217.514899)
+    									     (1024, 953.530896)};
+  \end{axis}
+\end{tikzpicture}
+}
+
+Der Graph zeigt in dem gemessenen Bereich ein lineares Verhaltenswachstum. 
+Man kann bei jeder Verdopplung der Interlines eine Vervierfachung der Laufzeit
+beobachten. Unter 64 Interlines liegt eine Laufzeit von unter einer Sekunde 
+vor, was eine sinnvolle Leistungsbewertung in diesem Bereich unmöglich macht.
+In diesem Zusammenhang ist die in der Aufgabenstellung geforderte 
+Mindestlaufzeit von 50 Sekunden problematisch, da sonst eine viel zu hohe 
+Laufzeit bei 1024 Interlines die Folge ist. Genauer: Damit das Programm bei 1 
+Interlines und 12 Threads eine Laufzeit von über 50 Sekunden aufweist, müssten
+über 4 Millionen Iterationen berechnet werden. Das hätte bei 1024 Interlines
+über 106 Tage Laufzeit zur Folge.
+
+\section{Rückmeldung}
+
+Eine schwammige Formulierung ist uns aufgefallen: "Die schnellste 
+Parallelisierung sollte mindestens 50 Sekunden rechnen". Bei wie vielen
+Interlines und welche Parametern? Zwar war es Aufgabe, die Parameter entsprechend
+zu wählen, aber eine gewisse Vorgabe oder Konkretisierung wäre hier schon 
+sinnvoll gewesen.
+
+Ansonsten war die Aufgabe von der Schwierigkeit her angemessen. Wir haben ca.
+5 Stunden damit verbracht. 2 Stunden für das Parallelsieren, 1 Stunde für die
+Auswertung und 2 Stunden zum Daten sammeln.
+
+\end{document}
+
