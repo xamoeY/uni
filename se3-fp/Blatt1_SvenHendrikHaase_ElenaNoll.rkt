@@ -19,7 +19,7 @@
 
 ;;Aufgabe 2.1
 (define (distanzAB breite_a laenge_a breite_b laenge_b)
-  (nm->km (* 60 (radiant->degrees(acos (+ (* (sin (degrees->radiant breite_a))
+  (nm->km (* 60 (radiant->degrees(my-acos (+ (* (sin (degrees->radiant breite_a))
                                              (sin (degrees->radiant breite_b)))
                                           (* (cos (degrees->radiant breite_a))
                                              (sin (degrees->radiant breite_b))
