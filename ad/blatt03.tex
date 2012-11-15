@@ -1,0 +1,74 @@
+\documentclass[a4paper,fleqn]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{scrpage2}
+\usepackage{tikz}
+
+\ihead{AD Übung 3}
+
+\ohead{Alisa Dammer, Elena Noll, Sven-Hendrik Haase}
+\pagestyle{scrheadings}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\subsection*{Aufgabe 1}
+\subsubsection*{a)}
+\begin{enumerate}
+\item \([6, 18, 14, 19, 15, 21, 20]\)
+\item \([6, 18, 14, 19, 15, 20, 21]\)
+\item \([6, 14, 18, 19, 15, 20, 21]\)
+\item \([6, 14, 15, 19, 18, 20, 21]\)
+\item \([6, 14, 15, 18, 19, 20, 21]\)
+\end{enumerate}
+
+\subsubsection*{b)}
+\begin{verbatim}
+search(x, liste)
+    i = 1
+    j = liste.länge
+    if x > liste[liste.länge - 1] + liste[liste.länge] oder
+       x < liste[1] + liste[2]
+        return -1 // Fehlercode
+    while liste[i] + liste[j] != x
+        if i == j
+            return -2 // Fehlercode
+        if liste[i] + liste[j] < x
+            i += 1
+        elseif liste[i] + liste[j] > x
+            j -= 1
+    return Pair(liste[i], liste[j])
+\end{verbatim}
+
+Die beiden Laufindizes \(i, j\) werden so gewählt, dass sie auf den Anfang und das Ende
+des Arrays zeigen. Dies ist notwendig, denn dadurch ist gewährleistet, dass alle
+möglichen Paare \((a, b)\), für die \(x = a + b\) gilt, eingeschlossen werden.
+\(a\) ist der Wert an der Stelle \(i\), \(b\) ist der Wert an der Stelle \(j\).
+Zudem führt dies mit unserem Algorithmus zu einer Laufzeit von \(O(n)\).
+
+Beginnend wird geprüft, ob \(x\) mit den Werten im Array überhaupt erreichbar 
+ist, indem wir prüfen, ob \(x \leq Array[1] + Array[2]\) oder \(x \geq Array
+[Array.länge - 1] + Array[Array.länge]\) ist. Sollte einer dieser Fälle zutreffen, 
+so brechen wir mit einem Fehlerwert ab.
+
+Wenn die vorhergegangene Prüfung keinen Fehlerwert zurückgibt,
+wird geprüft, ob \(x \not= a + b\), denn solange ist das Ergebnis nicht erreicht.
+Wenn das der Fall ist, wird geprüft, ob \(x \leq a + b\) oder \(x \geq a + b\).
+Dies ist entscheidend dafür, wie unsere Laufindizes verändert werden. Wenn
+\(x \leq a + b\), wissen wir, dass es nur Sinn macht, \(i\) zu erhöhen, denn
+nur die Erhöhung einer der beiden Summanden führt zu einer Erhöhung der Summe.
+Da \(b\) bereits den höchsten Wert hat, kann nur der Wert von \(a\) erhöht werden.
+Andersherum entsprechend, wenn \(x \geq a + b\), muss \(j\) verringert werden,
+damit die Summe somit geringer wird. Nach der Verränderung wird die Schleife
+erneut ausgeführt und die Kondition evaluiert.
+Wenn alle möglichen Summen getestet wurden und das Ergebnis dennoch nicht erreicht wurde,
+können wir abbrechen und einen Fehlerwert zurückgeben, weil das Ergebnis mit 
+den Werten des Arrays nicht erreicht werden kann.
+
+
+\end{document}
