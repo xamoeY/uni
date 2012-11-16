@@ -204,11 +204,12 @@ thread_calc(void* params)
     double** Matrix_Out = args->arguments->Matrix[args->m1];
     double** Matrix_In  = args->arguments->Matrix[args->m2];
     /* over all rows */
-    for (i = args->slices[args->thread_id * 2]; i < args->slices[args->thread_id * 2 + 1]; i++)
+    for (i = args->slices[args->thread_id * 2] + 1; i < args->slices[args->thread_id * 2 + 1]; i++)
     {
         /* over all columns */
         for (j = 1; j < args->arguments->N; j++)
         {
+	    //printf("in zeile: %d, spalte: %d", i, j);
             star = 0.25 * (Matrix_In[i-1][j] + Matrix_In[i][j-1] + Matrix_In[i][j+1] + Matrix_In[i+1][j]);
 
             if (args->options->inf_func == FUNC_FPISIN)
@@ -218,10 +219,10 @@ thread_calc(void* params)
 
             if (args->options->termination == TERM_PREC || args->term_iteration == 1)
             {
-                pthread_mutex_lock(&residuum_mutex); *args->residuum = Matrix_In[i][j] - star;
+                //pthread_mutex_lock(&residuum_mutex); *args->residuum = Matrix_In[i][j] - star;
                 *args->residuum = (*args->residuum < 0) ? -*args->residuum : *args->residuum;
                 *args->maxresiduum = (*args->residuum < *args->maxresiduum) ? *args->maxresiduum : *args->residuum;
-                pthread_mutex_unlock(&residuum_mutex);
+                //pthread_mutex_unlock(&residuum_mutex);
             }
 
             Matrix_Out[i][j] = star;
@@ -262,30 +263,25 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
     pthread_t threads[nthreads];
 
-	int* slices = malloc(sizeof(int) * nthreads * 2) + 1;
+	int* slices = malloc(sizeof(int) * nthreads * 4) + 1;
 	int lines = ((N - 1) / nthreads) - 1;
         int rest = (N - 1) % nthreads;
 	// Aufteilung der N Zeilen auf nthreads Threads
 	// Werte sind in slices hinterlegt
 	slices[0] = 1;
-	for (i = 1; i < nthreads * 2; ++i)
-    {
-		if (rest != 0)
-        {
+	for (i = 1; i < nthreads * 2; ++i){
+		if (rest != 0){
 			slices[i] = slices[i - 1] + lines + 1;
 			--rest;
 		}
-		else
-        {
+		else{
 			slices[i] = slices[i - 1] + lines;
 		}
-		slices[++i] = slices[i - 1] + 1; 
+
+	slices[++i] = slices[i - 1] + 1;
 	}
-    slices[(nthreads - 1) * 2]--;
-    int vb;
-    for(vb = 0; vb < nthreads * 2; ++vb)
-            printf("%d\n", slices[vb]);
-            printf("%d\n", N);
+        slices[nthreads * 2 - 1]--;
+    
 	while (term_iteration > 0)
 	{
 		*maxresiduum = 0;
