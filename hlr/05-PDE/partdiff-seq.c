@@ -219,10 +219,10 @@ thread_calc(void* params)
 
             if (args->options->termination == TERM_PREC || args->term_iteration == 1)
             {
-                //pthread_mutex_lock(&residuum_mutex); *args->residuum = Matrix_In[i][j] - star;
+                pthread_mutex_lock(&residuum_mutex); *args->residuum = Matrix_In[i][j] - star;
                 *args->residuum = (*args->residuum < 0) ? -*args->residuum : *args->residuum;
                 *args->maxresiduum = (*args->residuum < *args->maxresiduum) ? *args->maxresiduum : *args->residuum;
-                //pthread_mutex_unlock(&residuum_mutex);
+                pthread_mutex_unlock(&residuum_mutex);
             }
 
             Matrix_Out[i][j] = star;
