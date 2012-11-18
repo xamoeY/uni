@@ -70,5 +70,91 @@ Wenn alle möglichen Summen getestet wurden und das Ergebnis dennoch nicht errei
 können wir abbrechen und einen Fehlerwert zurückgeben, weil das Ergebnis mit 
 den Werten des Arrays nicht erreicht werden kann.
 
+\subsection*{Aufgabe 2}
+\subsubsection*{a)}
+Array A = \([6, 21, 14, 19, 15, 18, 20]\) \\\\
+BUILD-MAX-HEAP(A) \\
+\begin{tabular}{l|l|l}
+	HEAP & ADDED & SWAP\\
+	\hline
+	\hline
+    [0] &  6 &      \\
+	\hline
+	[6] & 21 & 6, 21\\
+	\hline
+	[21, 6] & 14 &  \\
+	\hline
+	[21, 6, 14] & 19 & 6, 19\\
+	\hline
+	[21, 19, 14, 6] & 15 & \\
+	\hline
+	[21, 19, 14, 6, 15] & 18 & 14, 18\\
+	\hline
+	[21, 19, 18, 6, 15, 14] & 20 & 18, 20\\
+	\hline
+	[21, 19, 20, 6, 15, 14, 18] & & \\
+\end{tabular} \\\\
+SORT \\
+\begin{tabular}{l|l|l|l|l}
+    HEAP & SWAP & DELETED & SORTED ARRAY \\
+    \hline
+    \hline
+    [21, 19, 20, 6, 15, 14, 18] & 21, 18 &    &    \\
+    \hline
+    [18, 19, 20, 6, 15, 14, 21] &        & 21 & 21 \\
+    \hline
+    [18, 19, 20, 6, 15, 14]     & 18, 20 &    &    \\
+    \hline
+    [20, 19, 18, 6, 15, 14]     & 20, 14 &    &    \\
+    \hline
+    [14, 19, 18, 6, 15, 20]     &        & 20 & 20, 21 \\
+    \hline
+    [14, 19, 18, 6, 15]         & 14, 19 &    &    \\
+    \hline
+    [19, 14, 18, 6, 15]         & 14, 15 &    &    \\
+    \hline
+    [19, 15, 18, 6, 14]         & 19, 14 &    &    \\
+    \hline
+    [14, 15, 18, 6, 19          &        & 19 & 19, 20, 21 \\
+    \hline
+    [14, 15, 18, 6]             & 14, 18 &    &    \\
+    \hline
+    [18, 15, 14, 6]             & 18, 6  &    &    \\
+    \hline
+    [6, 15, 14, 18]             &        & 18 & 18, 19, 20, 21 \\
+    \hline
+    [6, 15, 14]                 & 6, 15  &    &    \\
+    \hline
+    [15, 6, 14]                 & 15, 14 &    &    \\
+    \hline
+    [14, 6, 15]                 &        & 15 & 15, 18, 19, 20, 21 \\
+    \hline
+    [14, 6]                     & 14, 6  &    &    \\
+    \hline 
+    [6, 14]                     &        & 14 & 14, 15, 18, 19, 20, 21 \\
+    \hline
+    [6]                         &        &  6 & 6, 14, 15, 18, 19, 20, 21 \\
+\end{tabular}
+
+\subsubsection*{b)}
+A = [8, 4, 12, 1, 3] \\
+
+\begin{itemize}
+  \item \([12, 4, 8, 1, 3]\)
+  \item \([12, 8, 4, 3, 1]\)
+  \item \([12, 8, 4, 1, 3]\)
+  \item \([12, 8, 1, 4, 3]\)
+  \item \([12, 8, 1, 3, 4]\)
+  \item \([12, 8, 3, 1, 4]\)
+  \item \([12, 8, 3, 4, 1]\)
+\end{itemize}
+\subsubsection*{c)}
+\paragraph*{1.}
+\[\begin{vmatrix}
+3  & 4  & 5 & 9\\
+5  & 8  & 9 & \\
+12 & 14 &   & \\
+16 &    &   & \\
+\end{vmatrix}\]
 
 \end{document}
