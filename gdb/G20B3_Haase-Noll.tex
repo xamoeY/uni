@@ -21,9 +21,9 @@
   
 \usepackage{pdfpages}
 
-\ihead{GDB G4\_B3}
+\ihead{GDB G20\_B3}
 \chead{}
-\ohead{Arne Feil, Eike Meyer, William Wenske}
+\ohead{Elena Noll, Sven-Hendrik Haase}
 \pagestyle{scrheadings}
 \setheadsepline{1pt}
 \newcommand{\qed}{\quad \square}
@@ -89,7 +89,7 @@
 
 \section*{Aufgabe 2}
 \begin{spacing}{1.5}
-Dopinglabor(\underline{Name},\dashuline{PID$\rightarrow$Arzt.PID}, Adresse, Parole) \\
+Dopinglabor(\underline{Name}, \dashuline{PID$\rightarrow$Arzt.PID}, Adresse, Parole) \\
 Person(\underline{PID}, \dashuline{DobName$\rightarrow$Dopinglabor.Name}, Name, DOB, Geschlecht) \\
 Arzt(\underline{\dashuline{PID$\rightarrow$Person.PID}}, Spezialgebiet) \\
 behandelt(\underline{\dashuline{Arzt$\rightarrow$Arzt.PID}, \dashuline{Sportler$\rightarrow$Sportler.PID}}) \\
@@ -105,8 +105,8 @@ testet(\underline{\dashuline{Sportler$\rightarrow$Sportler.PID}, \dashuline{Kont
 \begin{enumerate}
  \item[a)]
  \begin{enumerate}
-  \item[i)] Der Ausdruck ist Fehlerhaft: Es wird eine Selection über das Prädikat Geburt gemacht, dieses wird aber bei der Projektion nicht mit einbezogen, d.h. der Join von Abteilung und der Projektion von PID, Vorname, Nachname über Personal hat kein Prädikat Geburt in der Ergebnismenge.
-  \item[ii)] Die Relationen der Projektionen sind nicht Verträglich, daher ist eine Vereingung nicht möglich.
+  \item[i)] Der Ausdruck ist fehlerhaft: Es wird eine Selection über das Prädikat Geburt gemacht. Dieses wird jedoch bei der Projektion nicht mit einbezogen. D.h. der Join von Abteilung und der Projektion von PID, Vorname, Nachname über Personal hat kein Prädikat Geburt in der Ergebnismenge.
+  \item[ii)] Die Relationen der Projektionen sind nicht verträglich, daher ist eine Vereingung nicht möglich.
   \item[iii)] Budget kleiner als 1000 und größer als 5000...wird schwierig...geht nicht
   \item[iv)] Nach den jeweiligen Projektionen gibt es kein PID mehr, geht also auch nicht.
  \end{enumerate}
