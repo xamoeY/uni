@@ -1,0 +1,192 @@
+\documentclass[a4paper,10pt,]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+
+% \usepackage{sans}
+
+\usepackage{tikz}
+\usepackage{tikz-er2}
+% \usepackage{geometry}
+% \usepackage{lscape}
+\usepackage{graphicx}
+\usepackage{setspace}
+
+  
+\usepackage{pdfpages}
+
+\ihead{GDB G4\_B3}
+\chead{}
+\ohead{Arne Feil, Eike Meyer, William Wenske}
+\pagestyle{scrheadings}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\section*{Aufgabe 1}
+
+\usetikzlibrary{positioning}
+\usetikzlibrary{shadows}
+
+\tikzstyle{every entity} = [top color=white, bottom color=blue!30, 
+                            draw=blue!50!black!100, drop shadow]
+\tikzstyle{every weak entity} = [drop shadow={shadow xshift=.7ex, 
+                                 shadow yshift=-.7ex}]
+\tikzstyle{every attribute} = [top color=white, bottom color=yellow!20, 
+                               draw=yellow, node distance=1cm, drop shadow]
+\tikzstyle{every relationship} = [top color=white, bottom color=red!20, 
+                                  draw=red!50!black!100, drop shadow, aspect=2]
+\tikzstyle{every isa} = [diamond, top color=white, bottom color=green!20, 
+                         draw=green!50!black!100, drop shadow]
+
+\begin{center}
+\scalebox{.9}{
+\begin{tikzpicture}[node distance=1.5cm, every edge/.style={link}]
+
+\node[entity] (datei) {Datei};
+\node[attribute] (dname) [above=of datei] {Name} edge (datei);
+\node[attribute] (dinode) [above right=of datei] {\key{Inode-Nr}} edge (datei);
+
+\node[isa] (isa) [below=1cm of datei] {\textbf{is-a}} edge (datei);
+
+\node[entity] (video) [below left=of isa] {Video} edge (isa);
+\node[attribute] (vlaenge) [above=of video] {Länge} edge (video);
+\node[attribute] (vcodec) [above left=of video] {Codec} edge (video);
+
+\node[relationship] (befindetsich) [right=of datei] {befindet sich} edge node[below] {[0,1]} (datei);
+
+\node[entity] (verzeichnis) [below right=of isa] {Verzeichnis} edge (isa) edge node[right] {[0,n]} (befindetsich);
+
+\node[relationship] (abgebildet) [below left=of video] {abgebildet} edge node[left] {[0,n]} (video);
+
+
+\node[relationship] (aufnehmen) [below=of video] {aufnehmen} edge node[below left] {[1,1]} (video);
+
+\node[entity] (person) [below=of aufnehmen] {Person} edge node[below left] {[0,m]} (abgebildet)  edge node[right] {[0,n]} (aufnehmen);
+\node[attribute] (pname) [below=of person] {\key{Name}} edge (person);
+
+\node[attribute] (aurheber) [below right=of aufnehmen] {Urheber} edge (aufnehmen);
+
+\node[relationship] (registrieren) [below right=of person] {registrieren} edge node[above right] {[0,2]} (person);
+
+\node[entity] (benutzerkonto) [above right=of registrieren] {Benutzerkonto} edge node[below right] {[1,1]} (registrieren);
+\node[attribute] (blogin) [right=of benutzerkonto] {\key{Login}} edge (benutzerkonto);
+
+\node[relationship] (kommentieren) [above=of benutzerkonto] {kommentieren} edge node[left] {[0,n]} (benutzerkonto) edge node[below left] {[0,m]} (video);
+\node[attribute] (kdatum) [above right=of kommentieren] {Datum} edge (kommentieren);
+\node[attribute] (ktext) [right=of kommentieren] {Kommentar\-text} edge (kommentieren);
+
+\end{tikzpicture}
+}
+\end{center}
+
+
+\section*{Aufgabe 2}
+\begin{spacing}{1.5}
+Dopinglabor(\underline{Name},\dashuline{PID$\rightarrow$Arzt.PID}, Adresse, Parole) \\
+Person(\underline{PID}, \dashuline{DobName$\rightarrow$Dopinglabor.Name}, Name, DOB, Geschlecht) \\
+Arzt(\underline{\dashuline{PID$\rightarrow$Person.PID}}, Spezialgebiet) \\
+behandelt(\underline{\dashuline{Arzt$\rightarrow$Arzt.PID}, \dashuline{Sportler$\rightarrow$Sportler.PID}}) \\
+verabreicht(\underline{Dosis, Datum}, \dashuline{Arzt$\rightarrow$Arzt.PID}, \dashuline{Sportler$\rightarrow$Sportler.PID}, \dashuline{Medikament$\rightarrow$Medikament.MID})\\
+Sportler(\underline{\dashuline{PID$\rightarrow$Person.PID}}) \\
+Medikament(\underline{MID}, Name, \dashuline{Nebenwirkung$\rightarrow$Nebenwirkung.MID.Nebenwirkung})\\
+Nebenwirkung(\underline{\dashuline{MID$\rightarrow$Medikament.MID}, Nebenwirkung}) \\
+Kontrolleur(\underline{\dashuline{PID$\rightarrow$Person.PID}}) \\
+testet(\underline{\dashuline{Sportler$\rightarrow$Sportler.PID}, \dashuline{Kontrolleur$\rightarrow$Kontrolleur.PID}, Datum})
+\end{spacing}
+
+\section*{Aufgabe 3}
+\begin{enumerate}
+ \item[a)]
+ \begin{enumerate}
+  \item[i)] Der Ausdruck ist Fehlerhaft: Es wird eine Selection über das Prädikat Geburt gemacht, dieses wird aber bei der Projektion nicht mit einbezogen, d.h. der Join von Abteilung und der Projektion von PID, Vorname, Nachname über Personal hat kein Prädikat Geburt in der Ergebnismenge.
+  \item[ii)] Die Relationen der Projektionen sind nicht Verträglich, daher ist eine Vereingung nicht möglich.
+  \item[iii)] Budget kleiner als 1000 und größer als 5000...wird schwierig...geht nicht
+  \item[iv)] Nach den jeweiligen Projektionen gibt es kein PID mehr, geht also auch nicht.
+ \end{enumerate}
+
+ \item[b)]
+ \begin{enumerate}
+  \item[i)] $\pi_{Name} ((\sigma_{Geburt>1989-12-31}(Personal)) \Join ProjektArbeiter ) \Join Projekte )\\\rightarrow \text{\{(B.L.I.C.K.F.A.N.G)\}}$
+  \item[ii)] $\pi_{Vorname, Nachname, Geburt}((Personal) \Join ((\pi_{PrID}(\sigma_{Name=''Prozessoptimierung''}(Projekte)) \Join (ProjektArbeiter))\\
+  \rightarrow \text{\{(Frank, Siebenstein, 1975-12-02),(Bernd, Schmidt, 1973-11-26)\}}$
+  \item[iii)] % Mitarbeiter, die an keinem Projekt mitarbeiten
+  $(\pi_{PID}(Personal)) - (ProjektArbeiter) \\
+  \rightarrow \text{\{(4),(24)\}}$
+  \item[iv)] % Vor- und Nachnamen der Abteilungskollegen von Jochen Fuhrmann (PID=31)
+  $\pi_{Vorname, Nachname}(\sigma_{Abteilung=(\pi_{Abteilung}(\sigma_{PID=31}(Personal)))}(Personal)) \\
+  \rightarrow \text{\{(Jochen, Fuhrmann), (Ulrike, Müller), (Murat, Sahir), (Peter, Müller)\}}$
+ \end{enumerate}
+
+ \item[c)]
+ \begin{enumerate}
+  \item[i)] Vor- und Nachname von allen Leitern, dessen Projekte das Bugdet von 8000 überschreiten.\\
+  $\rightarrow \text{\{(Bernd, Schmidt)\}}$
+ 
+  \item[ii)] PID, Vor-, Nachname, Geburt, Wohnort und Abteilung der Mitarbeiter, die ein Projekt und eine Abteilung leiten. \\
+  $\rightarrow \text{\{(8, Bianca, Lohse, 1982-01-13, Kiel, 4)\}}$
+  \item[iii)] Name der Abteilungen die am Projekt ''B.L.I.C.K.F.A.N.G'' tätig sind. \\
+  $\rightarrow$ \{(Marketing), (Einkauf)\}
+  \item[iv)] PrID der Projekte an denen Mitarbeiter aus der Abteilung ''Controlling'' mitarbeiten. \\
+  $\rightarrow$ \{(15)\}
+ \end{enumerate}
+\end{enumerate}
+
+\section*{Aufgabe 4}
+\begin{enumerate}
+ \item[a)]
+ \begin{tikzpicture}[baseline]
+  \draw (0,0) node (b0) {$\pi_{PID,Vorname,Nachname}$};
+  \draw (0,-1) node (b1) {$\sigma_{Nachname=''Meier''}$};
+  \draw (0,-2) node (b2) {$\sigma_{Leiter=22}$};
+  \draw (0,-3) node (b3) {$\Join$};
+  \draw (-2,-4) node (b41) {$\Join$};
+  \draw (4,-5) node (b42) {$Projekte$};
+  \draw (-4,-5) node (b51) {$Personal$};
+  \draw (0,-5) node (b52) {$ProjektArbeiter$};
+  
+  \draw (b0) -- (b1);
+  \draw (b1) -- (b2);
+  \draw (b2) -- (b3);
+  \draw (b3) -- (b41);
+  \draw (b3) -- (b42);
+  \draw (b41) -- (b51);
+  \draw (b41) -- (b52);
+ \end{tikzpicture}
+ 
+ \item[b)]
+ \begin{tikzpicture}[baseline]
+  \draw (0,0) node (b0) {$\pi_{PID,Vorname,Nachname}$};
+  \draw (0,-1) node (b1) {$\Join$};
+  \draw (-2,-2) node (b21) {$\Join$};
+  \draw (3,-2) node (b22) {$\pi_{PrID}$};
+  \draw (-4,-3) node (b31) {$\pi_{PID,Vorname,Nachname}$};
+  \draw (0,-5) node (b32) {$ProjektArbeiter$};
+  \draw (3,-3) node (b33) {$\sigma_{Leiter=22}$};
+  \draw (-4,-4) node (b41) {$\sigma_{Nachname=''Meier''}$};
+  \draw (3,-5) node (b42) {$Projekte$};
+  \draw (-4,-5) node (b5) {$Personal$};
+  
+  \draw (b0) -- (b1);
+  \draw (b1) -- (b21);
+  \draw (b1) -- (b22);
+  \draw (b21) -- (b31);
+  \draw (b21) -- (b32);
+  \draw (b22) -- (b33);
+  \draw (b31) -- (b41);
+  \draw (b33) -- (b42);
+  \draw (b41) -- (b5);
+  ;
+ \end{tikzpicture}
+
+\end{enumerate}
+Ausdruck b) hat den höchsten Optimierungsgrad: Nach der Optimierungsheuristik I, werden Selektionen möglichst früh ausgeführt, nach II werden die Projektionen möglichst früh ausgeführt und nach III werden Operatoren Selektion und Projektion verknüpft. In Ausdruck a) werden erst die Relationen verknüpft und dann die Selektionen und Projektionen durchgeführt, das ist nicht effizient.
+\end{document}
+
+
