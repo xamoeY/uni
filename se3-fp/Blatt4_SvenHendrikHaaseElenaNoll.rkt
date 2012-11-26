@@ -44,7 +44,7 @@
 ;<rufzeichen-teil> ::= <rufzeichen-buchstabiert> <EOL>
 ;<namens-teil> ::= <schiffname>
 ;<name-buchstabiert-teil> :== <schiffname-buchstabiert> <EOL>
-;<standort-teil> ::= "NOTFALLPOSITION UNGEFÄHR" <position-teil> <EOL>
+;<standort-teil> ::= "NOTFALLPOSITION " <position-teil> <EOL>
 ;<position-teil> ::= <position>
 ;<zeitpunkt-teil> ::= "NOTFALLZEIT" <zeitpunkt> <EOL>
 ;<beschreibung-teil> ::= <beschreibung> <EOL>
@@ -126,8 +126,8 @@
 (printf(NOTRUF "BYE BYE LOVE" "DESY" "055°45’N, 006°31’E" "1020 UTC" "NACH KENTERUNG IN SCHWERER SEE SINKT: 8 MANN AN BOARD SCHIFF IST 12M LANG BLAUER RUMPF"))
 
 ;Aufgabe 3.1
-;Inerre Reduktion reduzirt die Terme von innen nach außen, äußere Reduktion genau umgedreht von außen nach innen.
-;inerre Rekudtion:
+;Innere Reduktion reduzirt die Terme von innen nach außen, äußere Reduktion genau umgedreht von außen nach innen.
+;innere Reduktion
 ;    (sqr (* 3 (+ 1 (sqr 2))))
 ;        ->(sqr (* 3 (+ 1 (* 2 2))) ;(sqr)
 ;        ->(sqr (* 3 (+ 1 4)) ;(*)
