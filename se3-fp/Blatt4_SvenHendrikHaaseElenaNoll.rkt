@@ -33,6 +33,8 @@
 ;Dies ist nicht der Fall und deshalb evaluiert der Ausdruck zu false.
 
 ;2.1
+;Anmerkung: den zeitpunkt-teil haben wir aus dem weitere-angaben-teil ausgelagert, weil wir es so übersichtlicher und schöner fanden.
+
 ;<notfallfunkspruch> ::= <ueberschrift-teil> <standort-teil> <zeitpunkt-teil> <beschreibung-teil> <weitere-angaben-teil>
 ;                        <peilzeichen-teil> <unterschrift-teil> "OVER" <EOL>
 ;<ueberschrift-teil> ::= <mayday3-teil> "HIER IST" <EOL> <namens3-teil> <rufzeichen-teil> "MAYDAY"
@@ -119,7 +121,7 @@
                  "OVER"))
 
 ;Aufgabe 2.3
-(printf(NOTRUF "BABETTE" "DEJY" "10 SM  NORDÖSTLICH LEUCHTTURM KIEL" "1000 UTC" "SCHWERER WASSEREINBRUCH WIR SINKEN KEINE VERLETZTEN VIER MANN GEHEN IN DIE RETTUNGSINSEL SCHNELLE HILFE ERFORDERLICH"))
+(printf(NOTRUF "BABETTE" "DEJY" "UNGEFÄHR 10 SM  NORDÖSTLICH LEUCHTTURM KIEL" "1000 UTC" "SCHWERER WASSEREINBRUCH WIR SINKEN KEINE VERLETZTEN VIER MANN GEHEN IN DIE RETTUNGSINSEL SCHNELLE HILFE ERFORDERLICH"))
 
 (printf(NOTRUF "BYE BYE LOVE" "DESY" "055°45’N, 006°31’E" "1020 UTC" "NACH KENTERUNG IN SCHWERER SEE SINKT: 8 MANN AN BOARD SCHIFF IST 12M LANG BLAUER RUMPF"))
 
