@@ -119,6 +119,35 @@
                  "OVER"))
 
 ;Aufgabe 2.3
-(printf (NOTRUF "BABETTE" "DEJY" "10 SM  NORDÖSTLICH LEUCHTTURM KIEL" "1000 UTC" "SCHWERER WASSEREINBRUCH WIR SINKEN KEINE VERLETZTEN VIER MANN GEHEN IN DIE RETTUNGSINSEL SCHNELLE HILFE ERFORDERLICH"))
+(NOTRUF "BABETTE" "DEJY" "10 SM  NORDÖSTLICH LEUCHTTURM KIEL" "1000 UTC" "SCHWERER WASSEREINBRUCH WIR SINKEN KEINE VERLETZTEN VIER MANN GEHEN IN DIE RETTUNGSINSEL SCHNELLE HILFE ERFORDERLICH")
 
-;(NOTRUF "BYE BYE LOVE" "DESY" "055")
+(NOTRUF "BYE BYE LOVE" "DESY" "055°45’N, 006°31’E" "1020 UTC" "NACH KENTERUNG IN SCHWERER SEE SINKT: 8 MANN AN BOARD SCHIFF IST 12M LANG BLAUER RUMPF")
+
+;Aufgabe 3.1
+;Inerre Reduktion reduzirt die Terme von innen nach außen, äußere Reduktion genau umgedreht von außen nach innen.
+;inerre Rekudtion:
+;    (sqr (* 3 (+ 1 (sqr 2))))
+;        ->(sqr (* 3 (+ 1 (* 2 2))) ;(sqr)
+;        ->(sqr (* 3 (+ 1 4)) ;(*)
+;        ->(sqr (* 3 5)) ;(+)
+;        ->(sqr 15) ;(*)
+;        ->(* 15 15) ;(sqr)
+;        ->225 ;(*)
+
+;äußere Reduktion
+;    (sqr (* 3 (+ 1 (sqr 2))))
+;        ->(* (* 3 (+ 1 (sqr 2))) (* 3 (+ 1 (sqr 2))) ;(sqr)
+;        ->(* (* 3 (+ 1 (* 2 2))) (* 3 (+ 1 (sqr 2))) ;(sqr)
+;        ->(* (* 3 (+ 1 4)) (* 3 (+ 1 (sqr 2))) ;(*)
+;        ->(* (* 3 5) (* 3 (+ 1 (sqr 2))) ;(+)
+;        ->(* 15 (* 3 (+ 1 (sqr 2))) ;(*)
+;        ->(* 15 (* 3 (+ 1 (* 2 2))) ;(sqr)
+;        ->(* 15 (* 3 (+ 1 4))) ;(*)
+;        ->(* 15 (* 3 5)) ;(+)
+;        ->(* 15 15) ;(*)
+;        ->225 ;(*)
+
+;Aufgabe 3.2
+;Für normale Funktionen wird die innere Reduktion angewendet. Für Spezialformen die äußere Reduktion.
+
+;Aufgabe 3.3
