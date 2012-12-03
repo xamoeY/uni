@@ -172,23 +172,23 @@
 ;das Merkmal "plain" aufweisen.
 
 (define (prüfe-musterung-kind musterung-mutter musterung-vater musterung-kind)
-  (if (> (max (get-listenposition Musterungen musterung-mutter) (get-listenposition Musterungen musterung-vater)) (get-listenposition Musterungen musterung-kind))
+  (if (<= (max (get-listenposition Musterungen musterung-mutter) (get-listenposition Musterungen musterung-vater)) (get-listenposition Musterungen musterung-kind))
       "True"
       "False"))
 
 (define (prüfe-flügelfarbe-kind flügelfarbe-mutter flügelfarbe-vater flügelfarbe-kind)
-  (if (> (max (get-listenposition Flügelfarben flügelfarbe-mutter) (get-listenposition Flügelfarben flügelfarbe-vater)) (get-listenposition Flügelfarben flügelfarbe-kind))
+  (if (<= (max (get-listenposition Flügelfarben flügelfarbe-mutter) (get-listenposition Flügelfarben flügelfarbe-vater)) (get-listenposition Flügelfarben flügelfarbe-kind))
       "True"
       "False"))
 
 (define (prüfe-fühlerform-kind fühlerform-mutter fühlerform-vater fühlerform-kind)
-  (if (> (max (get-listenposition Fühlerformen fühlerform-mutter) (get-listenposition Fühlerformen fühlerform-vater)) (get-listenposition Fühlerformen fühlerform-kind))
+  (if (<= (max (get-listenposition Fühlerformen fühlerform-mutter) (get-listenposition Fühlerformen fühlerform-vater)) (get-listenposition Fühlerformen fühlerform-kind))
       "True"
       "False"))
 
 (define (prüfe-ob-kind musterung-mutter flügelfarbe-mutter fühlerform-mutter musterung-vater flügelfarbe-vater fühlerform-vater musterung-kind flügelfarbe-kind fühlerform-kind)
-  (if (equal? "True" (prüfe-musterung-kind musterung-mutter musterung-vater musterung-kind) (prüfe-flügelfarbe-kind flügelfarbe-mutter flügelfarbe-vater flügelfarbe-kind)
-              (prüfe-fühlerform-kind fühlerform-mutter fühlerform-vater fühlerform-kind))
+  (if (and (equal? "True" (prüfe-musterung-kind musterung-mutter musterung-vater musterung-kind)) (equal? "True"(prüfe-flügelfarbe-kind flügelfarbe-mutter flügelfarbe-vater flügelfarbe-kind))
+              (equal? "True"(prüfe-fühlerform-kind fühlerform-mutter fühlerform-vater fühlerform-kind)))
       "Es kann ein Kind sein"
       "Es kann kein Kind sein"))
   
