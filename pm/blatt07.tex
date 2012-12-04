@@ -1,0 +1,138 @@
+\documentclass[t, 10pt]{beamer}
+%\documentclass[t, 10pt,handout]{beamer}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{graphicx}
+
+\usetheme{Boadilla}
+\usecolortheme{dove}
+
+\usepackage{multirow}
+
+\setbeamertemplate{blocks}[rounded]
+\setbeamertemplate{itemize items}[circle]
+
+% \usefonttheme{structurebold}
+% 
+\definecolor{defaultbackground}{RGB}{244,244,244}
+\definecolor{blockbackground}{RGB}{253,254,255}
+\definecolor{blockforeground}{RGB}{68,68,68}
+\definecolor{titleforeground}{RGB}{88,88,88}
+
+\setbeamercolor{background canvas}{bg=defaultbackground}
+\setbeamercolor{block title}{bg=titleforeground,fg=blockbackground}
+\setbeamercolor{block body}{bg=blockbackground,fg=blockforeground}
+\setbeamercolor{itemize item}{fg=blockforeground}
+\setbeamercolor{frametitle}{fg=titleforeground}
+
+\beamertemplatenavigationsymbolsempty
+
+\AtBeginPart{\frame{\partpage}}
+\AtBeginSection{\frame{\frametitle{\insertsection}\tableofcontents[currentsection,hideothersubsections]}}
+
+\title{Aufgabe 7}
+\subtitle{PM}
+\author{Sven-Hendrik Haase, Sönke Kracht, Elena Noll, Arne Feil}
+\date{\today}
+
+\begin{document}
+\begin{frame}
+\maketitle
+\end{frame}
+
+\begin{frame}{Informationsmanagement}
+\begin{block}{Kommunikation mit}
+\begin{tabular}[t]{lp{8cm}}
+\textbf{Projektteilnehmer} &
+Reports, Memos, Mails, Protokolle, Aushänge, Filesystem, Blog, Wiki, Microblog \\
+\textbf{Stakeholder} & 
+Reports, Memos, Mails, Protokolle
+\end{tabular}
+\end{block}
+
+\begin{block}{Informationsmanagement}
+\begin{tabular}[t]{lp{8cm}}
+\textbf{Dokumentation} & 
+Projektteilnehmer und Stakeholder erhalten lesend Zugriff auf Reports, Memos, Protokolle.
+Einige Projektteilnehmer erstellen schreibend alle Informationen für alle anderen beteiligten Personen. \\
+\textbf{Rahmen setzen} & \begin{itemize}
+\item Meetingstruktur definieren
+\item Informationmanagment und Infrastruktur definieren
+\end{itemize} 
+\end{tabular}
+\end{block}
+\end{frame}
+
+\begin{frame}{Tools}
+\begin{itemize}
+\item Mail-Programme
+\item Office-Anwendungen
+\item Papier
+\item Whiteboards
+\item Wiki
+\item Datenbanken
+\item Texteditor für Notizen direkt im Projekt-Quellcode
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Pre-Test-Meeting}
+\begin{block}{Machbarkeit}
+\begin{itemize}
+\item Es sollte immer ein kurzes Ergebnisprotokoll des Meetings angefertigt werden
+\item Protokoll an alle relevanten Personen und Teilnehmer versenden
+\end{itemize}
+\end{block}
+\begin{block}{Mögliche Risiken}
+\begin{itemize}
+\item Informationsüberflutung
+\item Information nur auf Nachfrage
+\item alle Menschen machen Fehler
+\item man sollte nicht davon ausgehen, dass andere Gedanken lesen können
+\item eigene Ideen klar und deutlich kommunizieren und nach Verständnis fragen
+\end{itemize}
+\end{block}
+\end{frame}
+
+\begin{frame}{Test-Meeting Protokoll - Test-Meeting}
+\begin{block}{Protokollkopf}
+\begin{itemize}
+\item Datum: 04.12.2012
+\item Anwesend: Arne F., Sönke K., Elena N., Sven-Henedrik H.
+\item Empfänger: Stakeholder, Projektteilnehmer, Projektowner
+\item Protokollant: Sven-Hendrik H.
+\end{itemize}
+\end{block}
+
+\begin{block}{Agenda}
+\begin{tabular}[t]{l|l|l}
+Begin & Dauer & Inhalt \\ \hline \hline
+16:30 & 15min & Warm-Up \\ \hline
+16:45 & 30min & Kommunkationsformen diskutieren \\ \hline
+17:15 & 30min & Projektreport \\ \hline
+17:45 & 15min & Wrap-up \\ \hline
+\end{tabular}
+\end{block}
+\end{frame}
+
+\begin{frame}{Test-Meeting Protokoll - Test-Meeting}
+
+\begin{block}{Ablauf}
+
+\textbf{Thema: Kommunikationsformen diskutieren}
+\begin{tabular}[t]{c|l|l|l}
+Typ & Inhalt & Wer & Wann \\ \hline \hline
+\multicolumn{4}{l}{\textbf{Thema: Kommunikationsformen diskutieren}} \\ \hline
+D   & Protokollanten benannt & Sven-Hendrik H. & 04.12.2012 \\ \hline
+I   & nicht zu viel/zu wenig kommunizieren \\ \hline
+A   & Kommunikationsprobleme suchen & Arne F. & 04.12.2012 \\ \hline
+A   & Tools für Kommunikation suchen & Sönke K. & 04.12.2012 \\ \hline
+\multicolumn{4}{l}{\textbf{Thema: Projektreport}} \\ \hline
+I   & Projekt geht zu langsam voran \\ \hline
+A   & Brainstorm fur neue Ideen & Sven-Hendrik H. & 04.12.2012
+\end{tabular}
+\end{block}
+\end{frame}
+
+\end{document}
