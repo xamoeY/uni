@@ -24,6 +24,7 @@
 #include <malloc.h>
 #include <sys/time.h>
 #include "partdiff-seq.h"
+#define plus + 1
 
 struct calculation_arguments
 {
@@ -143,7 +144,7 @@ allocateMatrices (struct calculation_arguments* arguments)
 {
     int i, m;
 
-    int const N = arguments->N;
+    int const N = arguments->N plus;
     int const N_global = arguments->N_global;
 
     arguments->M = allocateMemory(arguments->num_matrices * (N + 1) * (N_global + 1) * sizeof(double));
@@ -215,15 +216,26 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
             {
                 for (i = 0; i <= N_global; i++)
                 {
-                    Matrix[g][N][i] = h * i;
+                    Matrix[g][N plus][i] = h * i;
                 }
             }
 
             // Precalculate left and right columns
-            for (i = 0; i <= N; i++)
+            if(mpi_myrank == 0)
             {
-                Matrix[g][i][0] = 1.0 - (h * (i + offset));
-                Matrix[g][i][N_global] = h * (i + offset);
+                for (i = 0; i <= N; i++)
+                {
+                    Matrix[g][i][0] = 1.0 - (h * (i + offset));
+                    Matrix[g][i][N_global] = h * (i + offset);
+                }
+            }
+            else
+            {
+                for (i = 0; i <= N; i++)
+                {
+                    Matrix[g][i plus][0] = 1.0 - (h * (i + offset));
+                    Matrix[g][i plus][N_global] = h * (i + offset);
+                }
             }
         }
 
@@ -243,7 +255,7 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
         {
             for (g = 0; g < arguments->num_matrices; g++)
             {
-                Matrix[g][N][0] = 0;
+                Matrix[g][N plus][0] = 0;
             }
         }
         
@@ -253,7 +265,7 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
         {
             for (g = 0; g < arguments->num_matrices; g++)
             {
-                for (i = 0; i <= N; i++)
+                for (i = 0; i <= N plus; i++)
                 {
                     for (j = 0; j <= N_global; j++)
                     {
@@ -304,7 +316,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         maxresiduum = 0;
 
         /* over all rows */
-        for (i = 1; i < N; i++)
+        for (i = 1; i < N plus; i++)
         {
             /* over all columns */
             for (j = 1; j < N_global; j++)
@@ -464,13 +476,13 @@ main (int argc, char** argv)
     calculate(&arguments, &results, &options);                                      /*  solve the equation  */
     gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
-    printf("rank %d matrix: %f\n", mpi_myrank, arguments.Matrix[results.m][0][1]);
-    printf("rank %d matrix: %f\n", mpi_myrank, arguments.Matrix[results.m][4][1]);
+    //printf("rank %d matrix: %f\n", mpi_myrank, arguments.Matrix[results.m][0][1]);
+    //printf("rank %d matrix: %f\n", mpi_myrank, arguments.Matrix[results.m][4][1]);
     //displayStatistics(&arguments, &results, &options);                                  /* **************** */
     // TODO arguments.starting_offset + 1 weil wir die comm zeilen noch nichts haben?
     DisplayMatrix("Matrix:",                              /*  display some    */
             arguments.Matrix[results.m][0], options.interlines,
-            mpi_myrank, mpi_nproc, arguments.starting_offset + 1, arguments.starting_offset + arguments.N); /*  statistics and  */
+            mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N); /*  statistics and  */
 
     freeMatrices(&arguments);                                       /*  free memory     */
 
