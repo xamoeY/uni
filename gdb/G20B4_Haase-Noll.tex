@@ -1,0 +1,121 @@
+\documentclass[a4paper,10pt,]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+
+% \usepackage{sans}
+
+\usepackage{tikz}
+\usepackage{tikz-er2}
+% \usepackage{geometry}
+% \usepackage{lscape}
+\usepackage{graphicx}
+\usepackage{setspace}
+
+  
+\usepackage{pdfpages}
+
+\ihead{GDB G20\_B3}
+\chead{}
+\ohead{Elena Noll, Sven-Hendrik Haase}
+\pagestyle{scrheadings}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\section*{Aufgabe 1}
+\subsection*{a)}
+\begin{verbatim}
+CREATE TABLE Abteilungen (
+    aid     int NOT NULL PRIMARY KEY,
+    name    varchar(50) UNIQUE
+);
+
+CREATE TABLE Personal (
+    pid     int NOT NULL PRIMARY KEY,
+    vorname varchar(50) NOT NULL,
+    nachname    varchar(50) NOT NULL,
+    geburt  date    NULL,
+    wohnort varchar(50) NULL,
+    abteilung   int NOT NULL,
+    CONSTRAINT abteilung_id FOREIGN KEY(abteilung) REFERENCES Abteilungen(aid)
+);
+
+CREATE TABLE Projekte (
+    pr_id   int NOT NULL PRIMARY KEY,
+    name    varchar(100) NOT NULL,
+    leiter  int NOT NULL,
+    budget  int NOT NULL CHECK(0 < budget < 200000),
+    CONSTRAINT personal_id1 FOREIGN KEY(leiter) REFERENCES Personal(pid)
+);
+
+CREATE TABLE ProjektArbeiter (
+    prid    int NOT NULL,
+    pid     int NOT NULL,
+    PRIMARY KEY(prid, pid),
+    CONSTRAINT projekte_id2 FOREIGN KEY(prid) REFERENCES Projekte(pr_id),
+    CONSTRAINT personal_id2 FOREIGN KEY(pid) REFERENCES Personal(pid)
+);
+
+\end{verbatim}
+
+\newpage
+\subsection*{b)}
+Wenn die Bedingung sofort geprüft wird, wird bei einer Verletzung dieser
+bereits nach der Ausführung des SQL-Statements ein Fehler geworfen. Bei
+verzögterem Check wird erst beim commit der Transkation der Fehler geworfen.
+Letzteres könnte zur Folge haben, dass die anderen, unabhängigen
+SQL-Statements zwischen den commits ebenfalls nicht ausgeführt werden.\\
+Wenn Abteilungen noch einen Fremdschlüssel auf Personal enthalten soll,
+bestünde bei der Erstellung beider Tabellen eine zyklische Abhängigkeit zwischen beiden.
+Es muss Abteilung vorläufig ohne Fremdschlüssel auf Personal erstellt werden
+und dann nachträglich, nachdem Personal erstellt wurde, per ALTER TABLE erst
+eine neue Spalte in Abteilung hinzugefügt werden und dann mit ALTER
+TABLE ... ADD CONSTRAINT ... REFERENCES die Referenz auf Personal hergestellt
+werden.
+
+\subsection*{c)}
+\begin{verbatim}
+INSERT INTO Abteilungen (aid, name) VALUES (1, "Controlling"),
+                                           (4, "Marketing"),
+                                           (2, "Einkauf");
+
+INSERT INTO Personal (pid, vorname, nachname, geburt, wohnort, abteilung) VALUES
+            (4, "Peter", "Müller", "1962-07-25", "Hamburg", 2),
+            (8, "Bianca", "Lohnse", "1982-01-13", "Kiel", 4),
+            (11, "Murat", "Sahir", "1990-03-16", "Hamburg", 2),
+            (21, "Frank", "Siebenstein", "1975-12-02", "Norderstedt", 1),
+            (22, "Bernd", "Schmidt", "1973-11-26", "Norderstedt", 1),
+            (24, "Ulrike", "Müller", "1963-10-07", "Hamburg", 2),
+            (31, "Jochen", "Fuhrmann", "1958-05-09", "Stade", 2);
+
+INSERT INTO Projekte (prid, name, leiter, budget) VALUES
+            (15, "Prozessoptimierung", 22, 10000),
+            (36, "B.L.I.C.K.F.A.N.G", 8, 7500);
+
+INSERT INTO ProjektArbeiter (prid, pid) VALUES (36, 8),
+                                               (15, 21),
+                                               (36, 11),
+                                               (15, 22),
+                                               (36, 31);
+\end{verbatim}
+
+\newpage
+\subsection*{d)}
+\begin{verbatim}
+DROP TABLE ProjektArbeiter;
+DROP TABLE Projekte;
+DROP TABLE Personal;
+DROP TABLE Abteilungen;
+
+DELETE FROM Personal WHERE vorname = "Peter" AND nachname = "Müller";
+\end{verbatim}
+
+
+\end{document}
