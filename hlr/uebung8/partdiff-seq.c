@@ -27,7 +27,9 @@
 
 struct calculation_arguments
 {
-	int     N;              /* number of spaces between lines (lines=N+1)     */
+	int     N;              /* number of spaces between lines for this process*/
+    int     N_global;       /* global number of lines                         */
+	int     starting_offset;/* global starting offset of this process         */
 	int     num_matrices;   /* number of matrices                             */
 	double  h;              /* length of a space between two lines            */
 	double  ***Matrix;      /* index matrix used for addressing M             */
@@ -57,9 +59,37 @@ static
 void
 initVariables (struct calculation_arguments* arguments, struct calculation_results* results, struct options const* options)
 {
-	arguments->N = (options->interlines * 8) + 9 - 1;
+    // Get general MPI context info
+    int mpi_nproc;
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
+
+    int mpi_myrank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
+
+    // Figure out rest before we split so we can properly handle corner cases where matrix lines doesn't match process count cleanly
+	arguments->N_global = (options->interlines * 8) + 9 - 1;
+    int rest = arguments->N_global % mpi_nproc;
+        
+    // Split number of total lines in matrix by number of MPI processes we have available
+    arguments->N = arguments->N_global / mpi_nproc;
+
+    arguments->starting_offset = arguments->N * mpi_myrank;
+
+    // If the splits don't divide cleanly, make the lower processes calculate one more line each
+    if (mpi_myrank < rest)
+    {
+        arguments->starting_offset += mpi_myrank;
+        (arguments->N)++;
+    }
+    else
+    {
+        arguments->starting_offset += rest;
+    }
+
+    printf("I am rank %d, matrix has %d lines total, I have %d lines, my global start is %d\n", mpi_myrank, arguments->N_global, arguments->N, arguments->starting_offset);
+
 	arguments->num_matrices = (options->method == METH_JACOBI) ? 2 : 1;
-	arguments->h = 1.0 / arguments->N;
+	arguments->h = 1.0 / arguments->N_global;
 
 	results->m = 0;
 	results->stat_iteration = 0;
@@ -111,20 +141,21 @@ static
 void
 allocateMatrices (struct calculation_arguments* arguments)
 {
-	int i, j;
+	int i, m;
 
 	int const N = arguments->N;
+    int const N_global = arguments->N_global;
 
-	arguments->M = allocateMemory(arguments->num_matrices * (N + 1) * (N + 1) * sizeof(double));
+	arguments->M = allocateMemory(arguments->num_matrices * (N + 1) * (N_global + 1) * sizeof(double));
 	arguments->Matrix = allocateMemory(arguments->num_matrices * sizeof(double**));
 
-	for (i = 0; i < arguments->num_matrices; i++)
+	for (m = 0; m < arguments->num_matrices; m++)
 	{
-		arguments->Matrix[i] = allocateMemory((N + 1) * sizeof(double*));
+		arguments->Matrix[m] = allocateMemory((N + 1) * sizeof(double*));
 
-		for (j = 0; j <= N; j++)
+		for (i = 0; i <= N; i++)
 		{
-			arguments->Matrix[i][j] = arguments->M + (i * (N + 1) * (N + 1)) + (j * (N + 1));
+			arguments->Matrix[m][i] = arguments->M + (m * (N + 1) * (N_global + 1)) + (i * (N_global + 1));
 		}
 	}
 }
@@ -139,15 +170,24 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
 	int g, i, j;                                /*  local variables for loops   */
 
 	int const N = arguments->N;
+	int const N_global = arguments->N_global;
+    int const offset = arguments->starting_offset;
 	double const h = arguments->h;
 	double*** Matrix = arguments->Matrix;
+
+    // Get general MPI context info
+    int mpi_nproc;
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
+
+    int mpi_myrank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
 
 	/* initialize matrix/matrices with zeros */
 	for (g = 0; g < arguments->num_matrices; g++)
 	{
 		for (i = 0; i <= N; i++)
 		{
-			for (j = 0; j <= N; j++)
+			for (j = 0; j <= N_global; j++)
 			{
 				Matrix[g][i][j] = 0.0;
 			}
@@ -159,20 +199,44 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
 	{
 		for (g = 0; g < arguments->num_matrices; g++)
 		{
+            if(mpi_myrank == 0)
+            {
+                for (i = 0; i <= N_global; i++)
+                {
+                    Matrix[g][0][i] = 1.0 - (h * (i + offset));
+                }
+            }
+
+            if(mpi_myrank == mpi_nproc - 1)
+            {
+                for (i = 0; i <= N_global; i++)
+                {
+                    Matrix[g][N][i] = h * (i + offset);
+                }
+            }
+
 			for (i = 0; i <= N; i++)
 			{
-				Matrix[g][i][0] = 1.0 - (h * i);
-				Matrix[g][i][N] = h * i;
-				Matrix[g][0][i] = 1.0 - (h * i);
-				Matrix[g][N][i] = h * i;
+				Matrix[g][i][0] = 1.0 - (h * (i + offset));
+				Matrix[g][i][N_global] = h * (i + offset);
 			}
 		}
 
-		for (g = 0; g < arguments->num_matrices; g++)
-		{
-			Matrix[g][N][0] = 0.0;
-			Matrix[g][0][N] = 0.0;
-		}
+            if(mpi_myrank == 0)
+            {
+                for (g = 0; g < arguments->num_matrices; g++)
+                {
+                    Matrix[g][N][0] = 0.0;
+                }
+            }
+
+            if(mpi_myrank == mpi_nproc - 1)
+            {
+                for (g = 0; g < arguments->num_matrices; g++)
+                {
+                    Matrix[g][0][N_global] = 0.0;
+                }
+            }
 	}
 }
 
@@ -190,6 +254,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 	double maxresiduum;                         /* maximum residuum value of a slave in iteration */
 
 	int const N = arguments->N;
+	int const N_global = arguments->N_global;
 	double const h = arguments->h;
 
 	int term_iteration = options->term_iteration;
@@ -217,7 +282,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 		for (i = 1; i < N; i++)
 		{
 			/* over all columns */
-			for (j = 1; j < N; j++)
+			for (j = 1; j < N_global; j++)
 			{
 				star = 0.25 * (Matrix_In[i-1][j] + Matrix_In[i][j-1] + Matrix_In[i][j+1] + Matrix_In[i+1][j]);
 
@@ -349,6 +414,15 @@ displayStatistics (struct calculation_arguments const* arguments, struct calcula
 int
 main (int argc, char** argv)
 {
+    MPI_Init(&argc, &argv);
+
+    // Get general MPI context info
+    int mpi_nproc;
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
+
+    int mpi_myrank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
+    
 	struct options options;
 	struct calculation_arguments arguments;
 	struct calculation_results results;
@@ -365,11 +439,14 @@ main (int argc, char** argv)
 	calculate(&arguments, &results, &options);                                      /*  solve the equation  */
 	gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
-	displayStatistics(&arguments, &results, &options);                                  /* **************** */
+	//displayStatistics(&arguments, &results, &options);                                  /* **************** */
 	DisplayMatrix("Matrix:",                              /*  display some    */
-			arguments.Matrix[results.m][0], options.interlines);            /*  statistics and  */
+			arguments.Matrix[results.m][0], options.interlines,
+            mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N); /*  statistics and  */
 
 	freeMatrices(&arguments);                                       /*  free memory     */
+
+    MPI_Finalize();
 
 	return 0;
 }

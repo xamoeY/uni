@@ -2,7 +2,7 @@
 CC = mpicc
 
 # Compiler flags, paths and libraries
-CFLAGS = -std=gnu99 -pedantic -Wall -Wextra -O2
+CFLAGS = -std=gnu99 -pedantic -Wall -Wextra -O2 -g
 LFLAGS = $(CFLAGS)
 LIBS   = -lm
 
