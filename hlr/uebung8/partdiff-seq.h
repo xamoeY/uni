@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <malloc.h>
+#include <mpi.h>
 
 /* ************* */
 /* Some defines. */
@@ -55,6 +56,6 @@ struct options
 /* *************************** */
 void AskParams (struct options*, int, char**);
 
-void DisplayMatrix (char*, double*, int);
+void DisplayMatrix ( char *s, double *v, int interlines , int rank , int size, int from, int to );
 
 void DisplayMatrixAddr (char*, double***, int, int);
