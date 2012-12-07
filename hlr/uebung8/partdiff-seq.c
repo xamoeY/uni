@@ -360,12 +360,16 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         m1 = m2;
         m2 = i;
 
+        printf("rank: %d, maxresiduum: %f, maxresiduum < precision: %d\n", mpi_myrank, maxresiduum, maxresiduum < options->term_precision);
+        MPI_Allreduce(MPI_IN_PLACE, &maxresiduum, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+
         /* check for stopping calculation, depending on termination method */
         if (options->termination == TERM_PREC)
         {
             if (maxresiduum < options->term_precision)
             {
                 term_iteration = 0;
+                printf("rank %d finished iteration: %d\n", mpi_myrank, results->stat_iteration);
             }
         }
         else if (options->termination == TERM_ITER)
@@ -528,8 +532,8 @@ main (int argc, char** argv)
         // END DEBUG PRINT
     }
 
+    // TODO: fix this
     //displayStatistics(&arguments, &results, &options);                                  /* **************** */
-    // TODO arguments.starting_offset + 1 weil wir die comm zeilen noch nichts haben?
     DisplayMatrix("Matrix:",                              /*  display some    */
             arguments.Matrix[results.m][0], options.interlines,
             mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N); /*  statistics and  */
