@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt,]{scrartcl}
+\documentclass[a4paper,12pt,]{scrartcl}
 \usepackage[ngerman]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -12,7 +12,6 @@
 % \usepackage{sans}
 
 \usepackage{tikz}
-\usepackage{tikz-er2}
 % \usepackage{geometry}
 % \usepackage{lscape}
 \usepackage{graphicx}
@@ -21,7 +20,7 @@
   
 \usepackage{pdfpages}
 
-\ihead{GDB G20\_B3}
+\ihead{GDB G20\_B4}
 \chead{}
 \ohead{Elena Noll, Sven-Hendrik Haase}
 \pagestyle{scrheadings}
@@ -48,7 +47,7 @@ CREATE TABLE Personal (
 );
 
 CREATE TABLE Projekte (
-    pr_id   int NOT NULL PRIMARY KEY,
+    prid   int NOT NULL PRIMARY KEY,
     name    varchar(100) NOT NULL,
     leiter  int NOT NULL,
     budget  int NOT NULL CHECK(0 < budget < 200000),
@@ -59,7 +58,7 @@ CREATE TABLE ProjektArbeiter (
     prid    int NOT NULL,
     pid     int NOT NULL,
     PRIMARY KEY(prid, pid),
-    CONSTRAINT projekte_id2 FOREIGN KEY(prid) REFERENCES Projekte(pr_id),
+    CONSTRAINT projekte_id2 FOREIGN KEY(prid) REFERENCES Projekte(prid),
     CONSTRAINT personal_id2 FOREIGN KEY(pid) REFERENCES Personal(pid)
 );
 
@@ -117,5 +116,61 @@ DROP TABLE Abteilungen;
 DELETE FROM Personal WHERE vorname = "Peter" AND nachname = "Müller";
 \end{verbatim}
 
+\section{Aufgabe 2}
+
+\subsection*{a)}
+\begin{verbatim}
+SELECT name FROM Projekte WHERE budget>5000
+\end{verbatim}
+
+\subsection*{b)}
+\begin{verbatim}
+SELECT p.nachname FROM Personal p, ProjektArbeiter pa
+WHERE p.pid = pa.pid AND pa.prid = 
+    (SELECT prid FROM Projekte WHERE name = "B.L.I.C.K.F.A.N.G")
+ORDER BY p.nachname ASC;
+\end{verbatim}
+
+\subsection*{c)}
+\begin{verbatim}
+SELECT p.name, m.geburt FROM Projekte p, Personal m, ProjektArbeiter pr
+WHERE m.pid = pr.pid AND p.prid = pr.prid ORDER BY m.geburt LIMIT 2
+\end{verbatim}
+
+\subsection*{d)}
+\begin{verbatim}
+SELECT * FROM Personal p, Abteilungen ab
+WHERE p.abteilung = ab.aid AND ab.aid =
+    (SELECT aid FROM Abteilungen WHERE name = "Controlling")
+ORDER BY p.nachname DESC;
+\end{verbatim}
+
+\subsection*{e)}
+\begin{verbatim}
+SELECT ab.name, COUNT(*) FROM Personal p, Abteilungen ab
+WHERE ab.aid = p.abteilung GROUP BY ab.aid;
+\end{verbatim}
+
+\subsection*{e)}
+\begin{verbatim}
+SELECT * FROM Personal m WHERE m.pid NOT IN (SELECT pr.pid FROM ProjektArbeiter pr)
+\end{verbatim}
+
+\subsection*{g)}
+\begin{verbatim}
+SELECT p.nachname, ab.name,
+    (SELECT SUM(pr.budget) FROM Projekte pr WHERE pr.leiter = p.pid) sum_value 
+FROM Personal p, Projekte pr, Abteilungen ab WHERE pr.leiter = p.pid
+GROUP BY pr.leiter;
+\end{verbatim}
+
+\subsection*{h)}
+\begin{verbatim}
+SELECT p.name FROM Projekte p, ProjektArbeiter pa
+WHERE pa.prid = p.prid AND pa.pid IN
+    (SELECT pid FROM Personal WHERE geburt BETWEEN "1970-01-01"
+    AND "1980-01-01" AND
+        (nachname LIKE 'L%' OR nachname LIKE 'S%')) GROUP BY p.name;
+\end{verbatim}
 
 \end{document}
