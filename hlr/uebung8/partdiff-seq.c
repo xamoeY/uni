@@ -18,13 +18,13 @@
 /* ************************************************************************ */
 /* Include standard header file.                                            */
 /* ************************************************************************ */
+#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
 #include <malloc.h>
 #include <sys/time.h>
 #include "partdiff-seq.h"
-#define plus + 1
 
 struct calculation_arguments
 {
@@ -69,12 +69,18 @@ initVariables (struct calculation_arguments* arguments, struct calculation_resul
 
     // Figure out rest before we split so we can properly handle corner cases where matrix lines doesn't match process count cleanly
     arguments->N_global = (options->interlines * 8) + 9 - 1;
-    int rest = arguments->N_global % mpi_nproc;
+    int rest = (arguments->N_global + 1) % mpi_nproc;
+    
+    if(mpi_nproc == 1)
+        arguments->N = arguments->N_global;
+    else{    
+        // Split number of total lines in matrix by number of MPI processes we have available
+        arguments->N = ((arguments->N_global + 1) / mpi_nproc);
+        if(mpi_myrank != 0 && mpi_myrank != mpi_nproc - 1)
+            arguments->N++;
+    }
+    arguments->starting_offset = ((arguments->N_global + 1) / mpi_nproc) * mpi_myrank;
 
-    // Split number of total lines in matrix by number of MPI processes we have available
-    arguments->N = arguments->N_global / mpi_nproc;
-
-    arguments->starting_offset = arguments->N * mpi_myrank;
 
     // If the splits don't divide cleanly, make the lower processes calculate one more line each
     if (mpi_myrank < rest)
@@ -87,7 +93,7 @@ initVariables (struct calculation_arguments* arguments, struct calculation_resul
         arguments->starting_offset += rest;
     }
 
-    printf("I am rank %d, matrix has %d lines total, I have %d lines, my global start/offset is %d, my rest is %d\n", mpi_myrank, arguments->N_global, arguments->N, arguments->starting_offset, rest);
+   // printf("I am rank %d, matrix has %d lines total, I have %d lines, my global start/offset is %d, my rest is %d\n", mpi_myrank, arguments->N_global, arguments->N, arguments->starting_offset, rest);
 
     arguments->num_matrices = (options->method == METH_JACOBI) ? 2 : 1;
     arguments->h = 1.0 / arguments->N_global;
@@ -144,7 +150,7 @@ allocateMatrices (struct calculation_arguments* arguments)
 {
     int i, m;
 
-    int const N = arguments->N plus;
+    int const N = arguments->N;
     int const N_global = arguments->N_global;
 
     arguments->M = allocateMemory(arguments->num_matrices * (N + 1) * (N_global + 1) * sizeof(double));
@@ -212,26 +218,14 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
 
             // Precalculate bottom line
             // Only in last rank
-            /*
-            if(mpi_nproc == 1)
-            { // TODO: hackfix
+            if(mpi_myrank == mpi_nproc - 1)
+            {
                 for (i = 0; i <= N_global; i++)
                 {
                     Matrix[g][N][i] = h * i;
                 }
             }
-            else
-            {
-            */
-            if(mpi_myrank == mpi_nproc - 1)
-            {
-                for (i = 0; i <= N_global; i++)
-                {
-                    Matrix[g][N plus][i] = h * i;
-                }
-            }
-            //}
-
+            
             // Precalculate left and right columns
             if(mpi_myrank == 0)
             {
@@ -245,8 +239,8 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
             {
                 for (i = 0; i <= N; i++)
                 {
-                    Matrix[g][i plus][0] = 1.0 - (h * (i + offset));
-                    Matrix[g][i plus][N_global] = h * (i + offset);
+                    Matrix[g][i][0] = 1.0 - (h * (i + offset - 1));
+                    Matrix[g][i][N_global] = h * (i + offset - 1);
                 }
             }
         }
@@ -267,25 +261,9 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
         {
             for (g = 0; g < arguments->num_matrices; g++)
             {
-                Matrix[g][N plus][0] = 0;
+                Matrix[g][N][0] = 0;
             }
-        }
-        
-        // TODO OMG
-        // fuck around with matrix
-        if(mpi_myrank == 100)
-        {
-            for (g = 0; g < arguments->num_matrices; g++)
-            {
-                for (i = 0; i <= N plus; i++)
-                {
-                    for (j = 0; j <= N_global; j++)
-                    {
-                        Matrix[g][i][j] = 0.111;
-                    }
-                }
-            }
-        }
+        }    
     }
 }
 
@@ -308,12 +286,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
     int mpi_nproc;
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
 
-    // TODO: HACKFIX
-    int hack = 0;
-//    if(mpi_nproc == 1)
-//        hack = 1;
-
-    int const N = arguments->N - hack;
+    int const N = arguments->N;
     int const N_global = arguments->N_global;
     double const h = arguments->h;
 
@@ -339,16 +312,21 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         maxresiduum = 0;
 
         /* over all rows */
-        for (i = 1; i < N plus; i++)
+        for (i = 1; i < N; i++)
         {
             /* over all columns */
             for (j = 1; j < N_global; j++)
             {
-                star = 0.25 * (Matrix_In[i-1][j] + Matrix_In[i][j-1] + Matrix_In[i][j+1] + Matrix_In[i+1][j]);
+                star = 0.25 * (Matrix_In[i-1][j] + 
+                        Matrix_In[i][j-1] + 
+                        Matrix_In[i][j+1] + 
+                        Matrix_In[i+1][j]);
 
                 if (options->inf_func == FUNC_FPISIN)
                 {
-                    star += (0.25 * TWO_PI_SQUARE * h * h) * sin((PI * h) * (double)i) * sin((PI * h) * (double)j);
+                    star += (0.25 * TWO_PI_SQUARE * h * h) * 
+                        sin((PI * h) * (double)i) * 
+                        sin((PI * h) * (double)j);
                 }
 
                 if (options->termination == TERM_PREC || term_iteration == 1)
@@ -366,14 +344,14 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         results->stat_precision = maxresiduum;
         
         if(mpi_myrank > 0){
-            MPI_Sendrecv(Matrix_Out[1], N_global, MPI_DOUBLE, mpi_myrank - 1, mpi_myrank - 1,
-                         Matrix_Out[0], N_global, MPI_DOUBLE, mpi_myrank - 1, mpi_myrank,
+            MPI_Sendrecv(Matrix_Out[1], N_global, MPI_DOUBLE, mpi_myrank - 1, mpi_myrank ,
+                         Matrix_Out[0], N_global, MPI_DOUBLE, mpi_myrank - 1, mpi_myrank - 1,
                          MPI_COMM_WORLD, NULL);
         }
 
         if(mpi_myrank != mpi_nproc - 1) {
-            MPI_Sendrecv(Matrix_Out[N], N_global, MPI_DOUBLE, mpi_myrank + 1, mpi_myrank + 1,
-                     Matrix_Out[N plus], N_global, MPI_DOUBLE, mpi_myrank + 1, mpi_myrank,
+            MPI_Sendrecv(Matrix_Out[N - 1], N_global, MPI_DOUBLE, mpi_myrank + 1, mpi_myrank,
+                     Matrix_Out[N], N_global, MPI_DOUBLE, mpi_myrank + 1, mpi_myrank + 1,
                      MPI_COMM_WORLD, NULL);
         }
 
@@ -500,20 +478,56 @@ main (int argc, char** argv)
     struct calculation_results results;
 
     /* get parameters */
-    AskParams(&options, argc, argv);              /* ************************* */
+    AskParams(&options, argc, argv);
 
-    initVariables(&arguments, &results, &options);           /* ******************************************* */
+    initVariables(&arguments, &results, &options);
 
     allocateMatrices(&arguments);        /*  get and initialize variables and matrices  */
-    initMatrices(&arguments, &options);            /* ******************************************* */
+    initMatrices(&arguments, &options);
 
     gettimeofday(&start_time, NULL);                   /*  start timer         */
     calculate(&arguments, &results, &options);                                      /*  solve the equation  */
     MPI_Barrier(MPI_COMM_WORLD);
     gettimeofday(&comp_time, NULL);                   /*  stop timer          */
+    
+    if(options.interlines == 0) {
+        // BEGIN DEBUG PRINT
+        usleep(10000 * mpi_myrank);
+        const int N = arguments.N;
+        const int N_global = arguments.N_global + 1;
+        const int BUF = 1000;
+        char* output = malloc(BUF);
+        int length = 0;
+        length += snprintf(output + length, BUF - length, "\nrank %d matrix:\n", mpi_myrank);
+        length += snprintf(output + length, BUF - length, "         ");
+        for (int j = 0; j < N_global; ++j)
+        {
+            length += snprintf(output + length, BUF - length, "%5s %d", "col", j);
+        }
+        length += snprintf(output + length, BUF - length, "\n          ");
+        for (int j = 0; j < N_global; ++j)
+        {
+            length += snprintf(output + length, BUF - length, "-------");
+        }
+        length += snprintf(output + length, BUF - length, "\n");
+        for (int i = 0; i < N + 1; ++i)
+        {
+            length += snprintf(output + length, BUF - length, "line %2d | ", i);
+            for (int j = 0; j < N_global; ++j)
+            {
+                length += snprintf(output + length, BUF - length, "%7.4f", arguments.Matrix[results.m][i][j]);
+            }
+            if (i == 0 || i == N)
+                length += snprintf(output + length, BUF - length, " <- comm line");
+            length += snprintf(output + length, BUF - length, "\n");
+        }
+        length += snprintf(output + length, BUF - length, "\n");
+        printf("%s", output);
+        fflush(stdout);
+        MPI_Barrier(MPI_COMM_WORLD);
+        // END DEBUG PRINT
+    }
 
-    //printf("rank %d matrix: %f\n", mpi_myrank, arguments.Matrix[results.m][0][1]);
-    //printf("rank %d matrix: %f\n", mpi_myrank, arguments.Matrix[results.m][4][1]);
     //displayStatistics(&arguments, &results, &options);                                  /* **************** */
     // TODO arguments.starting_offset + 1 weil wir die comm zeilen noch nichts haben?
     DisplayMatrix("Matrix:",                              /*  display some    */
