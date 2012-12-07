@@ -360,7 +360,6 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         m1 = m2;
         m2 = i;
 
-        printf("rank: %d, maxresiduum: %f, maxresiduum < precision: %d\n", mpi_myrank, maxresiduum, maxresiduum < options->term_precision);
         MPI_Allreduce(MPI_IN_PLACE, &maxresiduum, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
 
         /* check for stopping calculation, depending on termination method */
@@ -369,7 +368,6 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
             if (maxresiduum < options->term_precision)
             {
                 term_iteration = 0;
-                printf("rank %d finished iteration: %d\n", mpi_myrank, results->stat_iteration);
             }
         }
         else if (options->termination == TERM_ITER)
@@ -389,6 +387,14 @@ void
 displayStatistics (struct calculation_arguments const* arguments, struct calculation_results const* results, struct options const* options)
 {
     int N = arguments->N;
+    int N_global = arguments->N_global;
+
+    // Get general MPI context info
+    int mpi_nproc;
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
+
+    int mpi_myrank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
 
     double time = (comp_time.tv_sec - start_time.tv_sec) + (comp_time.tv_usec - start_time.tv_usec) * 1e-6;
     printf("Berechnungszeit:    %f s \n", time);
@@ -397,7 +403,7 @@ displayStatistics (struct calculation_arguments const* arguments, struct calcula
     // star op = 5 ASM ops (+1 XOR) with -O3, matrix korrektur = 1
     double q = 6;
     double mflops;
-    long dataPoints = (long) (N - 1) * (N - 1) * results->stat_iteration;
+    long dataPoints = (long) mpi_nproc * (N - 1) * (N_global - 1) * results->stat_iteration;
 
     if (options->inf_func == FUNC_F0)
     {
@@ -416,7 +422,7 @@ displayStatistics (struct calculation_arguments const* arguments, struct calcula
 
     printf("Speed:              %f MFlop/s\n", mflops / time);
 
-    printf("Memory footprint:   %f MiB\n",   (N + 1) * (N + 1) * sizeof(double) * arguments->num_matrices / 1024.0 / 1024.0);
+    printf("Memory footprint:   %f MiB\n", mpi_nproc * (N + 1) * (N_global + 1) * sizeof(double) * arguments->num_matrices / 1024.0 / 1024.0);
     printf("Mem thp (read):     %f MiB/s\n", dataPoints * 4.0 / 1024 / 1024  / time);
     printf("Mem thp (write):    %f MiB/s\n", dataPoints * 1.0 / 1024 / 1024 / time);
     printf("Mem thp (total):    %f MiB/s\n", dataPoints * 5.0 / 1024 / 1024  / time);
@@ -532,8 +538,8 @@ main (int argc, char** argv)
         // END DEBUG PRINT
     }
 
-    // TODO: fix this
-    //displayStatistics(&arguments, &results, &options);                                  /* **************** */
+    if (mpi_myrank == 0)
+        displayStatistics(&arguments, &results, &options);
     DisplayMatrix("Matrix:",                              /*  display some    */
             arguments.Matrix[results.m][0], options.interlines,
             mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N); /*  statistics and  */
