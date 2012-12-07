@@ -57,7 +57,7 @@ struct timeval comp_time;        /* time when calculation completed             
 /* initVariables: Initializes some global variables                         */
 /* ************************************************************************ */
 static
-    void
+void
 initVariables (struct calculation_arguments* arguments, struct calculation_results* results, struct options const* options)
 {
     // Get general MPI context info
@@ -101,7 +101,7 @@ initVariables (struct calculation_arguments* arguments, struct calculation_resul
 /* freeMatrices: frees memory for matrices                                  */
 /* ************************************************************************ */
 static
-    void
+void
 freeMatrices (struct calculation_arguments* arguments)
 {
     int i;
@@ -120,7 +120,7 @@ freeMatrices (struct calculation_arguments* arguments)
 /* allocates memory and quits if there was a memory allocation problem      */
 /* ************************************************************************ */
 static
-    void*
+void*
 allocateMemory (size_t size)
 {
     void *p;
@@ -139,7 +139,7 @@ allocateMemory (size_t size)
 /* allocateMatrices: allocates memory for matrices                          */
 /* ************************************************************************ */
 static
-    void
+void
 allocateMatrices (struct calculation_arguments* arguments)
 {
     int i, m;
@@ -165,7 +165,7 @@ allocateMatrices (struct calculation_arguments* arguments)
 /* initMatrices: Initialize matrix/matrices and some global variables       */
 /* ************************************************************************ */
 static
-    void
+void
 initMatrices (struct calculation_arguments* arguments, struct options const* options)
 {
     int g, i, j;                                /*  local variables for loops   */
@@ -212,6 +212,17 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
 
             // Precalculate bottom line
             // Only in last rank
+            /*
+            if(mpi_nproc == 1)
+            { // TODO: hackfix
+                for (i = 0; i <= N_global; i++)
+                {
+                    Matrix[g][N][i] = h * i;
+                }
+            }
+            else
+            {
+            */
             if(mpi_myrank == mpi_nproc - 1)
             {
                 for (i = 0; i <= N_global; i++)
@@ -219,6 +230,7 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
                     Matrix[g][N plus][i] = h * i;
                 }
             }
+            //}
 
             // Precalculate left and right columns
             if(mpi_myrank == 0)
@@ -281,7 +293,7 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
 /* calculate: solves the equation                                           */
 /* ************************************************************************ */
 static
-    void
+void
 calculate (struct calculation_arguments const* arguments, struct calculation_results *results, struct options const* options)
 {
     int i, j;                                   /* local variables for loops  */
@@ -290,7 +302,18 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
     double residuum;                            /* residuum of current iteration                  */
     double maxresiduum;                         /* maximum residuum value of a slave in iteration */
 
-    int const N = arguments->N;
+    int mpi_myrank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
+
+    int mpi_nproc;
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
+
+    // TODO: HACKFIX
+    int hack = 0;
+//    if(mpi_nproc == 1)
+//        hack = 1;
+
+    int const N = arguments->N - hack;
     int const N_global = arguments->N_global;
     double const h = arguments->h;
 
@@ -341,6 +364,18 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
         results->stat_iteration++;
         results->stat_precision = maxresiduum;
+        
+        if(mpi_myrank > 0){
+            MPI_Sendrecv(Matrix_Out[1], N_global, MPI_DOUBLE, mpi_myrank - 1, mpi_myrank - 1,
+                         Matrix_Out[0], N_global, MPI_DOUBLE, mpi_myrank - 1, mpi_myrank,
+                         MPI_COMM_WORLD, NULL);
+        }
+
+        if(mpi_myrank != mpi_nproc - 1) {
+            MPI_Sendrecv(Matrix_Out[N], N_global, MPI_DOUBLE, mpi_myrank + 1, mpi_myrank + 1,
+                     Matrix_Out[N plus], N_global, MPI_DOUBLE, mpi_myrank + 1, mpi_myrank,
+                     MPI_COMM_WORLD, NULL);
+        }
 
         /* exchange m1 and m2 */
         i = m1;
@@ -368,7 +403,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 /*  displayStatistics: displays some statistics about the calculation       */
 /* ************************************************************************ */
 static
-    void
+void
 displayStatistics (struct calculation_arguments const* arguments, struct calculation_results const* results, struct options const* options)
 {
     int N = arguments->N;
@@ -448,7 +483,7 @@ displayStatistics (struct calculation_arguments const* arguments, struct calcula
 /* ************************************************************************ */
 /*  main                                                                    */
 /* ************************************************************************ */
-    int
+int
 main (int argc, char** argv)
 {
     MPI_Init(&argc, &argv);
@@ -474,6 +509,7 @@ main (int argc, char** argv)
 
     gettimeofday(&start_time, NULL);                   /*  start timer         */
     calculate(&arguments, &results, &options);                                      /*  solve the equation  */
+    MPI_Barrier(MPI_COMM_WORLD);
     gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
     //printf("rank %d matrix: %f\n", mpi_myrank, arguments.Matrix[results.m][0][1]);
