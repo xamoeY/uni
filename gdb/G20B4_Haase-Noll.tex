@@ -151,7 +151,7 @@ SELECT ab.name, COUNT(*) FROM Personal p, Abteilungen ab
 WHERE ab.aid = p.abteilung GROUP BY ab.aid;
 \end{verbatim}
 
-\subsection*{e)}
+\subsection*{f)}
 \begin{verbatim}
 SELECT * FROM Personal m WHERE m.pid NOT IN (SELECT pr.pid FROM ProjektArbeiter pr)
 \end{verbatim}
