@@ -213,7 +213,7 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
 
             // Precalculate bottom line
             // Only in last rank
-            if(mpi_myrank == mpi_nproc - 1)
+            if(mpi_myrank == mpi_nproc - 1 || (N == 2 && mpi_myrank == mpi_nproc - 2))
             {
                 for (i = 0; i <= N_global; i++)
                 {
@@ -536,6 +536,8 @@ main (int argc, char** argv)
     short DEBUG = 1;
     if(DEBUG == 1 && options.interlines == 0) {
         printDebug(&arguments, &results);
+            DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines, 
+                          mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N - 1);
     }
     else
     {
