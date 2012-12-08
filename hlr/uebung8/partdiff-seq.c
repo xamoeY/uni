@@ -26,6 +26,8 @@
 #include <sys/time.h>
 #include "partdiff-seq.h"
 
+#define DEBUG 0             // debug flag for nice matrix output when using 0 interlines
+
 struct calculation_arguments
 {
     int     N;              /* number of spaces between lines for this process*/
@@ -91,7 +93,9 @@ initVariables (struct calculation_arguments* arguments, struct calculation_resul
         arguments->starting_offset += rest;
     }
 
-   // printf("I am rank %d, matrix has %d lines total, I have %d lines, my global start/offset is %d, my rest is %d\n", mpi_myrank, arguments->N_global, arguments->N, arguments->starting_offset, rest);
+#if DEBUG == 1
+    printf("I am rank %d, matrix has %d lines total, I have %d lines, my global start/offset is %d, my rest is %d\n", mpi_myrank, arguments->N_global + 1, arguments->N - 1, arguments->starting_offset, rest);
+#endif
 
     arguments->num_matrices = (options->method == METH_JACOBI) ? 2 : 1;
     arguments->h = 1.0 / arguments->N_global;
@@ -316,8 +320,11 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
                 if (options->inf_func == FUNC_FPISIN)
                 {
+                    int offset_hack = arguments->starting_offset;
+                    if(mpi_myrank > 0)
+                        offset_hack--;
                     star += (0.25 * TWO_PI_SQUARE * h * h) * 
-                        sin((PI * h) * (double)i) * 
+                        sin((PI * h) * (double)(i+offset_hack)) * 
                         sin((PI * h) * (double)j);
                 }
 
@@ -533,19 +540,19 @@ main (int argc, char** argv)
     MPI_Barrier(MPI_COMM_WORLD);                       /*  wait for processes to finish */
     gettimeofday(&comp_time, NULL);                    /*  stop timer                   */
     
-    short DEBUG = 1;
-    if(DEBUG == 1 && options.interlines == 0) {
-        printDebug(&arguments, &results);
-            DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines, 
-                          mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N - 1);
-    }
-    else
+#if DEBUG == 1
+    if(options.interlines == 0)
     {
-        if (mpi_myrank == 0)
-            displayStatistics(&arguments, &results, &options);
-            DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines, 
-                          mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N);
+        printDebug(&arguments, &results);
+        DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines, 
+                      mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N - 1);
     }
+#else
+    if (mpi_myrank == 0)
+        displayStatistics(&arguments, &results, &options);
+    DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines, 
+                  mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N - 1);
+#endif
 
     freeMatrices(&arguments);                                       /*  free memory     */
 
