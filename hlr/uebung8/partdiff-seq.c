@@ -18,7 +18,6 @@
 /* ************************************************************************ */
 /* Include standard header file.                                            */
 /* ************************************************************************ */
-#include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -64,21 +63,23 @@ static
 void
 initVariables (struct calculation_arguments* arguments, struct calculation_results* results, struct options const* options)
 {
-    const int mpi_nproc = arguments->mpi_nproc;
-    const int mpi_myrank= arguments->mpi_myrank;
+    const int mpi_nproc = arguments->mpi_nproc;   // number of total openmpi processes
+    const int mpi_myrank= arguments->mpi_myrank;  // openmpi rank of this process
 
     // Figure out rest before we split so we can properly handle corner cases where matrix lines doesn't match process count cleanly
     arguments->N_global = (options->interlines * 8) + 9 - 1;
     int rest = (arguments->N_global + 1) % mpi_nproc;
     
+	// Handle corner case when only using a single process
     if(mpi_nproc == 1)
         arguments->N = arguments->N_global;
-    else{    
+    else {    
         // Split number of total lines in matrix by number of MPI processes we have available
         arguments->N = ((arguments->N_global + 1) / mpi_nproc);
         if(mpi_myrank != 0 && mpi_myrank != mpi_nproc - 1)
             arguments->N++;
     }
+	// Attempt to calculate a first guess at the offset (but we have to correct it later)
     arguments->starting_offset = ((arguments->N_global + 1) / mpi_nproc) * mpi_myrank;
 
 
@@ -320,6 +321,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
                 if (options->inf_func == FUNC_FPISIN)
                 {
+					// Fix offset for ranks other than 0
                     int offset_hack = arguments->starting_offset;
                     if(mpi_myrank > 0)
                         offset_hack--;
@@ -342,12 +344,14 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         results->stat_iteration++;
         results->stat_precision = maxresiduum;
         
+		// Communicate lines with each other into each other's extra allocated line
         if(mpi_myrank > 0){
             MPI_Sendrecv(Matrix_Out[1], N_global, MPI_DOUBLE, mpi_myrank - 1, mpi_myrank ,
                          Matrix_Out[0], N_global, MPI_DOUBLE, mpi_myrank - 1, mpi_myrank - 1,
                          MPI_COMM_WORLD, NULL);
         }
 
+		// Last rank can't communicate with higher ranks because there aren't any
         if(mpi_myrank != mpi_nproc - 1) {
             MPI_Sendrecv(Matrix_Out[N - 1], N_global, MPI_DOUBLE, mpi_myrank + 1, mpi_myrank,
                      Matrix_Out[N], N_global, MPI_DOUBLE, mpi_myrank + 1, mpi_myrank + 1,
@@ -359,6 +363,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         m1 = m2;
         m2 = i;
 
+		// Find lowest maxresiduum in whole process swarm
         MPI_Allreduce(MPI_IN_PLACE, &maxresiduum, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
 
         /* check for stopping calculation, depending on termination method */
@@ -461,6 +466,8 @@ displayStatistics (struct calculation_arguments const* arguments, struct calcula
     printf("Norm des Fehlers:   %e\n", results->stat_precision);
 }
 
+// Debug function for pretty printing matrix
+// Use DEBUG = 1 and 0 interlines to have a look.
 __attribute__((cold))
 void
 printDebug(struct calculation_arguments const* arguments, struct calculation_results const* results) {
@@ -520,6 +527,7 @@ main (int argc, char** argv)
     struct calculation_arguments arguments;
     struct calculation_results results;
 
+	// Get openmpi context data and put it into the arguments struct
     int mpi_nproc;
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
     int mpi_myrank;;
@@ -543,12 +551,12 @@ main (int argc, char** argv)
 #if DEBUG == 1
     if(options.interlines == 0)
     {
-        printDebug(&arguments, &results);
+        printDebug(&arguments, &results); // pretty-print matrix if we are debugging
         DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines, 
                       mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N - 1);
     }
 #else
-    if (mpi_myrank == 0)
+    if (mpi_myrank == 0) // print statistics only as root and only if we aren't debugging
         displayStatistics(&arguments, &results, &options);
     DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines, 
                   mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N - 1);
