@@ -13,9 +13,9 @@ OBJS = partdiff-seq.o askparams.o displaymatrix.o
 	$(CC) -c $(CFLAGS) $*.c
 
 # Targets ...
-all: partdiff-seq
+all: partdiff-par
 
-partdiff-seq: $(OBJS) Makefile
+partdiff-par: $(OBJS) Makefile
 	$(CC) $(LFLAGS) -o $@ $(OBJS) $(LIBS)
 
 clean:
