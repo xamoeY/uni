@@ -35,6 +35,8 @@ struct calculation_arguments
     double  h;              /* length of a space between two lines            */
     double  ***Matrix;      /* index matrix used for addressing M             */
     double  *M;             /* two matrices with real values                  */
+    int     mpi_nproc;      /* number of global mpi processes                 */
+    int     mpi_myrank;     /* mpi rank of this process                       */
 };
 
 struct calculation_results
@@ -60,12 +62,8 @@ static
 void
 initVariables (struct calculation_arguments* arguments, struct calculation_results* results, struct options const* options)
 {
-    // Get general MPI context info
-    int mpi_nproc;
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
-
-    int mpi_myrank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
+    const int mpi_nproc = arguments->mpi_nproc;
+    const int mpi_myrank= arguments->mpi_myrank;
 
     // Figure out rest before we split so we can properly handle corner cases where matrix lines doesn't match process count cleanly
     arguments->N_global = (options->interlines * 8) + 9 - 1;
@@ -183,11 +181,8 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
     double*** Matrix = arguments->Matrix;
 
     // Get general MPI context info
-    int mpi_nproc;
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
-
-    int mpi_myrank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
+    const int mpi_nproc = arguments->mpi_nproc;
+    const int mpi_myrank = arguments->mpi_myrank;
 
     /* initialize matrix/matrices with zeros */
     for (g = 0; g < arguments->num_matrices; g++)
@@ -280,11 +275,8 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
     double residuum;                            /* residuum of current iteration                  */
     double maxresiduum;                         /* maximum residuum value of a slave in iteration */
 
-    int mpi_myrank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
-
-    int mpi_nproc;
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
+    const int mpi_nproc = arguments->mpi_nproc;
+    const int mpi_myrank = arguments->mpi_myrank;
 
     int const N = arguments->N;
     int const N_global = arguments->N_global;
@@ -386,15 +378,9 @@ static
 void
 displayStatistics (struct calculation_arguments const* arguments, struct calculation_results const* results, struct options const* options)
 {
-    int N = arguments->N;
-    int N_global = arguments->N_global;
-
-    // Get general MPI context info
-    int mpi_nproc;
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
-
-    int mpi_myrank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
+    const int N = arguments->N;
+    const int N_global = arguments->N_global;
+    const int mpi_nproc = arguments->mpi_nproc;
 
     double time = (comp_time.tv_sec - start_time.tv_sec) + (comp_time.tv_usec - start_time.tv_usec) * 1e-6;
     printf("Berechnungszeit:    %f s \n", time);
@@ -468,6 +454,53 @@ displayStatistics (struct calculation_arguments const* arguments, struct calcula
     printf("Norm des Fehlers:   %e\n", results->stat_precision);
 }
 
+__attribute__((cold))
+void
+printDebug(struct calculation_arguments const* arguments, struct calculation_results const* results) {
+    const int mpi_nproc = arguments->mpi_nproc;
+    const int mpi_myrank = arguments->mpi_myrank;
+    const int N = arguments->N;
+    const int N_global = arguments->N_global + 1;
+    const int BUF = 1000;
+    char* output = malloc(BUF * sizeof(char));
+    int length = 0;
+    char* recv_buf = malloc(BUF * sizeof(char) * mpi_nproc);
+
+    length += snprintf(output + length, BUF - length, "\nrank %d matrix:\n", mpi_myrank);
+    length += snprintf(output + length, BUF - length, "         ");
+
+    for (int j = 0; j < N_global; ++j)
+    {
+        length += snprintf(output + length, BUF - length, "%5s %d", "col", j);
+    }
+    length += snprintf(output + length, BUF - length, "\n          ");
+    for (int j = 0; j < N_global; ++j)
+    {
+        length += snprintf(output + length, BUF - length, "-------");
+    }
+    length += snprintf(output + length, BUF - length, "\n");
+    for (int i = 0; i < N + 1; ++i)
+    {
+        length += snprintf(output + length, BUF - length, "line %2d | ", i);
+        for (int j = 0; j < N_global; ++j)
+        {
+            length += snprintf(output + length, BUF - length, "%7.4f", arguments->Matrix[results->m][i][j]);
+        }
+        if (i == 0 || i == N)
+            length += snprintf(output + length, BUF - length, " <- comm line");
+        length += snprintf(output + length, BUF - length, "\n");
+    }
+
+    length += snprintf(output + length, BUF - length, "\n");
+    MPI_Gather(output, BUF, MPI_CHAR, recv_buf, BUF, MPI_CHAR, 0, MPI_COMM_WORLD);
+    for(int i = 0; i < mpi_nproc; ++i)
+        printf("%s", recv_buf + BUF * i);
+    fflush(stdout);
+
+    free(output);
+    free(recv_buf);
+}
+
 /* ************************************************************************ */
 /*  main                                                                    */
 /* ************************************************************************ */
@@ -476,16 +509,16 @@ main (int argc, char** argv)
 {
     MPI_Init(&argc, &argv);
 
-    // Get general MPI context info
-    int mpi_nproc;
-    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
-
-    int mpi_myrank;
-    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
-
     struct options options;
     struct calculation_arguments arguments;
     struct calculation_results results;
+
+    int mpi_nproc;
+    MPI_Comm_size(MPI_COMM_WORLD, &mpi_nproc);
+    int mpi_myrank;;
+    MPI_Comm_rank(MPI_COMM_WORLD, &mpi_myrank);
+    arguments.mpi_nproc = mpi_nproc;
+    arguments.mpi_myrank = mpi_myrank;
 
     /* get parameters */
     AskParams(&options, argc, argv);
@@ -495,54 +528,22 @@ main (int argc, char** argv)
     allocateMatrices(&arguments);        /*  get and initialize variables and matrices  */
     initMatrices(&arguments, &options);
 
-    gettimeofday(&start_time, NULL);                   /*  start timer         */
-    calculate(&arguments, &results, &options);                                      /*  solve the equation  */
-    MPI_Barrier(MPI_COMM_WORLD);
-    gettimeofday(&comp_time, NULL);                   /*  stop timer          */
+    gettimeofday(&start_time, NULL);                   /*  start timer                  */
+    calculate(&arguments, &results, &options);         /*  solve the equation           */
+    MPI_Barrier(MPI_COMM_WORLD);                       /*  wait for processes to finish */
+    gettimeofday(&comp_time, NULL);                    /*  stop timer                   */
     
-    if(options.interlines == 0) {
-        // BEGIN DEBUG PRINT
-        usleep(10000 * mpi_myrank);
-        const int N = arguments.N;
-        const int N_global = arguments.N_global + 1;
-        const int BUF = 1000;
-        char* output = malloc(BUF);
-        int length = 0;
-        length += snprintf(output + length, BUF - length, "\nrank %d matrix:\n", mpi_myrank);
-        length += snprintf(output + length, BUF - length, "         ");
-        for (int j = 0; j < N_global; ++j)
-        {
-            length += snprintf(output + length, BUF - length, "%5s %d", "col", j);
-        }
-        length += snprintf(output + length, BUF - length, "\n          ");
-        for (int j = 0; j < N_global; ++j)
-        {
-            length += snprintf(output + length, BUF - length, "-------");
-        }
-        length += snprintf(output + length, BUF - length, "\n");
-        for (int i = 0; i < N + 1; ++i)
-        {
-            length += snprintf(output + length, BUF - length, "line %2d | ", i);
-            for (int j = 0; j < N_global; ++j)
-            {
-                length += snprintf(output + length, BUF - length, "%7.4f", arguments.Matrix[results.m][i][j]);
-            }
-            if (i == 0 || i == N)
-                length += snprintf(output + length, BUF - length, " <- comm line");
-            length += snprintf(output + length, BUF - length, "\n");
-        }
-        length += snprintf(output + length, BUF - length, "\n");
-        printf("%s", output);
-        fflush(stdout);
-        MPI_Barrier(MPI_COMM_WORLD);
-        // END DEBUG PRINT
+    short DEBUG = 1;
+    if(DEBUG == 1 && options.interlines == 0) {
+        printDebug(&arguments, &results);
     }
-
-    if (mpi_myrank == 0)
-        displayStatistics(&arguments, &results, &options);
-    DisplayMatrix("Matrix:",                              /*  display some    */
-            arguments.Matrix[results.m][0], options.interlines,
-            mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N); /*  statistics and  */
+    else
+    {
+        if (mpi_myrank == 0)
+            displayStatistics(&arguments, &results, &options);
+            DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines, 
+                          mpi_myrank, mpi_nproc, arguments.starting_offset, arguments.starting_offset + arguments.N);
+    }
 
     freeMatrices(&arguments);                                       /*  free memory     */
 
