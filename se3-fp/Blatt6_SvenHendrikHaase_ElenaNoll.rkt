@@ -15,25 +15,25 @@
                (star 50 "solid" "yellow")))
 
 ;Erzeugt einen Schneemann.
-(define schneemann (above/align
-                    "center"
+(define schneemann (underlay/xy
                     ;Hut
-                    (rectangle 15 20 "solid" "black")
-                    (ellipse 40 3 "solid" "black")
-                    ;Kopf
-                    (underlay/xy
-                     (underlay/xy
-                      (underlay/xy (ellipse 40 40 "solid" "gray")
-                                   7 12
-                                   (ellipse 10 10 "solid" "black"))
-                      23 12
-                     (ellipse 10 10 "solid" "black"))
-                     10 25
-                     (triangle/ssa 32 52 7  "solid" "orange"))
-                    ;Körper
-                    (ellipse 80 70 "solid" "gray")
-                    (ellipse 110 100 "solid" "gray")))
+                    (above/align "center"
+                                 (rectangle 15 20 "solid" "black")
+                                 (ellipse 40 3 "solid" "black")
+                                 ;Kopf
+                                 (underlay/xy
+                                  (underlay/xy (ellipse 40 40 "solid" "gray")
+                                               7 12
+                                               (ellipse 10 10 "solid" "black"))
+                                  23 12
+                                  (ellipse 10 10 "solid" "black"))
+                                 ;Körper
+                                 (ellipse 80 70 "solid" "gray")
+                                 (ellipse 110 100 "solid" "gray"))
+                                 47 50
+                                 (triangle/ssa 32 52 7  "solid" "orange")))
 
+;Erzeugt ein Geschenk
 (define geschenk (above/align "center"
                                (beside
                                 (rotate 135 (ellipse 15 5 "outline" "gold"))
@@ -44,14 +44,37 @@
                                           (rectangle 3 35 "solid" "gold"))
                                 (rectangle 40 3 "solid" "gold"))))
 
+;Erzeugt einen Tannenbaum
+(define tannenbaum (above/align "center"
+                                (overlay/xy
+                                 (overlay/xy
+                                  (overlay/xy
+                                   (overlay/xy
+                                    (overlay/xy
+                                     (rectangle 1 1 "solid" "white")
+                                     40 2
+                                     (radial-star 6 6 30 "solid" "orange"))
+                                    30 30
+                                    (isosceles-triangle 60 70 "solid" "darkgreen"))
+                                   20 50
+                                   (isosceles-triangle 80 70 "solid" "darkgreen"))
+                                  10 70
+                                  (isosceles-triangle 100 70 "solid" "darkgreen"))
+                                 0 90
+                                 (isosceles-triangle 120 70 "solid" "darkgreen"))
+                                (rectangle 30 40 "solid" "brown")))
+
 ;Setzt das Gesamtbild zusammen.
 (define erzeuge-bild (underlay/xy
                       (underlay/xy
                        (underlay/xy
-                        bilderrahmen
-                        0 30
-                        schneemann)
-                       200 10
-                       stern)
-                      400 200
-                      geschenk))
+                        (underlay/xy
+                         bilderrahmen
+                         0 30
+                         schneemann)
+                        200 10
+                        stern)
+                       350 240
+                       geschenk)
+                      360 50
+                      tannenbaum))
