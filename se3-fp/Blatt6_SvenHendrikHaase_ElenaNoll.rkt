@@ -5,8 +5,16 @@
 ;Aufgabe 1
 
 ;Aufgabe 2
+
+;Erzeugt einen Bilderrahmen der als Grundlage für unser Bild dienen soll.
 (define bilderrahmen (empty-scene 500 300))
 
+;Erzeugt einen Stern.
+(define stern (underlay
+               (radial-star 8 8 50 "solid" "orange")
+               (star 50 "solid" "yellow")))
+
+;Erzeugt einen Schneemann.
 (define schneemann (above/align
                     "center"
                     ;Hut
@@ -26,7 +34,18 @@
                     (ellipse 80 70 "solid" "gray")
                     (ellipse 110 100 "solid" "gray")))
 
+(define geschenk (above/align "center"
+                               (beside
+                                (rotate 135 (ellipse 15 5 "outline" "gold"))
+                                (flip-horizontal
+                                 (rotate 135 (ellipse 15 5 "outline" "gold"))))
+                               (underlay
+                                (underlay (rectangle 40 35 "solid" "blue")
+                                          (rectangle 3 35 "solid" "gold"))
+                                (rectangle 40 3 "solid" "gold"))))
+
+;Setzt das Gesamtbild zusammen.
 (define erzeuge-bild (underlay/xy
-                      bilderrahmen
-                      0 0
-                      schneemann))
+                       bilderrahmen
+                       0 30
+                       schneemann))
