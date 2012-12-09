@@ -46,6 +46,12 @@
 
 ;Setzt das Gesamtbild zusammen.
 (define erzeuge-bild (underlay/xy
-                       bilderrahmen
-                       0 30
-                       schneemann))
+                      (underlay/xy
+                       (underlay/xy
+                        bilderrahmen
+                        0 30
+                        schneemann)
+                       200 10
+                       stern)
+                      400 200
+                      geschenk))
