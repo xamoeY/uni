@@ -64,6 +64,11 @@
                                  (isosceles-triangle 120 70 "solid" "darkgreen"))
                                 (rectangle 30 40 "solid" "brown")))
 
+;Erzeugt eine Kerze
+(define kerze (above/align "center"
+                           (rectangle 2 5 "solid" "black")
+                           (rectangle 10 15 "solid" "red")))
+
 ;Setzt das Gesamtbild zusammen.
 (define erzeuge-bild (underlay/xy
                       (underlay/xy
