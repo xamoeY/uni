@@ -4,6 +4,25 @@
 
 ;Aufgabe 1
 
+;            direkte Rekursion  indirekte Rekusion  geschachtelte Rekursion  lineare Rekursion  Baumrekurison
+; take               ja               nein                     nein                 ja                nein
+; drop               ja               nein                     nein                 ja                nein
+; merge              ja               nein                     nein                 nein              ja
+; merge-sort         ja               ja                       nein                 ja                ja
+
+; Erklaerung 
+; take: Direkt und nicht indirekt, da es sich direkt wieder selber aufruft. Nur linear, da in dem
+;       Argument fuer sich selbst kein weiterer Aufruf von sich selbst befindet (nicht (take (take ...))).
+;       Keine Baumrekursion, da es sich nur einmal selber aufruft.
+
+; drop: Selbe Erklaerung wie bei take.
+
+; merge: Direkt und nicht indirekt, da es sich direkt wieder selber aufruft. Hier liegt Baumrekursion vor,
+;        da hier zwei Aufrufe von sich selbst abgehen.
+
+; merge-sort: Diese Funktion ruft sowohl sich selbst direkt mittels Baumrekursion auf als auch zwei andere
+;             rekursive Funktionen (indirekt) jeweils ein Mal (linear).
+
 ;Aufgabe 2
 
 ;Erzeugt einen Bilderrahmen der als Grundlage für unser Bild dienen soll.
@@ -100,3 +119,5 @@
                        geschenk)
                       360 50
                       tannenbaum))
+
+(print erzeuge-bild)
