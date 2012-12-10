@@ -66,8 +66,25 @@
 
 ;Erzeugt eine Kerze
 (define kerze (above/align "center"
-                           (rectangle 2 5 "solid" "black")
-                           (rectangle 10 15 "solid" "red")))
+                           (underlay/xy
+                            (underlay/xy
+                             (ellipse 10 17 "solid" "yellow")
+                             2 1
+                             (ellipse 7 14 "solid" "orange"))
+                            4 4
+                            (ellipse 3 8 "solid" "red")) 
+                           (rectangle 2 7 "solid" "black")
+                           (rectangle 20 30 "solid" "red")))
+
+(define (geschenk-stapel ebenen)
+  (above/align "center"
+               geschenk
+               (if (= ebenen 0)
+                   kerze
+                   (beside/align "center"
+                                 (geschenk-stapel (- ebenen 1))
+                                 (geschenk-stapel (- ebenen 1))))))
+  
 
 ;Setzt das Gesamtbild zusammen.
 (define erzeuge-bild (underlay/xy
