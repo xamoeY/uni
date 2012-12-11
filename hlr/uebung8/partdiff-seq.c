@@ -340,9 +340,6 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
                 Matrix_Out[i][j] = star;
             }
         }
-
-        results->stat_iteration++;
-        results->stat_precision = maxresiduum;
         
 		// Communicate lines with each other into each other's extra allocated line
         if(mpi_myrank > 0){
@@ -365,6 +362,9 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
 		// Find lowest maxresiduum in whole process swarm
         MPI_Allreduce(MPI_IN_PLACE, &maxresiduum, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+
+        results->stat_iteration++;
+        results->stat_precision = maxresiduum;
 
         /* check for stopping calculation, depending on termination method */
         if (options->termination == TERM_PREC)
