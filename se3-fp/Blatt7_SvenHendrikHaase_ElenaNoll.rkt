@@ -98,16 +98,21 @@
 ;Aufgabe 2.4
 ;Idee: Die Rotphase muss sich verlängern, da eine Phase hinzukommt in der beide Richtungen "rot haben". Dies ist notwendig, damit 
 ;keine Unfälle passieren wenn es auf der Kreuzung zu einem kurzen Stau oder der gleichen kommt. 
+;Unsere Lösung ist, dass wir unsere 4 Phasen um eine 5. Phase erweitern die ebenfalls eine Rotphase ist.
 
 ;Zustandsdiagramm:
 ;Ampel 1: (S0: rot) ---> (S1: rot) ---> (S2: rot) ---> (S3: rot) ---> (S4: rot) ---> (S5: rot-geld) ---> (S6: grün) ---> (S7: gelb) ---> S0
 ;Ampel 2: (S0: rot) ---> (S1: rot-gelb) ---> (S2: grün) ---> (S3: gelb) ---> (S4: rot) ---> (S5: rot) ---> (S6: rot) ---> (S7: rot) ---> S0
 
+;Unsere neue Liste mit den 5 Zuständen.
 (define neue-Ampelzustände (list rote-Ampel rot-gelbe-Ampel grüne-Ampel gelbe-Ampel rote-Ampel))
 
+;Die neuen Listen mit den Zustandslängen für die beiden kreuzenden Ampeln.
+;Die Idee ist die beiden Rotphasen zu vertauschen. Unsere Idee funktioniert, siehe (animate zeige-Ampeln).
 (define neue-Zustandslänge-Ampel1 '(120 10 50 20 20))
 (define neue-Zustandslänge-Ampel2 '(20 10 50 20 120))
 
+;expandierte Zustandsliste usw. damit wir unsere Ampeln animiert testen können.
 (define expandierte-Zustandsliste-Ampel1 (expandiere neue-Ampelzustände neue-Zustandslänge-Ampel1))
 (define expandierte-Zustandsliste-Ampel2 (expandiere neue-Ampelzustände neue-Zustandslänge-Ampel2))
 
@@ -116,6 +121,8 @@
 (define bessere-expandierte-Zustandsliste-Ampel2
   (helper-bessere-expandierte-Zustandsliste(flatten expandierte-Zustandsliste-Ampel2)))
 
+;Erzeugt ein Bild mit den beiden Ampeln untereinander, mit (animate zeige-Ampeln) kann man sich davon
+;vergewissern, dass unsere Theorie funktioniert.
 (define (zeige-Ampeln t)
   (if (>= t (length bessere-expandierte-Zustandsliste-Ampel1))
       (zeige-Ampeln (- t (length bessere-expandierte-Zustandsliste-Ampel1)))
