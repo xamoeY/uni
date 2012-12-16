@@ -99,4 +99,26 @@
 ;Idee: Die Rotphase muss sich verlängern, da eine Phase hinzukommt in der beide Richtungen "rot haben". Dies ist notwendig, damit 
 ;keine Unfälle passieren wenn es auf der Kreuzung zu einem kurzen Stau oder der gleichen kommt. 
 
-             
+;Zustandsdiagramm:
+;Ampel 1: (S0: rot) ---> (S1: rot) ---> (S2: rot) ---> (S3: rot) ---> (S4: rot) ---> (S5: rot-geld) ---> (S6: grün) ---> (S7: gelb) ---> S0
+;Ampel 2: (S0: rot) ---> (S1: rot-gelb) ---> (S2: grün) ---> (S3: gelb) ---> (S4: rot) ---> (S5: rot) ---> (S6: rot) ---> (S7: rot) ---> S0
+
+(define neue-Ampelzustände (list rote-Ampel rot-gelbe-Ampel grüne-Ampel gelbe-Ampel rote-Ampel))
+
+(define neue-Zustandslänge-Ampel1 '(120 10 50 20 20))
+(define neue-Zustandslänge-Ampel2 '(20 10 50 20 120))
+
+(define expandierte-Zustandsliste-Ampel1 (expandiere neue-Ampelzustände neue-Zustandslänge-Ampel1))
+(define expandierte-Zustandsliste-Ampel2 (expandiere neue-Ampelzustände neue-Zustandslänge-Ampel2))
+
+(define bessere-expandierte-Zustandsliste-Ampel1
+  (helper-bessere-expandierte-Zustandsliste(flatten expandierte-Zustandsliste-Ampel1)))
+(define bessere-expandierte-Zustandsliste-Ampel2
+  (helper-bessere-expandierte-Zustandsliste(flatten expandierte-Zustandsliste-Ampel2)))
+
+(define (zeige-Ampeln t)
+  (if (>= t (length bessere-expandierte-Zustandsliste-Ampel1))
+      (zeige-Ampeln (- t (length bessere-expandierte-Zustandsliste-Ampel1)))
+      (above/align "center"
+       (Ampel (list-ref bessere-expandierte-Zustandsliste-Ampel1 t))
+       (Ampel (list-ref bessere-expandierte-Zustandsliste-Ampel2 t)))))
