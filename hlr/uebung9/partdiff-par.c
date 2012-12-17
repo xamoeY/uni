@@ -274,11 +274,11 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 				if (options->inf_func == FUNC_FPISIN)
 				{
 					star += (0.25 * TWO_PI_SQUARE * h * h) * 
-						sin((PI * h) * (double)(i+arguments->offset) * 
-						sin((PI * h) * (double)j));
+						sin((PI * h) * ((double)i + arguments->offset)) *
+						sin((PI * h) * (double)j);
 				}
-
-				if (options->termination == TERM_PREC || term_iteration == 1)
+				
+                if (options->termination == TERM_PREC || term_iteration == 1)
 				{
 					residuum = Matrix_In[i][j] - star;
 					residuum = (residuum < 0) ? -residuum : residuum;
