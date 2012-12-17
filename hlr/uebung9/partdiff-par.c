@@ -223,12 +223,14 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
     double star;                                /* four times center value minus 4 neigh.b values */
     double residuum;                            /* residuum of current iteration                  */
     double maxresiduum;                         /* maximum residuum value of a slave in iteration */
-    double maxresiduumbuf;                         /* holds the preceeding maxresiduum               */
+    double maxresiduumbuf;                      /* holds the preceeding maxresiduum               */
     int termflag;                               /* once the last rank is accurate enough to 
                                                    terminate by precision, it communicates
                                                    this information using this flag to the
                                                    next process above it.                           */
-    int termflag2;
+    int termflag2;                              /* this flag is set and sent down starting from
+                                                   rank 0 once rank 0 receives termflag = 1 from a
+                                                   process beneath it                               */
 
     int const N = arguments->N;
     int const N_global = arguments->N_global;
@@ -261,21 +263,25 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         maxresiduumbuf = 0;
         
         if(rank > 0){
-            // receive
+            // receive communication line from above
             MPI_Recv(Matrix_Out[0], N_global + 1, MPI_DOUBLE, rank - 1,
                     rank - 1 + results->stat_iteration, MPI_COMM_WORLD, NULL);
+
             // receive preceeding maxresiduum
             MPI_Recv(&maxresiduumbuf, 1, MPI_DOUBLE, rank - 1, rank - 1, MPI_COMM_WORLD, NULL);
+
+            // receive final termination flag from above
             MPI_Recv(&termflag2, 1, MPI_DOUBLE, rank - 1, rank - 1, MPI_COMM_WORLD, NULL); 
             }
 
         // in the initial run the first process must not receive values
         if(results->stat_iteration > 0) 
             if(rank != nproc - 1){
-                // reveive
+                // reveive communication line from below
                 MPI_Recv(Matrix_Out[N], N_global + 1, MPI_DOUBLE, rank + 1, 
                         rank + 1 + results->stat_iteration - 1, MPI_COMM_WORLD, NULL);
-                // receive termflag from preceeding rank
+
+                // receive preliminary termflag from preceeding rank
                 MPI_Recv(&termflag, 1, MPI_INT, rank + 1, rank + 1, MPI_COMM_WORLD, NULL);
             }
 
@@ -312,18 +318,23 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         // in the last iteration the values must not get sent upwards, this lets the pipeline run out
         if(term_iteration > 1)
         if(rank > 0){
-            // send upwards
+            // send communication line upwards
             MPI_Send(Matrix_Out[1], N_global + 1, MPI_DOUBLE, rank - 1,
                     rank + results->stat_iteration, MPI_COMM_WORLD);
+
+            // send prelimary termination flag upwards
             MPI_Send(&termflag, 1, MPI_INT, rank - 1, rank, MPI_COMM_WORLD);
         }
 
         if(rank != nproc - 1){
-            // send downwards
+            // send communication line downwards
             MPI_Send(Matrix_Out[N - 1], N_global + 1, MPI_DOUBLE, rank + 1, 
                     rank + results->stat_iteration, MPI_COMM_WORLD);
+
             // send maxresiduum down the procs
             MPI_Send(&maxresiduum, 1, MPI_DOUBLE, rank + 1, rank, MPI_COMM_WORLD);
+
+            // send final termflag downwards
             MPI_Send(&termflag2, 1, MPI_DOUBLE, rank + 1, rank, MPI_COMM_WORLD);
         }
 
