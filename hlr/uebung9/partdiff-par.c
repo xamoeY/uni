@@ -228,6 +228,7 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
                                                    terminate by precision, it communicates
                                                    this information using this flag to the
                                                    next process above it.                           */
+    int termflag2;
 
     int const N = arguments->N;
     int const N_global = arguments->N_global;
@@ -237,7 +238,8 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
     int term_iteration = options->term_iteration;
     termflag = 0;
-
+    termflag2 = 0;
+    
     /* initialize m1 and m2 depending on algorithm */
     if (options->method == METH_JACOBI)
     {
@@ -257,13 +259,14 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
         maxresiduum = 0;
         maxresiduumbuf = 0;
-
+        
         if(rank > 0){
-            // receive 
+            // receive
             MPI_Recv(Matrix_Out[0], N_global + 1, MPI_DOUBLE, rank - 1,
                     rank - 1 + results->stat_iteration, MPI_COMM_WORLD, NULL);
             // receive preceeding maxresiduum
             MPI_Recv(&maxresiduumbuf, 1, MPI_DOUBLE, rank - 1, rank - 1, MPI_COMM_WORLD, NULL);
+            MPI_Recv(&termflag2, 1, MPI_DOUBLE, rank - 1, rank - 1, MPI_COMM_WORLD, NULL); 
             }
 
         // in the initial run the first process must not receive values
@@ -274,7 +277,6 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
                         rank + 1 + results->stat_iteration - 1, MPI_COMM_WORLD, NULL);
                 MPI_Recv(&termflag, 1, MPI_INT, rank + 1, rank + 1, MPI_COMM_WORLD, NULL);
 
-                //printf("rank %d, flag %d\n", rank, termflag);
             }
 
         /* over all rows */
@@ -309,13 +311,12 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
         // in the last iteration the values must not get sent upwards, this lets the pipeline run out
         if(term_iteration > 1)
-            if(rank > 0){
-                // send upwards
-                MPI_Send(Matrix_Out[1], N_global + 1, MPI_DOUBLE, rank - 1,
-                        rank + results->stat_iteration, MPI_COMM_WORLD);
-                MPI_Send(&termflag, 1, MPI_INT, rank - 1, rank, MPI_COMM_WORLD);
-                if(termflag == -1) printf("%d\n", term_iteration);
-            }
+        if(rank > 0){
+            // send upwards
+            MPI_Send(Matrix_Out[1], N_global + 1, MPI_DOUBLE, rank - 1,
+                    rank + results->stat_iteration, MPI_COMM_WORLD);
+            MPI_Send(&termflag, 1, MPI_INT, rank - 1, rank, MPI_COMM_WORLD);
+        }
 
         if(rank != nproc - 1){
             // send downwards
@@ -323,16 +324,8 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
                     rank + results->stat_iteration, MPI_COMM_WORLD);
             // send maxresiduum down the procs
             MPI_Send(&maxresiduum, 1, MPI_DOUBLE, rank + 1, rank, MPI_COMM_WORLD);
+            MPI_Send(&termflag2, 1, MPI_DOUBLE, rank + 1, rank, MPI_COMM_WORLD);
         }
-
-        //if(rank != nproc - 0)
-        //  MPI_Sendrecv(Matrix_Out[N - 1], N_global + 1, MPI_DOUBLE, rank + 1, rank + results->stat_iteration,
-        //           Matrix_Out[N],     N_global + 1, MPI_DOUBLE, rank + 1, rank + 1 + results->stat_iteration - 1,
-        //           MPI_COMM_WORLD, NULL);
-        //if(rank > 0)
-        //  MPI_Sendrecv(Matrix_Out[1], N_global + 1, MPI_DOUBLE, rank - 1, rank + results->stat_iteration,
-        //           Matrix_Out[0], N_global + 1, MPI_DOUBLE, rank - 1, rank - 1 + results->stat_iteration + 1,
-        //           MPI_COMM_WORLD, NULL);
 
         /* exchange m1 and m2 */
         i = m1;
@@ -342,13 +335,14 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         results->stat_iteration++;
         results->stat_precision = maxresiduum;
 
-        if(termflag == 1) {
-            term_iteration = rank * 2;
-            options->termination = TERM_ITER;
-            termflag = -1;
-        if(options->termination == TERM_ITER)
-            printf("rank: %d, current iteration %d, iterations left %d, iteration_type %s \n", rank, results->stat_iteration, term_iteration, options->termination == TERM_ITER ? "TERM_ITER" : "TERM_PREC");
-        }
+        if(termflag2 == 1)
+            term_iteration = 0;
+
+        if(rank == 0)
+            if(termflag == 1)
+            {
+                termflag2 = 1;
+            }
 
         /* check for stopping calculation, depending on termination method */
         if (options->termination == TERM_PREC){
@@ -523,11 +517,13 @@ main (int argc, char** argv)
 
     gettimeofday(&start_time, NULL);                  /*  start timer         */
     calculate(&arguments, &results, &options);        /*  solve the equation  */
+    printf("rank %d beendet\n", arguments.rank);
     MPI_Barrier(MPI_COMM_WORLD);
     gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
     printDebug(&arguments, &results); // pretty-print matrix if we are debugging
-    displayStatistics(&arguments, &results, &options);
+    if(arguments.rank == 0)
+        displayStatistics(&arguments, &results, &options);
     DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines,
             arguments.rank, arguments.nproc, arguments.offset + ((arguments.rank > 0) ? 1 : 0), (arguments.offset + arguments.N));
 
