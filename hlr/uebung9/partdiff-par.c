@@ -7,7 +7,7 @@
 /**            Andreas C. Schmidt                                          **/
 /**            JK und andere  besseres Timing, FLOP Berechnung             **/
 /**                                                                        **/
-/** File:      partdiff-seq.c                                              **/
+/** File:      partdiff-par.c                                              **/
 /**                                                                        **/
 /** Purpose:   Partial differential equation solver for Gauss-Seidel and   **/
 /**            Jacobi method.                                              **/
@@ -23,7 +23,7 @@
 #include <math.h>
 #include <malloc.h>
 #include <sys/time.h>
-#include "partdiff-seq.h"
+#include "partdiff-par.h"
 #include <mpi.h>
 
 struct calculation_arguments
@@ -274,8 +274,8 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 				if (options->inf_func == FUNC_FPISIN)
 				{
 					star += (0.25 * TWO_PI_SQUARE * h * h) * 
-						sin((PI * h) * (double)i) * 
-						sin((PI * h) * (double)j);
+						sin((PI * h) * (double)(i+arguments->offset) * 
+						sin((PI * h) * (double)j));
 				}
 
 				if (options->termination == TERM_PREC || term_iteration == 1)
@@ -486,7 +486,7 @@ main (int argc, char** argv)
 	calculate(&arguments, &results, &options);                                      /*  solve the equation  */
 	gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
-	//printDebug(&arguments, &results); // pretty-print matrix if we are debugging
+	printDebug(&arguments, &results); // pretty-print matrix if we are debugging
 	//DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines, 
 	//              arguments.rank, arguments.nproc, arguments.offset, arguments.offset + arguments.N - 1);
 
