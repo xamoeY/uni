@@ -275,8 +275,8 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
                 // reveive
                 MPI_Recv(Matrix_Out[N], N_global + 1, MPI_DOUBLE, rank + 1, 
                         rank + 1 + results->stat_iteration - 1, MPI_COMM_WORLD, NULL);
+                // receive termflag from preceeding rank
                 MPI_Recv(&termflag, 1, MPI_INT, rank + 1, rank + 1, MPI_COMM_WORLD, NULL);
-
             }
 
         /* over all rows */
@@ -357,7 +357,6 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         {
             term_iteration--;
         }
-
     }
 
     results->m = m2;
@@ -517,11 +516,10 @@ main (int argc, char** argv)
 
     gettimeofday(&start_time, NULL);                  /*  start timer         */
     calculate(&arguments, &results, &options);        /*  solve the equation  */
-    printf("rank %d beendet\n", arguments.rank);
     MPI_Barrier(MPI_COMM_WORLD);
     gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
-    printDebug(&arguments, &results); // pretty-print matrix if we are debugging
+   // printDebug(&arguments, &results); // pretty-print matrix if we are debugging
     if(arguments.rank == 0)
         displayStatistics(&arguments, &results, &options);
     DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines,
