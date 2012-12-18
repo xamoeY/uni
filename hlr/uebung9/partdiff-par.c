@@ -262,7 +262,8 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
         maxresiduum = 0;
         maxresiduumbuf = 0;
         
-        if(rank > 0){
+        if(rank > 0)
+        {
             // receive communication line from above
             MPI_Recv(Matrix_Out[0], N_global + 1, MPI_DOUBLE, rank - 1,
                     rank - 1 + results->stat_iteration, MPI_COMM_WORLD, NULL);
@@ -272,18 +273,21 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
             // receive final termination flag from above
             MPI_Recv(&termflag2, 1, MPI_DOUBLE, rank - 1, rank - 1, MPI_COMM_WORLD, NULL); 
-            }
+        }
 
         // in the initial run the first process must not receive values
-        if(results->stat_iteration > 0) 
-            if(rank != nproc - 1){
+        if(results->stat_iteration > 0)
+        {
+            if(rank != nproc - 1)
+            {
                 // reveive communication line from below
                 MPI_Recv(Matrix_Out[N], N_global + 1, MPI_DOUBLE, rank + 1, 
                         rank + 1 + results->stat_iteration - 1, MPI_COMM_WORLD, NULL);
 
                 // receive preliminary termflag from preceeding rank
                 MPI_Recv(&termflag, 1, MPI_INT, rank + 1, rank + 1, MPI_COMM_WORLD, NULL);
-            }
+            } 
+        }
 
         /* over all rows */
         for (i = 1; i < N; i++)
@@ -317,16 +321,20 @@ calculate (struct calculation_arguments const* arguments, struct calculation_res
 
         // in the last iteration the values must not get sent upwards, this lets the pipeline run out
         if(term_iteration > 1)
-        if(rank > 0){
-            // send communication line upwards
-            MPI_Send(Matrix_Out[1], N_global + 1, MPI_DOUBLE, rank - 1,
-                    rank + results->stat_iteration, MPI_COMM_WORLD);
+        {
+            if(rank > 0)
+            {
+                // send communication line upwards
+                MPI_Send(Matrix_Out[1], N_global + 1, MPI_DOUBLE, rank - 1,
+                        rank + results->stat_iteration, MPI_COMM_WORLD);
 
-            // send prelimary termination flag upwards
-            MPI_Send(&termflag, 1, MPI_INT, rank - 1, rank, MPI_COMM_WORLD);
+                // send prelimary termination flag upwards
+                MPI_Send(&termflag, 1, MPI_INT, rank - 1, rank, MPI_COMM_WORLD);
+            }
         }
 
-        if(rank != nproc - 1){
+        if(rank != nproc - 1)
+        {
             // send communication line downwards
             MPI_Send(Matrix_Out[N - 1], N_global + 1, MPI_DOUBLE, rank + 1, 
                     rank + results->stat_iteration, MPI_COMM_WORLD);
@@ -530,11 +538,18 @@ main (int argc, char** argv)
     MPI_Barrier(MPI_COMM_WORLD);
     gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
-   // printDebug(&arguments, &results); // pretty-print matrix if we are debugging
+    // communicate final maxresiduum from last rank to rank 0
+    if(arguments.rank == 0)
+        MPI_Recv(&results.stat_precision, 1, MPI_DOUBLE, arguments.nproc - 1, 1, MPI_COMM_WORLD, NULL);
+
+    if(arguments.rank == arguments.nproc - 1)
+        MPI_Send(&results.stat_precision, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
+
+    //printDebug(&arguments, &results); // pretty-print matrix if we are debugging
     if(arguments.rank == 0)
         displayStatistics(&arguments, &results, &options);
-    DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines,
-            arguments.rank, arguments.nproc, arguments.offset + ((arguments.rank > 0) ? 1 : 0), (arguments.offset + arguments.N - ((arguments.rank != arguments.nproc - 1) ? 1 : 0)));
+        DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines,
+                      arguments.rank, arguments.nproc, arguments.offset + ((arguments.rank > 0) ? 1 : 0), (arguments.offset + arguments.N - ((arguments.rank != arguments.nproc - 1) ? 1 : 0)));
 
     freeMatrices(&arguments);                                       /*  free memory     */
 
