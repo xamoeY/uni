@@ -212,11 +212,124 @@ initMatrices (struct calculation_arguments* arguments, struct options const* opt
 }
 
 /* ************************************************************************ */
-/* calculate: solves the equation                                           */
+/* calculate: solves the equation using Jacobi                              */
 /* ************************************************************************ */
 static
 void
-calculate (struct calculation_arguments const* arguments, struct calculation_results *results, struct options* options)
+calculate_jacobi (struct calculation_arguments const* arguments, struct calculation_results *results, struct options const* options)
+{
+    int i, j;                                   /* local variables for loops  */
+    int m1, m2;                                 /* used as indices for old and new matrices       */
+    double star;                                /* four times center value minus 4 neigh.b values */
+    double residuum;                            /* residuum of current iteration                  */
+    double maxresiduum;                         /* maximum residuum value of a slave in iteration */
+
+    const int nproc = arguments->nproc;
+    const int rank = arguments->rank;
+
+    int const N = arguments->N;
+    int const N_global = arguments->N_global;
+    double const h = arguments->h;
+
+    int term_iteration = options->term_iteration;
+
+    /* initialize m1 and m2 depending on algorithm */
+    if (options->method == METH_JACOBI)
+    {
+        m1 = 0;
+        m2 = 1;
+    }
+    else
+    {
+        m1 = 0;
+        m2 = 0;
+    }
+
+    while (term_iteration > 0)
+    {
+        double** Matrix_Out = arguments->Matrix[m1];
+        double** Matrix_In  = arguments->Matrix[m2];
+
+        maxresiduum = 0;
+
+        /* over all rows */
+        for (i = 1; i < N; i++)
+        {
+            /* over all columns */
+            for (j = 1; j < N_global; j++)
+            {
+                star = 0.25 * (Matrix_In[i-1][j] + 
+                        Matrix_In[i][j-1] + 
+                        Matrix_In[i][j+1] + 
+                        Matrix_In[i+1][j]);
+
+                if (options->inf_func == FUNC_FPISIN)
+                {
+                    star += (0.25 * TWO_PI_SQUARE * h * h) * 
+                        sin((PI * h) * ((double)i + arguments->offset)) * 
+                        sin((PI * h) * (double)j);
+                }
+
+                if (options->termination == TERM_PREC || term_iteration == 1)
+                {
+                    residuum = Matrix_In[i][j] - star;
+                    residuum = (residuum < 0) ? -residuum : residuum;
+                    maxresiduum = (residuum < maxresiduum) ? maxresiduum : residuum;
+                }
+
+                Matrix_Out[i][j] = star;
+            }
+        }
+        
+		// Communicate lines with each other into each other's extra allocated line
+        if(rank > 0){
+            MPI_Sendrecv(Matrix_Out[1], N_global, MPI_DOUBLE, rank - 1, rank ,
+                         Matrix_Out[0], N_global, MPI_DOUBLE, rank - 1, rank - 1,
+                         MPI_COMM_WORLD, NULL);
+        }
+
+		// Last rank can't communicate with higher ranks because there aren't any
+        if(rank != nproc - 1) {
+            MPI_Sendrecv(Matrix_Out[N - 1], N_global, MPI_DOUBLE, rank + 1, rank,
+                     Matrix_Out[N], N_global, MPI_DOUBLE, rank + 1, rank + 1,
+                     MPI_COMM_WORLD, NULL);
+        }
+
+        /* exchange m1 and m2 */
+        i = m1;
+        m1 = m2;
+        m2 = i;
+
+		// Find lowest maxresiduum in whole process swarm
+        MPI_Allreduce(MPI_IN_PLACE, &maxresiduum, 1, MPI_DOUBLE, MPI_MAX, MPI_COMM_WORLD);
+
+        results->stat_iteration++;
+        results->stat_precision = maxresiduum;
+
+        /* check for stopping calculation, depending on termination method */
+        if (options->termination == TERM_PREC)
+        {
+            if (maxresiduum < options->term_precision)
+            {
+                term_iteration = 0;
+            }
+        }
+        else if (options->termination == TERM_ITER)
+        {
+            term_iteration--;
+        }
+    }
+
+    results->m = m2;
+}
+
+
+/* ************************************************************************ */
+/* calculate: solves the equation using Gauss-Seidel                        */
+/* ************************************************************************ */
+static
+void
+calculate_gaussseidel (struct calculation_arguments const* arguments, struct calculation_results *results, struct options* options)
 {
     int i, j;                                   /* local variables for loops  */
     int m1, m2;                                 /* used as indices for old and new matrices       */
@@ -469,16 +582,16 @@ displayStatistics (struct calculation_arguments const* arguments, struct calcula
 __attribute__((cold))
     void
     printDebug(struct calculation_arguments const* arguments, struct calculation_results const* results) {
-        const int mpi_nproc = arguments->nproc;
-        const int mpi_myrank = arguments->rank;
+        const int nproc = arguments->nproc;
+        const int rank = arguments->rank;
         const int N = arguments->N;
         const int N_global = arguments->N_global;
         const int BUF = 1000;
         char* output = malloc(BUF * sizeof(char));
         int length = 0;
-        char* recv_buf = malloc(BUF * sizeof(char) * mpi_nproc);
+        char* recv_buf = malloc(BUF * sizeof(char) * nproc);
 
-        length += snprintf(output + length, BUF - length, "\nrank %d matrix:\n", mpi_myrank);
+        length += snprintf(output + length, BUF - length, "\nrank %d matrix:\n", rank);
         length += snprintf(output + length, BUF - length, "         ");
 
         for (int j = 0; j < N_global; ++j)
@@ -505,7 +618,7 @@ __attribute__((cold))
 
         length += snprintf(output + length, BUF - length, "\n");
         MPI_Gather(output, BUF, MPI_CHAR, recv_buf, BUF, MPI_CHAR, 0, MPI_COMM_WORLD);
-        for(int i = 0; i < mpi_nproc; ++i)
+        for(int i = 0; i < nproc; ++i)
             printf("%s", recv_buf + BUF * i);
         fflush(stdout);
 
@@ -534,7 +647,11 @@ main (int argc, char** argv)
     initMatrices(&arguments, &options);
 
     gettimeofday(&start_time, NULL);                  /*  start timer         */
-    calculate(&arguments, &results, &options);        /*  solve the equation  */
+    if (options.method == METH_JACOBI)
+        calculate_jacobi(&arguments, &results, &options);        /*  solve the equation using Jaocbi  */
+    else
+        calculate_gaussseidel(&arguments, &results, &options);   /*  solve the equation using Gauss-Seidel  */
+
     MPI_Barrier(MPI_COMM_WORLD);
     gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
