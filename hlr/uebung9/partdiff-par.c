@@ -534,7 +534,7 @@ main (int argc, char** argv)
     if(arguments.rank == 0)
         displayStatistics(&arguments, &results, &options);
     DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines,
-            arguments.rank, arguments.nproc, arguments.offset + ((arguments.rank > 0) ? 1 : 0), (arguments.offset + arguments.N));
+            arguments.rank, arguments.nproc, arguments.offset + ((arguments.rank > 0) ? 1 : 0), (arguments.offset + arguments.N - ((arguments.rank != arguments.nproc - 1) ? 1 : 0)));
 
     freeMatrices(&arguments);                                       /*  free memory     */
 
