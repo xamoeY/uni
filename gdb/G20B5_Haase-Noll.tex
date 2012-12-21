@@ -1,0 +1,143 @@
+\documentclass[a4paper,12pt,]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+
+% \usepackage{sans}
+
+\usepackage{tikz}
+% \usepackage{geometry}
+% \usepackage{lscape}
+\usepackage{graphicx}
+\usepackage{setspace}
+
+  
+\usepackage{pdfpages}
+
+\ihead{GDB G20\_B5}
+\chead{}
+\ohead{Elena Noll, Sven-Hendrik Haase}
+\pagestyle{scrheadings}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\section*{Aufgabe 1}
+\subsection*{a)}
+
+\subsubsection*{i)}
+\begin{verbatim}
+CREATE VIEW LetzteVerhandlung AS 
+SELECT RID AS Richter,
+(SELECT VID FROM Verhandlung WHERE RID = Vorsitz ORDER BY VID DESC LIMIT 1)
+AS letzte_verhandlung FROM Richter GROUP BY RID;
+\end{verbatim}
+
+\subsubsection*{ii)}
+\begin{verbatim}
+CREATE VIEW Minderjaehrige AS 
+SELECT Nachname, Alter
+FROM Person
+WHERE Alter < 18;
+\end{verbatim}
+
+\subsubsection*{iii)}
+\begin{verbatim}
+CREATE VIEW Prozessinformationen AS 
+SELECT *
+FROM Prozess pr, Person p, Straftat s
+WHERE pr.Angeklagter = p.PID
+AND pr.Anklage = s.SID;
+\end{verbatim}
+
+\subsection*{b)}
+\subsubsection*{i)}
+Geht. Alle Bedingungen erfüllt.
+
+\subsubsection*{ii)}
+Geht. Sicherheitsstufe-Bedingung wird verletzt, aber es wird nicht kontrolliert.
+
+\subsubsection*{iii)}
+Geht nicht. Sicherheitsstufe-Bedingung wird verletzt und es wird kontrolliert.
+
+\subsubsection*{iv)}
+Geht nicht. Datum-Bedingung wird verletzt und es wird kontrolliert.
+
+\subsubsection*{v)}
+Geht. Saal-Bedingung wird verletzt, aber es wird nicht kontrolliert.
+
+\subsubsection*{vi)}
+Geht. Sicherheitsstufe-Bedingung wird verletzt, aber es wird nicht kontrolliert.
+
+\section*{Aufgabe 2}
+\subsection*{a)}
+Ein Schema, welches bezüglich der referentiellen Aktionen sicher ist,
+stellt sich, dass die referentielle Integrität bei Änderungsoperationen
+nicht gefährdet wird.
+
+\subsection*{b)}
+Es kann sein, dass eine Person gelöscht wird, die aber Leiter der Videothek ist. Hiergegen ist das Schema momentan nicht geschützt.
+
+\section*{Aufgabe 3}
+\subsection*{S1}
+\subsection*{a)}
+A = 115 \\
+B = 5
+\subsection*{b)}
+A wird von \(T_2\) gelesen und geschrieben, aber \(T_1\) überschreibt A, ohne den neuen Wert von \(T_2\) zu respektieren.
+\subsection*{c)}
+Nicht serialisierbar, denn Änderungen gehen verloren.
+
+\subsection*{S2}
+\subsection*{a)}
+A = 300 \\
+B = 5
+\subsection*{b)}
+keine Abhängigkeiten
+\subsection*{c)}
+Seriell, denn \(T_1\) wird komplett vor \(T_2\) ausgeführt.
+
+\subsection*{S3}
+\subsection*{a)}
+A = 300 \\
+B = 5
+\subsection*{b)}
+\(T_1\) vor \(T_2\). 
+\subsection*{c)}
+Serialisierbar, denn die Änderungen der Transaktionen werden untereinander berücksichtigt.
+
+\subsection*{S4}
+\subsection*{a)}
+A = 195 \\
+B = 5
+\subsection*{b)}
+\(T_1\) schreibt A nachdem \(T_2\) A gelesen hat. \(T_2\) schreibt A danach, ohne die Änderungen von \(T_1\) zu berücksichtigen.
+\subsection*{c)}
+Nicht serialisierbar, denn Änderungen gehen verloren.
+
+\subsection*{S5}
+\subsection*{a)}
+A = 305 \\
+B = 195
+\subsection*{b)}
+\(T_2\) vor \(T_1\). 
+\subsection*{c)}
+Seriell, denn \(T_2\) wird vollkommen vor \(T_1\) ausgeführt. 
+
+\subsection*{S6}
+\subsection*{a)}
+A = 195 \\
+B = 5
+\subsection*{b)}
+B wird von \(T_1\) neu geschrieben, aber zuvor wird es von \(T_2\) gelesen, sodass die Änderungen nicht beachtet überschrieben werden.
+\subsection*{c)}
+Nicht serialisierbar, denn \(T_2\) überschreibt die Änderungen von \(T_1\) vollständig.
+
+
+\end{document}
