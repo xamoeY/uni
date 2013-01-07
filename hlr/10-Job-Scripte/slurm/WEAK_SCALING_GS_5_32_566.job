@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#SBATCH --time=01:00:00
+#SBATCH -N 5 --tasks-per-node=7
+#SBATCH --error=WEAK_SCALING_GS_5_32_566.err --output=WEAK_SCALING_GS_5_32_566.out
+
+mpiexec -n 32 ./partdiff-par 1 1 566 1 2 5000
+mpiexec -n 32 ./partdiff-par 1 1 566 1 2 5000
+mpiexec -n 32 ./partdiff-par 1 1 566 1 2 5000
