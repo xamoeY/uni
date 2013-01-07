@@ -655,12 +655,16 @@ main (int argc, char** argv)
     MPI_Barrier(MPI_COMM_WORLD);
     gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
-    // communicate final maxresiduum from last rank to rank 0
-    if(arguments.rank == 0)
-        MPI_Recv(&results.stat_precision, 1, MPI_DOUBLE, arguments.nproc - 1, 1, MPI_COMM_WORLD, NULL);
+    // only attempt communication if we have more than 1 procss
+    if(arguments.nproc > 1)
+    {
+        // communicate final maxresiduum from last rank to rank 0
+        if(arguments.rank == 0)
+            MPI_Recv(&results.stat_precision, 1, MPI_DOUBLE, arguments.nproc - 1, 1, MPI_COMM_WORLD, NULL);
 
-    if(arguments.rank == arguments.nproc - 1)
-        MPI_Send(&results.stat_precision, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
+        if(arguments.rank == arguments.nproc - 1)
+            MPI_Send(&results.stat_precision, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
+    }
 
     //printDebug(&arguments, &results); // pretty-print matrix if we are debugging
     if(arguments.rank == 0)
