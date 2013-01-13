@@ -374,7 +374,7 @@ calculate_gaussseidel (struct calculation_arguments const* arguments, struct cal
 
         maxresiduum = 0;
         maxresiduumbuf = 0;
-        
+
         if(rank > 0)
         {
             // receive communication line from above
@@ -387,7 +387,7 @@ calculate_gaussseidel (struct calculation_arguments const* arguments, struct cal
             // receive final termination flag from above
             MPI_Recv(&termflag2, 1, MPI_DOUBLE, rank - 1, rank - 1, MPI_COMM_WORLD, NULL); 
         }
-
+        
         // in the initial run the first process must not receive values
         if(results->stat_iteration > 0)
         {
@@ -433,7 +433,7 @@ calculate_gaussseidel (struct calculation_arguments const* arguments, struct cal
         }
 
         // in the last iteration the values must not get sent upwards, this lets the pipeline run out
-        if(term_iteration > 1)
+        if(term_iteration > 1 && termflag2 != 1)
         {
             if(rank > 0)
             {
@@ -470,6 +470,8 @@ calculate_gaussseidel (struct calculation_arguments const* arguments, struct cal
         if(termflag2 == 1)
             term_iteration = 0;
 
+        // if we receive the termflag at the top of our process stack (rank 0), set termflag2 to 1
+        // so the stack terminates
         if(rank == 0)
             if(termflag == 1)
             {
@@ -477,9 +479,10 @@ calculate_gaussseidel (struct calculation_arguments const* arguments, struct cal
             }
 
         /* check for stopping calculation, depending on termination method */
-        if (options->termination == TERM_PREC){
+        if (options->termination == TERM_PREC)
+        {
             if (rank == nproc - 1) {
-                if (maxresiduum < options->term_precision && termflag != -1)
+                if (maxresiduum < options->term_precision && termflag != 1)
                 {
                     termflag = 1;
                 }
@@ -489,6 +492,7 @@ calculate_gaussseidel (struct calculation_arguments const* arguments, struct cal
         {
             term_iteration--;
         }
+
     }
 
     results->m = m2;
@@ -655,18 +659,24 @@ main (int argc, char** argv)
     MPI_Barrier(MPI_COMM_WORLD);
     gettimeofday(&comp_time, NULL);                   /*  stop timer          */
 
-    // communicate final maxresiduum from last rank to rank 0
-    if(arguments.rank == 0)
-        MPI_Recv(&results.stat_precision, 1, MPI_DOUBLE, arguments.nproc - 1, 1, MPI_COMM_WORLD, NULL);
+    // only attempt communication if we have more than 1 procss
+    if(arguments.nproc > 1)
+    {
+        // communicate final maxresiduum from last rank to rank 0
+        if(arguments.rank == 0)
+            MPI_Recv(&results.stat_precision, 1, MPI_DOUBLE, arguments.nproc - 1, 1, MPI_COMM_WORLD, NULL);
 
-    if(arguments.rank == arguments.nproc - 1)
-        MPI_Send(&results.stat_precision, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
+        if(arguments.rank == arguments.nproc - 1)
+            MPI_Send(&results.stat_precision, 1, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
+    }
 
     //printDebug(&arguments, &results); // pretty-print matrix if we are debugging
     if(arguments.rank == 0)
         displayStatistics(&arguments, &results, &options);
-        DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines,
-                      arguments.rank, arguments.nproc, arguments.offset + ((arguments.rank > 0) ? 1 : 0), (arguments.offset + arguments.N - ((arguments.rank != arguments.nproc - 1) ? 1 : 0)));
+
+    DisplayMatrix("Matrix:", arguments.Matrix[results.m][0], options.interlines,
+                  arguments.rank, arguments.nproc, arguments.offset + ((arguments.rank > 0) ? 1 : 0),
+                  (arguments.offset + arguments.N - ((arguments.rank != arguments.nproc - 1) ? 1 : 0)));
 
     freeMatrices(&arguments);                                       /*  free memory     */
 

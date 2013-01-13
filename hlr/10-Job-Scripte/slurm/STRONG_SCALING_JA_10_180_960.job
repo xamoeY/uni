@@ -1,0 +1,9 @@
+#!/bin/sh
+
+#SBATCH --time=02:00:00
+#SBATCH -N 10 --tasks-per-node=18
+#SBATCH --error=STRONG_SCALING_JA_10_180_960.err --output=STRONG_SCALING_JA_10_180_960.out
+
+mpiexec -n 180 ./partdiff-par 1 2 960 1 2 2000
+mpiexec -n 180 ./partdiff-par 1 2 960 1 2 2000
+mpiexec -n 180 ./partdiff-par 1 2 960 1 2 2000
