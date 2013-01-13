@@ -23,7 +23,7 @@
   (if (empty? r)
       #t
       (if (some (reverse (car r)) r)
-          (lambda (x)
+          ((lambda (x)
             (remove (reverse (car x)) x)
-            (symmetrisch? (cdr x)) r)
+            (symmetrisch? (cdr x))) r)
           #f)))
