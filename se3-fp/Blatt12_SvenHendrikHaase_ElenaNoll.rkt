@@ -28,8 +28,6 @@
 
 ;2.2
 
-(define alphabet (string->list "ABCDEFGHIJKLMNOPQRSTUVWXZY"))
-
 (define (distinct? list)
   (equal? (length list) (length (remove-duplicates list))))
 
