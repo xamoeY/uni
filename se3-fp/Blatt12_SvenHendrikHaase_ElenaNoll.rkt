@@ -22,7 +22,8 @@
 ;Als fixe Eingabe dienen drei Listen "summand1", "summand2" und "summe".
 ;Diese Listen beeinhalten schlicht die Zahlen als Buchstaben repräsentiert.
 ;Wir lösen dieses Problem mittels amb. Es wird dadurch durch alle Möglichkeiten hindurch getestet,
-;ob die Bedingungen erfüllt werden.
+;ob die Bedingungen erfüllt werden. Das ist natürlich die dümmste Methode mit Abstand, aber hey,
+;wenn man genug Zeit hat, ist die trotzdem effektiv.
 ;Die Liste der Eingabebuchstaben hat folgendes Format: '(Buchstabe . (amb 0 1 2 3 4 5 6 7 8 9)
 ;Also z.B.: '((A . 0) (B . 4))
 
@@ -48,3 +49,15 @@
                            (hoehere-zahl (prepare-number-list summand2 buchstaben)))
                         (hoehere-zahl (prepare-number-list summe buchstaben)))))
     buchstaben))
+
+;Leichte Eingabe
+(krypto '(A) '(B) '(C))
+
+;Mittelschwere Eingabe
+(krypto '(D H) '(A F U) '(N B L))
+
+;Geht leider kaputt, weil Übertrag die Funktion verwirrt:
+(krypto '(S E) '(R E) '(N E Y))
+
+;Wenn man ein paar Jahre Zeit hat, kann man auch Folgendes lösen:
+(krypto '(S E N D) '(M O R E) '(M O N E Y))
