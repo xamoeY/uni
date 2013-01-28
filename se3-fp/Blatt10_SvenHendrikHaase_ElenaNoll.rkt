@@ -110,16 +110,117 @@
 
 ;2.1
 (defclass fahrzeug ()
+  (maximalgeschwindigkeit
+   :initarg :maxgeschw
+   :reader read-maxgeschw)
+  (zuladung
+   :initarg :zul
+   :reader read-zul)
+  (verbrauch
+   :initarg :verb
+   :reader read-verb)
+  (passigier
+   :initarg :passa
+   :reader read-passa))
+
+(defclass landfahrzeug (fahrzeug)
   (medium
-   :initarg :init-fahrzeug
+   :initvalue 'land
+   :reader read-medium))
+  
+(defclass wasserfahrzeug (fahrzeug)
+  (medium
+   :initvalue 'wasser
    :reader read-medium))
 
-(defclass landfahrzeug (fahrzeug))
+(defclass luftfahrzeug (fahrzeug)
+    (medium
+   :initvalue 'luft
+   :reader read-medium))
 
-(defclass wasserfahrzeug (fahrzeug))
+(defclass amphibienfahrzeug (landfahrzeug wasserfahrzeug))
+  
+(defclass batmanfahrzeug (amphibienfahrzeug luftfahrzeug))
 
-(defclass luftfahrzeug (fahrzeug))
+(define auto (make landfahrzeug :maxgeschw 100 :zul 20 :verb 12 :passa 4))
+(define boot (make wasserfahrzeug :maxgeschw 50 :zul 2000 :verb 20 :passa 20))
+(define flugzeug (make luftfahrzeug :maxgeschw 1000 :zul 10 :verb 150 :passa 10))
+(define hovercraft (make amphibienfahrzeug :maxgeschw 80 :zul 10 :verb 30 :passa 8))
+(define batmobil (make batmanfahrzeug :maxgeschw 200 :zul 50 :verb 20 :passa 2))
 
-(defclass amphiefahrzeug (landfahrzeug wasserfahrzeug))
+(defgeneric hole-medium ((fahrzeug))
+  :combination generic-append-combination)
+; Wir moechten eine Liste aller Bewegungsmodi dieses Fahrzeugs haben.
+(defmethod hole-medium ((lf landfahrzeug))
+  (list (read-medium lf)))
+(defmethod hole-medium ((wf wasserfahrzeug))
+  (list (read-medium wf)))
+(defmethod hole-medium ((lf luftfahrzeug))
+  (list (read-medium lf)))
+(defmethod hole-medium ((af amphibienfahrzeug))
+  (list (read-medium af)))
+(defmethod hole-medium ((btf batmanfahrzeug))
+  (list (read-medium btf)))
 
-(defclass batmanfahrzeug (amphiefahrzeug luftfahrzeug))
+(defgeneric hole-maxgeschw ((fahrzeug))
+  :combination generic-min-combination)
+; Wir moechten aus der Hierarchie das Geringste haben.
+(defmethod hole-maxgeschw ((lf landfahrzeug))
+  read-maxgeschw lf)
+(defmethod hole-maxgeschw ((wf wasserfahrzeug))
+  read-maxgeschw wf)
+(defmethod hole-maxgeschw ((lf luftfahrzeug))
+  read-maxgeschw lf)
+(defmethod hole-maxgeschw ((af amphibienfahrzeug))
+  read-maxgeschw af)
+(defmethod hole-maxgeschw ((btf batmanfahrzeug))
+  read-maxgeschw btf)
+
+(defgeneric hole-zul ((fahrzeug))
+  :combination generic-min-combination)
+; Wir moechten aus der Hierarchie das Geringste haben.
+(defmethod hole-zul ((lf landfahrzeug))
+  read-zul lf)
+(defmethod hole-zul ((wf wasserfahrzeug))
+  read-zul wf)
+(defmethod hole-zul ((lf luftfahrzeug))
+  read-zul lf)
+(defmethod hole-zul ((af amphibienfahrzeug))
+  read-zul af)
+(defmethod hole-zul ((btf batmanfahrzeug))
+  read-zul btf)
+
+(defgeneric hole-verb ((fahrzeug))
+  :combination generic-min-combination)
+; Wir moechten aus der Hierarchie das Geringste haben.
+(defmethod hole-verb ((lf landfahrzeug))
+  read-verb lf)
+(defmethod hole-verb ((wf wasserfahrzeug))
+  read-verb wf)
+(defmethod hole-verb ((lf luftfahrzeug))
+  read-verb lf)
+(defmethod hole-verb ((af amphibienfahrzeug))
+  read-verb af)
+(defmethod hole-verb ((btf batmanfahrzeug))
+  read-verb btf)
+
+(defgeneric hole-passa ((fahrzeug))
+  :combination generic-min-combination)
+; Wir moechten aus der Hierarchie das Geringste haben.
+(defmethod hole-passa ((lf landfahrzeug))
+  read-passa lf)
+(defmethod hole-passa ((wf wasserfahrzeug))
+  read-passa wf)
+(defmethod hole-passa ((lf luftfahrzeug))
+  read-passa lf)
+(defmethod hole-passa ((af amphibienfahrzeug))
+  read-passa af)
+(defmethod hole-passa ((btf batmanfahrzeug))
+  read-passa btf)
+
+; Wir haben keine Ahnung, warum die Aufrufe nicht gehen bzw. falsche Ergebnisse zurueckliefern.
+(displayln (hole-medium hovercraft))
+(displayln (hole-maxgeschw batmobil))
+(displayln (hole-zul auto))
+(displayln (hole-verb hovercraft))
+(displayln (hole-passa batmobil))
