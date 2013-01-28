@@ -224,3 +224,55 @@
 (displayln (hole-zul auto))
 (displayln (hole-verb hovercraft))
 (displayln (hole-passa batmobil))
+
+;Aufgabe 3
+
+;3.1
+;a) evaluiert zu -1: Erst wird (- 2 3) zu -1 ausgewertet, danach (min 2 -1) zu -1
+;und danach (max -1) zu -1.
+;b) evaluiert zu '(+ ,(-24) 2): Das '() erzeugt eine Liste und verhindert, dass der Inhalt vorher ausgewertet wird.
+;Das 1. Listenelement ist also das +, das 2. ist ,(-24) und das 3. 2
+;c) evaluiert zu 'Alle: car gibt das 1. Element einer Liste zurück. In diesem Fall das Symbol Alle
+;d) evaluiert zu '(auf (dem See)): cdr entfernt das 1. Element einer Liste und gibt die Restliste zurück.
+;In diesem Fall wird das 'schwimmen entfernt
+;e) evaluiert zu '(Listen sind einfach): cons fügt 2 Elemente zu einem Paar zusammen. Da es sich um 2 Listen handelt
+;entseht wieder eine Liste
+;f) evaluiert zu '(Paare . auch): Cons fügt die beiden Elemente zu einem Paar zusammen
+;g) evaluiert zu #t: equal überprüft ob der Inhalt gleich ist. In diesem Fall ist das wahr, da
+; (list 'Racket 'Prolog 'Java) zu '(Racket Prolog Java) evaluiert
+;h) evaluiert zu #f: eq? vergleicht die Referenz nicht den Wert. Der ist obwohl der selbe Inhalt verglichen wird
+;unterschiedlich
+;i) evaluiert zu '(1 8 27):
+;j) evaluiert zu '(1 3 5): filter odd? such alle ungeraden Listenelemente aus der gegeben Liste
+;und gibt diese als neue Liste zurück
+;k) evaluiert zu 2: es wird (min 6 2) ausgeführt
+;l) evaluiert zu #t: es wird (= 2 2) ausgeführt
+
+;3.2
+;1) Ja, es evaluiert zu 10
+;2) Nein, da + 2 Zahlen erwartet und *b* ein Symbol ist
+;3) Ja, es evaluiert zu 20, da 10 + 10 gerechnet wird, da eval das '*a* extra noch einmal auswertet
+;4) Ja, es evaluiert zu #f in Racket werden werden "und" und "oder" träge ausgewertet. (> *b* 3) würde
+; einen fehler geben aus dem selben Grund wie bei 2) aber da (> *a* 10) schon #f ergibt, kommt es gar nicht 
+; dazu, dass der 2. Teil ausgewertet wird und es wird #f zurück gegeben.
+;5) Nein, man darf auch in Racket nicht durch 0 teilen
+
+;3.3
+;a)
+(+ (* 3 4) (* 5 6))
+;b)
+(define (berechne-b x)
+  (sqrt (- 1 (sqr (sin x)))))
+
+;3.4
+(define (länge-vektor a b)
+  (sqrt (+ (sqr a) (sqr b))))
+(define (mytan a)
+  (/ (sin a) (sqrt (- 1 (sqr (sin a))))))
+
+;3.5
+(/ (+ 1 4) (- 2 1))
+(/ (- 2 (/ (+ 1 3) (* (+ 3 2) 3))) (sqrt 3))
+
+;3.6
+; (1 + 2 + 3) * (2 - 3 - (2 - 1))
