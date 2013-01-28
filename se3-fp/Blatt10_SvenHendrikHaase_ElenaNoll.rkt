@@ -85,7 +85,8 @@
                                             :init-zeitschrift "Heimwerkerpraxis für Anfänger"
                                             :init-bandnummer 3
                                             :init-heftnummer 500))
-                                            
+
+;1.2
 (defgeneric cite ((literaturbeitrag))
   :combination generic-append-combination)
 
@@ -105,3 +106,20 @@
 (displayln (cite Beispiel-Sammelband))
 (displayln (cite Beispiel-Zeitschriftenartikel))
 
+;Aufgabe 2
+
+;2.1
+(defclass fahrzeug ()
+  (medium
+   :initarg :init-fahrzeug
+   :reader read-medium))
+
+(defclass landfahrzeug (fahrzeug))
+
+(defclass wasserfahrzeug (fahrzeug))
+
+(defclass luftfahrzeug (fahrzeug))
+
+(defclass amphiefahrzeug (landfahrzeug wasserfahrzeug))
+
+(defclass batmanfahrzeug (amphiefahrzeug luftfahrzeug))
