@@ -86,3 +86,22 @@
                                             :init-bandnummer 3
                                             :init-heftnummer 500))
                                             
+(defgeneric cite ((literaturbeitrag))
+  :combination generic-append-combination)
+
+(defmethod cite ((b buch))
+  (list (string-append (read-verlag b) (read-verlagsort b) (read-reihe b) (read-seriennummer b))))
+
+(defmethod cite ((lb literaturbeitrag))
+  (list (string-append (read-autor lb) " (" (number->string (read-jahr lb)) ") " (read-titel lb))))
+
+(defmethod cite ((sa sammelband))
+  (list (string-append (read-herausgeber sa) (number->string (read-seitenangabe sa)))))
+  
+(defmethod cite ((zt zeitschriftenartikel))
+  (list (string-append (read-zeitschrift zt) (number->string (read-bandnummer zt)) (number->string (read-heftnummer zt)))))
+  
+(displayln (cite Beispiel-Buch))
+(displayln (cite Beispiel-Sammelband))
+(displayln (cite Beispiel-Zeitschriftenartikel))
+
