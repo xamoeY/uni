@@ -1,0 +1,46 @@
+- UML ist eine Beschreibungssprache, kein Prozess
+- man entwickelt nicht "nach UML"
+
+Gewicht einer Entscheidung (aufsteigend nach Zeit im Projekt)
+1. Business Modeling: Sehr hoch
+2. Requirements: Hoch
+3. Analyse und Design: Mittel
+4. Implementation: Gering
+5. Deployment: Sehr gering
+6. Betrieb: Sehr gering
+
+Aenderungen im Unternehmen:
+- Organisation
+- Ablaeufe
+- Produkte/Dienstleistungen
+- Marketing
+- Gesetze
+=> benoetigt Koordination
+=> benoetigt SW-Technik
+
+- Kunden wissen nicht was sie wollen.
+=> Informatiker sollen Kunden beraten hinsichtlich ihrer Wuensche
+
+Phase Anforderungsanalyse
+Ziele:
+- gleiches Verstaendis Auftraggeber
+- Entwickler: Gebiet kennelernen
+- Sammeln von Informationen -> Prototyp
+- gegenwaertigen Zustand kennenlernen
+- beschreiben der Anforderung
+- Pruefen der Anforderungen: Konsistenz etc
+- Festlegen der Nutzerschnittstelle
+
+Techniken
+- Fragen stellen
+- Zuhoeren
+- Informationen festhalten und strukturieren
+- Informationen pruefen
+
+3 Taetigkeiten
+- Eliciation (Anforderungen erheben)
+- Structuring (Informationen festhalten und strukturieren)
+- Validation (Pruefen)
+
+- Verbedingungen: erfuellt, bevor Use-Case startet
+- Nachbedingungen: erfuellt nach Beendigung
