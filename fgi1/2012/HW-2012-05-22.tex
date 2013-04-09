@@ -1,0 +1,64 @@
+\documentclass[a4paper,10pt]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 22.05.2012}
+\newcommand{\aufgabe}[1]{\item[\textbf{#1}]}
+
+\title{\titleinfo}
+\author{Arne Feil}
+\date{\today}
+\ihead{FGI1}
+\chead{Arne Feil, Sven-Hendrik Haase, Christian Darsow-Fromm}
+\ohead{\today}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+\newcommand{\terminal}[1]{\langle #1 \rangle }
+\everymath{\displaystyle}
+\begin{document}
+%\maketitle
+\begin{enumerate}
+\aufgabe{7.3}
+
+\aufgabe{7.4}
+
+\begin{enumerate}[1.]
+ \item
+
+ \item
+  \begin{enumerate}[a)]
+   \item
+    $$R_a=\frac{B\Rightarrow A}{A}$$
+    Nach Satz 6.7 ist die Inferenzrelation erfüllt, wenn $(B\Rightarrow A)\vDash A$ gilt, also $A$ immer erfüllt ist, wenn auch $(B\Rightarrow A)$ wahr ist.\\
+    Dies ist jedoch nicht der Fall, wenn $B=A=0$ ist. Dann ist $(B\Rightarrow A)=1$, nicht jedoch $A$. Daher gilt diese Inferenzrelation nicht.
+   \item
+    $$R_b=\frac{\neg A,\neg B}{A\Rightarrow B}$$
+    $\neg A, \neg B$ können nur erfüllt sein bei $A=B=0$. In diesem Fall ist offensichtlich auch $(A\Rightarrow B)$ wahr und die Inferenzrelation gilt.
+   \item
+    $$R_c=\frac{A\vee\neg B,B\vee C}{A\vee C}$$
+    Um die Prämissen zu erfüllen gibt es folgende Möglichkeiten: \\
+	\begin{tabular*}{0.27\textwidth}{ccc|c}
+	 $A$&$B$&$C$&$(A\vee C)$ \\
+	 \hline
+	 0&0&1&1 \\
+	 1&0&1&1 \\
+	 1&1&0&1 \\
+	 1&1&1&1
+	\end{tabular*}\\
+	In jedem dieser Fälle ist, wie in der Tabelle zu sehen, auch die Konklusion erfüllt. Daher gilt die Inferenzrelation.
+
+  \end{enumerate}
+\end{enumerate}
+
+
+
+\end{enumerate}
+\end{document}

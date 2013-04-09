@@ -1,0 +1,182 @@
+\documentclass[a4paper]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{tikz}
+\usetikzlibrary{arrows,automata}
+
+\newcommand{\titleinfo}{Hausaufgaben zum 01.05.2012}
+\newcommand{\aufgabe}[1]{\item[\textbf{#1}]}
+
+\title{\titleinfo}
+\author{Arne Feil}
+\date{\today}
+\ihead{FGI1}
+\chead{Arne Feil, Sven-Hendrik Haase, Christian Darsow-Fromm}
+\ohead{\today}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+\newcommand{\terminal}[1]{\langle #1 \rangle }
+\everymath{\displaystyle}
+\begin{document}
+%\maketitle
+\begin{enumerate}
+
+\aufgabe{4.3}
+\begin{enumerate}[1.]
+ \item
+ $X \in \{A,B,\bot\}$\\
+ $X$ steht für ein beliebiges der drei möglichen Zeichen im Keller.\\
+ \begin{tikzpicture}[->, auto, node distance=3cm, >=latex]
+    \tikzstyle{every initial by arrow}=[initial text=,->, >=stealth]
+
+    \node[initial, state] (A) {$q_1$};
+    \node[state] (B) [right of=A] {$q_2$};
+    \node[accepting, state] (C) [right of=B] {$q_3$};
+
+    \draw (A) edge [loop above] node[text width=2cm,align=center] {$a,X|AX$\\
+									  $b,X|BX$} (A);
+    \draw (A) edge [bend left] node[text width=2cm,align=center, below] {$a,X|AX$\\
+									  $b,X|BX$\\
+									  $a,X|X$\\ % ändert nichts am Keller.
+									  $b,X|X$} (B);
+    \draw (B) edge [loop above] node[text width=2cm,align=center] {$a,A|\epsilon$\\
+									  $b,B|\epsilon$} (B);
+    \draw (B) edge [bend left] node[text width=2cm,align=center, below] {$\epsilon,\bot|\epsilon$} (C);
+\end{tikzpicture}
+
+Im Zustand $q_1$ wird jeder Buchstabe in den Keller geschrieben.
+Der Wechsel zu $q_2$ kann mit jedem Kellerinhalt passieren, entweder mit dem letzten Buchstaben der ersten Worthälfte oder mit dem mittleren Buchstaben.
+Bei einer geraden Buchstabenzahl wird er bei dem Übergang in den Keller geschrieben, bei einer ungeraden nicht.
+Die Schleife bei $q_2$ läuft so lange, bis der Keller leer ist. Wenn er zu früh leer ist, erreicht er keinen Endzustand.
+Das Schlusszeichen $\bot$ wird mit dem letzten $\epsilon$-Übergang zu $q_2$ aus dem Keller geholt. Wenn das alles erfolgreich war, erreicht der Automat dort seinen Endzustand.
+
+\item
+\begin{align*}
+ L &= \{a^n b^* c^n | b\text{ kann nur folgen, wenn } n\geq 1\};\ n\in\mathbb{N};\ n\geq 0\\
+ G &= (\Sigma,N,P,S)\\
+ \Sigma &= \{a,b,c\}\\ %Muss hier auch das \epsilon auftauchen?
+ N &= \{S,T\}\\
+ P &= \{
+   S\to \epsilon,\
+   S\to aSc,\
+   S\to aTc,\
+   T\to bT,\
+   T\to \epsilon
+ \}\\
+ S &= S
+\end{align*}
+
+\paragraph{Beweis von $L(G)=L$}
+
+\subparagraph{$L(G)\subseteq L$}
+
+Das leere Wort ist in $L(G)$ enthalten. Da die Sprache $L$ mit $\{\dots\}^*$ definiert ist, enthält sie auch $\epsilon$. \\
+Die weiteren Möglichkeiten von $S$ sind:
+
+\begin{description}
+\item[$S\to aSc$]\
+gleiche Anzahl von $a$ und $c$ mit noch Unbekanntem in der Mitte. Die bisherigen Terminale sind in $L$ enthalten.
+
+\item[$S\to aTc$]\
+es kommt ein neues $a$ an den Anfangsblock und ein $c$ an den Endblock. Auch hier sind die Terminale in $L$.
+\end{description}
+
+Nun geht es mit $T$ weiter. $T\to bT$ erzeugt eine beliebig lange Reihe $\{b\}^*$ und bricht mit $T\to \epsilon$ ab.
+Die Reihe von $b$ innerhalb der $a$ und $c$ ist auch in der Sprache enthalten. Damit stimmt die Aussage $L(G)\subseteq L$.
+
+\subparagraph{$L\subseteq L(G)$}
+
+In $L$ sind am Anfang beliebig viele ($n$) $a$ und am Ende genauso viele $c$.
+Für $n=0$ gibt es $S\to \epsilon$.
+
+Die $a$ und $c$ lassen sich mit $S\to aSc$ erzeugen und sind damit in $L(G)$.
+Nach dem Wechsel über $S\to aTc$ lassen sich mit $T\to bT$ beliebig viele $b$ erzeugen.
+Diese sind in der Mitte des Wortes und damit an der richtigen Position.
+$T\to \epsilon$ sorgt dafür, dass nicht unbedingt ein $b$ existieren muss und die Schleife beendet werden kann.
+
+Damit sind alle erforderlichen Bedingungen von $L(G)$ erfüllt und es gilt $L=L(G)$.
+
+\end{enumerate}
+
+
+\aufgabe{4.4}
+
+% Chomsky-Normalform.
+\begin{enumerate}[1.]
+\item
+$\epsilon$-frei machen \\
+$
+S \rightarrow BCD~|~BC~|~BD~|~B~|~a \\
+A \rightarrow aBD~|~aDb~|~CSSD~|~aB~|~ab~|~CSS~|~SSD \\
+B \rightarrow bB~|~aC~|~bD~|~a~|~b \\
+C \rightarrow Cc~|~c \\
+D \rightarrow AC~|~A
+$
+
+\item
+Reduzieren \\
+Es sind keine unproduktiven Terminale enthalten.
+
+\item
+Kettenregeln entfernen \\
+$
+S \rightarrow BCD~|~BC~|~BD~|~bB~|~aC~|~bD~|~a~|~b \\
+A \rightarrow aBD~|~aDb~|~CSSD~|~aB~|~ab~|~CSS~|~SSD \\
+B \rightarrow bB~|~aC~|~bD~|~a~|~b \\
+C \rightarrow Cc~|~c \\
+D \rightarrow AC~|~aBD~|~aDb~|~CSSD~|~aB~|~ab~|~CSS~|~SSD
+$
+
+\item
+Ersetzen langer Terminalregeln \\
+$
+S \rightarrow BCD~|~BC~|~BD~|~\terminal{b}B~|~\terminal{a}C~|~\terminal{b}D~|~a~|~b \\
+A \rightarrow \terminal{a}BD~|~\terminal{a}D\terminal{b}~|~CSSD~|~\terminal{a}B~|~\terminal{a}\terminal{b}~|~CSS~|~SSD \\
+B \rightarrow \terminal{b}B~|~\terminal{a}C~|~\terminal{b}D~|~a~|~b \\
+C \rightarrow C\terminal{c}~|~c \\
+D \rightarrow AC~|~\terminal{a}BD~|~\terminal{a}D\terminal{b}~|~CSSD~|~\terminal{a}B~|~\terminal{a}\terminal{b}~|~CSS~|~SSD \\
+\terminal{a} \rightarrow a \\
+\terminal{b} \rightarrow b \\
+\terminal{c} \rightarrow c
+$
+
+\item
+Verkürzen zu langer Regeln \\
+$
+S \rightarrow \terminal{BC}D~|~BC~|~BD~|~\terminal{b}B~|~\terminal{a}C~|~\terminal{b}D~|~a~|~b \\
+A \rightarrow \terminal{a}\terminal{BD}~|~\terminal{\terminal{a}D}\terminal{b}~|~\terminal{CS}\terminal{SD}~|~\terminal{a}B~|~\terminal{a}\terminal{b}~|~\terminal{CS}S~|~S\terminal{SD} \\
+B \rightarrow \terminal{b}B~|~\terminal{a}C~|~\terminal{b}D~|~a~|~b \\
+C \rightarrow C\terminal{c}~|~c \\
+D \rightarrow AC~|~\terminal{a}\terminal{BD}~|~\terminal{\terminal{a}D}\terminal{b}~|~CSSD~|~\terminal{a}B~|~\terminal{a}\terminal{b}~|~\terminal{CS}S~|~S\terminal{SD} \\
+\terminal{a} \rightarrow a \\
+\terminal{b} \rightarrow b \\
+\terminal{c} \rightarrow c \\
+\terminal{BC} \rightarrow BC \\
+\terminal{BD} \rightarrow BD \\
+\terminal{\terminal{a}D} \rightarrow \terminal{a}D \\
+\terminal{CS} \rightarrow CS \\
+\terminal{SD} \rightarrow SD
+$
+
+\item
+% Ob die Begründung formuliert wie es erwartet wird, weiß ich nicht, sie stimmt aber ;)
+Wiederherstellen der ursprünglichen Sprache durch evtl. Hinzunahme einer $\epsilon$-Regel \\
+Es muss keine $\epsilon$-Regel hinzugefügt werden, da in der Sprache keine leeres Wort erzeugt werden konnte. \\
+$
+S \rightarrow BCD $ mit $C \rightarrow \epsilon$, $D \rightarrow \epsilon$ und $B \rightarrow bB~|aC~|~bD$ \\
+$S$ wird also mindestens auf $a$, oder $b$ abgeleitet.
+\end{enumerate}
+
+
+\aufgabe{4.5}
+
+% TODO Bonusaufgabe.
+
+\end{enumerate}
+\end{document}
