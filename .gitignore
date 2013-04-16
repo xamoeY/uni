@@ -1,3 +1,5 @@
 *.aux
 *.log
 *~
+*.user
+prak/paraquest-build
