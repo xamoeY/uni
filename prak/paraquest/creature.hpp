@@ -12,6 +12,8 @@ public:
 
 private:
     std::string m_type;
+    uint16_t m_x;
+    uint16_t m_y;
     uint16_t m_strength;
     uint16_t m_agility;
     uint16_t m_intelligence;
