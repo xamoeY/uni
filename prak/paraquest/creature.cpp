@@ -1,9 +1,17 @@
 #include "creature.hpp"
+#include <random>
+
 
 Creature::Creature(std::string type) :
     m_type(type)
+
 {
     // TODO random spawning
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> distribution(0, 100);
+    m_x = distribution(generator);
+    m_y = distribution(generator);
+
     if (type == "goblin")
     {
         m_strength = 210;

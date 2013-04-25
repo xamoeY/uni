@@ -12,6 +12,7 @@ void World::addCreature(std::string type)
 {
     creatures.push_back(std::unique_ptr<Creature> (new Creature(type)));
 
+
 }
 
 void World::populate(uint32_t count)
