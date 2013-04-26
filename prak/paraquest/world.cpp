@@ -14,10 +14,8 @@ World::World(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *scene)
 
 void World::addCreature(QString type)
 {
-    quint16 x = randInt(0, this->sizeX);
-    quint16 y = randInt(0, this->sizeY);
-
-    creatures.push_back(std::unique_ptr<Creature> (new Creature(type, x, y, this->scale)));
+    creatures.push_back(std::unique_ptr<Creature> (new Creature(type, this->scale,
+                                                                this->sizeX, this->sizeY)));
     scene->addItem(creatures.back().get());
 }
 

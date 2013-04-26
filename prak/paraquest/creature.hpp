@@ -7,7 +7,8 @@
 class Creature : public QGraphicsItem
 {
 public:
-    Creature(QString type, quint16 posX, quint16 posY, quint16 scale);
+    Creature(QString type, quint16 scale,
+             quint16 worldSizeX, quint16 worldSizeY);
 
     void initCreature();
     void doAction();
@@ -25,6 +26,9 @@ private:
     quint16 x;
     quint16 y;
     quint16 scale;
+    quint16 worldSizeX;
+    quint16 worldSizeY;
+
     quint16 strength;
     quint16 agility;
     quint16 intelligence;

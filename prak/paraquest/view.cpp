@@ -26,7 +26,7 @@ View::View(const QString &name, QWidget *parent)
     setFrameStyle(Sunken | StyledPanel);
     graphicsView = new GraphicsView(this);
     graphicsView->setRenderHint(QPainter::Antialiasing, false);
-    graphicsView->setDragMode(QGraphicsView::RubberBandDrag);
+    graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
     graphicsView->setOptimizationFlags(QGraphicsView::DontSavePainterState);
     graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
     graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
@@ -88,11 +88,11 @@ View::View(const QString &name, QWidget *parent)
     selectModeButton = new QToolButton;
     selectModeButton->setText(tr("Select"));
     selectModeButton->setCheckable(true);
-    selectModeButton->setChecked(true);
+    selectModeButton->setChecked(false);
     dragModeButton = new QToolButton;
     dragModeButton->setText(tr("Drag"));
     dragModeButton->setCheckable(true);
-    dragModeButton->setChecked(false);
+    dragModeButton->setChecked(true);
     antialiasButton = new QToolButton;
     antialiasButton->setText(tr("Antialiasing"));
     antialiasButton->setCheckable(true);

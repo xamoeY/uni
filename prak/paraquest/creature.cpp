@@ -4,9 +4,11 @@
 
 #include "utils.hpp"
 
-Creature::Creature(QString type, quint16 posX, quint16 posY, quint16 scale) :
-    type(type), x(posX), y(posY), scale(scale)
+Creature::Creature(QString type, quint16 scale, quint16 worldSizeX, quint16 worldSizeY) :
+    type(type), scale(scale), worldSizeX(worldSizeX), worldSizeY(worldSizeY)
 {
+    x = randInt(0, this->worldSizeX);
+    y = randInt(0, this->worldSizeY);
     setZValue((this->x + this->y) % 2);
 
     setFlags(ItemIsSelectable | ItemIsMovable);
@@ -80,6 +82,11 @@ void Creature::doAction()
 {
     // TODO
     // random actions: wait, walk, fight
+
+    //this->x = randInt(0, this->world->sizeX());
+    //this->y = randInt(0, this->world->sizeY());
+
+    //setPos(this->x * scale, this->y * scale);
 }
 
 QRectF Creature::boundingRect() const

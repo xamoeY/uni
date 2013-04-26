@@ -1,6 +1,7 @@
 #include "mainwindow.hpp"
 
 #include <QHBoxLayout>
+#include <QTimer>
 
 #include "creature.hpp"
 #include "view.hpp"
@@ -18,6 +19,10 @@ MainWindow::MainWindow(QWidget *parent)
     setLayout(layout);
 
     setWindowTitle(tr("ParaQuest"));
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(update()));
+    timer->start(1000);
 }
 
 QGraphicsScene *MainWindow::graphicsScene()

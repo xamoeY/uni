@@ -17,14 +17,12 @@ public:
     // some container type getCollisions();
     void populate(quint32 count);
     void simulate(quint32 ticks);
-    // TODO
-    // std::pair<uint16_t> getWorldSize();
 
 private:
     std::vector<std::unique_ptr<Creature>> creatures;
-    uint16_t sizeX;
-    uint16_t sizeY;
-    uint16_t scale;
+    quint16 sizeX;
+    quint16 sizeY;
+    quint16 scale;
     QGraphicsScene *scene;
 };
 
