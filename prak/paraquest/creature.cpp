@@ -83,10 +83,14 @@ void Creature::doAction()
     // TODO
     // random actions: wait, walk, fight
 
-    //this->x = randInt(0, this->world->sizeX());
-    //this->y = randInt(0, this->world->sizeY());
+    this->x = randInt(0, this->worldSizeX);
+    this->y = randInt(0, this->worldSizeY);
+}
 
-    //setPos(this->x * scale, this->y * scale);
+// This is not thread safe. Run in main thread.
+void Creature::updateGraphics()
+{
+    this->setPos(this->x * scale, this->y * scale);
 }
 
 QRectF Creature::boundingRect() const
@@ -100,7 +104,6 @@ void Creature::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, 
 {
     Q_UNUSED(widget);
     Q_UNUSED(option);
-
 
     /*
     QColor fillColor = (option->state & QStyle::State_Selected) ? color.dark(150) : color;

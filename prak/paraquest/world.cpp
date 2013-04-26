@@ -34,3 +34,9 @@ void World::simulate(quint32 ticks)
         for(auto &creature : creatures)
             creature->doAction();
 }
+
+void World::updateCreatures()
+{
+    for(auto &creature : creatures)
+        creature->updateGraphics();
+}

@@ -12,6 +12,7 @@ public:
 
     void initCreature();
     void doAction();
+    void updateGraphics();
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget);
