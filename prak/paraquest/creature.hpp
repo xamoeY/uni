@@ -1,23 +1,37 @@
 #ifndef CREATURE_HPP
 #define CREATURE_HPP
 
-#include <cstdint>
-#include <string>
+#include <QColor>
+#include <QGraphicsItem>
 
-class Creature
+class Creature : public QGraphicsItem
 {
 public:
-    Creature(std::string type);
+    Creature(QString type, quint16 posX, quint16 posY, quint16 scale);
+
+    void initCreature();
     void doAction();
 
+    QRectF boundingRect() const;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget);
+
+protected:
+    void mousePressEvent(QGraphicsSceneMouseEvent *event);
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event);
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+
 private:
-    std::string m_type;
-    uint16_t m_x;
-    uint16_t m_y;
-    uint16_t m_strength;
-    uint16_t m_agility;
-    uint16_t m_intelligence;
-    uint16_t m_sociability;
+    QString type;
+    quint16 x;
+    quint16 y;
+    quint16 scale;
+    quint16 strength;
+    quint16 agility;
+    quint16 intelligence;
+    quint16 sociability;
+    QColor color;
+    QImage image;
+    QVector<QPointF> stuff;
 };
 
 #endif // CREATURE_HPP
