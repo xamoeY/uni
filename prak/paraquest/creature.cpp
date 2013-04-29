@@ -7,8 +7,8 @@
 Creature::Creature(QString type, quint16 scale, quint16 worldSizeX, quint16 worldSizeY) :
     type(type), scale(scale), worldSizeX(worldSizeX), worldSizeY(worldSizeY)
 {
-    //x = randInt(0, this->worldSizeX);
-    //y = randInt(0, this->worldSizeY);
+    x = randInt(0, this->worldSizeX);
+    y = randInt(0, this->worldSizeY);
     setZValue((this->x + this->y) % 2);
 
     setFlags(ItemIsSelectable | ItemIsMovable);
@@ -81,28 +81,8 @@ void Creature::initCreature()
 void Creature::doAction()
 {
     // TODO
-    // random actions: wait?, walk, fight
-    
-    //random step i used as simple, as could be: n_s = (1, -1) w_e = (1, -1)
-    //first random chose direction n/s or w/s, so as we can't move diagonally, second chooses concrete direction
-    int direction = randInt(0, 2);
-    int where_to_go = randInt(0,1);
-    if(direction == 0)
-    {
-        if(where_to_go == 0)
-        {this->y += 1;}
-        else
-        {this->y -= 1;}
-    }
-    if(direction == 1)
-    {if (where_to_go == 1)
-        {this->x += 1;}
-        else
-        {this->x -= 1;}
-    }
-    else
-    {//do nothing
-    }
+    // random actions: wait, walk, fight
+
     this->x = randInt(0, this->worldSizeX);
     this->y = randInt(0, this->worldSizeY);
 }

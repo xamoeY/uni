@@ -23,7 +23,7 @@ int main(int argc, char **argv)
 
     QTimer timer;
     QObject::connect(&timer, SIGNAL(timeout()), &world, SLOT(updateCreatures()));
-    timer.start(3000);
+    timer.start(100);
 
     world.populate(100);
 
