@@ -1,0 +1,50 @@
+introduction
+- everything is becoming embedded
+- quick progress
+- examples: abs, smart keys airbags, watches, rfid
+- outlook: artificial eye, brain implants
+- cyber-physical systems (cps)
+- must be efficient and dependable
+- real-time behavior is essential
+- implementation: simulation, breadboards, ASICs, FPGAs
+- ASIC: application-specific integrated circuit
+- FPGA: field-programmable gate array
+
+specifcation and modeling
+- timing is important for design
+- hardware specs need to be known
+- timing techniques: measure elapsed time, delay, timeout, specify deadline
+- petri nets: modeling of mutual exclusion and synchronization
+- vhdl: VHSIC hardware description language
+- vhdl uses discrete event model
+- c/c++ not that suited for ES
+- threads not well suited for ES
+- von-neumann models: beware of deadlocks
+
+cps/es hardware
+- shared memory vs message passing
+- discrete time domain using clocked transistor
+- energy efficiency important and depends on application
+- increasing energy density
+- ASCIs: very energy efficient but high cost, use only if large numbers can be sold
+- dark silicon: unpowered parts of silicon due to constraints
+- SIMD: efficient register exploit
+- VLIW: very long instruction word (intel itanium)
+- memory: less is better
+
+cps/es system software
+- embedded OS need to be very configurable and customizable
+- no bloat allowed
+- security not that important in ES
+- often real-time OS
+- RTOS: synchronization with real clocks and predictability important
+- pthread/openmp: shared model
+- mpi: message passing
+
+evaluation
+
+mapping of applications to execution platforms
+
+optimizations
+
+test
