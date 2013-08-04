@@ -11,7 +11,7 @@
 
 int main(int argc, char **argv)
 {
-    initRandom(20);
+    initRandom(0);
 
     QApplication app(argc, argv);
 

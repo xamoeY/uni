@@ -3,12 +3,13 @@ introduction
 - quick progress
 - examples: abs, smart keys airbags, watches, rfid
 - outlook: artificial eye, brain implants
-- cyber-physical systems (cps)
-- must be efficient and dependable
+- cyber-physical systems (CPS)
+- must be efficient (code, runtime, weight, cost, energy) and dependable
 - real-time behavior is essential
-- implementation: simulation, breadboards, ASICs, FPGAs
+- implementation: simulation, breadboards, ASICs, FPGAs, DSPs
 - ASIC: application-specific integrated circuit
 - FPGA: field-programmable gate array
+- DSP: domain-specific processor
 
 specifcation and modeling
 - timing is important for design
@@ -17,6 +18,8 @@ specifcation and modeling
 - petri nets: modeling of mutual exclusion and synchronization
 - vhdl: VHSIC hardware description language
 - vhdl uses discrete event model
+- vhdl is signal-based
+- vhdl: specification -> algo design -> arch design -> synthesis -> layout
 - c/c++ not that suited for ES
 - threads not well suited for ES
 - von-neumann models: beware of deadlocks
@@ -42,9 +45,34 @@ cps/es system software
 - mpi: message passing
 
 evaluation
+- criteria: dalay, energy consumption, thermal behavior, reliabsility, safety, cost/size, weight, radiation hardness, environmental friendliness, EMC
+- execution times hard to evaluate
+- voltage influences power quadratically
+- thermal/energy density goes up as scale goes down
+- rate of faults higher if scale is smaller
+- 1 FIT (failure-in-time): 10^-9 failures per hour
+- EMC: elctro-magnetic compatibility
+- mathematical verification is non-trivial
 
 mapping of applications to execution platforms
+- deciding whether a schedule exists is NPc
+- HLS: high-level synthesis
+- RMS: rate monotonic scheduling
+- highly dependent on good mapping tools
+- auto parallelization
 
 optimizations
-
-test
+- floating-point to fixed point conversion: lower cost, faster
+- uses range estimation
+- cache locality very important
+- loop interchange, loop fission, loop unrolling
+- smart compiler required
+- compiling for performance vs energy
+- memory usage means energy usage
+- tools for optimizing memory usage
+- allocation strategies: static, dynamic, hybrid
+- SPM: scratch pad memories
+- WCET: worst case execution time
+- CMOS: complementary metal oxide semiconductor
+- TCM: task-level concurrency management
+- evolutionary algorithm based optimization
