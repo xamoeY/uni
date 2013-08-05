@@ -3,7 +3,7 @@
 
 #include <random>
 
-void initRandom(std::default_random_engine generator, int seed);
+void initRandom(int seed);
 
 int randInt(int low, int high);
 

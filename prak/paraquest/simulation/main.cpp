@@ -5,17 +5,10 @@
 
 int main(int argc, char **argv)
 {
-    //initRandom(generator, 0);
+    initRandom(0);
 
-    std::random_device rd;
-    std::mt19937 generator(rd());
-    std::uniform_int_distribution<int> distribution(0, 4000);
-    std::cout << distribution(generator) << std::endl;
+    World world(10, 10);
 
-    //std::cout << randInt(100) << std::endl;
-
-    //World world(100, 100);
-
-    //world.populate(100);
-    //world.simulate(100);
+    world.populate(10);
+    world.simulate(10);
 }

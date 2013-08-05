@@ -61,10 +61,28 @@ Creature::Creature(std::string type, uint32_t id, uint16_t positionX, uint16_t p
 
 void Creature::doAction()
 {
-    // random actions: wait, walk, fight
+    const uint16_t action = randInt(0, 4);
 
-    this->positionX = randInt(0, this->worldSizeX);
-    this->positionY = randInt(0, this->worldSizeY);
+    if (action == 0) {
+        // wait
+        return;
+    } else if (action == 1) {
+        // move east
+        if (this->positionX + 1 < this->worldSizeX)
+            this->positionX += 1;
+    } else if (action == 2) {
+        // move south
+        if (this->positionY + 1 < this->worldSizeY)
+            this->positionY += 1;
+    } else if (action == 3) {
+        // move west
+        if (this->positionX - 1 >= 0)
+            this->positionX -= 1;
+    } else if (action == 4) {
+        // move north
+        if (this->positionY - 1 >= 0)
+            this->positionY -= 1;
+    }
 }
 
 std::string Creature::typeToString(uint16_t type)
@@ -101,4 +119,25 @@ int16_t Creature::stringToType(std::string type)
         return 5;
     else
         return -1;
+}
+
+uint32_t Creature::getId() const
+{
+    return id;
+}
+
+void Creature::setId(const uint32_t &value)
+{
+    id = value;
+}
+
+std::pair<uint16_t, uint16_t> Creature::getPosition() const
+{
+    return std::make_pair(this->positionX, this->positionY);
+}
+
+void Creature::setPosition(const std::pair<uint16_t, uint16_t> &value)
+{
+    this->positionX = value.first;
+    this->positionY = value.second;
 }
