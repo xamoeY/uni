@@ -38,10 +38,39 @@ int main(int argc, char *argv[])
 
     initRandom(random_seed);
 
-    World world(world_size, world_size);
+    // MPI stuff
+    int rc = MPI_Init(&argc, &argv);
+    if (rc != MPI_SUCCESS)
+    {
+        std::cerr << "Error starting MPI program. Terminating." << std::endl;
+        MPI_Abort(MPI_COMM_WORLD, rc);
+    }
+
+    // Get the number of processes
+    int comm_size;
+    MPI_Comm_size(MPI_COMM_WORLD, &comm_size);
+
+    // Get the rank of the process
+    int comm_rank;
+    MPI_Comm_rank(MPI_COMM_WORLD, &comm_rank);
+
+    // Get the name of the processor
+    char processor_name[MPI_MAX_PROCESSOR_NAME];
+    int name_len;
+    MPI_Get_processor_name(processor_name, &name_len);
+
+    std::cout << "Initializing world with size " << world_size << "x" << world_size << " and " << creature_count << " creatures." << std::endl;
+    std::cout << "Simulation will run for " << simulation_length << " ticks." << std::endl;
+    std::cout << "Using " << comm_size << " processes." << " Own rank is " << comm_rank << " on " << processor_name << std::endl;
+
+    World world(world_size, world_size, comm_size, comm_rank, processor_name);
 
     world.populate(creature_count);
-    world.simulate(simulation_length);
 
+    std::cout << "Starting simulation" << std::endl;
+    world.simulate(simulation_length);
+    std::cout << "Finished simulation" << std::endl;
+
+    MPI_Finalize();
     return 0;
 }

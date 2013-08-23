@@ -10,7 +10,7 @@
 class World
 {
 public:
-    World(uint16_t sizeY, uint16_t sizeX);
+    World(uint16_t size_x, uint16_t sizeY, uint16_t comm_size, uint16_t comm_rank, char* processor_name);
     void addCreature(std::string type);
     void populate(uint32_t count);
     void simulate(uint32_t ticks);
@@ -20,6 +20,9 @@ private:
     std::multimap<uint32_t, std::unique_ptr<Creature>> creatures;
     uint16_t sizeX;
     uint16_t sizeY;
+    uint16_t commSize;
+    uint16_t commRank;
+    char* processorName;
     uint32_t currentId; // ever-increasing number that uniquely identifies a creature
 };
 

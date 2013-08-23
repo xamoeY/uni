@@ -5,8 +5,8 @@
 
 #include "utils.hpp"
 
-World::World(uint16_t sizeY, uint16_t sizeX) :
-    sizeX(sizeX), sizeY(sizeY)
+World::World(uint16_t size_x, uint16_t size_y, uint16_t comm_size, uint16_t comm_rank, char* processor_name) :
+    sizeX(size_x), sizeY(size_y), commSize(comm_size), commRank(comm_rank), processorName(processor_name)
 {}
 
 void World::addCreature(std::string type)
@@ -53,12 +53,13 @@ void World::simulate(uint32_t ticks)
         creatures = std::move(new_creatures); // TODO: Maybe memory leak here even though it's allocated on the stack?
 
         // debug output
+        /*
         for(auto &creature : creatures)
         {
             std::cout << "    " << creature.first << " : <id " << creature.second->getId() <<
                          "> <pos " << creature.second->getPosition().first << "/" <<
                          creature.second->getPosition().second << ">" << std::endl;
-        }
+        }*/
 
         // Check for collisions
         // Use a second list to store iterators to collisions
@@ -99,9 +100,18 @@ void World::simulate(uint32_t ticks)
 // A file is dumped after each step of the simulation with the current contents of this node's world.
 void World::dumpState(uint32_t tick)
 {
-    std::ofstream log("node1_tick" + std::to_string(tick) + ".log", std::ios::out | std::ios::app);
+    std::ofstream log(this->processorName + std::to_string(this->commRank) + "_tick" + std::to_string(tick) + ".log", std::ios::out | std::ios::app);
+
     if(log.is_open())
     {
+        // Before first tick, print general info about this node that won't change during runtime
+        if(tick == 0)
+        {
+            log << "world_size_x:" << this->sizeX
+                << " world_size_y:" << this->sizeY
+                << std::endl;
+        }
+
         for(auto &creature : creatures)
         {
             log << creature.second->serialize() << std::endl;

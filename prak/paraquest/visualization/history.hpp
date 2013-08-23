@@ -9,19 +9,13 @@
 
 #include "creature.hpp"
 
-class World : public QObject
+class History : public QObject
 {
     Q_OBJECT
 public:
-    World(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *scene);
+    History(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *scene);
+    void parseHistory(const std::string& path);
     void addCreature(QString type);
-    // TODO
-    // some container type getCollisions();
-    void populate(quint32 count);
-    void simulate(quint32 ticks);
-
-public slots:
-    void updateCreatures();
 
 private:
     std::vector<std::unique_ptr<Creature>> creatures;
