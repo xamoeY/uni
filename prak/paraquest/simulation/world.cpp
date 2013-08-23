@@ -1,6 +1,7 @@
 #include "world.hpp"
 
 #include <iostream>
+#include <fstream>
 
 #include "utils.hpp"
 
@@ -31,12 +32,15 @@ void World::populate(uint32_t count)
 
 void World::simulate(uint32_t ticks)
 {
-    for(uint i = 0; i < ticks; ++i)
+    // Dump state once at very beginning
+    dumpState(0);
+
+    for(uint i = 1; i < ticks + 1; ++i)
     {
         // Make a new multimap after each tick and replace the old one with it after the tick.
         std::multimap<uint32_t, std::unique_ptr<Creature>> new_creatures;
 
-        std::cout << std::endl << "tick " << i << std::endl;
+//        std::cout << std::endl << "tick " << i << std::endl;
 
         // Make every creature do something
         for(auto &creature : creatures)
@@ -84,8 +88,25 @@ void World::simulate(uint32_t ticks)
 
         for(auto &col : collisions)
         {
-            std::cout << col.first << " " << col.second->second->getId() << std::endl;
+//            std::cout << col.first << " " << col.second->second->getId() << std::endl;
             creatures.erase(col.second);
         }
+
+        dumpState(i);
+    }
+}
+
+// A file is dumped after each step of the simulation with the current contents of this node's world.
+void World::dumpState(uint32_t tick)
+{
+    std::ofstream log("node1_tick" + std::to_string(tick) + ".log", std::ios::out | std::ios::app);
+    if(log.is_open())
+    {
+        for(auto &creature : creatures)
+        {
+            log << creature.second->serialize() << std::endl;
+        }
+
+        log.close();
     }
 }

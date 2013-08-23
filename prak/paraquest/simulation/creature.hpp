@@ -20,6 +20,9 @@ public:
     std::pair<uint16_t, uint16_t> getPosition() const;
     void setPosition(const std::pair<uint16_t, uint16_t> &value);
 
+    std::string serialize() const;
+    void deserialize(const std::string &line);
+
 private:
     uint16_t type;
     uint32_t id;

@@ -1,6 +1,8 @@
 #include "creature.hpp"
 
 #include <iostream>
+#include <sstream>
+#include <regex>
 
 #include "utils.hpp"
 
@@ -140,4 +142,63 @@ void Creature::setPosition(const std::pair<uint16_t, uint16_t> &value)
 {
     this->positionX = value.first;
     this->positionY = value.second;
+}
+
+std::string Creature::serialize() const
+{
+    std::stringstream string;
+    string << "id:" << this->id
+           << " type:" << this->type
+           << " posx:" << this->positionX
+           << " posy:" << this->positionY
+           << " str:" << this->strength
+           << " agi:" << this->agility
+           << " int:" << this->intelligence
+           << " soc:" << this->sociability;
+    return string.str();
+}
+
+void Creature::deserialize(const std::string &line)
+{
+    std::vector<std::string> tokens;
+    uint16_t current = 0;
+    bool done = false;
+    while(!done)
+    {
+        auto pos = line.find_first_of(' ');
+        if(pos != line.npos)
+        {
+            std::string token = line.substr(current, pos);
+            tokens.push_back(token);
+            current = pos + 1;
+        }
+        else
+        {
+            done = true;
+        }
+    }
+
+    for(auto token : tokens)
+    {
+        auto token_pos = token.find_first_of(':');
+        std::string key = token.substr(0, token_pos);
+        auto value = std::stoi(token.substr(token_pos + 1));
+        if(key == "id")
+            this->id = value;
+        if(key == "type")
+            this->type = value;
+        if(key == "posx")
+            this->positionX = value;
+        if(key == "posy")
+            this->positionY = value;
+        if(key == "str")
+            this->strength = value;
+        if(key == "agi")
+            this->agility = value;
+        if(key == "int")
+            this->intelligence = value;
+        if(key == "soc")
+            this->sociability = value;
+    }
+
 }

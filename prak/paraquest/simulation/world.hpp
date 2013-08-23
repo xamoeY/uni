@@ -12,10 +12,9 @@ class World
 public:
     World(uint16_t sizeY, uint16_t sizeX);
     void addCreature(std::string type);
-    // TODO
-    // some container type getCollisions();
     void populate(uint32_t count);
     void simulate(uint32_t ticks);
+    void dumpState(uint32_t tick);
 
 private:
     std::multimap<uint32_t, std::unique_ptr<Creature>> creatures;
