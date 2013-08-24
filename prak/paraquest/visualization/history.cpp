@@ -34,14 +34,14 @@ void History::parseHistory(const std::string &directory)
         auto tick_pos = file.find_first_of('-', rank_pos) + 1;
         uint32_t tick = std::stoi(file.substr(tick_pos));
 
-        this->history_states.emplace_back(std::unique_ptr<HistoryState> (new HistoryState(hostname, rank, tick)));
+        this->history_states.emplace(tick, std::unique_ptr<HistoryState> (new HistoryState(hostname, rank, tick)));
 
         // Now parse the contents of the archive
         std::ifstream infile(file);
         std::string line;
         while(std::getline(infile, line))
         {
-            history_states.back()->addCreature(line);
+            history_states[tick]->addCreature(line);
         }
     }
 }
