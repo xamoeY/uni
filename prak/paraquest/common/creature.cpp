@@ -170,7 +170,7 @@ void Creature::deserialize(const std::string &line)
     bool done = false;
     while(!done)
     {
-        auto pos = line.find_first_of(' ');
+        auto pos = line.find_first_of(' ', current);
         if(pos != line.npos)
         {
             std::string token = line.substr(current, pos);
@@ -205,5 +205,4 @@ void Creature::deserialize(const std::string &line)
         if(key == "soc")
             this->sociability = value;
     }
-
 }

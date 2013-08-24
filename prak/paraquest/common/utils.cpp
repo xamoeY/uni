@@ -1,5 +1,6 @@
 #include "utils.hpp"
 
+#include <algorithm>
 #include <iostream>
 
 #include "dirent.h"
@@ -49,5 +50,6 @@ std::vector<std::string> getLogFiles(const std::string &directory)
         std::cerr << "Unable to open specified directory." << std::endl;
     }
 
+    std::sort(files.begin(), files.end());
     return files;
 }

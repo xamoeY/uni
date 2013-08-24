@@ -25,7 +25,8 @@ GraphicalCreature::GraphicalCreature(const std::string &line, qint16 scale) :
     else if (this->species == 5)
         this->color = Qt::red;
 
-    this->image.load(this->species + ".png");
+    std::string image_name(convertSpecies(this->species) + ".png");
+    this->image.load(image_name.c_str());
 }
 
 // This is not thread safe. Run in main thread.

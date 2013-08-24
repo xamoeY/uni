@@ -19,7 +19,7 @@ public:
     void addCreature(QString type);
 
 private:
-    std::vector<std::unique_ptr<HistoryState>> creatures;
+    std::vector<std::unique_ptr<HistoryState>> history_states;
     quint16 sizeX;
     quint16 sizeY;
     quint16 scale;

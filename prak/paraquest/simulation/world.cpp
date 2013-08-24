@@ -12,15 +12,17 @@ World::World(uint16_t size_x, uint16_t size_y, uint16_t comm_size, uint16_t comm
     sizeX(size_x), sizeY(size_y), commSize(comm_size), commRank(comm_rank), processorName(processor_name)
 {}
 
-void World::addCreature(std::string type)
+void World::addCreature(std::string species)
 {
     this->currentId++;
 
+    // Generate random starting position
     const uint16_t x = randInt(0, this->sizeX - 1);
     const uint16_t y = randInt(0, this->sizeY - 1);
 
+    // Generate spatial hash to use as map key
     const uint32_t hash = this->sizeX * y + x;
-    creatures.emplace(hash, std::unique_ptr<Creature> (new Creature(type, this->currentId, x, y,
+    this->creatures.emplace(hash, std::unique_ptr<Creature> (new Creature(species, this->currentId, x, y,
                                                                     this->sizeX, this->sizeY)));
 }
 
@@ -105,8 +107,9 @@ void World::dumpState(uint32_t tick, uint32_t max_tick)
 {
     std::ostringstream filename;
     filename << std::setfill('0')
-             << this->processorName << std::setw(std::to_string(this->commSize).length()) << this->commRank
-             << "_tick" << std::setw(std::to_string(max_tick).length()) << tick
+             << this->processorName << "-"
+             << std::setw(std::to_string(this->commSize).length()) << this->commRank
+             << "_tick" << "-" << std::setw(std::to_string(max_tick).length()) << tick
              << ".log";
     std::ofstream log(filename.str(), std::ios::out);
 

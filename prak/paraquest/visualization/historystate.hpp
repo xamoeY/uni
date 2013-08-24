@@ -9,10 +9,15 @@
 class HistoryState
 {
 public:
-    HistoryState();
+    HistoryState(const std::string &hostname, uint16_t rank, uint32_t tick);
+    void addCreature(const std::string &line);
 
 private:
-    std::multimap<uint32_t, std::unique_ptr<GraphicalCreature>> creatures;
+    std::string hostname;
+    uint16_t rank;
+    uint32_t tick;
+
+    std::vector<std::unique_ptr<GraphicalCreature>> creatures;
 };
 
 #endif // HISTORYSTATE_HPP
