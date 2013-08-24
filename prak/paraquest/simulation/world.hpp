@@ -14,7 +14,7 @@ public:
     void addCreature(std::string type);
     void populate(uint32_t count);
     void simulate(uint32_t ticks);
-    void dumpState(uint32_t tick);
+    void dumpState(uint32_t tick, uint32_t max_tick);
 
 private:
     std::multimap<uint32_t, std::unique_ptr<Creature>> creatures;

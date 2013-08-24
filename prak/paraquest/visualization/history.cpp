@@ -1,5 +1,7 @@
 #include "history.hpp"
 
+#include <iostream>
+
 #include "utils.hpp"
 
 History::History(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *scene) :
@@ -12,14 +14,16 @@ History::History(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *sc
         scene->addLine(0, y, sizeY * scale, y, QPen(Qt::black));
 }
 
-void History::parseHistory(const std::string &path)
+void History::parseHistory(const std::string &directory)
 {
-
+    std::vector<std::string> log_files = getLogFiles(directory);
+    for(auto file : log_files)
+        std::cout << file << std::endl;
 }
 
 void History::addCreature(QString type)
 {
-    creatures.push_back(std::unique_ptr<Creature> (new Creature(type, this->scale,
-                                                                this->sizeX, this->sizeY)));
-    scene->addItem(creatures.back().get());
+//    creatures.push_back(std::unique_ptr<GraphicalCreature> (new GraphicalCreature(type, this->scale,
+//                                                                this->sizeX, this->sizeY)));
+//    scene->addItem(creatures.back().get());
 }

@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
     window.show();
 
     History history(100, 100, 72, window.graphicsScene());
+    history.parseHistory(".");
 
     return app.exec();
 }

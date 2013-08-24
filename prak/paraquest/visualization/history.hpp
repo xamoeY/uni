@@ -7,18 +7,19 @@
 #include <QGraphicsScene>
 #include <QObject>
 
-#include "creature.hpp"
+#include "graphicalcreature.hpp"
+#include "historystate.hpp"
 
 class History : public QObject
 {
     Q_OBJECT
 public:
     History(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *scene);
-    void parseHistory(const std::string& path);
+    void parseHistory(const std::string& directory);
     void addCreature(QString type);
 
 private:
-    std::vector<std::unique_ptr<Creature>> creatures;
+    std::vector<std::unique_ptr<HistoryState>> creatures;
     quint16 sizeX;
     quint16 sizeY;
     quint16 scale;

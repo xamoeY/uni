@@ -6,13 +6,14 @@
 class Creature
 {
 public:
-    Creature(std::string type, uint32_t id, uint16_t positionX, uint16_t positionY,
+    Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY,
              uint16_t worldSizeX, uint16_t worldSizeY);
+    Creature(const std::string &line);
 
     void doAction();
 
-    static std::string typeToString(uint16_t type);
-    static int16_t stringToType(std::string type);
+    static std::string convertSpecies(uint16_t species);
+    static int16_t convertSpecies(std::string species);
 
     uint32_t getId() const;
     void setId(const uint32_t &value);
@@ -23,9 +24,9 @@ public:
     std::string serialize() const;
     void deserialize(const std::string &line);
 
-private:
-    uint16_t type;
+protected:
     uint32_t id;
+    uint16_t species;
     uint16_t positionX;
     uint16_t positionY;
     uint16_t worldSizeX;

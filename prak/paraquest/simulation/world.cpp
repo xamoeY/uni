@@ -1,7 +1,10 @@
 #include "world.hpp"
 
+#include <cmath>
 #include <iostream>
+#include <iomanip>
 #include <fstream>
+#include <sstream>
 
 #include "utils.hpp"
 
@@ -33,7 +36,7 @@ void World::populate(uint32_t count)
 void World::simulate(uint32_t ticks)
 {
     // Dump state once at very beginning
-    dumpState(0);
+    dumpState(0, ticks);
 
     for(uint i = 1; i < ticks + 1; ++i)
     {
@@ -93,24 +96,30 @@ void World::simulate(uint32_t ticks)
             creatures.erase(col.second);
         }
 
-        dumpState(i);
+        dumpState(i, ticks);
     }
 }
 
 // A file is dumped after each step of the simulation with the current contents of this node's world.
-void World::dumpState(uint32_t tick)
+void World::dumpState(uint32_t tick, uint32_t max_tick)
 {
-    std::ofstream log(this->processorName + std::to_string(this->commRank) + "_tick" + std::to_string(tick) + ".log", std::ios::out | std::ios::app);
+    std::ostringstream filename;
+    filename << std::setfill('0')
+             << this->processorName << std::setw(std::to_string(this->commSize).length()) << this->commRank
+             << "_tick" << std::setw(std::to_string(max_tick).length()) << tick
+             << ".log";
+    std::ofstream log(filename.str(), std::ios::out);
 
     if(log.is_open())
     {
+        /*
         // Before first tick, print general info about this node that won't change during runtime
         if(tick == 0)
         {
             log << "world_size_x:" << this->sizeX
                 << " world_size_y:" << this->sizeY
                 << std::endl;
-        }
+        }*/
 
         for(auto &creature : creatures)
         {

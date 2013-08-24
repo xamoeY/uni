@@ -6,13 +6,13 @@
 
 #include "utils.hpp"
 
-Creature::Creature(std::string type, uint32_t id, uint16_t positionX, uint16_t positionY,
+Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY,
                    uint16_t worldSizeX, uint16_t worldSizeY) :
     id(id), positionX(positionX), positionY(positionY), worldSizeX(worldSizeX), worldSizeY(worldSizeY)
 {
-    this->type = stringToType(type);
+    this->species = convertSpecies(species);
 
-    if (this->type == 0)
+    if (this->species == 0)
     {
         this->strength = 210;
         this->agility = 210;
@@ -20,7 +20,7 @@ Creature::Creature(std::string type, uint32_t id, uint16_t positionX, uint16_t p
         this->sociability = 80;
     }
 
-    if (this->type == 1)
+    if (this->species == 1)
     {
         this->strength = 120;
         this->agility = 230;
@@ -28,7 +28,7 @@ Creature::Creature(std::string type, uint32_t id, uint16_t positionX, uint16_t p
         this->sociability = 120;
     }
 
-    if (this->type == 2)
+    if (this->species == 2)
     {
         this->strength = 210;
         this->agility = 200;
@@ -36,7 +36,7 @@ Creature::Creature(std::string type, uint32_t id, uint16_t positionX, uint16_t p
         this->sociability = 95;
     }
 
-    if (this->type == 3)
+    if (this->species == 3)
     {
         this->strength = 105;
         this->agility = 150;
@@ -44,7 +44,7 @@ Creature::Creature(std::string type, uint32_t id, uint16_t positionX, uint16_t p
         this->sociability = 110;
     }
 
-    if (this->type == 4)
+    if (this->species == 4)
     {
         this->strength = 195;
         this->agility = 185;
@@ -52,13 +52,18 @@ Creature::Creature(std::string type, uint32_t id, uint16_t positionX, uint16_t p
         this->sociability = 50;
     }
 
-    if (this->type == 5)
+    if (this->species == 5)
     {
         this->strength = 150;
         this->agility = 75;
         this->intelligence = 180;
         this->sociability = 195;
     }
+}
+
+Creature::Creature(const std::string &line)
+{
+    deserialize(line);
 }
 
 void Creature::doAction()
@@ -87,37 +92,37 @@ void Creature::doAction()
     }
 }
 
-std::string Creature::typeToString(uint16_t type)
+std::string Creature::convertSpecies(uint16_t species)
 {
-    if (type == 0)
+    if (species == 0)
         return "goblin";
-    else if (type == 1)
+    else if (species == 1)
         return "hobbit";
-    else if (type == 2)
+    else if (species == 2)
         return "orc";
-    else if (type == 3)
+    else if (species == 3)
         return "elf";
-    else if (type == 4)
+    else if (species == 4)
         return "dwarf";
-    else if (type == 5)
+    else if (species == 5)
         return "human";
     else
         return "invalid";
 }
 
-int16_t Creature::stringToType(std::string type)
+int16_t Creature::convertSpecies(std::string species)
 {
-    if (type == "golbin")
+    if (species == "goblin")
         return 0;
-    else if (type == "hobbit")
+    else if (species == "hobbit")
         return 1;
-    else if (type == "orc")
+    else if (species == "orc")
         return 2;
-    else if (type == "elf")
+    else if (species == "elf")
         return 3;
-    else if (type == "dwarf")
+    else if (species == "dwarf")
         return 4;
-    else if (type == "human")
+    else if (species == "human")
         return 5;
     else
         return -1;
@@ -148,7 +153,7 @@ std::string Creature::serialize() const
 {
     std::stringstream string;
     string << "id:" << this->id
-           << " type:" << this->type
+           << " species:" << this->species
            << " posx:" << this->positionX
            << " posy:" << this->positionY
            << " str:" << this->strength
@@ -185,8 +190,8 @@ void Creature::deserialize(const std::string &line)
         auto value = std::stoi(token.substr(token_pos + 1));
         if(key == "id")
             this->id = value;
-        if(key == "type")
-            this->type = value;
+        if(key == "species")
+            this->species = value;
         if(key == "posx")
             this->positionX = value;
         if(key == "posy")
