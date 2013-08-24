@@ -6,11 +6,10 @@
 class Creature
 {
 public:
-    Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY,
-             uint16_t worldSizeX, uint16_t worldSizeY);
+    Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY);
     Creature(const std::string &line);
 
-    void doAction();
+    void doAction(uint32_t world_size_x, uint32_t world_size_y);
 
     static std::string convertSpecies(uint16_t species);
     static int16_t convertSpecies(std::string species);
@@ -29,8 +28,6 @@ protected:
     uint16_t species;
     uint16_t positionX;
     uint16_t positionY;
-    uint16_t worldSizeX;
-    uint16_t worldSizeY;
 
     uint16_t strength;
     uint16_t agility;

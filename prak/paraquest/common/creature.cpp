@@ -6,9 +6,8 @@
 
 #include "utils.hpp"
 
-Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY,
-                   uint16_t worldSizeX, uint16_t worldSizeY) :
-    id(id), positionX(positionX), positionY(positionY), worldSizeX(worldSizeX), worldSizeY(worldSizeY)
+Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY) :
+    id(id), positionX(positionX), positionY(positionY)
 {
     this->species = convertSpecies(species);
 
@@ -66,7 +65,7 @@ Creature::Creature(const std::string &line)
     deserialize(line);
 }
 
-void Creature::doAction()
+void Creature::doAction(uint32_t world_size_x, uint32_t world_size_y)
 {
     const uint16_t action = randInt(0, 4);
 
@@ -75,11 +74,11 @@ void Creature::doAction()
         return;
     } else if (action == 1) {
         // move east
-        if (this->positionX + 1 < this->worldSizeX)
+        if (this->positionX + 1 < int32_t(world_size_x))
             this->positionX += 1;
     } else if (action == 2) {
         // move south
-        if (this->positionY + 1 < this->worldSizeY)
+        if (this->positionY + 1 < int32_t(world_size_y))
             this->positionY += 1;
     } else if (action == 3) {
         // move west
@@ -159,7 +158,8 @@ std::string Creature::serialize() const
            << " str:" << this->strength
            << " agi:" << this->agility
            << " int:" << this->intelligence
-           << " soc:" << this->sociability;
+           << " soc:" << this->sociability
+           << " ";
     return string.str();
 }
 

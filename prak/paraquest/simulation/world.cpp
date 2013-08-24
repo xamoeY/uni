@@ -9,7 +9,7 @@
 #include "utils.hpp"
 
 World::World(uint16_t size_x, uint16_t size_y, uint16_t comm_size, uint16_t comm_rank, char* processor_name) :
-    sizeX(size_x), sizeY(size_y), commSize(comm_size), commRank(comm_rank), processorName(processor_name)
+    sizeX(size_x), sizeY(size_y), commSize(comm_size), commRank(comm_rank), processorName(processor_name), currentId(0)
 {}
 
 void World::addCreature(std::string species)
@@ -22,8 +22,7 @@ void World::addCreature(std::string species)
 
     // Generate spatial hash to use as map key
     const uint32_t hash = this->sizeX * y + x;
-    this->creatures.emplace(hash, std::unique_ptr<Creature> (new Creature(species, this->currentId, x, y,
-                                                                    this->sizeX, this->sizeY)));
+    this->creatures.emplace(hash, std::unique_ptr<Creature> (new Creature(species, this->currentId, x, y)));
 }
 
 void World::populate(uint32_t count)
@@ -50,7 +49,7 @@ void World::simulate(uint32_t ticks)
         // Make every creature do something
         for(auto &creature : creatures)
         {
-            creature.second->doAction();
+            creature.second->doAction(this->sizeX, this->sizeY);
             const uint32_t hash = this->sizeX * creature.second->getPosition().second + creature.second->getPosition().first;
             new_creatures.emplace(hash, std::move(creature.second));
         }
