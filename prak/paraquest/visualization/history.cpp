@@ -3,11 +3,24 @@
 #include <iostream>
 #include <fstream>
 
+#include <cereal/types/map.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+
 #include "utils.hpp"
 
 History::History(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *scene) :
     sizeX(sizeX), sizeY(sizeY), scale(scale), scene(scene)
 {
+    // Preload pixmaps
+    std::vector<std::string> species {"goblin", "hobbit", "orc", "elf", "dwarf", "human"};
+    for(auto &s : species)
+    {
+        images[s] = QPixmap(QString::fromStdString(":/images/" + s + ".png"));
+    }
+
     // Make a grid
     for (int x = 0; x <= sizeX * scale; x += scale)
         scene->addLine(x, 0, x, sizeX * scale, QPen(Qt::black));
@@ -37,18 +50,18 @@ void History::parseHistory(const std::string &directory)
         this->history_states.emplace(tick, std::unique_ptr<HistoryState> (new HistoryState(hostname, rank, tick)));
 
         // Now parse the contents of the archive
-        std::ifstream infile(file);
-        std::string line;
-        while(std::getline(infile, line))
+        std::ifstream log(file);
+        cereal::BinaryInputArchive archive(log);
+        std::multimap<uint32_t, std::shared_ptr<Creature>> temp_creatures;
+        archive(temp_creatures);
+
+        for(auto c : temp_creatures)
         {
-            history_states[tick]->addCreature(line);
+            history_states[tick]->addCreature(c.second, this->scale);
+            GraphicalCreature* graphical_creature = history_states[tick]->getLastCreature();
+            const std::string species = graphical_creature->getSpecies();
+            graphical_creature->setPixmap(&images[species]);
+            this->scene->addItem(graphical_creature);
         }
     }
-}
-
-void History::addCreature(QString type)
-{
-//    creatures.push_back(std::unique_ptr<GraphicalCreature> (new GraphicalCreature(type, this->scale,
-//                                                                this->sizeX, this->sizeY)));
-//    scene->addItem(creatures.back().get());
 }

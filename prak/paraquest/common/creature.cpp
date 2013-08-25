@@ -6,11 +6,22 @@
 
 #include "utils.hpp"
 
-Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY) :
-    id(id), positionX(positionX), positionY(positionY)
+Creature::Creature(const Creature& creature)
 {
-    this->species = convertSpecies(species);
+    this->species = convertSpecies(creature.getSpecies());
+    this->id = creature.getId();
+    this->positionX = creature.getPosition().first;
+    this->positionY = creature.getPosition().second;
 
+    this->strength = creature.getStrength();
+    this->agility = creature.getAgility();
+    this->intelligence = creature.getIntelligence();
+    this->sociability = creature.getSociability();
+}
+
+Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY) :
+    species(convertSpecies(species)), id(id), positionX(positionX), positionY(positionY)
+{
     if (this->species == 0)
     {
         this->strength = 210;
@@ -58,11 +69,6 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
         this->intelligence = 180;
         this->sociability = 195;
     }
-}
-
-Creature::Creature(const std::string &line)
-{
-    deserialize(line);
 }
 
 void Creature::doAction(uint32_t world_size_x, uint32_t world_size_y)
@@ -148,61 +154,44 @@ void Creature::setPosition(const std::pair<uint16_t, uint16_t> &value)
     this->positionY = value.second;
 }
 
-std::string Creature::serialize() const
+std::string Creature::getSpecies() const
 {
-    std::stringstream string;
-    string << "id:" << this->id
-           << " species:" << this->species
-           << " posx:" << this->positionX
-           << " posy:" << this->positionY
-           << " str:" << this->strength
-           << " agi:" << this->agility
-           << " int:" << this->intelligence
-           << " soc:" << this->sociability
-           << " ";
-    return string.str();
+    return convertSpecies(this->species);
 }
 
-void Creature::deserialize(const std::string &line)
+uint16_t Creature::getStrength() const
 {
-    std::vector<std::string> tokens;
-    uint16_t current = 0;
-    bool done = false;
-    while(!done)
-    {
-        auto pos = line.find_first_of(' ', current);
-        if(pos != line.npos)
-        {
-            std::string token = line.substr(current, pos);
-            tokens.push_back(token);
-            current = pos + 1;
-        }
-        else
-        {
-            done = true;
-        }
-    }
+    return strength;
+}
 
-    for(auto token : tokens)
-    {
-        auto token_pos = token.find_first_of(':');
-        std::string key = token.substr(0, token_pos);
-        auto value = std::stoi(token.substr(token_pos + 1));
-        if(key == "id")
-            this->id = value;
-        if(key == "species")
-            this->species = value;
-        if(key == "posx")
-            this->positionX = value;
-        if(key == "posy")
-            this->positionY = value;
-        if(key == "str")
-            this->strength = value;
-        if(key == "agi")
-            this->agility = value;
-        if(key == "int")
-            this->intelligence = value;
-        if(key == "soc")
-            this->sociability = value;
-    }
+void Creature::setStrength(const uint16_t &value)
+{
+    strength = value;
+}
+uint16_t Creature::getAgility() const
+{
+    return agility;
+}
+
+void Creature::setAgility(const uint16_t &value)
+{
+    agility = value;
+}
+uint16_t Creature::getIntelligence() const
+{
+    return intelligence;
+}
+
+void Creature::setIntelligence(const uint16_t &value)
+{
+    intelligence = value;
+}
+uint16_t Creature::getSociability() const
+{
+    return sociability;
+}
+
+void Creature::setSociability(const uint16_t &value)
+{
+    sociability = value;
 }

@@ -3,16 +3,21 @@
 
 #include <string>
 
+#include <cereal/cereal.hpp>
+
 class Creature
 {
 public:
+    Creature() = default;
+    Creature(const Creature &creature);
     Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY);
-    Creature(const std::string &line);
 
     void doAction(uint32_t world_size_x, uint32_t world_size_y);
 
     static std::string convertSpecies(uint16_t species);
     static int16_t convertSpecies(std::string species);
+
+    std::string getSpecies() const;
 
     uint32_t getId() const;
     void setId(const uint32_t &value);
@@ -20,12 +25,28 @@ public:
     std::pair<uint16_t, uint16_t> getPosition() const;
     void setPosition(const std::pair<uint16_t, uint16_t> &value);
 
-    std::string serialize() const;
-    void deserialize(const std::string &line);
+    uint16_t getStrength() const;
+    void setStrength(const uint16_t &value);
+
+    uint16_t getAgility() const;
+    void setAgility(const uint16_t &value);
+
+    uint16_t getIntelligence() const;
+    void setIntelligence(const uint16_t &value);
+
+    uint16_t getSociability() const;
+    void setSociability(const uint16_t &value);
+
+    template<class Archive>
+    void serialize(Archive &archive)
+    {
+        archive(this->id, this->species, this->positionX, this->positionY,
+                this->strength, this->agility, this->intelligence, this->sociability);
+    }
 
 protected:
-    uint32_t id;
     uint16_t species;
+    uint32_t id;
     uint16_t positionX;
     uint16_t positionY;
 

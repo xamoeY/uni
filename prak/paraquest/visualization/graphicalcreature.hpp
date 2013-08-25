@@ -9,12 +9,16 @@
 class GraphicalCreature : public QGraphicsItem, public Creature
 {
 public:
-    GraphicalCreature(const std::string &line, qint16 scale);
+    GraphicalCreature(const std::shared_ptr<Creature>& creature, qint16 scale=72);
 
     void updateGraphics();
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget);
+
+    QPixmap *getPixmap() const;
+    void setPixmap(QPixmap *value);
+
 
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
@@ -24,7 +28,7 @@ protected:
 private:
     quint16 scale;
     QColor color;
-    QImage image;
+    QPixmap *pixmap;
 };
 
 #endif // GRAPHICALCREATURE_HPP

@@ -16,10 +16,10 @@ class History : public QObject
 public:
     History(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *scene);
     void parseHistory(const std::string& directory);
-    void addCreature(QString type);
 
 private:
     std::map<uint32_t, std::unique_ptr<HistoryState>> history_states;
+    std::map<std::string, QPixmap> images;
     quint16 sizeX;
     quint16 sizeY;
     quint16 scale;

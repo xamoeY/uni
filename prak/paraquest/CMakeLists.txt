@@ -6,12 +6,12 @@ aux_source_directory(common SRC_LIST_COMMON)
 set(CMAKE_AUTOMOC TRUE)
 set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-add_definitions("-Wall -Wextra -std=c++11 -g -pedantic")
+add_definitions("-Wall -Wextra -Wno-unused-parameter -std=c++11 -g -O0")
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
 find_package(MPI)
 
-include_directories(common)
+include_directories(common common/cereal-0.9.1/include/)
 
 if(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND})
     qt5_add_resources(RESOURCES visualization/paraquest.qrc)

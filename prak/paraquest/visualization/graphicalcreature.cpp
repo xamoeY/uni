@@ -4,8 +4,8 @@
 
 #include "utils.hpp"
 
-GraphicalCreature::GraphicalCreature(const std::string &line, qint16 scale) :
-    Creature(line), scale(scale)
+GraphicalCreature::GraphicalCreature(const std::shared_ptr<Creature> &creature, qint16 scale) :
+    Creature(*(creature.get())), scale(scale)
 {
     setZValue((this->positionX + this->positionY) % 2);
     setFlags(ItemIsSelectable | ItemIsMovable);
@@ -24,9 +24,6 @@ GraphicalCreature::GraphicalCreature(const std::string &line, qint16 scale) :
         this->color = Qt::gray;
     else if (this->species == 5)
         this->color = Qt::red;
-
-    std::string image_name(convertSpecies(this->species) + ".png");
-    this->image.load(image_name.c_str());
 }
 
 // This is not thread safe. Run in main thread.
@@ -86,7 +83,7 @@ void GraphicalCreature::paint(QPainter *painter, const QStyleOptionGraphicsItem 
         painter->setBrush(this->color);
         painter->drawRect(boundingRect());
         painter->restore();
-        painter->drawImage(0, 0, QImage(std::string(":/images/" + convertSpecies(this->species) + ".png").c_str()));
+        painter->drawPixmap(0, 0, *(this->pixmap));
     } else {
         painter->save();
         painter->setBrush(this->color);
@@ -115,4 +112,14 @@ void GraphicalCreature::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsItem::mouseReleaseEvent(event);
     update();
+}
+
+QPixmap *GraphicalCreature::getPixmap() const
+{
+    return pixmap;
+}
+
+void GraphicalCreature::setPixmap(QPixmap *value)
+{
+    pixmap = value;
 }

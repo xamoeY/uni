@@ -17,7 +17,7 @@ public:
     void dumpState(uint32_t tick, uint32_t max_tick);
 
 private:
-    std::multimap<uint32_t, std::unique_ptr<Creature>> creatures;
+    std::multimap<uint32_t, std::shared_ptr<Creature>> creatures; // TODO: Use unique_ptr again here once cereal is fixed
     uint16_t sizeX;
     uint16_t sizeY;
     uint16_t commSize;

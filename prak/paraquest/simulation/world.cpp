@@ -6,6 +6,12 @@
 #include <fstream>
 #include <sstream>
 
+#include <cereal/types/map.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/types/string.hpp>
+#include <cereal/archives/binary.hpp>
+#include <cereal/archives/json.hpp>
+
 #include "utils.hpp"
 
 World::World(uint16_t size_x, uint16_t size_y, uint16_t comm_size, uint16_t comm_rank, char* processor_name) :
@@ -42,7 +48,7 @@ void World::simulate(uint32_t ticks)
     for(uint i = 1; i < ticks + 1; ++i)
     {
         // Make a new multimap after each tick and replace the old one with it after the tick.
-        std::multimap<uint32_t, std::unique_ptr<Creature>> new_creatures;
+        std::multimap<uint32_t, std::shared_ptr<Creature>> new_creatures;
 
 //        std::cout << std::endl << "tick " << i << std::endl;
 
@@ -67,7 +73,7 @@ void World::simulate(uint32_t ticks)
 
         // Check for collisions
         // Use a second list to store iterators to collisions
-        std::map<uint32_t, std::multimap<uint32_t, std::unique_ptr<Creature>>::const_iterator> collisions;
+        std::map<uint32_t, std::multimap<uint32_t, std::shared_ptr<Creature>>::const_iterator> collisions;
         for(auto it = creatures.cbegin(); it != creatures.cend(); ++it)
         {
             if (creatures.count(it->first) > 1)
@@ -110,24 +116,12 @@ void World::dumpState(uint32_t tick, uint32_t max_tick)
              << std::setw(std::to_string(this->commSize).length()) << this->commRank
              << "_tick" << "-" << std::setw(std::to_string(max_tick).length()) << tick
              << ".log";
-    std::ofstream log(filename.str(), std::ios::out);
+    std::ofstream log(filename.str());
 
     if(log.is_open())
     {
-        /*
-        // Before first tick, print general info about this node that won't change during runtime
-        if(tick == 0)
-        {
-            log << "world_size_x:" << this->sizeX
-                << " world_size_y:" << this->sizeY
-                << std::endl;
-        }*/
-
-        for(auto &creature : creatures)
-        {
-            log << creature.second->serialize() << std::endl;
-        }
-
+        cereal::BinaryOutputArchive archive(log);
+        archive(creatures);
         log.close();
     }
 }
