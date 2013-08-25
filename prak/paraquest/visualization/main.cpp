@@ -1,9 +1,6 @@
 #include <iostream>
 
 #include <QApplication>
-#include <QTimer>
-#include <QObject>
-#include <QtConcurrent/QtConcurrentRun>
 
 #include "mainwindow.hpp"
 #include "history.hpp"
