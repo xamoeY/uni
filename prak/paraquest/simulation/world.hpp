@@ -14,6 +14,7 @@ public:
     void addCreature(std::string species);
     void populate(uint32_t count);
     void simulate(uint32_t ticks);
+    void dumpSettings();
     void dumpState(uint32_t tick, uint32_t max_tick);
 
 private:

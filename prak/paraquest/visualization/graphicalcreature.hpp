@@ -19,7 +19,6 @@ public:
     QPixmap *getPixmap() const;
     void setPixmap(QPixmap *value);
 
-
 protected:
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     void mouseMoveEvent(QGraphicsSceneMouseEvent *event);

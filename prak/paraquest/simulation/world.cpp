@@ -42,6 +42,9 @@ void World::populate(uint32_t count)
 
 void World::simulate(uint32_t ticks)
 {
+    // Dump global world settings once
+    dumpSettings();
+
     // Dump state once at very beginning
     dumpState(0, ticks);
 
@@ -107,9 +110,30 @@ void World::simulate(uint32_t ticks)
     }
 }
 
+// Dumps the world properties to a file.
+void World::dumpSettings()
+{
+    // Create a specially named file name in the following syntax:
+    // world.log
+    std::ostringstream filename;
+    filename << "world.properties";
+    std::ofstream log(filename.str());
+
+    // Dump world settings.
+    if(log.is_open())
+    {
+        cereal::BinaryOutputArchive archive(log);
+        archive(this->sizeX, this->sizeY);
+        log.close();
+    }
+}
+
 // A file is dumped after each step of the simulation with the current contents of this node's world.
 void World::dumpState(uint32_t tick, uint32_t max_tick)
 {
+    // Create a specially named file name in the following syntax:
+    // <node_name>-<node_rank>_tick-<tick_number>.log
+    // The setw commands are used to pad the number with leading zeroes for easier parsing.
     std::ostringstream filename;
     filename << std::setfill('0')
              << this->processorName << "-"
@@ -118,6 +142,7 @@ void World::dumpState(uint32_t tick, uint32_t max_tick)
              << ".log";
     std::ofstream log(filename.str());
 
+    // Dump all of the current creatures into the log.
     if(log.is_open())
     {
         cereal::BinaryOutputArchive archive(log);

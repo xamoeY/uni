@@ -8,7 +8,7 @@
 
 int main(int argc, char *argv[])
 {
-    int world_size = 100;
+    int world_size = 10;
     int creature_count = 10;
     int simulation_length = 10;
     int random_seed = 0;

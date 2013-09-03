@@ -43,8 +43,8 @@ private slots:
     void togglePointerMode();
     void toggleOpenGL();
     void toggleAntialiasing();
-    void rotateLeft();
-    void rotateRight();
+    void tickBackward();
+    void tickForward();
 
 private:
     GraphicsView *graphicsView;
@@ -57,7 +57,7 @@ private:
     QToolButton *printButton;
     QToolButton *resetButton;
     QSlider *zoomSlider;
-    QSlider *rotateSlider;
+    QSlider *tickSlider;
 };
 
 #endif // VIEW_H
