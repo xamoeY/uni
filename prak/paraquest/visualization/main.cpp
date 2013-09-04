@@ -21,12 +21,13 @@ int main(int argc, char *argv[])
     // Get world size from world properties file
     uint16_t size_x;
     uint16_t size_y;
+    uint32_t max_tick;
     std::ifstream log("world.properties");
     cereal::BinaryInputArchive archive(log);
     if(log.is_open())
-        archive(size_x, size_y);
+        archive(size_x, size_y, max_tick);
 
-    History history(size_x, size_y, 72, window.graphicsScene());
+    History history(size_x, size_y, max_tick, 72, window.graphicsScene());
     history.parseHistory(".");
 
     return app.exec();

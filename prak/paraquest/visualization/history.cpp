@@ -10,9 +10,10 @@
 #include <cereal/archives/json.hpp>
 
 #include "utils.hpp"
+#include "view.hpp"
 
-History::History(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *scene) :
-    sizeX(sizeX), sizeY(sizeY), scale(scale), scene(scene)
+History::History(quint16 size_x, quint16 size_y, quint32 max_tick, quint16 scale, QGraphicsScene *scene) :
+    sizeX(size_x), sizeY(size_y), maxTick(max_tick), scale(scale), scene(scene)
 {
     // Preload pixmaps
     std::vector<std::string> species {"goblin", "hobbit", "orc", "elf", "dwarf", "human"};
@@ -26,6 +27,10 @@ History::History(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *sc
         scene->addLine(x, 0, x, sizeX * scale, QPen(Qt::black));
     for (int y = 0; y <= sizeY * scale; y += scale)
         scene->addLine(0, y, sizeY * scale, y, QPen(Qt::black));
+
+    // Set slider to proper max value
+    GraphicsView *view = static_cast<GraphicsView*>(this->scene->views().first());
+    view->getView()->setMaximumTick(maxTick);
 }
 
 void History::parseHistory(const std::string &directory)

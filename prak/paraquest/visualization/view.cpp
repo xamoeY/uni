@@ -18,6 +18,12 @@ void GraphicsView::wheelEvent(QWheelEvent *e)
         QGraphicsView::wheelEvent(e);
     }
 }
+
+View *GraphicsView::getView() const
+{
+    return view;
+}
+
 #endif
 
 View::View(const QString &name, QWidget *parent)
@@ -67,7 +73,7 @@ View::View(const QString &name, QWidget *parent)
     tickSlider = new QSlider;
     tickSlider->setOrientation(Qt::Horizontal);
     tickSlider->setMinimum(0);
-    tickSlider->setMaximum(10); // TODO: Set this to max ticks
+    tickSlider->setMaximum(10); // This will get to something else during History initialization
     tickSlider->setValue(0);
     tickSlider->setTickPosition(QSlider::TicksBelow);
 
@@ -209,6 +215,11 @@ void View::zoomIn(int level)
 void View::zoomOut(int level)
 {
     zoomSlider->setValue(zoomSlider->value() - level);
+}
+
+void View::setMaximumTick(quint32 max_tick)
+{
+    tickSlider->setMaximum(max_tick);
 }
 
 void View::tickBackward()

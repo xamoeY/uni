@@ -10,12 +10,12 @@ int main(int argc, char *argv[])
 {
     int world_size = 10;
     int creature_count = 10;
-    int simulation_length = 10;
+    int max_ticks = 10;
     int random_seed = 0;
 
     // Parse program arguments
     int option = 0;
-    while ((option = getopt(argc, argv,"hs:c:l:r:")) != -1) {
+    while ((option = getopt(argc, argv,"hs:c:t:r:")) != -1) {
         switch (option) {
         case 's':
             world_size = std::stoi(optarg);
@@ -23,15 +23,15 @@ int main(int argc, char *argv[])
         case 'c':
             creature_count = std::stoi(optarg);
             break;
-        case 'l':
-            simulation_length = std::stoi(optarg);
+        case 't':
+            max_ticks = std::stoi(optarg);
             break;
         case 'r':
             random_seed = std::stoi(optarg);
             break;
         case 'h':
         default:
-            std::cout << "usage: " << argv[0] << " [-h] [-s WORLDSIZE] [-c CREAUTECOUNT] [-l SIMULATIONLENTH]" << std::endl;
+            std::cout << "usage: " << argv[0] << " [-h] [-s WORLDSIZE] [-c CREAUTECOUNT] [-t MAXTICKS]" << std::endl;
             return 1;
         }
     }
@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
     MPI_Get_processor_name(processor_name, &name_len);
 
     std::cout << "Initializing world with size " << world_size << "x" << world_size << " and " << creature_count << " creatures." << std::endl;
-    std::cout << "Simulation will run for " << simulation_length << " ticks." << std::endl;
+    std::cout << "Simulation will run for " << max_ticks << " ticks." << std::endl;
     std::cout << "Using " << comm_size << " processes." << " Own rank is " << comm_rank << " on " << processor_name << std::endl;
 
     World world(world_size, world_size, comm_size, comm_rank, processor_name);
@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
     world.populate(creature_count);
 
     std::cout << "Starting simulation" << std::endl;
-    world.simulate(simulation_length);
+    world.simulate(max_ticks);
     std::cout << "Finished simulation" << std::endl;
 
     MPI_Finalize();

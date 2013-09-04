@@ -14,7 +14,7 @@ class History : public QObject
 {
     Q_OBJECT
 public:
-    History(quint16 sizeY, quint16 sizeX, quint16 scale, QGraphicsScene *scene);
+    History(quint16 size_x, quint16 size_y, quint32 max_tick, quint16 scale, QGraphicsScene *scene);
     void parseHistory(const std::string& directory);
 
 private:
@@ -22,6 +22,7 @@ private:
     std::map<std::string, QPixmap> images;
     quint16 sizeX;
     quint16 sizeY;
+    quint32 maxTick;
     quint16 scale;
     QGraphicsScene *scene;
 };

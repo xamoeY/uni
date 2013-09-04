@@ -15,6 +15,8 @@ class GraphicsView : public QGraphicsView
 public:
     GraphicsView(View *v) : QGraphicsView(), view(v) { }
 
+    View *getView() const;
+
 protected:
 #ifndef QT_NO_WHEELEVENT
     void wheelEvent(QWheelEvent *);
@@ -35,6 +37,7 @@ public:
 public slots:
     void zoomIn(int level = 1);
     void zoomOut(int level = 1);
+    void setMaximumTick(quint32 max_tick);
 
 private slots:
     void resetView();

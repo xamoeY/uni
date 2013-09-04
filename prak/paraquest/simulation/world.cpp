@@ -43,7 +43,7 @@ void World::populate(uint32_t count)
 void World::simulate(uint32_t ticks)
 {
     // Dump global world settings once
-    dumpSettings();
+    dumpSettings(ticks);
 
     // Dump state once at very beginning
     dumpState(0, ticks);
@@ -111,7 +111,7 @@ void World::simulate(uint32_t ticks)
 }
 
 // Dumps the world properties to a file.
-void World::dumpSettings()
+void World::dumpSettings(uint32_t max_tick)
 {
     // Create a specially named file name in the following syntax:
     // world.log
@@ -123,7 +123,7 @@ void World::dumpSettings()
     if(log.is_open())
     {
         cereal::BinaryOutputArchive archive(log);
-        archive(this->sizeX, this->sizeY);
+        archive(this->sizeX, this->sizeY, max_tick);
         log.close();
     }
 }
