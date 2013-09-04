@@ -28,7 +28,11 @@ void World::addCreature(std::string species)
 
     // Generate spatial hash to use as map key
     const uint32_t hash = this->sizeX * y + x;
-    this->creatures.emplace(hash, std::unique_ptr<Creature> (new Creature(species, this->currentId, x, y)));
+
+    // Add this new creature only if it doesn't collide with another creature already.
+    // This also means that we'll likely be below our max creatures right from the start already.
+    if (this->creatures.count(hash) == 0)
+        this->creatures.emplace(hash, std::unique_ptr<Creature> (new Creature(species, this->currentId, x, y)));
 }
 
 void World::populate(uint32_t count)
