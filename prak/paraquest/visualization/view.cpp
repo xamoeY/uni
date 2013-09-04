@@ -33,8 +33,8 @@ View::View(const QString &name, QWidget *parent)
     graphicsView = new GraphicsView(this);
     graphicsView->setRenderHint(QPainter::Antialiasing, false);
     graphicsView->setDragMode(QGraphicsView::ScrollHandDrag);
+    graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
     graphicsView->setOptimizationFlags(QGraphicsView::DontSavePainterState);
-    graphicsView->setViewportUpdateMode(QGraphicsView::SmartViewportUpdate);
     graphicsView->setTransformationAnchor(QGraphicsView::AnchorUnderMouse);
 
     int size = style()->pixelMetric(QStyle::PM_ToolBarIconSize);
@@ -139,11 +139,9 @@ View::View(const QString &name, QWidget *parent)
 
     connect(resetButton, SIGNAL(clicked()), this, SLOT(resetView()));
     connect(zoomSlider, SIGNAL(valueChanged(int)), this, SLOT(setupMatrix()));
-    connect(tickSlider, SIGNAL(valueChanged(int)), this, SLOT(setupMatrix()));
-    connect(graphicsView->verticalScrollBar(), SIGNAL(valueChanged(int)),
-            this, SLOT(setResetButtonEnabled()));
-    connect(graphicsView->horizontalScrollBar(), SIGNAL(valueChanged(int)),
-            this, SLOT(setResetButtonEnabled()));
+    connect(tickSlider, SIGNAL(valueChanged(int)), graphicsView->viewport(), SLOT(update()));
+    connect(graphicsView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(setResetButtonEnabled()));
+    connect(graphicsView->horizontalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(setResetButtonEnabled()));
     connect(selectModeButton, SIGNAL(toggled(bool)), this, SLOT(togglePointerMode()));
     connect(dragModeButton, SIGNAL(toggled(bool)), this, SLOT(togglePointerMode()));
     connect(antialiasButton, SIGNAL(toggled(bool)), this, SLOT(toggleAntialiasing()));
@@ -154,6 +152,7 @@ View::View(const QString &name, QWidget *parent)
     connect(zoomOutIcon, SIGNAL(clicked()), this, SLOT(zoomOut()));
 
     setupMatrix();
+    togglePointerMode();
 }
 
 QGraphicsView *View::view() const
@@ -220,6 +219,11 @@ void View::zoomOut(int level)
 void View::setMaximumTick(quint32 max_tick)
 {
     tickSlider->setMaximum(max_tick);
+}
+
+quint32 View::getTickSliderValue() const
+{
+    return tickSlider->value();
 }
 
 void View::tickBackward()

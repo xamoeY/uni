@@ -38,6 +38,7 @@ public slots:
     void zoomIn(int level = 1);
     void zoomOut(int level = 1);
     void setMaximumTick(quint32 max_tick);
+    quint32 getTickSliderValue() const;
 
 private slots:
     void resetView();

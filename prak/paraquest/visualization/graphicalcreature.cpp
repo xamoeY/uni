@@ -3,6 +3,7 @@
 #include <QtWidgets>
 
 #include "utils.hpp"
+#include "view.hpp"
 
 GraphicalCreature::GraphicalCreature(const std::shared_ptr<Creature> &creature, qint16 scale) :
     Creature(*(creature.get())), scale(scale)
@@ -26,69 +27,31 @@ GraphicalCreature::GraphicalCreature(const std::shared_ptr<Creature> &creature, 
         this->color = Qt::red;
 }
 
-// This is not thread safe. Run in main thread.
-void GraphicalCreature::updateGraphics()
-{
-    setPos(this->positionX * scale, this->positionY * scale);
-}
-
 QRectF GraphicalCreature::boundingRect() const
 {
-    //return QRectF(0, 0, 72, 72);
     return QRectF(0, 0, this->scale, this->scale);
 }
 
 #include <QDebug>
 void GraphicalCreature::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
-    Q_UNUSED(widget);
-    Q_UNUSED(option);
-
-    /*
-    QColor fillColor = (option->state & QStyle::State_Selected) ? color.dark(150) : color;
-    if (option->state & QStyle::State_MouseOver)
-        fillColor = fillColor.light(125);
-
-    if (lod < 0.35) {
-        if (lod < 0.125) {
-            painter->fillRect(QRectF(0, 0, 110, 70), fillColor);
-            return;
+    // Only draw at all if we're on the correct tick value.
+    if (this->data(0).toUInt() == this->data(1).value<View*>()->getTickSliderValue())
+    {
+        const qreal lod = option->levelOfDetailFromTransform(painter->worldTransform());
+        if (lod > 0.35) {
+            painter->save();
+            painter->setOpacity(0.4);
+            painter->setBrush(this->color);
+            painter->drawRect(boundingRect());
+            painter->restore();
+            painter->drawPixmap(0, 0, *(this->pixmap));
+        } else {
+            painter->save();
+            painter->setBrush(this->color);
+            painter->drawEllipse(0, 0, this->scale, this->scale);
+            painter->restore();
         }
-
-        QBrush b = painter->brush();
-        painter->setBrush(fillColor);
-        painter->drawRect(13, 13, 97, 57);
-        painter->setBrush(b);
-        return;
-    }
-
-    QPen oldPen = painter->pen();
-    QPen pen = oldPen;
-    int width = 0;
-    if (option->state & QStyle::State_Selected)
-        width += 2;
-
-    pen.setWidth(width);
-    QBrush b = painter->brush();
-    painter->setBrush(QBrush(fillColor.dark(option->state & QStyle::State_Sunken ? 120 : 100)));
-
-    painter->drawRect(QRect(14, 14, 79, 39));
-    painter->setBrush(b);
-    */
-
-    const qreal lod = option->levelOfDetailFromTransform(painter->worldTransform());
-    if (lod > 0.35) {
-        painter->save();
-        painter->setOpacity(0.4);
-        painter->setBrush(this->color);
-        painter->drawRect(boundingRect());
-        painter->restore();
-        painter->drawPixmap(0, 0, *(this->pixmap));
-    } else {
-        painter->save();
-        painter->setBrush(this->color);
-        painter->drawEllipse(0, 0, this->scale, this->scale);
-        painter->restore();
     }
 }
 
@@ -101,7 +64,6 @@ void GraphicalCreature::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void GraphicalCreature::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (event->modifiers() & Qt::ShiftModifier) {
-        //stuff << event->pos();
         update();
         return;
     }

@@ -66,6 +66,10 @@ void History::parseHistory(const std::string &directory)
             GraphicalCreature* graphical_creature = history_states[tick]->getLastCreature();
             const std::string species = graphical_creature->getSpecies();
             graphical_creature->setPixmap(&images[species]);
+            graphical_creature->setData(0, QVariant(tick)); // Store the tick of this creature in 0 so compare with later during rendering
+            GraphicsView *gview = static_cast<GraphicsView*>(this->scene->views().first());
+            View *view = gview->getView();
+            graphical_creature->setData(1, QVariant::fromValue(view)); // Store pointer to View in 1 so we can get the slider value later
             this->scene->addItem(graphical_creature);
         }
     }
