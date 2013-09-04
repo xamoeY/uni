@@ -1,0 +1,48 @@
+Kommentare/ Inhalte:
+Viele Fragestellungen können nur teilweise oder überhaupt nicht mit experimentellen bzw. theoretischen Methoden beantwortet werden. In solchen Fällen ist der Einsatz von computergestützten Simulationen erforderlich. Deren Ergebnisdaten sind allerdings oftmals unverständlich und zu komplex. 
+Der Einsatz innovativer, explorativer Visualisierungsverfahren im Zusammenhang mit hochinteraktiven 3D-/Virtual-Reality-Technologien in netzverteilten Systemen gewinnt daher zunehmend an Bedeutung. Dies wiederum fordert neben einer Vielzahl an konzeptionellen Überlegungen, Methoden und Algorithmen auch eine hohe Leistungsfähigkeit der Rechner- und Grafik-Hardware, der Bildschirm-, Projektions- und Eingabegeräte, der Kommunikations- und Speicherungsinfrastruktur sowie der Software. In der angebotenen Lehrveranstaltung wird die so entstehende Prozesskette von der Erzeugung der Daten über die Extraktion von 3D-Szenen bis hin zur Darstellung analysiert. 
+Aufgrund der hohen Leistungsanforderungen der numerischen Simulation – als Visualisierungskontext – sowie der Datenextraktion und der 3D-Visualisierung wird auch in die Parallelverarbeitung eingeführt. Dabei wird auf die Architektur und Programmierung von Rechenclustern und Grafikprozessoren, insbesondere auch zum Zweck des Hochleistungsrechnens (GPGPU = General-Purpose Computing on Graphics Processing Units) eingegangen. 
+
+Lernziel:
+Die Teilnehmer der Veranstaltung sollen einen Einblick in die Anforderungen und Lösungsansätze zur Visualisierung komplexer Ergebnisdaten erhalten. Dazu wird neben den allgemeinen Methoden auch der Umgang mit Anwendungswerkzeugen vermittelt, z. B. Grafikprogrammierung mit OpenGL und Szenengraphen, paralleles Rechnen mit OpenCL und CUDA sowie Hardware- und Software-Systeme für 3D-Datenvisualisierung und Virtuelle Realität.
+
+Vorgehen:
+Datenvisualisierung – „Visualization in Scientific Computing“
+-Anwendungsszenarien
+-Daten- und Problemklassifikationen
+
+Visualisierungspipeline
+-Datenquelle, Filter, Mapper, Renderer, Display
+-Rückkanal: Interaktion
+
+Komplexe Ergebnisdaten
+-Datenquellen: Experimente bzw  . Simulationsrechnungen
+-Datenrepräsentation: Formate für Speicheru ng und Transport
+
+Aufbereitung komplexer, mehrdimensionaler, dynamischer Daten
+-Volumenvisualisierung
+-Strömungsvisualisierung
+
+Rendering
+-OpenGL
+-Szenengraphen
+
+Gesichtspunkte zum Einsatz von Farbe
+-Wahrnehmungsaspekte
+-Technische Aspekte – „Color Management Systems“
+
+3D-Darstellung und -Interaktion
+-Stereoskopische Darstellung
+-Eingabegeräte, Tracking
+
+Hochleistungsvisualisierung
+-Leistungsbegriff, Leistungsparameter, Skalierung, Effizienz
+-Parallelisierungsstrategien - Simulation, Datenextraktion, Rendering
+
+Visualisierung in verteilten Systemen
+-Streamingverfahren - Videoclips und 3D-Animationen im WWW
+-Interaktive Simulationssteuerung – „Computational Steering“
+
+GPU-Computing
+-GPU-Architekturen: Massiv-parallele Rechner
+-GPU-Computing: vom Vertex- und Pixel-Shader zu CUDA und OpenCL
