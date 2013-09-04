@@ -8,15 +8,11 @@
 #ifndef QT_NO_WHEELEVENT
 void GraphicsView::wheelEvent(QWheelEvent *e)
 {
-    if (e->modifiers() & Qt::ControlModifier) {
-        if (e->delta() > 0)
-            view->zoomIn(6);
-        else
-            view->zoomOut(6);
-        e->accept();
-    } else {
-        QGraphicsView::wheelEvent(e);
-    }
+    if (e->delta() > 0)
+        view->zoomIn(6);
+    else
+        view->zoomOut(6);
+    e->accept();
 }
 
 View *GraphicsView::getView() const
