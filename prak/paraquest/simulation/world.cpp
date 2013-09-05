@@ -35,9 +35,17 @@ void World::addCreature(std::string species)
         this->creatures.emplace(hash, std::unique_ptr<Creature> (new Creature(species, this->currentId, x, y)));
 }
 
-void World::populate(uint32_t count)
+void World::populate(uint32_t creature_count, uint32_t obstacle_count)
 {
-    for(uint i = 0; i < count; ++i)
+    // Seed the world with obstacles
+    for(uint i = 0; i < obstacle_count; ++i)
+    {
+        // Yes, rocks are creatures, think pet rocks :)
+        addCreature("rock");
+    }
+
+    // Seed the world with creatures
+    for(uint i = 0; i < creature_count; ++i)
     {
         std::vector<std::string> races {"goblin", "hobbit", "orc", "elf", "dwarf", "human"};
         addCreature(races[randInt(races.size() - 1)]);

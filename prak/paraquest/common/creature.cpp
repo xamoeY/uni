@@ -69,11 +69,23 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
         this->intelligence = 180;
         this->sociability = 195;
     }
+
+    if (this->species == 6)
+    {
+        this->strength = 255;
+        this->agility = 255;
+        this->intelligence = 255;
+        this->sociability = 255;
+    }
 }
 
 void Creature::doAction(uint32_t world_size_x, uint32_t world_size_y)
 {
     const uint16_t action = randInt(0, 4);
+
+    // Rocks don't move
+    if (this->species == 6)
+        return;
 
     if (action == 0) {
         // wait
@@ -111,6 +123,8 @@ std::string Creature::convertSpecies(uint16_t species)
         return "dwarf";
     else if (species == 5)
         return "human";
+    else if (species == 6)
+        return "rock";
     else
         return "invalid";
 }
@@ -129,6 +143,8 @@ int16_t Creature::convertSpecies(std::string species)
         return 4;
     else if (species == "human")
         return 5;
+    else if (species == "rock")
+        return 6;
     else
         return -1;
 }

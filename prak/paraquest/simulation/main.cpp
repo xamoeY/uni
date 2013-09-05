@@ -10,12 +10,13 @@ int main(int argc, char *argv[])
 {
     int world_size = 10;
     int creature_count = 10;
+    int obstacle_count = 10;
     int max_ticks = 10;
     int random_seed = 0;
 
     // Parse program arguments
     int option = 0;
-    while ((option = getopt(argc, argv,"hs:c:t:r:")) != -1) {
+    while ((option = getopt(argc, argv,"hs:c:t:r:o:")) != -1) {
         switch (option) {
         case 's':
             world_size = std::stoi(optarg);
@@ -29,9 +30,12 @@ int main(int argc, char *argv[])
         case 'r':
             random_seed = std::stoi(optarg);
             break;
+        case 'o':
+            obstacle_count = std::stoi(optarg);
+            break;
         case 'h':
         default:
-            std::cout << "usage: " << argv[0] << " [-h] [-s WORLDSIZE] [-c CREAUTECOUNT] [-t MAXTICKS]" << std::endl;
+            std::cout << "usage: " << argv[0] << " [-h] [-r SEED] [-s WORLDSIZE] [-c CREAUTECOUNT] [-t MAXTICKS] [-o OBSTACLECOUNT]" << std::endl;
             return 1;
         }
     }
@@ -65,7 +69,7 @@ int main(int argc, char *argv[])
 
     World world(world_size, world_size, comm_size, comm_rank, processor_name);
 
-    world.populate(creature_count);
+    world.populate(creature_count, obstacle_count);
 
     std::cout << "Starting simulation" << std::endl;
     world.simulate(max_ticks);

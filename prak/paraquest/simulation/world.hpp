@@ -12,7 +12,7 @@ class World
 public:
     World(uint16_t size_x, uint16_t sizeY, uint16_t comm_size, uint16_t comm_rank, char* processor_name);
     void addCreature(std::string species);
-    void populate(uint32_t count);
+    void populate(uint32_t creature_count, uint32_t obstacle_count);
     void simulate(uint32_t ticks);
     void dumpSettings(uint32_t max_tick);
     void dumpState(uint32_t tick, uint32_t max_tick);

@@ -6,5 +6,6 @@
         <file>images/hobbit.png</file>
         <file>images/human.png</file>
         <file>images/orc.png</file>
+        <file>images/rock.png</file>
     </qresource>
 </RCC>

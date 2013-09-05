@@ -16,7 +16,7 @@ History::History(quint16 size_x, quint16 size_y, quint32 max_tick, quint16 scale
     sizeX(size_x), sizeY(size_y), maxTick(max_tick), scale(scale), scene(scene)
 {
     // Preload pixmaps
-    std::vector<std::string> species {"goblin", "hobbit", "orc", "elf", "dwarf", "human"};
+    std::vector<std::string> species {"goblin", "hobbit", "orc", "elf", "dwarf", "human", "rock"};
     for(auto &s : species)
     {
         images[s] = QPixmap(QString::fromStdString(":/images/" + s + ".png"));

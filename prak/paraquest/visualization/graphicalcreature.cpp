@@ -25,6 +25,8 @@ GraphicalCreature::GraphicalCreature(const std::shared_ptr<Creature> &creature, 
         this->color = Qt::gray;
     else if (this->species == 5)
         this->color = Qt::red;
+    else if (this->species == 6)
+        this->color = Qt::black;
 }
 
 QRectF GraphicalCreature::boundingRect() const
