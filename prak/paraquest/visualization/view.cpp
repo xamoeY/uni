@@ -15,6 +15,19 @@ void GraphicsView::wheelEvent(QWheelEvent *e)
     e->accept();
 }
 
+void GraphicsView::keyPressEvent(QKeyEvent *e)
+{
+    if (e->modifiers() & Qt::ControlModifier) {
+        if (e->key() == Qt::Key_Left)
+            view->tickBackward();
+        else if (e->key() == Qt::Key_Right)
+            view->tickForward();
+        e->accept();
+    } else {
+        QGraphicsView::keyPressEvent(e);
+    }
+}
+
 View *GraphicsView::getView() const
 {
     return view;

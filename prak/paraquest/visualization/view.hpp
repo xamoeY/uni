@@ -21,6 +21,7 @@ protected:
 #ifndef QT_NO_WHEELEVENT
     void wheelEvent(QWheelEvent *);
 #endif
+    void keyPressEvent(QKeyEvent *e);
 
 private:
     View *view;
@@ -39,6 +40,8 @@ public slots:
     void zoomOut(int level = 1);
     void setMaximumTick(quint32 max_tick);
     quint32 getTickSliderValue() const;
+    void tickBackward();
+    void tickForward();
 
 private slots:
     void resetView();
@@ -47,8 +50,6 @@ private slots:
     void togglePointerMode();
     void toggleOpenGL();
     void toggleAntialiasing();
-    void tickBackward();
-    void tickForward();
 
 private:
     GraphicsView *graphicsView;
