@@ -66,45 +66,44 @@ void World::simulate(uint32_t ticks)
         std::multimap<uint32_t, std::shared_ptr<Creature>> new_creatures;
 
         // Make every creature do something
-        for(auto &creature : this->creatures)
-        //for(auto it = creatures.cbegin(); it != creatures.cend(); ++it)
+        //for(auto &creature : this->creatures)
+        for(auto it = creatures.cbegin(); it != creatures.cend(); ++it)
         {
             const uint16_t action = randInt(0, 4);
 
             std::pair<int8_t, int8_t> direction(0, 0);
 
             // wait             rocks don't move
-            if (action == 0 || creature.second->getSpecies() == "rock");
+            if (action == 0 || it->second->getSpecies() == "rock");
 
             // move east
             else if (action == 1) {
-                if (creature.second->getPosition().first + 1 < int32_t(this->sizeX))
+                if (it->second->getPosition().first + 1 < int32_t(this->sizeX))
                     direction = std::make_pair(1, 0);
             }
 
             // move south
             else if (action == 2) {
-                if (creature.second->getPosition().second + 1 < int32_t(this->sizeY))
+                if (it->second->getPosition().second + 1 < int32_t(this->sizeY))
                     direction = std::make_pair(0, 1);
             }
 
             // move west
             else if (action == 3) {
-                if (creature.second->getPosition().first - 1 >= 0)
+                if (it->second->getPosition().first - 1 >= 0)
                     direction = std::make_pair(-1, 0);
             }
 
             // move north
             else if (action == 4) {
-                if (creature.second->getPosition().second - 1 >= 0)
+                if (it->second->getPosition().second - 1 >= 0)
                     direction = std::make_pair(0, -1);
             }
 
             // Check whether our new position would lead to a collision with a rock
-            uint32_t current_hash = Creature::getHash(this->sizeX, creature.second->getPosition().first, creature.second->getPosition().second);
-            uint32_t new_hash = Creature::getHash(this->sizeX, creature.second->getPosition().first + direction.first, creature.second->getPosition().second + direction.second);
+            uint32_t current_hash = Creature::getHash(this->sizeX, it->second->getPosition().first, it->second->getPosition().second);
+            uint32_t new_hash = Creature::getHash(this->sizeX, it->second->getPosition().first + direction.first, it->second->getPosition().second + direction.second);
 
-            /*
             // Only check if we have actually moved
             if (current_hash != new_hash)
             {
@@ -113,14 +112,16 @@ void World::simulate(uint32_t ticks)
                 {
                     auto c = this->creatures.find(new_hash)->second;
                     if (c->getSpecies() == "rock")
+                    {
                         direction = std::make_pair(0, 0);
+                        new_hash = current_hash;
+                    }
                 }
             }
-            */
 
-            auto new_position = std::make_pair(creature.second->getPosition().first + direction.first, creature.second->getPosition().second + direction.second);
-            creature.second->setPosition(new_position);
-            new_creatures.emplace(new_hash, std::move(creature.second));
+            auto new_position = std::make_pair(it->second->getPosition().first + direction.first, it->second->getPosition().second + direction.second);
+            it->second->setPosition(new_position);
+            new_creatures.emplace(new_hash, std::move(it->second));
         }
 
         creatures = std::move(new_creatures);
