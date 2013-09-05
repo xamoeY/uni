@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
     int name_len;
     MPI_Get_processor_name(processor_name, &name_len);
 
-    std::cout << "Initializing world with size " << world_size << "x" << world_size << " and " << creature_count << " creatures." << std::endl;
+    std::cout << "Initializing world with size " << world_size << "x" << world_size << " and " << creature_count << " creatures as well as " << obstacle_count << " obstacles." << std::endl;
     std::cout << "Simulation will run for " << max_ticks << " ticks." << std::endl;
     std::cout << "Using " << comm_size << " processes." << " Own rank is " << comm_rank << " on " << processor_name << std::endl;
 

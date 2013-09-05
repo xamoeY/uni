@@ -65,26 +65,65 @@ void World::simulate(uint32_t ticks)
         // Make a new multimap after each tick and replace the old one with it after the tick.
         std::multimap<uint32_t, std::shared_ptr<Creature>> new_creatures;
 
-//        std::cout << std::endl << "tick " << i << std::endl;
-
         // Make every creature do something
-        for(auto &creature : creatures)
+        for(auto &creature : this->creatures)
+        //for(auto it = creatures.cbegin(); it != creatures.cend(); ++it)
         {
-            creature.second->doAction(this->sizeX, this->sizeY);
-            const uint32_t hash = this->sizeX * creature.second->getPosition().second + creature.second->getPosition().first;
-            new_creatures.emplace(hash, std::move(creature.second));
+            const uint16_t action = randInt(0, 4);
+
+            std::pair<int8_t, int8_t> direction(0, 0);
+
+            // wait             rocks don't move
+            if (action == 0 || creature.second->getSpecies() == "rock");
+
+            // move east
+            else if (action == 1) {
+                if (creature.second->getPosition().first + 1 < int32_t(this->sizeX))
+                    direction = std::make_pair(1, 0);
+            }
+
+            // move south
+            else if (action == 2) {
+                if (creature.second->getPosition().second + 1 < int32_t(this->sizeY))
+                    direction = std::make_pair(0, 1);
+            }
+
+            // move west
+            else if (action == 3) {
+                if (creature.second->getPosition().first - 1 >= 0)
+                    direction = std::make_pair(-1, 0);
+            }
+
+            // move north
+            else if (action == 4) {
+                if (creature.second->getPosition().second - 1 >= 0)
+                    direction = std::make_pair(0, -1);
+            }
+
+            // Check whether our new position would lead to a collision with a rock
+            uint32_t current_hash = Creature::getHash(this->sizeX, creature.second->getPosition().first, creature.second->getPosition().second);
+            uint32_t new_hash = Creature::getHash(this->sizeX, creature.second->getPosition().first + direction.first, creature.second->getPosition().second + direction.second);
+
+            /*
+            // Only check if we have actually moved
+            if (current_hash != new_hash)
+            {
+                // There is some kind of collision, check what type
+                if (this->creatures.count(new_hash) > 0)
+                {
+                    auto c = this->creatures.find(new_hash)->second;
+                    if (c->getSpecies() == "rock")
+                        direction = std::make_pair(0, 0);
+                }
+            }
+            */
+
+            auto new_position = std::make_pair(creature.second->getPosition().first + direction.first, creature.second->getPosition().second + direction.second);
+            creature.second->setPosition(new_position);
+            new_creatures.emplace(new_hash, std::move(creature.second));
         }
 
-        creatures = std::move(new_creatures); // TODO: Maybe memory leak here even though it's allocated on the stack?
-
-        // debug output
-        /*
-        for(auto &creature : creatures)
-        {
-            std::cout << "    " << creature.first << " : <id " << creature.second->getId() <<
-                         "> <pos " << creature.second->getPosition().first << "/" <<
-                         creature.second->getPosition().second << ">" << std::endl;
-        }*/
+        creatures = std::move(new_creatures);
 
         // Check for collisions
         // Use a second list to store iterators to collisions
@@ -114,7 +153,6 @@ void World::simulate(uint32_t ticks)
 
         for(auto &col : collisions)
         {
-//            std::cout << col.first << " " << col.second->second->getId() << std::endl;
             creatures.erase(col.second);
         }
 

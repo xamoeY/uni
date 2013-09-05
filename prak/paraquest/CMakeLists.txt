@@ -6,7 +6,7 @@ aux_source_directory(common SRC_LIST_COMMON)
 set(CMAKE_AUTOMOC TRUE)
 set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
-add_definitions("-Wall -Wextra -Wno-unused-parameter -std=c++11 -g -Og")
+add_definitions("-Wall -Wextra -Wno-unused-parameter -std=c++11 -g -O0")
 find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
 find_package(MPI)

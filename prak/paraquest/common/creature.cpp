@@ -3,6 +3,7 @@
 #include <iostream>
 #include <sstream>
 #include <regex>
+#include <utility>
 
 #include "utils.hpp"
 
@@ -79,36 +80,6 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
     }
 }
 
-void Creature::doAction(uint32_t world_size_x, uint32_t world_size_y)
-{
-    const uint16_t action = randInt(0, 4);
-
-    // Rocks don't move
-    if (this->species == 6)
-        return;
-
-    if (action == 0) {
-        // wait
-        return;
-    } else if (action == 1) {
-        // move east
-        if (this->positionX + 1 < int32_t(world_size_x))
-            this->positionX += 1;
-    } else if (action == 2) {
-        // move south
-        if (this->positionY + 1 < int32_t(world_size_y))
-            this->positionY += 1;
-    } else if (action == 3) {
-        // move west
-        if (this->positionX - 1 >= 0)
-            this->positionX -= 1;
-    } else if (action == 4) {
-        // move north
-        if (this->positionY - 1 >= 0)
-            this->positionY -= 1;
-    }
-}
-
 std::string Creature::convertSpecies(uint16_t species)
 {
     if (species == 0)
@@ -173,6 +144,11 @@ void Creature::setPosition(const std::pair<uint16_t, uint16_t> &value)
 std::string Creature::getSpecies() const
 {
     return convertSpecies(this->species);
+}
+
+uint32_t Creature::getHash(uint32_t world_size_x, uint32_t creature_pos_x, uint32_t creature_pos_y)
+{
+    return world_size_x * creature_pos_y + creature_pos_x;
 }
 
 uint16_t Creature::getStrength() const

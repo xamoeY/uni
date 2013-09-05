@@ -1,6 +1,7 @@
 #ifndef CREATURE_HPP
 #define CREATURE_HPP
 
+#include <map>
 #include <string>
 
 #include <cereal/cereal.hpp>
@@ -12,12 +13,12 @@ public:
     Creature(const Creature &creature);
     Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY);
 
-    void doAction(uint32_t world_size_x, uint32_t world_size_y);
-
     static std::string convertSpecies(uint16_t species);
     static int16_t convertSpecies(std::string species);
 
     std::string getSpecies() const;
+
+    static uint32_t getHash(uint32_t world_size_x, uint32_t creature_pos_x, uint32_t creature_pos_y);
 
     uint32_t getId() const;
     void setId(const uint32_t &value);
