@@ -36,7 +36,7 @@ History::History(quint16 size_x, quint16 size_y, quint32 max_tick, quint16 scale
 void History::parseHistory(const std::string &directory)
 {
     std::vector<std::string> log_files = getLogFiles(directory);
-    for(auto file : log_files)
+    for(auto &file : log_files)
     {
         // First of all, we need to parse the file name itself
 
@@ -60,16 +60,21 @@ void History::parseHistory(const std::string &directory)
         std::multimap<uint32_t, std::shared_ptr<Creature>> temp_creatures;
         archive(temp_creatures);
 
-        for(auto c : temp_creatures)
+        for(auto &creature : temp_creatures)
         {
-            history_states[tick]->addCreature(c.second, this->scale);
+            history_states[tick]->addCreature(creature.second, this->scale);
             GraphicalCreature* graphical_creature = history_states[tick]->getLastCreature();
             const std::string species = graphical_creature->getSpecies();
             graphical_creature->setPixmap(&images[species]);
-            graphical_creature->setData(0, QVariant(tick)); // Store the tick of this creature in 0 so compare with later during rendering
+
+            // Store the tick of this creature in 0 so compare with later during rendering
+            graphical_creature->setData(0, QVariant(tick));
+
+            // Store pointer to View in 1 so we can get the slider value later
             GraphicsView *gview = static_cast<GraphicsView*>(this->scene->views().first());
             View *view = gview->getView();
-            graphical_creature->setData(1, QVariant::fromValue(view)); // Store pointer to View in 1 so we can get the slider value later
+            graphical_creature->setData(1, QVariant::fromValue(view));
+
             this->scene->addItem(graphical_creature);
         }
     }

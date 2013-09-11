@@ -66,7 +66,6 @@ void World::simulate(uint32_t ticks)
         std::multimap<uint32_t, std::shared_ptr<Creature>> new_creatures;
 
         // Make every creature do something
-        //for(auto &creature : this->creatures)
         for(auto it = creatures.cbegin(); it != creatures.cend(); ++it)
         {
             const uint16_t action = randInt(0, 4);
@@ -74,30 +73,44 @@ void World::simulate(uint32_t ticks)
             std::pair<int8_t, int8_t> direction(0, 0);
 
             // wait             rocks don't move
-            if (action == 0 || it->second->getSpecies() == "rock");
+            if (action == 0 || it->second->getSpecies() == "rock")
+            {
+            }
 
             // move east
-            else if (action == 1) {
+            else if (action == 1)
+            {
                 if (it->second->getPosition().first + 1 < int32_t(this->sizeX))
+                {
                     direction = std::make_pair(1, 0);
+                }
             }
 
             // move south
-            else if (action == 2) {
+            else if (action == 2)
+            {
                 if (it->second->getPosition().second + 1 < int32_t(this->sizeY))
+                {
                     direction = std::make_pair(0, 1);
+                }
             }
 
             // move west
-            else if (action == 3) {
+            else if (action == 3)
+            {
                 if (it->second->getPosition().first - 1 >= 0)
+                {
                     direction = std::make_pair(-1, 0);
+                }
             }
 
             // move north
-            else if (action == 4) {
+            else if (action == 4)
+            {
                 if (it->second->getPosition().second - 1 >= 0)
+                {
                     direction = std::make_pair(0, -1);
+                }
             }
 
             // Check whether our new position would lead to a collision with a rock
