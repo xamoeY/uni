@@ -5,7 +5,7 @@
 #include "utils.hpp"
 #include "view.hpp"
 
-GraphicalCreature::GraphicalCreature(const std::shared_ptr<Creature> &creature, qint16 scale) :
+GraphicalCreature::GraphicalCreature(const std::unique_ptr<Creature> &creature, qint16 scale) :
     Creature(*(creature.get())), scale(scale)
 {
     setZValue((this->positionX + this->positionY) % 2);

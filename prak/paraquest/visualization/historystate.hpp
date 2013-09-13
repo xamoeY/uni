@@ -10,7 +10,7 @@ class HistoryState
 {
 public:
     HistoryState(const std::string &hostname, uint16_t rank, uint32_t tick);
-    void addCreature(const std::shared_ptr<Creature>& creature, qint16 scale);
+    void addCreature(const std::unique_ptr<Creature> &creature, qint16 scale);
 
     // We need this raw pointer for the QGraphicsScene, sadly :(
     GraphicalCreature* getLastCreature() const;

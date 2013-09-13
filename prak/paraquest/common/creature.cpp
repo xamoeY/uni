@@ -29,6 +29,7 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
         this->agility = 210;
         this->intelligence = 100;
         this->sociability = 80;
+        mixTraits();
     }
 
     if (this->species == 1)
@@ -37,6 +38,7 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
         this->agility = 230;
         this->intelligence = 130;
         this->sociability = 120;
+        mixTraits();
     }
 
     if (this->species == 2)
@@ -45,6 +47,7 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
         this->agility = 200;
         this->intelligence = 95;
         this->sociability = 95;
+        mixTraits();
     }
 
     if (this->species == 3)
@@ -53,6 +56,7 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
         this->agility = 150;
         this->intelligence = 235;
         this->sociability = 110;
+        mixTraits();
     }
 
     if (this->species == 4)
@@ -61,6 +65,7 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
         this->agility = 185;
         this->intelligence = 170;
         this->sociability = 50;
+        mixTraits();
     }
 
     if (this->species == 5)
@@ -69,6 +74,7 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
         this->agility = 75;
         this->intelligence = 180;
         this->sociability = 195;
+        mixTraits();
     }
 
     if (this->species == 6)
@@ -146,9 +152,12 @@ std::string Creature::getSpecies() const
     return convertSpecies(this->species);
 }
 
-uint32_t Creature::getHash(uint32_t world_size_x, uint32_t creature_pos_x, uint32_t creature_pos_y)
+void Creature::mixTraits()
 {
-    return world_size_x * creature_pos_y + creature_pos_x;
+    this->strength += randInt(-25, 25);
+    this->agility += randInt(-25, 25);
+    this->intelligence += randInt(-25, 25);
+    this->sociability += randInt(-25, 25);
 }
 
 uint16_t Creature::getStrength() const

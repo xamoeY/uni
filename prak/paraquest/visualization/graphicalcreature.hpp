@@ -9,7 +9,7 @@
 class GraphicalCreature : public QGraphicsItem, public Creature
 {
 public:
-    GraphicalCreature(const std::shared_ptr<Creature>& creature, qint16 scale=72);
+    GraphicalCreature(const std::unique_ptr<Creature>& creature, qint16 scale=72);
 
     QRectF boundingRect() const;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *item, QWidget *widget);

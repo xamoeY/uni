@@ -3,7 +3,7 @@
 #include <iostream>
 #include <fstream>
 
-#include <cereal/types/map.hpp>
+#include <cereal/types/vector.hpp>
 #include <cereal/types/memory.hpp>
 #include <cereal/types/string.hpp>
 #include <cereal/archives/binary.hpp>
@@ -57,12 +57,12 @@ void History::parseHistory(const std::string &directory)
         // Now parse the contents of the archive
         std::ifstream log(file);
         cereal::BinaryInputArchive archive(log);
-        std::multimap<uint32_t, std::shared_ptr<Creature>> temp_creatures;
+        std::vector<std::unique_ptr<Creature>> temp_creatures;
         archive(temp_creatures);
 
         for(auto &creature : temp_creatures)
         {
-            history_states[tick]->addCreature(creature.second, this->scale);
+            history_states[tick]->addCreature(creature, this->scale);
             GraphicalCreature* graphical_creature = history_states[tick]->getLastCreature();
             const std::string species = graphical_creature->getSpecies();
             graphical_creature->setPixmap(&images[species]);

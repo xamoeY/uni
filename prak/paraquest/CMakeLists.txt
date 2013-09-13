@@ -11,7 +11,7 @@ find_package(Qt5Widgets)
 find_package(Qt5OpenGL)
 find_package(MPI)
 
-include_directories(common common/cereal-0.9.1/include/)
+include_directories(common common/cereal/include/)
 
 if(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND})
     qt5_add_resources(RESOURCES visualization/paraquest.qrc)
