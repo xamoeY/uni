@@ -7,42 +7,44 @@ Lernziel:
 Die Teilnehmer der Veranstaltung sollen einen Einblick in die Anforderungen und Lösungsansätze zur Visualisierung komplexer Ergebnisdaten erhalten. Dazu wird neben den allgemeinen Methoden auch der Umgang mit Anwendungswerkzeugen vermittelt, z. B. Grafikprogrammierung mit OpenGL und Szenengraphen, paralleles Rechnen mit OpenCL und CUDA sowie Hardware- und Software-Systeme für 3D-Datenvisualisierung und Virtuelle Realität.
 
 Vorgehen:
-Datenvisualisierung – „Visualization in Scientific Computing“
--Anwendungsszenarien
--Daten- und Problemklassifikationen
+- Datenvisualisierung – „Visualization in Scientific Computing“
+    - explorative Analyse, konfirmative Analyse, Praesentation
+    - Qualitaet: expressiv, effektiv, angemessen
+- Anwendungsszenarien
+- Daten- und Problemklassifikationen
 
 Visualisierungspipeline
--Datenquelle, Filter, Mapper, Renderer, Display
--Rückkanal: Interaktion
+- Datenquelle, Filter, Mapper, Renderer, Display
+- Rückkanal: Interaktion
 
 Komplexe Ergebnisdaten
--Datenquellen: Experimente bzw  . Simulationsrechnungen
--Datenrepräsentation: Formate für Speicheru ng und Transport
+- Datenquellen: Experimente bzw  . Simulationsrechnungen
+- Datenrepräsentation: Formate für Speicheru ng und Transport
 
 Aufbereitung komplexer, mehrdimensionaler, dynamischer Daten
--Volumenvisualisierung
--Strömungsvisualisierung
+- Volumenvisualisierung
+- Strömungsvisualisierung
 
 Rendering
--OpenGL
--Szenengraphen
+- OpenGL
+- Szenengraphen
 
 Gesichtspunkte zum Einsatz von Farbe
--Wahrnehmungsaspekte
--Technische Aspekte – „Color Management Systems“
+- Wahrnehmungsaspekte
+- Technische Aspekte – „Color Management Systems“
 
 3D-Darstellung und -Interaktion
--Stereoskopische Darstellung
--Eingabegeräte, Tracking
+- Stereoskopische Darstellung
+- Eingabegeräte, Tracking
 
 Hochleistungsvisualisierung
--Leistungsbegriff, Leistungsparameter, Skalierung, Effizienz
--Parallelisierungsstrategien - Simulation, Datenextraktion, Rendering
+- Leistungsbegriff, Leistungsparameter, Skalierung, Effizienz
+- Parallelisierungsstrategien - Simulation, Datenextraktion, Rendering
 
 Visualisierung in verteilten Systemen
--Streamingverfahren - Videoclips und 3D-Animationen im WWW
--Interaktive Simulationssteuerung – „Computational Steering“
+- Streamingverfahren - Videoclips und 3D-Animationen im WWW
+- Interaktive Simulationssteuerung – „Computational Steering“
 
 GPU-Computing
--GPU-Architekturen: Massiv-parallele Rechner
--GPU-Computing: vom Vertex- und Pixel-Shader zu CUDA und OpenCL
+- GPU-Architekturen: Massiv-parallele Rechner
+- GPU-Computing: vom Vertex- und Pixel-Shader zu CUDA und OpenCL
