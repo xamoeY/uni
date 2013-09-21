@@ -8,18 +8,22 @@ Die Teilnehmer der Veranstaltung sollen einen Einblick in die Anforderungen und 
 
 Vorgehen:
 - Datenvisualisierung – „Visualization in Scientific Computing“
-    - explorative Analyse, konfirmative Analyse, Praesentation
-    - Qualitaet: expressiv, effektiv, angemessen
 - Anwendungsszenarien
+    - Informationsraeume, 3D-Visualisation, Geometrie, Modellierung, Wissenschaft
+    - Medizin: Tomografie
+    - Stroemungsdaten, Strukturmechanik
+    - abstrakte Daten
+    - Virtual Reality
 - Daten- und Problemklassifikationen
 
 Visualisierungspipeline
-- Datenquelle, Filter, Mapper, Renderer, Display
-- Rückkanal: Interaktion
+- Datenquelle (Simulation, Tomograf) -> Filter (Reduktion, Ausschnitt) -> Mapper (Daten nach 3D-Szene) -> Renderer (Bilderzeugung) -> Display (Monitor)
+- Rückkanal: Interaktion (VR, Maus, Trackball)
 
 Komplexe Ergebnisdaten
-- Datenquellen: Experimente bzw  . Simulationsrechnungen
-- Datenrepräsentation: Formate für Speicheru ng und Transport
+- Datenquellen: Experimente bzw. Simulationsrechnungen
+- Datenrepräsentation: Formate für Speicherung und Transport
+    - Kompression, Codierung, Bitrate
 
 Aufbereitung komplexer, mehrdimensionaler, dynamischer Daten
 - Volumenvisualisierung
