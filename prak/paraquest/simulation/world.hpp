@@ -11,7 +11,7 @@ class World
 {
 public:
     World(uint16_t size_x, uint16_t sizeY, uint16_t comm_size, uint16_t comm_rank, char* processor_name);
-    std::vector<Creature*> getCreaturesAt(uint16_t x, uint16_t y);
+    std::vector<std::vector<std::unique_ptr<Creature>>::iterator> getCreaturesAt(uint16_t x, uint16_t y);
     void addCreature(std::string species);
     void populate(uint32_t creature_count, uint32_t obstacle_count);
     void simulate(uint32_t ticks);

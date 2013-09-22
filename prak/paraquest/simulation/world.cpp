@@ -1,10 +1,12 @@
 #include "world.hpp"
 
+#include <algorithm>
 #include <cmath>
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <sstream>
+#include <set>
 
 #include <cereal/types/vector.hpp>
 #include <cereal/types/memory.hpp>
@@ -18,15 +20,17 @@ World::World(uint16_t size_x, uint16_t size_y, uint16_t comm_size, uint16_t comm
     sizeX(size_x), sizeY(size_y), commSize(comm_size), commRank(comm_rank), processorName(processor_name), currentId(0)
 {}
 
-std::vector<Creature*> World::getCreaturesAt(uint16_t x, uint16_t y)
+std::vector<std::vector<std::unique_ptr<Creature>>::iterator> World::getCreaturesAt(uint16_t x, uint16_t y)
 {
-    std::vector<Creature*> results;
-    for(const auto &creature : this->creatures)
-    {
-        if (creature->getPosition().first == x && creature->getPosition().second == y)
-            results.push_back(creature.get());
-    }
+    std::vector<std::vector<std::unique_ptr<Creature>>::iterator> results;
 
+    for(auto it = this->creatures.begin(); it != this->creatures.end(); ++it)
+    {
+        if ((*it)->getPosition().first == x && (*it)->getPosition().second == y)
+        {
+            results.push_back(it);
+        }
+    }
     return results;
 }
 
@@ -132,7 +136,7 @@ void World::simulate(uint32_t ticks)
                 {
                     for (auto c : colliding)
                     {
-                        if (c->getSpecies() == "rock")
+                        if ((*c)->getSpecies() == "rock")
                             direction = std::make_pair(0, 0);
                     }
                 }
@@ -144,47 +148,37 @@ void World::simulate(uint32_t ticks)
         }
 
         // Check for collisions
-        // Use a second list to store iterators to scheduled deletions
-//        std::vector<std::vector<std::unique_ptr<Creature>>::const_iterator> deletions;
 
-        /*
-        // Since we're using multimap that uses spacial hashes for the key, we can iterate
-        // over all keys to check which keys have duplicate values. If that is the case, we take
-        // a closer look and run the actual battle resolution.
-        for(auto it = creatures.begin(); it != creatures.end(); ++it)
+        // Use a set to store a list of places where creatures are at
+        std::set<std::pair<uint16_t, uint16_t>> coordinates;
+        for(auto &creature : this->creatures)
         {
-            uint32_t position = it->first;
+            coordinates.insert(creature->getPosition());
+        }
 
-            // Check whether we have multiple creatures standing on this position
-            if (creatures.count(position) > 1)
+        // Use a second list to store iterators to scheduled deletions
+        std::vector<std::vector<std::unique_ptr<Creature>>::iterator> deletions;
+
+        for(auto coordinate : coordinates)
+        {
+            auto colliding = getCreaturesAt(coordinate.first, coordinate.second);
+            // Check whether we have multiple creatures standing on this position and whether we haven't
+            // already added that creature
+            if (colliding.size() > 1)
             {
-                // This variable is getting filled with a range that contains all creatures on this
-                // spatial position
-                auto duplicates = creatures.equal_range(position);
-
-                // Transfer range of collisions into a list of iterators for easier handling
-                //std::vector<std::multimap<uint32_t, std::unique_ptr<Creature>>::const_iterator> collisions;
-                for(auto it_dup = duplicates.first; it_dup != duplicates.second; ++it_dup)
-                {
-                    //creatures.erase(it_dup);
-
-                    //deletions.push_back(it);
-                    // Lock 2 creatures into a fight with each other
-
-                    // TODO add hp fighting system somewhere here
-                    //if (counter != winner)
-                    //    deletions.push_back(it_dup);
-                    //++counter;
-                }
+                deletions.push_back(colliding[0]);
+                // TODO add hp fighting system somewhere here
+                //if (counter != winner)
+                //    deletions.push_back(it_dup);
+                //++counter;
             }
         }
-        */
 
         // Delete all creatures that are scheduled for deletion
-//        for(auto &creature : deletions)
-//        {
-//            creatures.erase(creature);
-//        }
+        for(auto &deletion : deletions)
+        {
+            this->creatures.erase(deletion);
+        }
 
         dumpState(i, ticks);
     }

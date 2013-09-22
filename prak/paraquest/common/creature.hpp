@@ -39,13 +39,14 @@ public:
     uint16_t getSociability() const;
     void setSociability(const uint16_t &value);
 
+    std::string debug() const;
+
     template<class Archive>
     void serialize(Archive &archive)
     {
         archive(this->id, this->species, this->positionX, this->positionY,
                 this->strength, this->agility, this->intelligence, this->sociability);
     }
-
 protected:
     uint16_t species;
     uint32_t id;

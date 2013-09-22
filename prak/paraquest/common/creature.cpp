@@ -196,3 +196,10 @@ void Creature::setSociability(const uint16_t &value)
 {
     sociability = value;
 }
+
+std::string Creature::debug() const
+{
+    std::stringstream ss;
+    ss << "id: " << this->id << " | species: " << this->getSpecies() << " | pos: " << this->positionX << "/" << this->positionY;
+    return ss.str();
+}
