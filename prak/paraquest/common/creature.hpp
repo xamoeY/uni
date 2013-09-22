@@ -33,11 +33,8 @@ public:
     uint16_t getAgility() const;
     void setAgility(const uint16_t &value);
 
-    uint16_t getIntelligence() const;
-    void setIntelligence(const uint16_t &value);
-
-    uint16_t getSociability() const;
-    void setSociability(const uint16_t &value);
+    int16_t getHitpoints() const;
+    void setHitpoints(const int16_t &value);
 
     std::string debug() const;
 
@@ -45,8 +42,9 @@ public:
     void serialize(Archive &archive)
     {
         archive(this->id, this->species, this->positionX, this->positionY,
-                this->strength, this->agility, this->intelligence, this->sociability);
+                this->strength, this->agility, this->hitpoints);
     }
+
 protected:
     uint16_t species;
     uint32_t id;
@@ -55,8 +53,7 @@ protected:
 
     uint16_t strength;
     uint16_t agility;
-    uint16_t intelligence;
-    uint16_t sociability;
+    int16_t hitpoints;
 };
 
 #endif // CREATURE_HPP

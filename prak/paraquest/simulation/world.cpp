@@ -27,9 +27,7 @@ std::vector<std::vector<std::unique_ptr<Creature>>::iterator> World::getCreature
     for(auto it = this->creatures.begin(); it != this->creatures.end(); ++it)
     {
         if ((*it)->getPosition().first == x && (*it)->getPosition().second == y)
-        {
             results.push_back(it);
-        }
     }
     return results;
 }
@@ -76,6 +74,9 @@ void World::simulate(uint32_t ticks)
     // Tick loop
     for(uint i = 1; i < ticks + 1; ++i)
     {
+        // debug
+        std::cout << "tick: " << i << " | creatures: " << this->creatures.size() << std::endl;
+
         // Make every creature do something
         for(auto &creature : this->creatures)
         {
@@ -125,6 +126,7 @@ void World::simulate(uint32_t ticks)
             }
 
             // Check whether our new position would lead to a collision with a rock
+            // or to more than 2 creatures on the same tile
             auto new_position = std::make_pair(creature->getPosition().first + direction.first, creature->getPosition().second + direction.second);
 
             // Only check if we have actually moved
@@ -132,6 +134,8 @@ void World::simulate(uint32_t ticks)
             {
                 // There is some kind of collision, check what type
                 auto colliding = getCreaturesAt(new_position.first, new_position.second);
+
+                // Avoid rock collision
                 if (colliding.size() > 0)
                 {
                     for (auto c : colliding)
@@ -140,6 +144,10 @@ void World::simulate(uint32_t ticks)
                             direction = std::make_pair(0, 0);
                     }
                 }
+
+                // Avoid more than 2 creatures on the same tile
+                if (colliding.size() >= 2)
+                    direction = std::make_pair(0, 0);
             }
 
             // Calculate final new_position
@@ -152,9 +160,7 @@ void World::simulate(uint32_t ticks)
         // Use a set to store a list of places where creatures are at
         std::set<std::pair<uint16_t, uint16_t>> coordinates;
         for(auto &creature : this->creatures)
-        {
             coordinates.insert(creature->getPosition());
-        }
 
         // Use a second list to store iterators to scheduled deletions
         std::vector<std::vector<std::unique_ptr<Creature>>::iterator> deletions;
@@ -162,23 +168,41 @@ void World::simulate(uint32_t ticks)
         for(auto coordinate : coordinates)
         {
             auto colliding = getCreaturesAt(coordinate.first, coordinate.second);
-            // Check whether we have multiple creatures standing on this position and whether we haven't
-            // already added that creature
+            // Check whether we have multiple creatures standing on this position
             if (colliding.size() > 1)
             {
-                deletions.push_back(colliding[0]);
-                // TODO add hp fighting system somewhere here
-                //if (counter != winner)
-                //    deletions.push_back(it_dup);
-                //++counter;
+                // It better be exaclty 2 creatures or something is fucked up
+                assert(colliding.size() == 2);
+
+                // Each fight has exactly 2 fighters so we might as well create them statically here
+                auto attacker = colliding[0];
+                auto defender = colliding[1];
+
+                // Fight goes on only if current attacker is not dead
+                while ((*attacker)->getHitpoints() > 0)
+                {
+                    uint16_t attack_damage = (*attacker)->getStrength() + randInt(100);
+
+                    // Determine whether the attack was dodged
+                    int16_t dodge_chance = randInt(200) + (*defender)->getAgility() - 300;
+                    bool attack_was_dodged = dodge_chance > 0 ? true : false;
+
+                    if (!attack_was_dodged)
+                        (*defender)->setHitpoints((*defender)->getHitpoints() - attack_damage);
+
+                    // Remove dead creatures
+                    if ((*defender)->getHitpoints() <= 0)
+                        deletions.push_back(defender);
+
+                    // Exchange attacker and defender
+                    std::swap(attacker, defender);
+                }
             }
         }
 
         // Delete all creatures that are scheduled for deletion
         for(auto &deletion : deletions)
-        {
             this->creatures.erase(deletion);
-        }
 
         dumpState(i, ticks);
     }

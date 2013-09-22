@@ -16,8 +16,7 @@ Creature::Creature(const Creature& creature)
 
     this->strength = creature.getStrength();
     this->agility = creature.getAgility();
-    this->intelligence = creature.getIntelligence();
-    this->sociability = creature.getSociability();
+    this->hitpoints = creature.getHitpoints();
 }
 
 Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_t positionY) :
@@ -27,8 +26,6 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
     {
         this->strength = 210;
         this->agility = 210;
-        this->intelligence = 100;
-        this->sociability = 80;
         mixTraits();
     }
 
@@ -36,8 +33,6 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
     {
         this->strength = 120;
         this->agility = 230;
-        this->intelligence = 130;
-        this->sociability = 120;
         mixTraits();
     }
 
@@ -45,8 +40,6 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
     {
         this->strength = 210;
         this->agility = 200;
-        this->intelligence = 95;
-        this->sociability = 95;
         mixTraits();
     }
 
@@ -54,8 +47,6 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
     {
         this->strength = 105;
         this->agility = 150;
-        this->intelligence = 235;
-        this->sociability = 110;
         mixTraits();
     }
 
@@ -63,8 +54,6 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
     {
         this->strength = 195;
         this->agility = 185;
-        this->intelligence = 170;
-        this->sociability = 50;
         mixTraits();
     }
 
@@ -72,8 +61,6 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
     {
         this->strength = 150;
         this->agility = 75;
-        this->intelligence = 180;
-        this->sociability = 195;
         mixTraits();
     }
 
@@ -81,9 +68,9 @@ Creature::Creature(std::string species, uint32_t id, uint16_t positionX, uint16_
     {
         this->strength = 255;
         this->agility = 255;
-        this->intelligence = 255;
-        this->sociability = 255;
     }
+
+    this->hitpoints = this->strength * 100;
 }
 
 std::string Creature::convertSpecies(uint16_t species)
@@ -156,8 +143,6 @@ void Creature::mixTraits()
 {
     this->strength += randInt(-25, 25);
     this->agility += randInt(-25, 25);
-    this->intelligence += randInt(-25, 25);
-    this->sociability += randInt(-25, 25);
 }
 
 uint16_t Creature::getStrength() const
@@ -178,23 +163,15 @@ void Creature::setAgility(const uint16_t &value)
 {
     agility = value;
 }
-uint16_t Creature::getIntelligence() const
+
+int16_t Creature::getHitpoints() const
 {
-    return intelligence;
+    return hitpoints;
 }
 
-void Creature::setIntelligence(const uint16_t &value)
+void Creature::setHitpoints(const int16_t &value)
 {
-    intelligence = value;
-}
-uint16_t Creature::getSociability() const
-{
-    return sociability;
-}
-
-void Creature::setSociability(const uint16_t &value)
-{
-    sociability = value;
+    hitpoints = value;
 }
 
 std::string Creature::debug() const
