@@ -1,0 +1,83 @@
+\documentclass{beamer}
+\usepackage[ngerman]{babel}
+\usepackage[utf8x]{inputenc}
+\usepackage{amsmath,amsfonts,amssymb}
+\pdfmapfile{+sansmathaccent.map}
+\usetheme{Warsaw}
+\usepackage{graphicx}
+\begin{document}
+
+\title{ParaQuest}
+\date{2013-09-23}
+\author{Alisa Dammer \and Sven-Hendrik Haase}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\section*{Gliederung}
+\begin{frame}{Gliederung}
+    \tableofcontents
+\end{frame}
+
+\section{Problemstellung}
+\begin{frame}{Problemstellung}
+\begin{itemize}
+    \item Grid-basierte 2D Welt mit Kreaturen, die gegeneinander kämpfen
+    \item Einfaches Kampfsystem mit Trefferpunkten, Angriffsstärke und Ausweichchance
+    \item Verschiedene Spezies von Kreaturen: Goblin, Hobbit, Orc, Elf, Dwarf, Human
+    \item Jede Spezies hat andere Werte der Attribute Strength und Agility
+    \item 1 Schritt pro Tick pro Kreatur
+    \item Zusätzlich gesperrte Felder (hier Steine)
+    \item Schicke Visualisierung der Welt
+\end{itemize}
+\end{frame}
+
+
+\section{Lösungsansatz}
+\begin{frame}{Lösungsansatz}
+\begin{itemize}
+    \item Welt als sparse Matrix
+    \item Jeden Tick ein Dump der gesamten Welt dieses Prozesses
+    \item Jede Kreatur hat eine 2D Position und eine global eindeutige Id
+    \item Umgesetzt in C++11 mit Visualisierung in Qt sowie cereal für die Serialisierung
+    \item Folgender Ablauf pro Tick: Kreaturen bewegen, Kämpfen, Verlierer löschen, Welt Dump
+    \item Der Welt Dump wird später für die Visualisierung benötigt
+\end{itemize}
+\end{frame}
+
+
+\section{Parallelisierungsschema}
+\begin{frame}{Parallelisierungsschema}
+\begin{itemize}
+	\item Kreaturen werden am Anfang auf Hauptprozess erzeugt und auf andere Prozesse aufgeteilt
+    \item Die Welt wird am Anfang der Simulation spaltenweise aufgeteilt
+    \item Die Aufteilung ist statisch
+    \item Es wird für Kollisionsabfragen eine Extraspalte links und rechts mit übermittelt
+\end{itemize}
+\end{frame}
+
+
+\section{Laufzeitmessungen}
+\begin{frame}{Laufzeitmessungen}
+\begin{itemize}
+    \item blah
+\end{itemize}
+\end{frame}
+
+
+\section{Leistungsanalyse}
+\begin{frame}{Leistungsanalyse}
+\begin{itemize}
+    \item Die meiste Zeit pro Prozess wird in Kollisionsabfragen benötigt
+\end{itemize}
+\end{frame}
+
+
+\section{Skalierbarkeit}
+\begin{frame}{Skalierbarkeit}
+\begin{itemize}
+    \item blah
+\end{itemize}
+\end{frame}
+\end{document}
