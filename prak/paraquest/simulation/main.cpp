@@ -1,3 +1,4 @@
+#include <cassert>
 #include <iostream>
 
 #include "mpi.h"
@@ -63,12 +64,23 @@ int main(int argc, char *argv[])
     int name_len;
     MPI_Get_processor_name(processor_name, &name_len);
 
-    std::cout << "Initializing world with size " << world_size << "x" << world_size << " and " << creature_count << " creatures as well as " << obstacle_count << " obstacles." << std::endl;
-    std::cout << "Simulation will run for " << max_ticks << " ticks." << std::endl;
-    std::cout << "Using " << comm_size << " processes." << " Own rank is " << comm_rank << " on " << processor_name << std::endl;
+    if(comm_rank == 0)
+    {
+        std::cout << "Initializing world with size " << world_size << "x" << world_size << " and " << creature_count << " creatures as well as " << obstacle_count << " obstacles." << std::endl;
+        std::cout << "Simulation will run for " << max_ticks << " ticks." << std::endl;
+        std::cout << "Using " << comm_size << " processes." << " Own rank is " << comm_rank << " on " << processor_name << std::endl;
+    }
+
+    // The world must be large enough to be splitable onto the processes
+    // Should only be a problem with lots of processes
+    assert(world_size / comm_size > 0);
+
+    // Make sure this splits cleanly, we're not handling odd numbers
+    assert(world_size % comm_size == 0);
 
     World world(world_size, world_size, comm_size, comm_rank, processor_name);
 
+    // Populate the world in root process and send out data to all processes
     world.populate(creature_count, obstacle_count);
 
     std::cout << "Starting simulation" << std::endl;

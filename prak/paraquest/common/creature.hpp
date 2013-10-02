@@ -38,6 +38,9 @@ public:
 
     std::string debug() const;
 
+    static Creature* mpiRecv(uint16_t from);
+    void mpiSend(uint16_t to);
+
     template<class Archive>
     void serialize(Archive &archive)
     {

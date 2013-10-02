@@ -5,6 +5,8 @@
 #include <regex>
 #include <utility>
 
+#include "mpi.h"
+
 #include "utils.hpp"
 
 Creature::Creature(const Creature& creature)
@@ -179,4 +181,28 @@ std::string Creature::debug() const
     std::stringstream ss;
     ss << "id: " << this->id << " | species: " << this->getSpecies() << " | pos: " << this->positionX << "/" << this->positionY;
     return ss.str();
+}
+
+Creature *Creature::mpiRecv(uint16_t from)
+{
+    Creature *creature = new Creature();
+    MPI_Recv(&creature->species, 1, MPI_UNSIGNED_SHORT, from, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Recv(&creature->id, 1, MPI_UNSIGNED, from, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Recv(&creature->positionX, 1, MPI_UNSIGNED_SHORT, from, 3, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Recv(&creature->positionY, 1, MPI_UNSIGNED_SHORT, from, 4, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Recv(&creature->strength, 1, MPI_UNSIGNED_SHORT, from, 5, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Recv(&creature->agility, 1, MPI_UNSIGNED_SHORT, from, 6, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Recv(&creature->hitpoints, 1, MPI_SHORT, from, 7, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    return creature;
+}
+
+void Creature::mpiSend(uint16_t to)
+{
+    MPI_Send(&this->species, 1, MPI_UNSIGNED_SHORT, to, 1, MPI_COMM_WORLD);
+    MPI_Send(&this->id, 1, MPI_UNSIGNED, to, 2, MPI_COMM_WORLD);
+    MPI_Send(&this->positionX, 1, MPI_UNSIGNED_SHORT, to, 3, MPI_COMM_WORLD);
+    MPI_Send(&this->positionY, 1, MPI_UNSIGNED_SHORT, to, 4, MPI_COMM_WORLD);
+    MPI_Send(&this->strength, 1, MPI_UNSIGNED_SHORT, to, 5, MPI_COMM_WORLD);
+    MPI_Send(&this->agility, 1, MPI_UNSIGNED_SHORT, to, 6, MPI_COMM_WORLD);
+    MPI_Send(&this->hitpoints, 1, MPI_SHORT, to, 7, MPI_COMM_WORLD);
 }
