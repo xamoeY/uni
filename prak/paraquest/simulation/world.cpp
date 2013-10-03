@@ -25,6 +25,9 @@ World::World(uint16_t size_x, uint16_t size_y, uint16_t comm_size, uint16_t comm
     // Figure out which creatures to queue for sending
     this->chunkSize = this->sizeX / this->commSize;
     this->offset = this->chunkSize * this->commRank;
+
+    if(this->commRank == 0)
+        std::cout << "Chunk size: " << this->chunkSize << std::endl;
 }
 
 std::vector<std::vector<std::unique_ptr<Creature>>::iterator> World::getCreaturesAt(uint16_t x, uint16_t y)
@@ -75,6 +78,8 @@ void World::populate(uint32_t creature_count, uint32_t obstacle_count)
         // Send creatures to other processes
         if(this->commSize > 1)
         {
+            std::vector<std::vector<std::unique_ptr<Creature>>::iterator> deletions;
+
             // Start with process = 1 because we're 0 and we don't have to send to ourselves
             for(size_t process = 1; process < this->commSize; ++process)
             {
@@ -89,6 +94,7 @@ void World::populate(uint32_t creature_count, uint32_t obstacle_count)
                     if((*it)->getPosition().first >= current_offset - 1 && (*it)->getPosition().first < current_offset + 1 + this->chunkSize)
                     {
                         scheduled_creatures.push_back(it);
+                        deletions.push_back(it);
                     }
                 }
 
@@ -102,14 +108,7 @@ void World::populate(uint32_t creature_count, uint32_t obstacle_count)
                 }
             }
 
-            // Clean up extra creatures out of root process memory
-            std::vector<std::vector<std::unique_ptr<Creature>>::iterator> deletions;
-            uint16_t chunk_size = this->sizeX / this->commSize;
-            for(auto it = this->creatures.begin(); it != this->creatures.end(); ++it)
-            {
-                if ((*it)->getPosition().first > chunk_size + 1)
-                    deletions.push_back(it);
-            }
+            // Clean up sent creatures out of root process memory
             for(auto &deletion : deletions)
                 this->creatures.erase(deletion);
         }
@@ -141,14 +140,17 @@ void World::simulate(uint32_t ticks)
     // Tick loop
     for(size_t i = 1; i < ticks + 1; ++i)
     {
-        // debug
-        std::cout << "tick: " << i << " | creatures: " << this->creatures.size() << std::endl;
+        // Debug
+        std::cout << "process: " << this->commRank << " | tick: " << i << " | creatures: " << this->creatures.size() << std::endl;
 
         // Make every creature do something
         move();
 
-        // Send/receive creatures to/from neighboring processes
-        sync();
+        if(this->commSize > 1)
+        {
+            // Send/receive creatures to/from neighboring processes
+            sync();
+        }
 
         // Check for collisions
         collide();
@@ -232,6 +234,9 @@ void World::move()
 
 void World::sync()
 {
+    // Schedule deletions in here
+    std::vector<std::vector<std::unique_ptr<Creature>>::iterator> deletions;
+
     // Our state works in a tick tock principle:
     // 0: tick down
     // 1: tock down
@@ -366,14 +371,20 @@ void World::sync()
             {
                 // Creatures left of us
                 if((*it)->getPosition().first == this->offset - 1)
+                {
                     scheduled_creatures.push_back(it);
+                    deletions.push_back(it);
+                }
             }
             // If this is true, we want to get the creatures right of us
             else if(partner > this->commRank)
             {
                 // Creatures right of us
                 if((*it)->getPosition().first == this->offset + 1 + this->chunkSize)
+                {
                     scheduled_creatures.push_back(it);
+                    deletions.push_back(it);
+                }
             }
         }
 
@@ -405,14 +416,6 @@ void World::sync()
         ++state;
     }
 
-    // Clean up creatures that went outside our memory
-    std::vector<std::vector<std::unique_ptr<Creature>>::iterator> deletions;
-    uint16_t chunk_size = this->sizeX / this->commSize;
-    for(auto it = this->creatures.begin(); it != this->creatures.end(); ++it)
-    {
-        if((*it)->getPosition().first < offset - 1 || (*it)->getPosition().first > offset + chunk_size + 1)
-            deletions.push_back(it);
-    }
     for(auto &deletion : deletions)
         this->creatures.erase(deletion);
 }
@@ -434,7 +437,7 @@ void World::collide()
         if (colliding.size() > 1)
         {
             // It better be exaclty 2 creatures or something is fucked up
-            assert(colliding.size() == 2);
+//            assert(colliding.size() == 2);
 
             // Each fight has exactly 2 fighters so we might as well create them statically here
             auto attacker = colliding[0];
