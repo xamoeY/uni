@@ -1,6 +1,8 @@
 \documentclass{beamer}
 \usepackage[ngerman]{babel}
 \usepackage[utf8x]{inputenc}
+\usepackage{pgfplots}
+\usepackage{tikz}
 \usepackage{amsmath,amsfonts,amssymb}
 \pdfmapfile{+sansmathaccent.map}
 \usetheme{Warsaw}
@@ -8,6 +10,7 @@
 \begin{document}
 
 \title{ParaQuest}
+\subtitle{Hochleistungsspeicherzugriffsfehler}
 \date{2013-09-23}
 \author{Alisa Dammer \and Sven-Hendrik Haase}
 
@@ -41,7 +44,7 @@
     \item Jeden Tick ein Dump der gesamten Welt dieses Prozesses
     \item Jede Kreatur hat eine 2D Position und eine global eindeutige Id
     \item Umgesetzt in C++11 mit Visualisierung in Qt sowie cereal für die Serialisierung
-    \item Folgender Ablauf pro Tick: Kreaturen bewegen, Kämpfen, Verlierer löschen, Welt Dump
+    \item Folgender Ablauf pro Tick: Kreaturen bewegen, Prozesse synchronisieren, Kämpfen, Verlierer löschen, Welt Dump
     \item Der Welt Dump wird später für die Visualisierung benötigt
 \end{itemize}
 \end{frame}
@@ -60,9 +63,16 @@
 
 \section{Laufzeitmessungen}
 \begin{frame}{Laufzeitmessungen}
-\begin{itemize}
-    \item blah
-\end{itemize}
+\centerline{
+\begin{tikzpicture}
+  \begin{axis}[xmin=0, xmax=4, 
+    xlabel=$x$,
+    ylabel={$f(x) = e^{-x}$}
+  ] 
+    \addplot[domain=0:4]{e^(-x)};
+  \end{axis}
+\end{tikzpicture}
+}
 \end{frame}
 
 
@@ -70,6 +80,8 @@
 \begin{frame}{Leistungsanalyse}
 \begin{itemize}
     \item Die meiste Zeit pro Prozess wird in Kollisionsabfragen benötigt
+    \item Senden/empfangen verbringt einen sehr geringen Teil
+    \item Super-linearer Speedup (!?)
 \end{itemize}
 \end{frame}
 
