@@ -132,16 +132,16 @@ aus dem eigenen Bereich herauslaufen, werden an den angrenzenden Nachbar
 gesendet und aus dem eigenen Speicher gelöscht.
 
 \section{Laufzeitmessungen}
-\centerline{
-\begin{tikzpicture}
-  \begin{axis}[xmin=0, xmax=4, 
-    xlabel=$x$,
-    ylabel={$f(x) = e^{-x}$}
-  ] 
-    \addplot[domain=0:4]{e^(-x)};
-  \end{axis}
-\end{tikzpicture}
-}
+Mit folgenden Parametern wurden die Messungen durchgeführt:
+\begin{verbatim}
+	./paraquest_simulation -r 10 -s 10000 -t 1000 -c 1000 -o 1000
+\end{verbatim}
+\begin{itemize}
+	\item 1 Prozess:  285,8s
+	\item 2 Prozesse: 74,4s
+	\item 4 Prozesse: 23,34s
+	\item 8 Prozesse: 11,9s
+\end{itemize}
 
 \section{Leistungsanalyse}
 Bei der Leistungsanalyse ist besonders aufgefallen, dass am meisten Zeit

@@ -63,16 +63,12 @@
 
 \section{Laufzeitmessungen}
 \begin{frame}{Laufzeitmessungen}
-\centerline{
-\begin{tikzpicture}
-  \begin{axis}[xmin=0, xmax=4, 
-    xlabel=$x$,
-    ylabel={$f(x) = e^{-x}$}
-  ] 
-    \addplot[domain=0:4]{e^(-x)};
-  \end{axis}
-\end{tikzpicture}
-}
+\begin{itemize}
+	\item 1 Prozess:  285,8s
+	\item 2 Prozesse: 74,4s
+	\item 4 Prozesse: 23,34s
+	\item 8 Prozesse: 11,9s
+\end{itemize}
 \end{frame}
 
 
@@ -81,7 +77,6 @@
 \begin{itemize}
     \item Die meiste Zeit pro Prozess wird in Kollisionsabfragen benötigt
     \item Senden/empfangen verbringt einen sehr geringen Teil
-    \item Super-linearer Speedup (!?)
 \end{itemize}
 \end{frame}
 
@@ -89,7 +84,7 @@
 \section{Skalierbarkeit}
 \begin{frame}{Skalierbarkeit}
 \begin{itemize}
-    \item blah
+    \item Super-linearer Speedup (!?)
 \end{itemize}
 \end{frame}
 \end{document}
