@@ -6,7 +6,7 @@
 \usepackage{scrpage2}\pagestyle{scrheadings}
 
 \ihead{Blatt 1, G2B}
-\chead{Elena Noll, Sven-Hendrik Haase, E. Böhmecke}
+\chead{Elena Noll, Sven-Hendrik Haase}
 \ohead{\today}
 \pagestyle{scrheadings}
 \setheadsepline{1pt}
@@ -82,7 +82,7 @@ Rechner handelt. Beim Rechnernetz ist dies allerdings offensichtlich.
 	\item a) WAN
 	\item b) GAN
 	\item c) WAN
-	\item d) BAN
+	\item d) PAN
 	\item e) MAN
 	\item f) MAN
 	\item g) BAN
@@ -93,14 +93,6 @@ Rechner handelt. Beim Rechnernetz ist dies allerdings offensichtlich.
 
 \section{Aufgabe 3}
 \subsection{a)}
-\begin{itemize}
-	\item 1. Ring: Alle Endgeräte sind jeweils mit einen Vorgänger bzw. Nachfolger verbunden.
-	\item 2. Vollständige Vermaschung: Jedes Endgäret ist mit jedem Endgerät verbunden.
-	\item 3. Punkt-zu-Punkt Verbindung: Beide Endgeräte sind direkt miteinander verbunden.
-	\item 4. Baum: Endgeräte werden als Knoten dargestellt. Die Blätter eines Knotens sind die verbundenen Endgeräte zu dem jeweiligen Knoten (Endgerät).
-	\item 5. irreguläre Vermaschung: keine klare Struktur der Verbindungen zwischen den Endgeräten
-	\item 6. Bus: Alle Endgeräte können mit den anderen Endgeräten über eine gemeinsame Verbindung kommunizieren.
-\end{itemize}
 
 \subsection{b)}
 \begin{itemize}
@@ -110,7 +102,7 @@ Rechner handelt. Beim Rechnernetz ist dies allerdings offensichtlich.
 \end{itemize}
 
 \subsection{c)}
-Bei einer physischen Topologie müssen wir die Verkabelung konkreter Hardware betrachten.
+Bei einer physischen Topologie müssen wir die konkrete Hardware betrachten.
 Zum Beispiel Kabel, Switches, Radiokarten oder Antennen. Die logische
 Topologie wird von dem Kommunikationsmodell der Software bestimmt.
 
@@ -118,8 +110,8 @@ Topologie wird von dem Kommunikationsmodell der Software bestimmt.
 \begin{itemize}
 	\item physikalischer Stern mit logischem Stern: Fileserver in einem
 	kleinen Firmennetzwerk (Anwendungsschicht)
-	\item physikalischer Stern mit logischem Ring: Token-Ring - sternvörmige Verkabelung der Endgeräte mit einem Verteiler. Dieser Verteiler sendet ein Token an das nächst liegende Endgerät im logischen Ring.
-	\item physikalischer Bus mit logischem Ring:  Profibus - Master und Slaves liegen auf dem selben Bus, allerdings kommunizieren die Master jeweils nur mit den anderen Master in einem logischen Ring. Ebenso wie die Slaves. (Netzzugangsschicht)
+	\item physikalischer Stern mit logischem Ring:
+	\item physikalischer Bus mit logischem Ring: 
 	\item physiaklische irreguläre Vermaschung mit logischer Punkt-zu-Punkt Verbindung: Torrent über Internet (Anwendungsschicht)	
 \end{itemize}
 
@@ -135,7 +127,6 @@ Topologie wird von dem Kommunikationsmodell der Software bestimmt.
 Ein Protokoll hat die Aufgabe, den beteiligten Kommunikationspartnern eine
 effiziente und fehlerrobuste Kommunikation zu ermöglichen. Alle Partner müssen
 auf exakt dieselbe Weise kommunizieren.
-Eine verteilte Diensterbringung ist ohne ein geeignetes Protokoll daher nicht möglich, da so beide Partner keine gemeinsamen Regeln für die Kommunikation besäßen.
 
 \subsection{b)}
 
