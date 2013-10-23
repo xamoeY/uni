@@ -152,12 +152,24 @@ Ein Dienst ist in der Regel protokollunabhängig und kann sogar gleichzeitig
 mehrere Protokolle verwenden.
 
 \subsubsection{ii)}
+Es können mehrere Dienste mithilfe eines Protokolls erbracht werden, wenn zum Beispiel die Daten die übertragen werden gleich sind
+aber sie vom jeweiligen Dienst zu einem anderen zweck verwendet werden.
 
 \subsubsection{iii)}
+Es können mehrere Dienstschnittstellen bereitgestellt werden. Man könnte im Protokoll zum Beispiel einen Integer übergeben der entscheidet mit welcher Dienstschnitstelle er kommunizieren möchte.
 
 \subsection{d)}
-Nachteile: Mehr Verzögerung und Komplexität \\
-Vorteile: Mehr Abstraktion und Ausfallsicherheit
+Nachteile:
+\begin{itemize}
+	\item Mehr Verzögerung
+\end{itemize}
+Vorteile:
+\begin{itemize}
+	\item Mehr Abstraktion und Ausfallsicherheit
+	\item leichter zu testen (jede Schicht einzelnd testen)
+	\item  bessere Standardisierungsmöglichkeiten (jede Schicht enthällt eigene Protokolle)
+	\item Komplexität wird verringert, dadurch das jede Schicht nur die Daten erhällt die sie benötigt
+\end{itemize}
 
 \subsection{e)}
 
