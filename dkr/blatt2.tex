@@ -1,5 +1,7 @@
 \documentclass[a4paper,12pt]{scrartcl}
 
+\newcommand{\dropsign}[1]{\smash{\llap{\raisebox{-.5\normalbaselineskip}{$#1$\hspace{2\arraycolsep}}}}}%
+
 \usepackage[utf8]{inputenc}
 \usepackage[ngerman]{babel}
 \usepackage{multicol}
@@ -99,5 +101,17 @@ Nein es spielt keine Rolle denn der Hemmingabstand ändert sich dadurch nicht.
 \subsection{c)}
 Dieser Code gestattet eine Fehlerkorrektur von bis zu x*3 Bitfehlern. (Herleitung aus der Formel: 2*d+1 $\rightarrow$ Korrektur aller v-Bit-Fehler, v $\leq$ d, v $\in$ N)\\\\
 Dieser Fehlerkorrektur ist allerdings nicht zuverlässig. Es bleibt das Risiko einer fehlerhaften ''Korrektur''.
+
+\section{Aufgabe 8}
+\subsection{c)}
+Unsere zu verschickende Nachricht $\rightarrow$ 1001011101\\\\
+Als erstes wandeln wir unser Generatorpolynom in eine Bitfolge um:\\
+$x^8$ + $x^4$ + $x^3$ + $x^2$ + 1 $\rightarrow$ 100011101\\\\
+Als nächstes erweitern wir unsere Nachricht mit 8 nullen, da die höchste Potenz in unserem Generatorpolynom 8 ist. Unsere Nachricht ist jetzt $\rightarrow$ 100101110100000000\\\\
+Nun führt der Sender eine Polynomdivision durch, indem wir unsere Nachricht mit dem Generatorpolynom teilen und den Rest zur ursprünglichen Nachricht hinzufügen.\\
+\includegraphics{./images/Aufgabe8c-sender}\\
+Unsere zu verschickende Nachricht ist jetzt $\rightarrow$ 100101110111000111\\\\
+Jetzt schicken wir diese Nachricht an den Empfänger und dieser führt ebenfalls eine Polynomdivision durch. Er dividiert die erhaltene Nachricht mit dem Generatorpolynom. Wenn als Ergebnis nur Nullen rauskommen ist die Nachricht korekkt angekommen, andernfalls ist ein fehler in der empfangenen Nachricht.\\
+\includegraphics{./images/Aufgabe8c-empfaenger}\\
 
 \end{document}
