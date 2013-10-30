@@ -105,6 +105,9 @@ Dieser Code gestattet eine Fehlerkorrektur von bis zu x*3 Bitfehlern. (Herleitun
 Dieser Fehlerkorrektur ist allerdings nicht zuverlässig. Es bleibt das Risiko einer fehlerhaften ''Korrektur''.
 
 \section{Aufgabe 8}
+\subsection{b)}
+Es werden alle Fehler ungerader Anzahl erkannt, sofern P(X) den Faktor (X + 1) enthält weil bei der Division mit einem Generatorpolynom mit einer geraden Anzahl an Faktoren die Bitfolge im Bezug auf die Geradheit/Ungeradheit unverändert bleibt.\\
+Der kleinste Polynom mit gerader anzahl an Termen ist (x + 1)- Wenn wir nun unsere erhaltene Nachricht mit unseren Generatorpolynom dividieren erhalten wir immer x oder 1 wenn unsere erhaltene Nachricht eine ungerade Anzahl an Termen hat. Dies führt dazu das unsere erhaltene Nachricht nicht durch unser Generatorpolynom teilbar ist.
 \subsection{c)}
 Unsere zu verschickende Nachricht $\rightarrow$ 1001011101\\\\
 Als erstes wandeln wir unser Generatorpolynom in eine Bitfolge um:\\
