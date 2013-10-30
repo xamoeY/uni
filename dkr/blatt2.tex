@@ -79,7 +79,9 @@ R\textsubscript{Code} = 0,11
 \end{displaymath}
 
 \subsection{d)}
+\begin{center}
 \includegraphics{./images/Aufgabe6d}
+\end{center}
 
 \subsection{e)}
 Ja, denn ein Code kann nur ein Präfix eines anderen Codes sein wenn es kurzer ist.
@@ -109,9 +111,13 @@ Als erstes wandeln wir unser Generatorpolynom in eine Bitfolge um:\\
 $x^8$ + $x^4$ + $x^3$ + $x^2$ + 1 $\rightarrow$ 100011101\\\\
 Als nächstes erweitern wir unsere Nachricht mit 8 nullen, da die höchste Potenz in unserem Generatorpolynom 8 ist. Unsere Nachricht ist jetzt $\rightarrow$ 100101110100000000\\\\
 Nun führt der Sender eine Polynomdivision durch, indem wir unsere Nachricht mit dem Generatorpolynom teilen und den Rest zur ursprünglichen Nachricht hinzufügen.\\
+\begin{center}
 \includegraphics{./images/Aufgabe8c-sender}\\
+\end{center}
 Unsere zu verschickende Nachricht ist jetzt $\rightarrow$ 100101110111000111\\\\
 Jetzt schicken wir diese Nachricht an den Empfänger und dieser führt ebenfalls eine Polynomdivision durch. Er dividiert die erhaltene Nachricht mit dem Generatorpolynom. Wenn als Ergebnis nur Nullen rauskommen ist die Nachricht korekkt angekommen, andernfalls ist ein fehler in der empfangenen Nachricht.\\
+\begin{center}
 \includegraphics{./images/Aufgabe8c-empfaenger}\\
+\end{center}
 
 \end{document}
