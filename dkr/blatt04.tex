@@ -28,11 +28,12 @@ Das "Bit stuffing" wird im HDLC-Protokoll eingesetzt um zu vermeiden das innerha
 	\item Bitfolge nach dem "Bit stuffing": 001111101100011111001
 \end{itemize}
 \subsection{b)}
+Das Bitmuster 01111110 ist als Synchronisationszeichen geeignet, alleridngs nur solange "Bit stuffing" nach 5 aufeinanderfolgenden Einsene ingesetzt wird. Sonst könnte es vorkommen dass in den Nutzdaten zufällig die selbe Bitfolge haben wie das Synchronisationszeichen.
 \subsection{c)}
 Man kann mit Opening bzw. Closing Frames arbeiten. Somit weiß man wann ein Datenblock anfängt und wo er aufhört. Beim nächsten Opening Frame kann dann der jeweilige Block wieder Synchronisiert werden.
 \subsection{d)}
 \subsection{Ethernet}
-Blocksynchronisation durch MAC-Frames (Media Access Control). Diese bestehen jeweils aus einer Präambel (7 Byte lange alternierende Bitfolge "101010...1010") gefolgt von einem Start Frame Delimeter (SFD). Die alternierende Bitfolge ermöglicht die Bitsynchronisation und das SFD (Blockanfang) der Blocksynchronisation.
+Blocksynchronisation durch MAC-Frames (Media Access Control). Diese bestehen jeweils aus einer Präambel (7 Byte lange alternierende Bitfolge "101010...1010") gefolgt von einem Start Frame Delimeter (SFD). Die alternierende Bitfolge ermöglicht die Bitsynchronisation und das SFD (Blockanfang) die Blocksynchronisation.
 \subsection{IEEE 802.11g WLANs}
 
 \section{Aufgabe 17}
