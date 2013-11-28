@@ -8,6 +8,7 @@
 \usepackage{scrpage2}\pagestyle{scrheadings}
 \usepackage{graphicx} 
 \usepackage{pgfplots}
+\usepackage{tikz-timing}
 
 \ihead{Blatt 4, G2B}
 \chead{Elena Noll, Sven-Hendrik Haase, E. Böhmecke}
@@ -19,7 +20,55 @@
 \begin{document}
 
 \section{Aufgabe 14}
+\subsection{a)}
+
+\definecolor{bgblue}{rgb}{0.41961,0.80784,0.80784}%
+\definecolor{bgred}{rgb}{1,0.61569,0.61569}%
+\definecolor{fgblue}{rgb}{0,0,0.6}%
+\definecolor{fgred}{rgb}{0.6,0,0}%
+
+Encoding von 01100111 \\
+\begin{tikztimingtable}[scale=4, timing/slope=0.1]
+  01100111            & LHHLLHHH \\
+  NRZ-Mark (bipolar)  & LHLLLHLH \\
+  Manchester-Code     & lhhlhllhlhhlhlhl \\
+  AMI                 & ZHLZZHLH  \\
+\extracode
+ \makeatletter
+ \begin{pgfonlayer}{background}
+  % Add background grid lines
+  \begin{scope}[gray,semitransparent,semithick]
+    %\fulltablegrid{}
+    \horlines{}
+    \vertlines{}
+  \end{scope}
+ \end{pgfonlayer}
+\end{tikztimingtable}
+
+\subsection{b)}
+Wir können in 2 Clocks 1 Bit enkodieren. D.h. wir brauchen allgemein doppelt
+so viel Bandbreite wie bei NRZ. Das Besondere beim Manchester-Code ist,
+dass das Clock-Signal aus den übermittelten Informationen wieder herauscodiert
+werden kann. Dies verhält sich anders bei NRZ.\\
+Es ist nicht möglich, dass Datenrate und Schrittgeschwindigkeit gleichgesetzt
+werden können, da Schrittgeschwidkeit in Baud gemessen wird und die Datenrate
+in Bit pro Sekunde. Die Schrittgeschdigkeit ist ein Teil der ermittelten
+Datenrate.
+
+\subsection{c)}
+Unter Bitsynchronistation versteht man das "rechtzeitige" auslesen des Signals
+zu regelmäßigen, diskreten Zeitabschnitten. Ja, der Manchester-Code
+unterstützt Bitsynchronistation, da es selbsttaktend ist und seine
+Taktinformation im übertragenen Signal nicht verloren geht. Wenn dies nicht
+durch die Codierung selbst gewährleistet werden kann,
+muss von außen aufgepasst werden, damit kein "Bit Slipping" erfolgt.
+
 \section{Aufgabe 15}
+\subsection{a)}
+434790 KHz - 433050 KHz = 1740 KHz (Durchlassbereich)
+1740 KHz / 16 KHz = 108,75. D.h. 108 bidirektionale Sprachkanäle passen
+in diesen Durchlassbereich.
+
 \section{Aufgabe 16}
 \subsection{a)}
 Das "Bit stuffing" wird im HDLC-Protokoll eingesetzt um zu vermeiden das innerhab des Datenbereichs bz der Prüfsumme das Opening bzw Closing flag (Bitfolge: 01111110) auftritt.
@@ -56,6 +105,10 @@ Internet Blockierungen in einen Banyan-Netz lassen sich durch folgende Maßnahme
 \subsection{d)}
 \includegraphics{./images/Blatt-4-Aufgabe17d}\\
 Der 5-dimensionale Hperwürfel enthält 32 Knoten, 80 Verbindungen und 5 maximale "Hops" zwischen zwei Knoten. Da jeder Knoten 5 ausgehende Verbindungen jeweils hat, kann ein Ausfall von 5 Verbindung im ungünstigsten Fall bedeuten das 1 Knoten überhaupt nicht mehr durch eine Verbindung erreichtbar ist und somit ist auch nicht mehr sichergestellt das jeder mit jedem Knoten kommunizieren kann.
+
 \subsection{e)}
+Diese Topologie kommt bei großen Rechnerclustern zum Einsatz. Es gab auch
+Supercomputer, die diese Architektur benutzten, namentlich die Connection
+Machine.
 
 \end{document}
