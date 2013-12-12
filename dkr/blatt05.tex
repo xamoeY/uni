@@ -1,0 +1,132 @@
+\documentclass[a4paper,12pt]{scrartcl}
+
+\newcommand{\dropsign}[1]{\smash{\llap{\raisebox{-.5\normalbaselineskip}{$#1$\hspace{2\arraycolsep}}}}}%
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{multicol}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{svg}
+\usepackage{graphicx} 
+\usepackage{pgfplots}
+\usepackage{hyperref}
+\usepackage{tikz-timing}
+
+\ihead{Blatt 5, G2B}
+\chead{Elena Noll, Sven-Hendrik Haase, E. Böhmecke}
+\ohead{\today}
+\pagestyle{scrheadings}
+\setheadsepline{1pt}
+\setcounter{secnumdepth}{0}
+
+\begin{document}
+
+\section{Aufgabe 18}
+
+\subsection{a)}
+\begin{figure}[h]
+	\includesvg{Aloha_PureVsSlotted}
+	\caption{Quelle: \url{"http://en.wikipedia.org/wiki/File:Aloha_PureVsSlotted.svg"}}
+\end{figure}
+Im Graphen: S ist Durchsatz, G der "Load", also wie viele Kommunikationsversuche
+pro Zeiteinheit erfolgen.\\
+Interpretation: Ein Load von 0,5 bei einfachen Aloha bzw. ein Load von 1 bei
+slotted Aloha scheinen optimal. Danach fällt der Durchsatz extrem ab. Ab einem
+Load von 3 ist einfaches Aloha unbrauchbar langsam. Bei slotted Aloha stellt
+sich diese Situation ab einem Load von 7 ein.
+
+\subsection{b)}
+(Zeichnung siehe a))
+Wir setzen nach Skript voraus, dass die Anzahl der durchschnittlichen
+Übertragungsversuche für 2 Zeiteinheiten 2G beträgt. Daraus ergibt sich folgende
+Wahrscheinlichkeit für einen Kommunikationsversuch während 2 Zeiteinheiten:
+
+\[P_{Versuch} = \frac {(2G)^ke^{-2G}} {k!}\]
+
+Nun berechnen wir die Wahrscheinlich der erfolgreichen Sendungen:
+
+\[P_{Erfolg} = e^{-2G}\]
+
+Der Durchsatz lässt sich berechnen als die Rate der Kommunikationsversuche *
+die Erfolgswahrscheinlichkeit und damit ergibt sich:
+
+\[S = Ge^{-2G}\]
+
+Für n = 0.5 wird der maximale Durchsatz bei einfachem Aloha erreicht.
+
+\subsection{c)}
+Bei günstigem Kommunikationsverhalten erreicht man bei einfachem Aloha einen
+Durchsatz von ca. 18\%, bei slotted Aloha einen von ca. 37\%. Damit hat
+slotted Aloha durchschnittlich den doppelten Durchsatz.
+(nach \url{"http://de.wikipedia.org/wiki/ALOHA"})
+
+\section{Aufgabe 19}
+
+\subsection{a)}
+Kette: 6 Verbindungsleitungen und 5 Switches \\
+Baum: 4 Verbindungsleitungen und 3 Switches 
+\\
+\\
+Der Baum ist in Bezug auf das in der Aufgabe genannte Kriterium also vorteilhafter.
+
+\subsection{b)}
+Gesamtzuverlässigkeit Kette: $(1 - p_s)^5 * (1 - p_l)^{16}$ \\
+Gesamtzuverlässigkeit Baum: $(1 - p_s)^5 * (1-p_l)^{16}$
+\\
+\\
+Da die Gesamtzuverlässigkeit nur von der Anzahl der Switches und der Verbindungsstücke abhängt und nicht von der Anordnung ist sie in beiden Netzen gleich groß.
+Darum berechnen wir den konkreten Wert nur einmal.
+
+\[(1 - 0,005)^5 * (1 - 0,001)^{16}\]
+\[= 0,95976\]
+\[= 95,976 \%\]
+
+Switchausfallwahrcheinlichkeit: 0,005*5 = 0,025 = 2,5 %
+\\Leitungsausfallwahrscheinlichkeit: 0,001*16 = 0,016 = 1,6 %
+
+\subsection{c)}
+Zuverlässigkeit längster Weg Kette: $(1 - p_s)^6 * (1 - p_l)^5$ \\
+Zuverlässigkeit längster Weg Baum: $(1 - p_s)^3 * (1 - p_l)^4$ 
+\\
+\\
+Als konkrete Werte ergibt das für den längsten Weg im Netz als Kette angeordnet ca. 97,04\%
+und im Netz als Baum angeordnet ca. 98,11\%. \\
+\\
+Der Zuverlässigkeitswert der Baumstrutkur ist stets größer da wir hier die Zuerlässigkeit des Längsten Weges zwischen 2 PCs betrachten und dieser sich nicht ändert.
+\\
+\\
+In beiden Netzen sind alle anderen Wege im Vergleich zu den längsten Wegen immer zuverlässiger, da wir für alle anderen Wege weniger Komponenten (Switches, Verbindungsleitungen) brauchen woraus folgt dass die Ausfallwahrscheinlichkeit aller Komponenten sich verringert
+
+\subsection{d)}
+Längster Weg: $((s*2)-1) + (s*2)$
+\\
+\\
+Es werden $a*(a-1)^{s-1}$ PCs miteinander verbunden.
+
+\section{Aufgabe 20}
+
+\subsection{a)}
+Ein DQDB ist dadurch gekennzeichnet, dass es aus 2 gegeneinander laufenden, einseitig gerichteten Bussen und Kopfstationen an jedem Busanfang besteht. Zudem sind alle Stationen an beide Busse angekoppelt. Das Queue ergibt sich daraus, dass die Busse wie eine Warteschlange nach dem FIFO-Prinzip abgearbeitet werden. Das Dual Bus kommt davon, dass das System aus 2 Bussen besteht. Das Distributet kommt daher, dass eine relativ große Netzausdehnung möglich ist.
+\\
+Es wurde die Slotgröße von 53 Byte gewählt da der zu übertragene Block aus 52 byte  Nutzdaten und aus 1 byte Kontrollfeld (Header) besteht.
+
+\subsection{b)}
+
+\subsection{c)}
+
+\section{Aufgabe 21}
+
+\subsection{a)}
+\begin{itemize}
+	\item führt zur Beeinträchtigung, Kollision da mehrere Sendungen gleichzeitig den Bus benutzen möchten.
+	\item keine Beeinträchtigung
+    \item führt zur Beeinträchtigung, Verzögerung (Da Switch Kollisionen durch Puffer vermeidet)
+    \item führt zur Beeinträchtigung, Kollision da mehrere Sendungen gleichzeitig den Bus benutzen möchten.
+    \item führt zur Beeinträchtigung, Verzögerung (Da Switch Kollisionen durch Puffer vermeidet)
+    \item führt zur Beeinträchtigung, Kollision da mehrere Sendungen gleichzeitig den Bus benutzen möchten.
+\end{itemize}
+
+\subsection{b)}
+Die Antwort hängt mit der Art des Verkehrsaufkommens ab, denn wenn man den Switch mit einem Hub und die Hubs mit Switches austauscht wird die Konfiguration nicht effizienter. Sie wird sogar noch ineffizienter weil dadurch sogar noch mehr Kollisionen auf den Bussen der beiden Hubs entstehen.
+
+\end{document}
