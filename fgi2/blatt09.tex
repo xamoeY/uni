@@ -1,0 +1,308 @@
+\documentclass[a4paper,12pt]{scrartcl}
+
+\usepackage[utf8]{inputenc}
+\usepackage[ngerman]{babel}
+\usepackage{multicol}
+\usepackage{scrpage2}\pagestyle{scrheadings}
+\usepackage{graphicx} 
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{pgfplots}
+\usetikzlibrary{arrows,automata,positioning,patterns,shapes,petri}
+
+\ihead{Blatt 9}
+\chead{Elena Noll, Sven-Hendrik Haase}
+\ohead{\today}
+\pagestyle{scrheadings}
+\setheadsepline{1pt}
+\setcounter{secnumdepth}{0}
+
+\begin{document}
+
+\section{Übungsaufgabe 9.3}
+
+\subsection{1.}
+\subsubsection{\(N_{9.3a}\)}
+\begin{center}
+  \begin{tikzpicture}[every path/.style={->}]
+      \node(A) {\((0, 0, 1)\)};
+      \node(B) [below left = of A] {\((1, 0, 0)\)};
+      \node(C) [below = of B] {\((0, 1, 0)\)};
+      \node(D) [below = of A] {\((2, 0, 0)\)};
+      \node(E) [below = of D] {\((1, 1, 0)\)};
+      \node(F) [below = of E] {\((0, 2, 0)\)};
+      \node(G) [right = of D] {\((0, \omega, 1)\)};
+      \node(I) [below = of G] {\((1, \omega, 0)\)};
+      \node(H) [below = of I] {\((0, \omega, 0)\)};
+      \node(J) [below right = of G] {\((2, \omega, 0)\)};
+      
+      \path(A) edge [above left] node{c} (B);
+      \path(B) edge [left] node{a} (C);
+      \path(A) edge [left] node{d} (D);
+      \path(D) edge [left] node{a} (E);
+      \path(E) edge [left] node{a} (F);
+      \path(D) edge [above] node{a'} (G);
+      \path(G) edge [left, bend right=40] node{b} (H);
+      \path(G) edge [left] node{c} (I);
+      \path(G) edge [below left] node{d} (J);
+      \path(I) edge [left] node{a} (H);
+      \path(J) edge [above right, bend right] node{a'} (G);
+      \path(J) edge [below, bend left] node{a} (I);
+  \end{tikzpicture}
+\end{center}
+
+\subsubsection{\(N_{9.3b}\)}
+\begin{center}
+  \begin{tikzpicture}[every path/.style={->}]
+      \node(A) {\((0, 0, 1)\)};
+      \node(B) [below left = of A] {\((1, 0, 0)\)};
+      \node(C) [below = of B] {\((0, 1, 0)\)};
+      \node(D) [below = of A] {\((2, 0, 0)\)};
+      \node(E) [below = of D] {\((1, 1, 0)\)};
+      \node(F) [below = of E] {\((0, 2, 0)\)};
+      \node(G) [right = of D] {\((0, 1, 1)\)};
+      \node(H) [right = of G] {\((0, 0, 0)\)};
+      
+      \path(A) edge [above left] node{c} (B);
+      \path(B) edge [left] node{a} (C);
+      \path(A) edge [left] node{d} (D);
+      \path(D) edge [left] node{a} (E);
+      \path(E) edge [left] node{a} (F);
+      \path(D) edge [above] node{a'} (G);
+      \path(G) edge [above] node{b} (H);
+      \path(G) edge [below right] node{c} (E);
+  \end{tikzpicture}
+\end{center}
+
+\subsection{2.}
+\subsubsection{\(N_{9.3a}\)}
+$\{p_2\}$
+\subsubsection{\(N_{9.3b}\)}
+\{\}
+\subsection{3.}
+\begin{center}
+  \begin{tikzpicture}[every node/.style={ellipse}, every path/.style={->,thick}]
+      \node[draw,fill=lightgray](A) {\(p_3\)};
+      \node[draw,fill=lightgray](B) [below left = of A] {\(p_1\)};
+      \node[draw,fill=lightgray](C) [below = of B] {\(p_2\)};
+      \node[draw,fill=lightgray](D) [below = of A] {\(2p_1\)};
+      \node[draw,fill=lightgray](E) [below = of D] {\(p_1 + p_2\)};
+      \node[draw,fill=lightgray](F) [below = of E] {\(2p_2\)};
+      \node[draw,fill=lightgray](G) [right = of D] {\(p_2 + p_3\)};
+      \node[draw,fill=lightgray](H) [right = of G] {\(\)};
+      
+      \path(A) edge [above left] node{c} (B);
+      \path(B) edge [left] node{a} (C);
+      \path(A) edge [left] node{d} (D);
+      \path(D) edge [left] node{a} (E);
+      \path(E) edge [left] node{a} (F);
+      \path(D) edge [above] node{a'} (G);
+      \path(G) edge [above] node{b} (H);
+      \path(G) edge [below right] node{c} (E);
+  \end{tikzpicture}
+\end{center}
+
+\subsection{4.}
+
+\section{Übungsaufgabe 9.4}
+Überdeckungsgraphen können für Inhibitornetzen Aussagekräftiger sein als für Normale P/T-Netze. In unserem Beispiel sind Überdeckungsgraph und Erreichbarkeitsgraph z.B gleich. Somit könnte man Anhand der Überdeckungsgraphen bereits Aussagen treffen, die normal nicht treffen kann. Allerdings ist das nicht für alle Inhibitornetze der Fall.
+\subsection{1.}
+Wirkungsmatrix
+\begin{align}
+\bordermatrix{
+   &  a	&  b &  c &  d \cr
+p1 &  1 & -1 &  0 &  0 \cr
+p2 & -1 &  1 &  0 &  0 \cr
+p3 &  0 &  1 & -1 &  0 \cr
+p4 &  0 &  0 & -1 &  1 \cr
+p5 &  0 &  0 &  1 & -1 \cr}
+\end{align}
+
+\subsection{2.}
+\begin{align}
+\left(
+   \begin{array}{ccccc}
+     1 & -1 &  0 &  0 &  0 \\
+    -1 &  1 &  1 &  0 &  0 \\
+     0 &  0 & -1 & -1 &  1 \\
+     0 &  0 &  0 &  1 & -1
+   \end{array}
+\right)
+\cdot
+\left(
+   \begin{array}{c}
+   v \\
+   w \\
+   x \\
+   y \\
+   z 
+   \end{array}
+\right)
+= 0 
+\end{align}
+
+\begin{align}
+v - w = 0 		\Rightarrow v = w \\
+-v + w + x = 0 	\Rightarrow x = 0 \\
+-x - y + z = 0 	\Rightarrow y = z \\
+y - z = 0		\Rightarrow y = z
+\end{align}
+
+\begin{align}
+\left(
+   \begin{array}{c}
+   v \\
+   v \\
+   0 \\
+   y \\
+   y 
+   \end{array}
+\right)
+=
+v
+\left(
+   \begin{array}{c}
+   1 \\
+   1 \\
+   0 \\
+   0 \\
+   0 
+   \end{array}
+\right)
++
+y
+\left(
+   \begin{array}{c}
+   0 \\
+   0 \\
+   0 \\
+   1 \\
+   1 
+   \end{array}
+\right)
+\end{align}
+
+\begin{align}
+\bordermatrix{
+   &  a	&  b &  c &  d & | i_1 & i_2 \cr
+p1 &  1 & -1 &  0 &  0 &   | 1 &   0 \cr
+p2 & -1 &  1 &  0 &  0 &   | 1 &   0 \cr
+p3 &  0 &  1 & -1 &  0 &   | 0 &   0 \cr
+p4 &  0 &  0 & -1 &  1 &   | 0 &   1 \cr
+p5 &  0 &  0 &  1 & -1 &   | 0 &   1 \cr}
+\end{align}
+
+\subsection{3.}
+Nach Theorem 7.35 ist $N_{9.4a}$ nicht strukturell beschränkt, da $i(p3) = 0$.
+
+\subsection{4.}
+Wirkungsmatrix
+\begin{align}
+\bordermatrix{
+   &  a	&  b &  c &  d \cr
+p1 &  1 & -1 &  0 &  0 \cr
+p2 & -1 &  1 &  0 &  0 \cr
+p3 &  0 &  1 & -1 &  0 \cr
+p4 &  0 &  0 & -1 &  1 \cr
+p5 &  0 &  0 &  1 & -1 \cr
+p6 &  0 & -1 &  1 &  0 \cr}
+\end{align} 
+
+Invarianten
+\begin{align}
+\left(
+   \begin{array}{cccccc}
+     1 & -1 &  0 &  0 &  0 &  0\\
+    -1 &  1 &  1 &  0 &  0 & -1\\
+     0 &  0 & -1 & -1 &  0 &  1\\
+     0 &  0 &  0 &  1 & -1 &  0
+   \end{array}
+\right)
+\cdot
+\left(
+   \begin{array}{c}
+   u \\
+   v \\
+   w \\
+   x \\
+   y \\
+   z 
+   \end{array}
+\right)
+= 0 
+\end{align}
+
+\begin{align}
+u - v = 0 			&\Rightarrow u = v \\
+-u + v + w - z = 0 	\Rightarrow w - z = 0 	&\Rightarrow w = z\\
+-w - x + z = 0 		\Rightarrow x = -w + z  &\Rightarrow x = 0\\
+x - y = 0			&\Rightarrow x = y
+\end{align}
+
+
+\begin{align}
+\left(
+   \begin{array}{c}
+   u \\
+   u \\
+   w \\
+   x \\
+   x \\
+   w 
+   \end{array}
+\right)
+=
+u
+\left(
+   \begin{array}{c}
+   1 \\
+   1 \\
+   0 \\
+   0 \\
+   0 \\
+   0
+   \end{array}
+\right)
++
+w
+\left(
+   \begin{array}{c}
+   0 \\
+   0 \\
+   1 \\
+   0 \\
+   0 \\
+   1
+   \end{array}
+\right)
++
+x
+\left(
+   \begin{array}{c}
+   0 \\
+   0 \\
+   0 \\
+   1 \\
+   1 \\
+   0
+   \end{array}
+\right)
+\end{align}
+
+\begin{align}
+\bordermatrix{
+   &  a	&  b &  c &  d & | i_1 & i_2 & i_3 \cr
+p1 &  1 & -1 &  0 &  0 &   | 1 &   0 &   0 \cr
+p2 & -1 &  1 &  0 &  0 &   | 1 &   0 &   0 \cr
+p3 &  0 &  1 & -1 &  0 &   | 0 &   1 &   0 \cr
+p4 &  0 &  0 & -1 &  1 &   | 0 &   0 &   1 \cr
+p5 &  0 &  0 &  1 & -1 &   | 0 &   0 &   1 \cr
+p6 &  0 &  0 &  1 & -1 &   | 0 &   1 &   0 \cr}
+\end{align}
+
+Nach Theorem 7.35 ist $N_{9.4b}$ strukturell beschränkt.
+
+\subsection{5.}
+Die Änderung stellt zum einen sicher, dass das Lager eine Kapazität hat, d.h nicht unendlich viele Teile im Lager gelagert werden können. Zudem ist das Netzt durch die Änderung nun strukturell beschränkt und es herrscht nun ein Ausgleich zwischen Produktion und Konsum.
+
+\end{document}
