@@ -60,10 +60,10 @@
 \subsection{Memory addressing}
 \begin{frame}{\insertsection}{\insertsubsection}
 	\begin{itemize}
-		\item Computers address memory in word-sized chunks
+		\item Computers address memory in word-sized chunks\pause
 		\item A \textbf{word} is a computer's natural unit for data
 		\item Word size is defined by architecture
-		\item Usual word sizes: 4 byte on 32-bit, 8 byte on 64-bit
+		\item Usual word sizes: 4 byte on 32-bit, 8 byte on 64-bit\pause
 		\item This means we can only address data at memory locations that are
 			  multiples of 4 or 8 respectively (strictly speaking)
         \item Many processors allow access of arbitrary memory locations while some fail
@@ -80,23 +80,21 @@
             \item \verb|getconf WORD_BIT| (32 for me)
             \item \verb|getconf LONG_BIT| (64 for me)
         \end{itemize}
-		\item Graphical example for 4 byte words:
 	\end{itemize}
-
-	\begin{center}
-		\begin{tikzpicture}[start chain, level distance=0.5cm, node distance=0.1cm, every on chain/.style={draw, fill=lightgray, minimum width=2cm}]
-			\node [on chain] {0x00000000} child {node [cell] {}};
-			\node [on chain] {0x00000004} child {node [cell] {}};
-			\node [on chain] {0x00000008} child {node [cell] {}};
-			\node [on chain] {0x00000012} child {node [cell] {}};
-		\end{tikzpicture}
-	\end{center}
 \end{frame}
 
 \subsection{Alignment 101}
 \begin{frame}{\insertsection}{\insertsubsection}
 	\begin{itemize}
 		\item Assume a 32-bit architecture with a word size of 4 byte
+            \begin{center}
+                \begin{tikzpicture}[start chain, level distance=0.5cm, node distance=0.1cm, every on chain/.style={draw, fill=lightgray, minimum width=2cm}]
+                    \node [on chain] {0x00000000} child {node [cell] {}};
+                    \node [on chain] {0x00000004} child {node [cell] {}};
+                    \node [on chain] {0x00000008} child {node [cell] {}};
+                    \node [on chain] {0x00000012} child {node [cell] {}};
+                \end{tikzpicture}
+            \end{center} \pause
 		\item Let's save a 4 byte \textbf{int}
 			\tikz[baseline=-0.5ex]{%
                 \node[cell, rectangle split part fill={green!50},] {};} in our
@@ -132,7 +130,7 @@
 			\node [on chain] {0x00000008} child {node [cell] {}};
 			\node [on chain] {0x00000012} child {node [cell] {}};
 		\end{tikzpicture}
-	\begin{itemize}
+	\begin{itemize} \pause
 		\item Oh wait \pause
 		\item Needs two memory accesses and some arithmetic to fetch the \textbf{int}.
 	\end{itemize}
@@ -163,7 +161,7 @@
 \begin{frame}{\insertsection}{\insertsubsection}
 	\begin{itemize}
 		\item Different behavior depending on architecture
-		\item Alignment fault errors on some platforms
+		\item Alignment fault errors on some platforms (RISC, ARM)
 		\item Bad performance on others
 		\item SSE requires proper alignment per specification (though this restriction is about to be removed)
 	\end{itemize}
@@ -174,7 +172,7 @@
 \begin{frame}[fragile]{\insertsection}{\insertsubsection}
     Consider this:
     \begin{minted}{c}
-    struct Foo {%
+    struct Foo {
         char x; // 1 byte
         short y // 2 bytes
         int z; // 4 bytes
@@ -188,11 +186,11 @@
 
 \begin{frame}[fragile]{\insertsection}{\insertsubsection}
     \begin{itemize}
-        \item A struct is aligned to the largest type's alignment requirements
+        \item A struct is aligned to the largest type's alignment requirements\pause
         \item This can yield some rather inefficient structures:
     \end{itemize}
     \begin{minted}{c}
-    struct Foo {%
+    struct Foo {
         char x; // 1 byte
         double y // 8 bytes
         char z; // 1 bytes
@@ -209,7 +207,7 @@
         \item The memory ineffiency can be minimized by reordering the members like so:
     \end{itemize}
     \begin{minted}{c}
-    struct Foo {%
+    struct Foo {
         char x; // 1 byte
         char z; // 1 bytes
         double y // 8 bytes
@@ -246,6 +244,7 @@
             front of a struct definition or \verb|-fpack-struct| as a compiler parameter
         \item Either of these generate an incompatible ABI
         \item We can use the \verb|sizeof| operator to check the effective size of a struct
+        \item Compiler warnings can help you find inefficiencies
     \end{itemize}
 \end{frame}
 
@@ -260,44 +259,44 @@
 
 \begin{frame}[fragile]{\insertsection}{\insertsubsection}
     For fun, let's look at the performance impact of misaligned memory:
-    \begin{columns}[t]
+    \begin{columns}[]
         \column{.5\textwidth}
             \begin{minted}[fontsize=\tiny]{c}
-struct Foo {%
-    char x;
-    short y;
-    int z;
-};
+    struct Foo {
+        char x;
+        short y;
+        int z;
+    };
 
-struct Foo foo;
-clock_gettime(CLOCK, &start);
-for (unsigned long i = 0; i < RUNS; ++i)
-{%
-     foo.z = 1;
-     foo.z += 1;
-}
-clock_gettime(CLOCK, &end);
+    struct Foo foo;
+    clock_gettime(CLOCK, &start);
+    for (unsigned long i = 0; i < RUNS; ++i) {
+         foo.z = 1;
+         foo.z += 1;
+    }
+    clock_gettime(CLOCK, &end);
             \end{minted}
 
         \column{.5\textwidth}
             \begin{minted}[fontsize=\tiny]{c}
-struct Bar {%
-    char x;
-    short y;
-    int z;
-} __attribute__((packed));
+    struct Bar {
+        char x;
+        short y;
+        int z;
+    } __attribute__((packed));
 
-struct Bar bar;
-clock_gettime(CLOCK, &start);
-for (unsigned long i = 0; i < RUNS; ++i)
-{%
-     bar.z = 1;
-     bar.z += 1;
-}
-clock_gettime(CLOCK, &end);
+    struct Bar bar;
+    clock_gettime(CLOCK, &start);
+    for (unsigned long i = 0; i < RUNS; ++i) {
+         bar.z = 1;
+         bar.z += 1;
+    }
+    clock_gettime(CLOCK, &end);
             \end{minted}
     \end{columns}
-    Compiled with \small\verb|gcc -DRUNS=400000000 -DCLOCK=CLOCK_MONOTONIC -std=gnu99 -O0|
+    \begin{block}{Compiled with}
+        \small \verb|gcc -DRUNS=400000000 -DCLOCK=CLOCK_MONOTONIC -std=gnu99 -O0|
+    \end{block}
 \end{frame}
 
 \begin{frame}{\insertsection}{\insertsubsection}
@@ -337,38 +336,69 @@ clock_gettime(CLOCK, &end);
     \end{itemize}
 \end{frame}
 
-\section{Stack Alignment}
+\section{Stack Alignment Issues}
 \subsection{Introduction}
 \begin{frame}{\insertsection}{\insertsubsection}
-	Even More Stuff
+    \begin{itemize}
+        \item Different platforms make different assumptions about stack alignment
+        \item Platforms:
+            \begin{itemize}
+                \item Linux: depends (legacy is 4 byte, modern is 16 byte)
+                \item Windows: 4 byte
+                \item OSX: 16 byte
+            \end{itemize}
+            \pause
+        \item But why do we care? \pause
+        \item Mixing stack alignments is very bad!
+    \end{itemize}
 \end{frame}
 
-\subsection{Stack Realignment}
-\begin{frame}{\insertsection}{\insertsubsection}
-	Even More Stuff
+\subsection{The Problem}
+\begin{frame}[fragile]{\insertsection}{\insertsubsection}
+    Consider this:
+    \begin{minted}{c}
+    void foo() {
+        struct MyType bar;
+    }
+    \end{minted}
+    \begin{itemize}
+        \item Looks benign!\pause
+        \item Imagine it is 16 byte aligned, then what will happen if this is called from a
+            platform with 4 byte alignment such as Windows?\pause
+        \item \textbf{Stack corruption}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\insertsection}{\insertsubsection}
+    \begin{itemize}
+        \item We don't usually care about stack alignment unless we have to\pause
+        \item If we have cross-architecture calls, we need special tricks\pause
+        \item To fix, decorate function with \verb|__attribute__((force_align_arg_pointer))| or use
+            \verb|-mstackrealign| \pause (or stop using Windows)
+    \end{itemize}
 \end{frame}
 
 \section{Summary}
-\subsection{Things to worry about}
+\subsection{TL;DR}
 \begin{frame}{\insertsection}{\insertsubsection}
-    \textbf{Do} worry about:
-	\begin{itemize}
-	    \item Positions of members within a struct
-        \item Using weird compiler parameters
-        \item GCC, Windows and SSE instructions
-	\end{itemize}
+    \begin{block}{\textbf{Do} worry about}
+        \begin{itemize}
+            \item Positions of members within a struct
+            \item Using weird compiler parameters
+            \item GCC, Windows and SSE instructions
+        \end{itemize}
+    \end{block}
+    \pause
+    \begin{block}{\textbf{Do not} worry about}
+        \begin{itemize}
+            \item Struct alignment/padding (compilers are smart)
+            \item Performance issues (computers are fast)
+        \end{itemize}
+    \end{block}
 \end{frame}
 
-\subsection{Things not to worry about}
+\subsection{Resources}
 \begin{frame}{\insertsection}{\insertsubsection}
-    \textbf{Do not} worry about:
-	\begin{itemize}
-	    \item Struct alignment/padding (compilers are smart)
-	    \item Performance issues (computers are fast)
-	\end{itemize}
-\end{frame}
-
-\begin{frame}{Resources}
 	\begin{itemize}
         \tiny
         \item \url{http://www.agner.org/optimize/blog/read.php?i=142&v=t}
@@ -380,6 +410,7 @@ clock_gettime(CLOCK, &end);
         \item \url{http://www.cs.umd.edu/class/sum2003/cmsc311/Notes/Data/aligned.html}
         \item \url{http://tuxsudh.blogspot.de/2005/05/structure-packing-in-gcc.html}
         \item \url{http://www.peterstock.co.uk/games/mingw_sse/}
+        \item \url{http://eigen.tuxfamily.org/dox-2.0/WrongStackAlignment.html}
 	\end{itemize}
 \end{frame}
 
