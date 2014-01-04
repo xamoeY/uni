@@ -4,3 +4,9 @@
 *~
 *.user
 prak/paraquest-build
+*.gz
+*.snm
+*.out
+*.nav
+*.toc
+*.vrb
