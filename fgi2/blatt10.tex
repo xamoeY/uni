@@ -84,4 +84,32 @@ Pfade:
 	\sigma^{c'} &= m_0 \xrightarrow{a'} m' \xrightarrow{c'} m''
 \end{align*}
 
+\subsection{5.}
+\begin{center}
+	\begin{tikzpicture}[>=stealth',shorten >=1pt,auto,node distance=2.5cm,every path/.style={->}]
+		%nodes
+		\node [circle, draw, minimum size = 1.2cm] (p1) {\(p_1\ p_2\)};
+		\node [rectangle, draw, minimum size = 0.7cm] (t1) [right of = p1] {};
+		\node [circle, draw, minimum size = 1.2cm] (p2) [right of = t1] {};
+		\node [rectangle, draw, minimum size = 0.7cm] (t2) [right of = p2] {};
+		\node [circle, draw, minimum size = 1.2cm] (p3) [right of = t2] {};
+		\node [rectangle, draw, minimum size = 0.7cm] (t3) [right of = p3] {};
+		\node [circle, draw, minimum size = 1.2cm] (p4) [below of = p1]
+			{\(g_1\ g_2\)};
+			
+		%paths
+		\path (p4) edge[bend right=10] node[above left] {\(g_1;g_2\)} (t1);
+		\path (p4) edge[bend right=10] node[above left ] {\(g_1;g_2\)} (t2);
+		\path (t3) edge[bend left=10] node[above] {\(g_1;g_2\)} (p4);
+		
+		\path (p1) edge node[midway, above] {\(p_1;p_2\)} (t1);
+		\path (t1) edge node[midway, above] {\(p_1;p_2\)} (p2);
+		\path (p2) edge node[midway, above] {\(p_1;p_2\)} (t2);
+		\path (t2) edge node[midway, above] {\(p_1;p_2\)} (p3);
+		\path (p3) edge node[midway, above] {\(p_1;p_2\)} (t3);
+		
+		\path (t3) edge[bend right=30] node[midway, below] {\(p_1;p_2\)} (p1);
+	\end{tikzpicture}
+\end{center}
+
 \end{document}
