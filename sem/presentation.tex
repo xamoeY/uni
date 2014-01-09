@@ -49,7 +49,7 @@
 \end{frame}
 
 \section{Introduction}
-\subsection{Guiding questions of this presentation}
+\subsection{Guiding Questions of This Presentation}
 \begin{frame}{\insertsection}{\insertsubsection}
 	\begin{itemize}
 		\item Which types of alignment exist in C?\pause
@@ -61,7 +61,7 @@
 	\end{itemize}
 \end{frame}
 
-\subsection{Memory addressing}
+\subsection{Memory Addressing}
 \begin{frame}{\insertsection}{\insertsubsection}
 	\begin{itemize}
 		\item Computers address memory in word-sized chunks\pause
@@ -161,7 +161,7 @@
     \end{itemize}
 \end{frame}
 
-\subsection{Consquences of misalignment}
+\subsection{Consquences of Misalignment}
 \begin{frame}{\insertsection}{\insertsubsection}
 	\begin{itemize}
 		\item Different behavior depending on architecture
@@ -183,7 +183,7 @@
 \end{frame}
 
 \section{Data Structure Alignment}
-\subsection{Structs and stuff}
+\subsection{Structs and Stuff}
 \begin{frame}[fragile]{\insertsection}{\insertsubsection}
     \pause
     Consider this:
@@ -288,7 +288,7 @@
     \end{minted}
 \end{frame}
 
-\subsection{Padding in the real world}
+\subsection{Padding in the Real World}
 \begin{frame}[fragile]{\insertsection}{\insertsubsection}
     \begin{itemize}
         \item Every decent compiler will automatically use data structure padding depending
@@ -318,7 +318,7 @@
     \end{itemize}
 \end{frame}
 
-\subsection{Performance implications}
+\subsection{Performance Implications}
 \begin{frame}{\insertsection}{\insertsubsection}
 	\begin{itemize}
         \item Do we actually have to worry about this?\pause
@@ -530,6 +530,7 @@ int main()
         \begin{itemize}
             \item Struct alignment/padding (compilers are smart)
             \item Performance issues (computers are fast)
+            \item The Stack (unless you are doing really wierd stuff)
         \end{itemize}
     \end{block}
 \end{frame}
