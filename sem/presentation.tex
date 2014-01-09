@@ -44,6 +44,7 @@
 %It's basically like Tetris but with computer memory
 
 \begin{frame}{Outline}
+    \tiny
     \tableofcontents
 \end{frame}
 
@@ -51,9 +52,12 @@
 \subsection{Guiding questions of this presentation}
 \begin{frame}{\insertsection}{\insertsubsection}
 	\begin{itemize}
+		\item Which types of alignment exist in C?\pause
 		\item What is data alignment?\pause
+		\item What is heap alignment?\pause
+		\item What is stack alignment?\pause
         \item How does it work in C?\pause
-        \item Do we need to care?
+        \item Do we need to care abouy any of these?
 	\end{itemize}
 \end{frame}
 
@@ -77,8 +81,8 @@
             locations equally well
         \item Find out word-sizes:
         \begin{itemize}
-            \item \verb|getconf WORD_BIT| (32 for me)
-            \item \verb|getconf LONG_BIT| (64 for me)
+            \item \verb|getconf WORD_BIT| (32 for me, 32 on RPi)
+            \item \verb|getconf LONG_BIT| (64 for me, 32 on RPi)
         \end{itemize}
 	\end{itemize}
 \end{frame}
@@ -167,9 +171,21 @@
 	\end{itemize}
 \end{frame}
 
+\subsection{Different Types of Alignment}
+\begin{frame}{\insertsection}{\insertsubsection}
+	\begin{itemize}
+		\item Some definitions so we don't get confused:\pause
+        \item \textbf{Data Structure Alignment} refers to the alignment of sequential memory inside
+            a data structure (struct) \pause
+        \item \textbf{Heap Alignment} refers to the alignment of dynamically allocated memory\pause
+        \item \textbf{Stack Alignment} refers to the alignment of the stack pointer
+	\end{itemize}
+\end{frame}
+
 \section{Data Structure Alignment}
 \subsection{Structs and stuff}
 \begin{frame}[fragile]{\insertsection}{\insertsubsection}
+    \pause
     Consider this:
     \begin{minted}{c}
     struct Foo {
@@ -180,13 +196,13 @@
     \end{minted}
     \begin{itemize}
         \item The struct's naive size would be 1 byte + 2 bytes + 4 bytes = 7 bytes\pause
-        \item Of course, we know it's actually going to be 8 bytes due to padding
+        \item Of course, we know it's actually going to be \pause 8 bytes due to padding
     \end{itemize}
 \end{frame}
 
 \begin{frame}[fragile]{\insertsection}{\insertsubsection}
     \begin{itemize}
-        \item A struct is aligned to the largest type's alignment requirements\pause
+        \item \textbf{A struct is aligned to the largest type's alignment requirements}\pause
         \item This can yield some rather inefficient structures:
     \end{itemize}
     \begin{minted}{c}
@@ -198,7 +214,7 @@
     \end{minted}
     \begin{itemize}
         \item The struct's naive size would be 1 byte + 8 bytes + 1 bytes = 10 bytes\pause
-        \item Its effective size is 24 byte!
+        \item Its effective size is \pause 24 bytes!
     \end{itemize}
 \end{frame}
 
@@ -218,13 +234,68 @@
     \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{\insertsection}{\insertsubsection}
+    \begin{itemize}
+        \item How about this?
+    \end{itemize}
+    \begin{minted}{c}
+    struct Foo {
+        double a; // 8 byte
+        char b; // 1 byte
+        char c; // 1 byte
+        short d; // 2 bytes
+        int e; // 4 bytes
+        double f; // 8 bytes
+    };
+    \end{minted}
+    \pause
+    \begin{itemize}
+        \item This structure is 24 bytes in total
+        \item Most efficient configuration possible
+        \item It's called \textbf{tighly packed}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\insertsection}{\insertsubsection}
+    \begin{itemize}
+        \item How about extension types?
+    \end{itemize}
+    \begin{minted}{c}
+    struct Foo {
+        char x; // 1 byte
+        __uint128_t y; // 16 bytes
+        char a; // 1 byte
+        __uint128_t b; // 16 bytes
+    };
+    \end{minted}
+    \begin{itemize}
+        \item This struct is \pause 64 bytes
+        \item World's most wasteful struct
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\insertsection}{\insertsubsection}
+    \begin{itemize}
+        \item Of course, we can also reorder this to make it 34 bytes only
+    \end{itemize}
+    \begin{minted}{c}
+    struct Foo {
+        __uint128_t y; // 16 bytes
+        __uint128_t b; // 16 bytes
+        char x; // 1 byte
+        char a; // 1 byte
+    };
+    \end{minted}
+\end{frame}
+
 \subsection{Padding in the real world}
 \begin{frame}[fragile]{\insertsection}{\insertsubsection}
     \begin{itemize}
         \item Every decent compiler will automatically use data structure padding depending
-            on architecture
+            on architecture\pause
         \item Some compilers support \verb|-Wpadded| which generates nice warnings about structure
-            padding
+            padding\pause
+        \item Compiler warnings can help you find inefficiencies
         \item Example output with clang:
     \end{itemize}
     \begin{verbatim}
@@ -241,10 +312,9 @@
     \begin{itemize}
         \item It's possible to prevent the compiler from padding a struct using either
             \verb|__attribute__((packed))| after a struct definition, \verb|#pragma pack (1)| in
-            front of a struct definition or \verb|-fpack-struct| as a compiler parameter
+            front of a struct definition or \verb|-fpack-struct| as a compiler parameter\pause
         \item Either of these generate an incompatible ABI
         \item We can use the \verb|sizeof| operator to check the effective size of a struct
-        \item Compiler warnings can help you find inefficiencies
     \end{itemize}
 \end{frame}
 
@@ -306,9 +376,10 @@
     \end{block}
     \pause
     \begin{itemize}
-        \item Takes the same time!
+        \item Takes the same time!\pause
 	    \item Nowadays it totally doesn't matter for performance! :D
-        \item Modern processors can read aligned/unaligned memory equally fast\pause
+        \item Modern processors can read aligned/unaligned memory equally fast (at least Intel
+            Sandy Bridge and up)\pause
         \item But what about processors with the computing power of a potato?
 	\end{itemize}
 \end{frame}
@@ -318,6 +389,7 @@
         aligned runtime: 12.174631568 s\\
         unaligned runtime: 26.453561832 s
     \end{block}
+    \pause
     \begin{itemize}
         \item On some architectures alignment matters a lot!
         \item We can nicely see that it takes about twice the time (two memory fetches) + some
@@ -328,15 +400,66 @@
 \subsection{SSE}
 \begin{frame}[fragile]{\insertsection}{\insertsubsection}
     \begin{itemize}
-        \item Classically, SSE requires 16 byte alignment of data
-        \item Requirement will be lifted soon
-        \item Compilers automatically align to that when using \verb|__m128| types
+        \item Classically, SSE requires 16 byte alignment of data and stack pointer
+        \item Requirement will be lifted soon\pause
+        \item Compilers automatically align to that when using SIMD types (\verb|__m128| and
+            friends)
+        \item x86\_64 is 16 byte aligned anyway
         \item Very modern compilers even automagically vectorize loops
         \item No worries to the programmer {\large\smiley}
     \end{itemize}
 \end{frame}
 
-\section{Stack Alignment Issues}
+\section{Heap Alignment}
+\subsection{Introduction}
+\begin{frame}[fragile]{\insertsection}{\insertsubsection}
+    \pause
+    \begin{itemize}
+        \item \verb|malloc| is usually good enough
+        \item Allocated memory is aligned to largest primitive type\pause
+        \item Use \verb|aligned_alloc| instead of \verb|malloc| for custom alignments
+        \item Other heap alignment functions: \verb|posix_memalign|, \verb|aligned_alloc| and \verb|valloc|\pause
+        \item \verb|memalign| and \verb|pvalloc| are considered obsolete
+    \end{itemize}
+\end{frame}
+
+\subsection{Example}
+\begin{frame}[fragile]{\insertsection}{\insertsubsection}
+    \begin{minted}[fontsize=\tiny]{c}
+#include <stdio.h>
+#include <stdlib.h>
+
+#define SIZE 1024 * 1024
+#define ALIGN 4096
+int main()
+{
+    void* a = malloc(SIZE);
+    void* b = aligned_alloc(ALIGN, SIZE);
+    
+    printf("a: %p, a %% %i: %lu\n", a, ALIGN, ((unsigned long)a) % ALIGN);
+    printf("b: %p, b %% %i: %lu\n", b, ALIGN, ((unsigned long)b) % ALIGN);
+    return 0;
+}
+    \end{minted}
+    \begin{block}{Results}
+        a: 0x7fdec2265010, a \% 4096: 16\\
+        b: 0x7fdec1cec000, b \% 4096: 0
+    \end{block}
+\end{frame}
+
+\subsection{Use Cases}
+\begin{frame}{\insertsection}{\insertsubsection}
+    You should consider using custom heap memory alignments when\ldots\pause
+    \begin{itemize}
+        \item interfacing with low-level stuff (hardware)\pause
+        \item trying to be really clever about CPU cache line optimization\pause
+        \item writing custom allocators (for instance when writing an interpreter or garbage
+            collector)\pause
+        \item using SIMD and your compilers is too stupid to align stuff properly by itself
+    \end{itemize}
+\end{frame}
+
+\section{Stack Alignment}
 \subsection{Introduction}
 \begin{frame}{\insertsection}{\insertsubsection}
     \begin{itemize}
@@ -346,6 +469,7 @@
                 \item Linux: depends (legacy is 4 byte, modern is 16 byte)
                 \item Windows: 4 byte
                 \item OSX: 16 byte
+                \item x86\_64 always uses 16 byte
             \end{itemize}
             \pause
         \item But why do we care? \pause
@@ -375,6 +499,19 @@
         \item If we have cross-architecture calls, we need special tricks\pause
         \item To fix, decorate function with \verb|__attribute__((force_align_arg_pointer))| or use
             \verb|-mstackrealign| \pause (or stop using Windows)
+        \item Other compiler arguments to play with stack alignment:
+            \verb|-mpreferred-stack-boundary|, \verb|-mincoming-stack-boundary|
+    \end{itemize}
+\end{frame}
+
+\subsection{Use Cases}
+\begin{frame}[fragile]{\insertsection}{\insertsubsection}
+    \begin{itemize}
+        \item Play with stack alignment only if you absolutely, positively have to\pause
+        \item Software that needs stack alignment: valgrind (virtual CPU), wine (cross-compiled
+            cross-platform cross-architecture compatibility layer), kernels\pause
+        \item Very memory limited device\pause
+        \item You will probably never have to worry about this
     \end{itemize}
 \end{frame}
 
