@@ -10,8 +10,7 @@ compile:
 	${cc} ${flags} -o example5 example5.c
 	${cc} ${flags} -o example6 example6.c
 	${cc} ${flags} -std=c11 -o example7 example7.c
-	${cc} ${flags} -S -o example8.s example8.c
-	${cc} ${flags} -m32 -mpreferred-stack-boundary=2 -S -o example8-stack-boundary.s example8.c
+	${cc} ${flags} -S -fno-asynchronous-unwind-tables -o example8.s example8.c
 
 run:
 	./example1
