@@ -1,0 +1,107 @@
+\documentclass[a4paper,fleqn]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{scrpage2}
+\usepackage{tikz}
+
+\ihead{AD Übung 2}
+
+\ohead{Alisa Dammer, Elena Noll, Sven-Hendrik Haase}
+\pagestyle{scrheadings}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\subsection*{Aufgabe 1}
+\begin{enumerate}[a)]
+ \item
+ \[ T(n):= \begin{cases}
+    c_0 & n < 3 \\ 
+    2T\left( \frac{n}{3} \right) N \cdot \log(n) + c_1 & \text{sonst}
+   \end{cases}\] \\
+   Begründung: Ist das Array kleiner 3, so wird 5 ausgegeben dieser Vorgang benötigt konstante Zeit $c_0$. \\
+   In den Zeilen 4 und 5 wird FUN für $\frac{1}{3}$ der Array-Länge, einmal für das erste Drittel und einmal für dritte Drittel $\Rightarrow 2\cdot T(\frac{n}{3}) $ \\
+   In Zeile 8 wird die Schleife über die Array-Länge ausgeführt, die benötigt die Zeit $n$, in dieser Schleife wird die zweite Schleife von $i+1$ bis zur Array-Länge durchlaufen, diese wird in jedem Schritt um $i-1$ kleiner $\Rightarrow \log(n)$, ist das Array wieder kleiner 3 wird wieder nur 5 ausgegeben $\Rightarrow c_1$.
+ \item
+ \begin{enumerate}[(a)]
+  \item \[ T(n) = 16 T\Big(\frac n 4\Big) + n^2 \]
+\[ T(n) = 16 \Big[T(\frac {\frac n 4} 4) + (\frac n 4)^2 \Big] + n^2\]
+\[ T(n) = 16^i T(\frac n {4^i} + i \cdot n^2\]
+\[ \frac n {4^i} \leq 1 \Leftrightarrow n \leq 4^i \Leftrightarrow \log_4 n \leq i \]
+\begin{align*}
+T(n) &= 16^i T(\frac n {4^i}) + i \cdot n^2\\
+     &\leq 16^{\log_4 n} \cdot T(1) + \log_4 n^2\\
+     &= 4^{\log_4 n} \cdot 4^{\log_4 n} \cdot c + \log_4 n \cdot n^2\\
+     &= n \cdot n \cdot c + \log_4 n n^2\\
+     &= n^2 (c + \log_4 n) = O(n^2\log n)
+\end{align*}
+
+IA: $T(n) \leq n^2 \log_2 n + c$ \\
+1. Schritt $n=1$: \\
+$T(1) - c \leq 1^2 \cdot 0 + c \Rightarrow 0 \leq 0$ gilt. \\
+2. Schritt 
+\begin{align*}
+ T(4n) &= (4n)^2 + 16 T(n) \\
+       &= 16 n^2 + 16(16T\left(\frac{n}{4}\right) + n^2) \\
+       &\leq \text{IA} \leq 16(n^2 \log_2n +c)+16n^2 \\
+       &= (4n)^2(\log_2 n + c + 1) \\
+       &= (4n)^2\log_24n +c \qed
+\end{align*}
+
+
+
+  \item \[ T(n) = 16 \cdot T\left( \frac{n}{4} \right) + n^2 \]
+\[ a= 16 \quad b = 4 \]
+\[ f(n) \in \Theta \left( n^{\log_b a} \right) \]
+\[ n^2 \in \Theta \left( n^{\log_4 16=2} \right) \]
+\[ \Theta \left(n^2 \cdot \log(n)\right) \]
+ \end{enumerate}
+
+ \item 
+ \begin{enumerate}[1.]
+  \item Behauptung: \(t=\log_b n, t\ ist\ Tiefe\ des\ Baumes\) \\
+        Beweis: \(t: \frac n {b^t} = f \Leftrightarrow b^t \Rightarrow \log_b n = \log_b b^t \Leftrightarrow t=\log_b n\)
+  \item $ n^{\log_b a} $
+ \end{enumerate}
+
+\end{enumerate}
+ 
+\subsection*{Aufgabe 2}
+\begin{enumerate}[1.]
+\item
+Wenn ein Array schon vollkommen durchsortiert ist, dann benötigt INSERTION-SORT nur eine lineare Zeit, während MERGE-SORT weiterhin in der Laufzeitklasse von $O\left(n \cdot \log(n)\right)$ liegt. \\
+INSERTION-SORT: $A[n]$ \\
+Laufzeit:$(n-2)\cdot 3$ \\
+MERGE-SORT: $A[n]$ \\
+Laufzeit: $n\cdot \log(n)$
+
+\item Zu zeigen ist, dass der Algorithmus korrekt ist. Wir zeigen dies nach
+Cormen mit den 3 Schritten: Initialization, Maintenance, Termination.
+Unsere Invariante ist: Das Subarray \(A[1..i]\) besteht aus den Elementen, die
+Ursprünglich in \(A[1..i]\), aber in sortierter Reihenfolge.
+\begin{enumerate}[(a)]
+\item Initilization: Zuerst prüfen wir, ob das Subarray \(A[1..i]\) vor der
+ersten Iteration aus dem originalen Array \(A^{orig}[1..i]\) besteht und
+nur sortiert ist.
+\[i = 1 \Rightarrow A[i] = A^{orig}[i] \Rightarrow Initilization\ ist\ korrekt\]
+\item Maintenance: Jetzt zeigen wir, dass der Algorithmus auch für weitere Schritte gilt.
+Der Körper der Schleifen des Sorts funktioniert so:
+\begin{enumerate}
+\item Das Element A[i] macht einen Schritt nach rechts.
+\item Das geht bis die gültige Position für A[i] gefunden ist.
+\item Dann besteht das Subarray A[1..i] aus den Elementen \(A^{orig}[1..i]\) (aber sortiert)
+\end{enumerate}
+\[\Rightarrow Maintenance\ ist\ korrekt\]
+\item Termination: Der Algorithmus terminiert, wenn \(i=A.length = n\).
+Dann ist \(A[1..i] = A[1..n] \geq A^{orig}[1..n]\), aber sortiert.
+\[\Rightarrow Termination\ ist\ korrekt\]
+\end{enumerate}
+Wenn alle drei Fälle korrekt sind, ist der Algorithmus korrekt.
+\end{enumerate}
+
+\end{document}

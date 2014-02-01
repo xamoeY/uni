@@ -1,0 +1,55 @@
+\documentclass[a4paper,fleqn]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage{enumerate}
+\usepackage{scrpage2}
+\usepackage{tikz}
+
+\ihead{AD Übung 7}
+
+\ohead{Alisa Dammer, Elena Noll, Sven-Hendrik Haase}
+\pagestyle{scrheadings}
+\setheadsepline{1pt}
+\newcommand{\qed}{\quad \square}
+
+\begin{document}
+\subsection*{Aufgabe 2}
+\subsubsection*{1.}
+\begin{tabular}{l r}
+Wert & Münzen \\
+1 & 1 \\
+2 & 1+1 \\
+3 & 1+1+1 \\
+4 & 4 \\
+5 & 5 \\
+6 & 5+1 \\
+7 & 5+1+1 \\
+8 & 5+1+1+1 \\
+9 & 5+4 \\
+10 & 5+5 \\
+11 & 5+5+1 \\
+12 & 5+5+1+1 \\
+\end{tabular}
+
+\subsubsection*{2.}
+\begin{verbatim}
+Münzen-Ausgeben(x W R)
+    sort(W)
+    current_w = W.pop
+    
+    while x-current_w >= 0
+        x = x - current_w
+        R.append(current_w)
+    
+    if x > 0
+        Münzen-Ausgeben(x W R)
+    
+    return R                                                                                           
+\end{verbatim}
+
+\end{document}
