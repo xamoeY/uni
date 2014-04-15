@@ -1,0 +1,127 @@
+% Packages & Stuff
+ 
+\documentclass[a4paper,11pt]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[top=1.3in, bottom=1.2in, left=0.9in, right=0.9in]{geometry}
+\usepackage{lmodern}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{pgfplots}
+\usepackage{multicol}
+ 
+% ------------------------------------------------------
+ 
+% Commands
+ 
+\newcommand{\authorinfo}{A. Struck, A. Dammer, S. Haase, E. Böhmecke}
+\newcommand{\titleinfo}{GSS-Übungsblatt 1 zum 16.04.2014}
+\newcommand{\qed}{\ \square}
+\newcommand{\todo}{\textcolor{red}{\textbf{TODO}}}
+\newcommand{\opt}{\textcolor{blue}{\textbf{Optional}}}
+ 
+% ------------------------------------------------------
+ 
+% Title & Pages
+ 
+\title{\titleinfo}
+\author{\authorinfo}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\authorinfo}
+\fancyhead[R]{\titleinfo}
+\fancyfoot[C]{\thepage}
+ 
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+\subsection*{1.}
+Ein nicht-verteiltes System benötigt kein Netzwerk, um effizient Rechnen zu
+können. Damit ist es nicht von außen angreifbar. Ein verteiltes System teilt sich
+mit vielen anderen Rechnern privaten Speicher. Damit können gleichzeitig viele
+Systeme angegriffen werden, falls eines der Systeme kompromitiert wurde.
+
+\subsection*{2.}
+\begin{itemize}
+	\item wenig Zeit und Rücksicht für eigene IT-Infrastruktur
+    \item Inkomptetenz
+    \item Profitstreben auf kurze Zeiträume
+\end{itemize}
+
+\subsection*{3.}
+\subsubsection*{a)}
+\opt
+
+\subsubsection*{b)}
+\opt
+         
+\section*{Aufgabe 2}
+\subsection*{1.}
+\begin{itemize}
+\item{a)} 
+Anonymität: Nutzer können Ressourcen und Dienste benutzen, ohne ihre 
+Indetität zu offenbaren. Selbst der Kommunikationspartner erfährt nicht die Identität.\\
+Pseudonymität: Nutzer können Ressourcen und Dienste benutzen, ohne echte Identität zu veröffentlichen, sondern ein Kennzeichen (Pseudonym) wird verwendet. (Pseudonym ist mit der Identität verknüpft) \\
+Unbeobachbarkeit: Nutzer können Ressourcen und Dienste benutzen, ohne dass andere dies beobachten können. Dritte können weder das Sensen noch den Erhalt von Nachrichten beobachten.\\
+\\
+Manche Anwendung erfordert trotz anonymer und unbeobachtbarer Kommunikation auch
+die Zurechenbarkeit von Aktionen zu ihrem Akteur. Pseudonymität
+gestattet die Verknüpfung von Anonymität und Zurechenbarkeit.
+\\
+\item{b)} Vertraulichkeit: Geheimhaltung von Daten während der Übertragung. \\
+Verdecktheit: Versteckte Übertragung von vertraulichen Daten. \\
+Die Vertraulichkeit bedeutet, dass nur Kommunikationspartnern den Inhalt der Nachricht erkennen können. Und im Vergleich zu Vertraulichkeit bedeutet  die Verdecktheit, dass Nachrictaustausch "beschutzt" ist - nur Kommunikationspartnern wissen, dass Nachricht existiert.
+
+
+\end{itemize}
+
+\subsection*{2.}
+\opt
+\subsection*{3.}
+\opt
+ 
+\section*{Aufgabe 3}
+\subsection*{1.}
+Ein Angreifermodell ist ein Modell, welches den stärksten Angreifer auf ein System (mit einem in dem 
+Modell spezifizierten Angriffsvektor), den der Systemschutz noch gerade abwehren kann. Ein solches Modell 
+wird aufgestellt, um aufzuzeigen, wie gut bzw. schlecht ein System ungefähr geschützt ist. \\
+Es werden die folgenden Kriterien berücksichtigt:
+\begin{itemize}
+  \item \textbf{Rollen:} 
+  Unterteilt in In- und Outsider, enthält das Rollen-Kriterium die Position des Angreifers in Relation zum
+  System.
+  \item \textbf{Verbreitung:} 
+  Beschreibt die Verbreitung des Angriffs, beispielsweise lokal oder netzweit.
+  \item \textbf{Verhalten:} 
+  Unterteilt in aktiv und passiv bzw. beobachtend und verändernd, beschreibt das Verhaltens-Kriterium, welche Eingriffe vorgenommen werden.
+  \item \textbf{Rechenkapazitäten:} 
+  Beschreibt die ungefähre Rechenkapazität des Angreifenden (Ausprägungen sind beispielsweise beschränkt 
+  und unbeschränkt)
+\end{itemize}       
+
+\subsection*{2.}
+\opt
+
+\section*{Aufgabe 4}
+\subsection*{1.}
+Kennwortspeicherung:
+Bei Kennwortspeicherung wird das Passwort des Benutzers in eine Hash-Funktion umgewandelt und zusammen mit dem Benutzernamen abgespeichert.
+Kennwortprüfung:
+Bei der Kennwortprüfung wird überprüft ob der eingegebene Benutzername mit dem abgespeicherten Benutzernamen übereinstimmt. Zusätzlich wird das eingegebene Passwort in eine Hash-Funktion umgewandelt und mit der abgespeicherten Hash-Funtkion verglichen. Wenn die Benutzername – Hash-Funktion Kombination mit der abgespeicherten übereinstimmt, war die Anmeldung erfolgreich.
+
+User: leroy
+Passwort: hund
+\subsection*{2.}
+\opt
+\subsection*{3.}
+\opt
+\subsection*{4.}
+\opt
+\subsection*{5.}
+\opt
+\end{document}
