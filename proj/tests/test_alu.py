@@ -1,9 +1,8 @@
 from myhdl import *
 from random import randrange
-from ALU import *
+from cpu import *
 
-def test_bench():
-    #a, b, result = [Signal(intbv(0)[32:]) for i in range(3)]
+def test_alu():
     a = Signal(intbv(1)[8:])
     b = Signal(intbv(0)[8:])
     result = Signal(0)
