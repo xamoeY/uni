@@ -1,13 +1,13 @@
 from myhdl import *
 from random import randrange
-from cpu import *
+from cpu.alu import *
 
 def test_alu():
-    a = Signal(intbv(1)[8:])
+    a = Signal(intbv(0)[8:])
     b = Signal(intbv(0)[8:])
-    result = Signal(0)
-    operation = Signal(alu_func["add"])
-    clk = Signal(0)
+    result = Signal(intbv(0)[8:])
+    operation = Signal(alu_func.add)
+    clk = Signal(bool(0))
     period = 10
 
     dut = alu(a, b, operation, result, clk)
@@ -16,18 +16,21 @@ def test_alu():
     def clkgen():
         clk.next = not clk
 
-    @instance
+    @always(clk.negedge)
     def monitor():
-        while True:
-            print "a= %s %s b= %s -> result %s" % (a, operation, b, result)
-            yield clk.negedge
+        print "a=%s %s b=%s -> result %s" % (a, operation, b, result)
             
-    """@instance
+    @instance
     def test_add():
-        yield operation(1, 2, alu_func["add"])
-        yield delay(period//4)
+        a.next = 1
+        b.next = 2
+        operation.next = alu_func.add
+        yield clk.posedge
+        yield clk.negedge
         assert result == 3
+        raise StopSimulation
 
+    """
     @instance
     def test_sub():
         yield operation(7, 1, alu_func["sub"])
@@ -70,8 +73,7 @@ def test_alu():
         yield delay(period//4)
         assert result == 13"""
 
-    return instances()
+    return clkgen, monitor, test_add, dut
 
-test = test_alu()#tb = traceSignals(test_bench)
-sim = Simulation(test)        
-sim.run(100)
+sim = Simulation(test_alu())
+sim.run()

@@ -1,4 +1,4 @@
 .PHONY: test
 
 test:
-	nosetests2
+	nosetests2 -s

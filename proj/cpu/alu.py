@@ -29,33 +29,23 @@ def alu(a, b, operation, result, clk):
     a, b - input 32bits u_sign int
     result - output 32bits
     clk - moment, when alu works"""
-
-    result = Signal(intbv(0)[16:])
     @always(clk.posedge)
     def logic():
         if operation == alu_func.add:
-            print "add"
             result.next = a + b
         elif operation == alu_func.sub:
-            print "sub"
             result.next = a - b
         elif operation == alu_func.mul:
-            print "mul"
             result.next = a * b
         elif operation == alu_func.inc:
-            print "inc"
             result.next = a + 1
         elif operation == alu_func.dec:
-            print "dec"
             result.next = a - 1
         elif operation ==  alu_func.not_a:
-            print "not a"
-            result = ~a
+            result.next = ~a
         elif operation == alu_func.b_and_a:
-            print "a and b"
             result.next = a & b
         elif operation == alu_func.a_or_b:
-            print "a or b"
             result.next = a | b
         else:
             print "no such command"
