@@ -21,12 +21,6 @@ def test_alu():
         while True:
             print "a= %s %s b= %s -> result %s" % (a, operation, b, result)
             yield clk.negedge
-
-    def operation(x, y, op):
-        a.next = x
-        b.next = y
-        operation.next = op
-
             
     """@instance
     def test_add():
@@ -78,6 +72,6 @@ def test_alu():
 
     return instances()
 
-test = test_bench()#tb = traceSignals(test_bench)
+test = test_alu()#tb = traceSignals(test_bench)
 sim = Simulation(test)        
 sim.run(100)
