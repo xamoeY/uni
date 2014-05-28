@@ -1,0 +1,88 @@
+% Packages & Stuff
+ 
+\documentclass[a4paper,11pt]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[top=1.3in, bottom=1.2in, left=0.8in, right=0.8in]{geometry}
+\usepackage{amsmath}
+\usepackage{lmodern}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{pgfplots}
+ 
+% ------------------------------------------------------
+ 
+% Commands
+ 
+\newcommand{\authorinfo}{A. Struck, S. Haase, E. Böhmecke}
+\newcommand{\titleinfo}{GSS-Übungsblatt 2 zum 07.05.2014}
+\newcommand{\qed}{\ \square}
+\newcommand{\todo}{\textcolor{red}{\textbf{TODO}}}
+\newcommand{\opt}{\textcolor{blue}{\textbf{Optional}}}
+ 
+% ------------------------------------------------------
+ 
+% Title & Pages
+ 
+\title{\titleinfo}
+\author{\authorinfo}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\authorinfo}
+\fancyhead[R]{\titleinfo}
+\fancyfoot[C]{\thepage}
+ 
+\begin{document}
+\maketitle
+
+\section*{Grundlagen von Betriebssystemen}
+\subsection*{a)}
+Auf der einen Seite muss ein Betriebssystem die Ressourcenverteilung (Zeit- und Speicherverteilung)
+managen (Betriebsmittelverwalter). Auf der anderen Seite dient es dazu die Systemdetails hinter einem User-Interface zu verbergen,
+da ein Mensch auf Dauer nicht mit diesen umzugehen vermag (virtuelle Maschine).
+\subsection*{b)}
+Auf Betriebsmittelverwaltungsebene bezogen hat Betriebssystem die Aufgabe, Ressourcen an Prozesse zu verteilen und Geraete zu verwalten.\\
+Auf der Ebene der virtuellen Maschine hat es die Aufgabe, die transparente Mehrfachbenutzung der Maschine zwischen den Benutzern transparent zu gestalten sowie den Zugriff auf Hardware zu abstrahieren, sodass Programme dies nicht selber tun muessen oder koennen.
+
+
+\section*{Prozesse und Threads}
+\subsection*{a)} 
+\subsubsection*{Programm}
+Ein Programm ist eine Folge von Anweisungen, welche auf einem Computer eine bestimmte Funktionalität bereitstellen.
+\subsubsection*{Prozess}
+Ein Prozess ist die Instanz eines Programmes in seiner Ausführung (die Abarbeitung hat begonnen und ist noch nicht terminiert worden). 
+\subsubsection*{Thread}
+Der Begriff Thread beschreibt einen (von mehreren möglichen) Ausführungsstrang im Ablauf eines Prozesses, dabei wird ein gemeinsamer Adressraum verwendet.
+\subsection*{d)}
+X: Ready \\
+Y: Running \\
+Z: Blocked \\
+\\
+\noindent
+a: Betriebsmittel allokieren\\
+b: Berechnung\\
+c: Warte auf vergebene Ressourcen\\
+d: Ressourcen wieder verfuegbar\\
+e: Ende der Befehle/Eingabe\\
+f: Neue Befehle/Eingaben holen
+
+\section*{n-Adressmaschine}
+\subsection*{a)}
+\(
+\begin{array}{lll}
+	\text{Befehl} & \text{Quelle, Ziel} & \text{Beschreibung} \\
+	MOVE & a_1, H1 & H1 := a_1 \\
+	ADD  & a_2, H1 & H1 := H1 + a_2 \\
+	DIV  & a_3, H1 & H1 := H1 / a_3 \\
+	MOVE & b_1, H2 & H2 := b_1 \\
+	SUB  & b_2, H2 & H2 := H2 - b_2 \\
+	DIV  & b_3, H2 & H2 := H2 / b_3 \\
+	ADD  & H1, H2  & H2 := H2 + H1 \\
+	MOVE & H2, R   & R := H2
+\end{array}
+\)
+
+
+\end{document}
