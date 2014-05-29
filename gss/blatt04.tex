@@ -1,0 +1,203 @@
+% Packages & Stuff
+ 
+\documentclass[a4paper,11pt,parskip=half]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[top=1.3in, bottom=1.2in, left=0.8in, right=0.8in]{geometry}
+\usepackage{amsmath}
+\usepackage{lmodern}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{pgfplots}
+\usepackage{blockgraph}
+
+% ------------------------------------------------------
+ 
+% Commands
+ 
+\newcommand{\authorinfo}{A. Struck, S. Haase, E. Böhmecke}
+\newcommand{\titleinfo}{GSS-Übungsblatt 4 zum 28.05.2014}
+\newcommand{\qed}{\ \square}
+\newcommand{\todo}{\textcolor{red}{\textbf{TODO}}}
+\newcommand{\opt}{\textcolor{blue}{\textbf{Optional}}}
+
+% ------------------------------------------------------
+ 
+% Title & Pages
+ 
+\title{\titleinfo}
+\author{\authorinfo}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\authorinfo}
+\fancyhead[R]{\titleinfo}
+\fancyfoot[C]{\thepage}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+
+\subsection*{a)}
+\begin{blockgraph}{28}{1}{0.5}
+    \bglabelxx{0}
+    \bglabelxx{5}
+    \bglabelxx{10}
+    \bglabelxx{15}
+    \bglabelxx{20}
+    \bglabelxx{25}
+    
+    \bgemptysingleblock{0}
+    \bgblock{1}{7}{$P_1$}
+    \bgemptysingleblock{7}
+    \bgblock{8}{9}{$P_3$}
+    \bgemptysingleblock{9}
+    \bgblock{10}{12}{$P_4$}
+    \bgemptysingleblock{12}
+    \bgblock{13}{18}{$P_2$}
+    \bgemptysingleblock{18}
+    \bgblock{19}{27}{$P_5$}
+\end{blockgraph}
+
+\subsection*{b)}
+% blockgraph-Umgebung. Erzeugt den Blockgraphen. Parameter:
+%   Breite (X-Achse)
+%   Hoehe (Y-Achse)
+%   Skalierung (Vergroeszerungsfaktor)
+\begin{blockgraph}{35}{1}{0.4}
+    % \bglabelxx erzeut Beschriftung der X-Achse an bestimmter Position
+    \bglabelxx{0}
+    \bglabelxx{5}
+    \bglabelxx{10}
+    \bglabelxx{15}
+    \bglabelxx{20}
+    \bglabelxx{25}
+    \bglabelxx{30}
+    \bglabelxx{35}
+    
+    % \bgblock erzeugt Block innerhalb des Graphen. Parameter:
+    %    Y-Position (z.B. CPU), optional
+    %    Beginn auf der X-Achse
+    %    Ende auf der X-Achse
+    %    Beschriftung
+    \bgemptysingleblock{0}
+    \bgblock{1}{3}{$P_1$}
+    \bgblock{3}{5}{$P_1$}
+    \bgemptysingleblock{5}
+    \bgblock{6}{8}{$P_2$}
+    \bgemptysingleblock{8}
+    \bgblock{9}{10}{$P_3$}
+    \bgemptysingleblock{10}
+    \bgblock{11}{13}{$P_1$}
+    \bgemptysingleblock{13}
+    \bgblock{14}{16}{$P_4$}
+    \bgemptysingleblock{16}
+    \bgblock{17}{19}{$P_2$}
+    \bgemptysingleblock{19}
+    \bgblock{20}{22}{$P_5$}
+    \bgemptysingleblock{22}
+    \bgblock{23}{24}{$P_2$}
+    \bgemptysingleblock{24}
+    \bgblock{25}{27}{$P_5$}
+    \bgblock{27}{29}{$P_5$}
+    \bgblock{29}{31}{$P_5$}
+
+\end{blockgraph}
+
+
+\section*{Aufgabe 2}
+
+\subsection*{a)}
+Annahme: Wenn ein idealer Scheduler alle Deadlines in unbeschränkter Zeit einhalten soll, muss ein Zeitintervall \((I)\) existieren, für das gilt: \\
+a) Es ist (ganzzahlig) durch die Periodendauern \((Pd(A_i))\) teilbar. \\
+b) Die Summe der Bedienzeiten \((B(A_i))\) im Zeitintervall ist kleiner, als die Länge des Intervalles. \\
+\\
+Da \(B(A_i)\) durch die Anzahl der Perioden im Intervall \((PI(A_i))\) in Abhängigkeit von \(|I|\) steht, ist das kleinste gemeinsame Vielfache der Periodenlängen praktikabel. Daher:\\ 
+\(|I| = kgV(4,7,3) = 84 \) \\ \newpage
+Für \(PI(A_i)\) gilt: \\
+\(PI(A_i) = |I|: Pd(A_i)\) \\
+\begin{center}
+\(
+\begin{array}{c | c c}
+	Task & PI(A_i) & B(A_i) \\ \hline
+	A_1  & 21 & 21 \\
+	A_2  & 12 & 36 \\ 
+	A_3  & 24 & 24
+\end{array}\quad \Rightarrow \quad
+ \sum\limits_{i=1}^3B(A_i) = 85 > 84 = |I|
+\)
+\end{center}
+Somit ist gezeigt, dass es selbst für einen perfekten Scheduler unmöglich ist, alle Deadlines bei unendlicher Laufzeit einzuhalten.
+
+\subsection*{b) ii)}
+\begin{blockgraph}{25}{1}{0.5}
+    \bglabelxx{0}
+    \bglabelxx{5}
+    \bglabelxx{10}
+    \bglabelxx{15}
+    \bglabelxx{20}
+    \bglabelxx{25}
+    
+    \bgblock{0}{3}{$B_1$}
+    \bgblock{3}{4}{$B_2$}
+    \bgblock{4}{6}{$B_3$}
+    \bgblock{6}{7}{$B_4$}
+    \bgblock{7}{10}{$B_1$}
+    \bgblock{10}{11}{$B_4$}
+    \bgblock{12}{14}{$B_3$}
+    \bgblock{14}{15}{$B_2$}
+    \bgblock{15}{18}{$B_1$}
+    \bgblock{18}{19}{$B_4$}
+    \bgblock{21}{22}{$B_3$}
+    \bgblock{22}{25}{$B_1$}
+\end{blockgraph}
+
+\subsection*{c)}
+
+Interpretation: Hoehere Prioritaet ist besser.
+
+% blockgraph-Umgebung. Erzeugt den Blockgraphen. Parameter:
+%   Breite (X-Achse)
+%   Hoehe (Y-Achse)
+%   Skalierung (Vergroeszerungsfaktor)
+\begin{blockgraph}{20}{4}{0.7}
+        % \bglabelxx erzeut Beschriftung der X-Achse an bestimmter Position, wobei Position und Beschriftung identisch sind
+        \bglabelxx{0}
+        \bglabelxx{5}
+        \bglabelxx{10}
+        \bglabelxx{15}
+        \bglabelxx{20}
+
+        % \bglabely erzeut Beschriftung der X-Achse an bestimmter Position
+        \bglabely{0}{CPU 0}
+        \bglabely{1}{CPU 1}
+        \bglabely{2}{CPU 2}
+        \bglabely{3}{CPU 3}
+
+        % \bgblock erzeugt Block innerhalb des Graphen. Parameter:
+        %    Y-Position (z.B. CPU), optional
+        %    Beginn auf der X-Achse
+        %    Ende auf der X-Achse
+        %    Beschriftung
+        %\bgemptysingleblock[2]{6}
+
+        \bgblock[0]{0}{4}{$P_1$}
+        \bgblock[1]{2}{8}{$P_2$}
+        \bgblock[2]{2}{7}{$P_3$}
+        \bgblock[3]{3}{11}{$P_5$}
+        \bgblock[0]{4}{5}{$P_4$}
+        \bgblock[0]{5}{10}{$P_6$}
+        \bgblock[2]{7}{14}{$P_4$}
+        \bgblock[1]{9}{13}{$P_7$}
+\end{blockgraph}
+
+\section*{Aufgabe 3}
+
+\subsection*{a)}
+
+
+\end{document}
