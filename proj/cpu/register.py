@@ -1,9 +1,10 @@
 from myhdl import *
+from cpu.constants import *
 
-def register(sig_in, sig_out, ce, clk):
+def register(sig_in, sig_out, ovf, clk):
 	"""sig_in, sig_out - are input and output data
 	accordingly
-	ce - is a status bit, that shows whether register
+	ovf - is a status bit, that shows whether register
 	is overflowed
 	0 - not overflowed
 	1 - owerflowed
@@ -11,6 +12,6 @@ def register(sig_in, sig_out, ce, clk):
 
 	@always(clk.posedge)
 	def logic():
-		if ce == 0:
+		if ovf == 0:
 			sig_out.next = sig_in
 	return logic

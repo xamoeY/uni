@@ -1,6 +1,7 @@
 from myhdl import *
 from random import randrange
 from cpu.alu import *
+from cpu.constants import *
 
 def test_alu():
     a = Signal(intbv(0)[8:])
@@ -17,7 +18,8 @@ def test_alu():
 
     @always(clk.negedge)
     def monitor():
-        print "a=%s %s b=%s -> result %s" % (a, operation, b, result)
+        if DEBUG:
+            print "a=%s %s b=%s -> result %s" % (a, operation, b, result)
     
     @instance
     def stimulus():

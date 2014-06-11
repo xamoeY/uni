@@ -1,5 +1,5 @@
 from myhdl import *
-
+from cpu.constants import *
 
 alu_func = enum("add",
                 "sub",
@@ -17,7 +17,6 @@ def alu(a, b, operation, result, clk):
     clk - moment, when alu works"""
     @always(clk.posedge)
     def logic():
-        print operation
         if operation == alu_func.add:
             result.next = a + b
         elif operation == alu_func.sub:
