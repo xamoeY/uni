@@ -1,0 +1,42 @@
+ISA
+
+general specifications:
+	16 bit instructions
+	16 bit words
+	4 registers
+
+instruction specification:
+	opcode [operand1] [operand2]
+
+	4 bit opcode
+	6 bit operand
+
+opcodes:
+	noop    0000
+
+	store   0001	
+	load    0010
+	mov     0011
+	movi    0100
+	
+	add     0101
+	sub     0110
+	mul     0111
+	div     1000
+		
+	not_a   1001
+	a_and_b 1010
+	a_or_b  1011
+
+	shift_l 1100
+	shift_r 1101
+	 
+	j       1110
+	jeq     1111
+
+registers:
+	a       000001
+	b       000010
+	c       000011
+	d       000100
+

@@ -2,6 +2,8 @@ from myhdl import *
 
 def instruction_unit(data_in, opcode, op1, op2, clk):
 
+	
+	
 	@always(clk.posedge)
 	def logic():
 		opcode.next = data_in[0:4]
