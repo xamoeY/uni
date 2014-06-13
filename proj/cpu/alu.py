@@ -8,7 +8,8 @@ alu_func = enum("add",
                 "dec",
                 "not_a",
                 "a_and_b",
-                "a_or_b")
+                "a_or_b",
+                )
 
 def alu(a, b, operation, result, clk):
     """This module represents an ALU.
@@ -33,6 +34,5 @@ def alu(a, b, operation, result, clk):
             result.next = a & b
         elif operation == alu_func.a_or_b:
             result.next = a | b
-        else:
-            print "no such command"
+       
     return logic

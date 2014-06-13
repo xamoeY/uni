@@ -2,7 +2,7 @@ from myhdl import *
 from cpu.register import *
 from cpu.constants import *
 
-def test_register():
+def test_register_bank():
     sig_in = Signal(intbv(1)[8:])
     sig_out = Signal(intbv(3)[8:])
     clk = Signal(bool(0))

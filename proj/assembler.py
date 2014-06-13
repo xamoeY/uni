@@ -13,8 +13,8 @@ def parse_line(line):
 
 	mcode = "None"
 
-	if opcode == "halt":
-		mcode = OPCODES["halt"]
+	if opcode == "stop":
+		mcode = OPCODES["stop"]
 		mcode = mcode.ljust(INSTRUCTION_SIZE, "0")
 	elif opcode == "store":
 		mcode = OPCODES["store"]
@@ -24,7 +24,86 @@ def parse_line(line):
 		mcode = OPCODES["load"]
 		mcode += REGISTERS[instruction[1]]
 		mcode += REGISTERS[instruction[2]]
+	elif opcode == "mov":
+		mcode = OPCODES["mov"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += REGISTERS[instruction[2]]
+	elif opcode == "movi":
+		mcode = OPCODES["movi"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += "{0:06b}".format(int(instruction[2]))
+	elif opcode == "add":
+		mcode = OPCODES["add"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += REGISTERS[instruction[2]]
+	elif opcode == "sub":
+		mcode = OPCODES["sub"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += REGISTERS[instruction[2]]
+	elif opcode == "mul":
+		mcode = OPCODES["mul"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += REGISTERS[instruction[2]]
+	elif opcode == "div":
+		mcode = OPCODES["div"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += REGISTERS[instruction[2]]
+	elif opcode == "addi":
+		pass
+	elif opcode == "subi":
+		pass
+	elif opcode == "muli":
+		pass
+	elif opcode == "divi":
+		pass
+	elif opcode == "inc":
+		pass
+	elif opcode == "dec":
+		pass
+	elif opcode == "not":
+		mcode = OPCODES["not"]
+		mcode += REGISTERS[instruction[1]]
+		mcode = mcode.ljust(INSTRUCTION_SIZE, "0")
+	elif opcode == "and":
+		mcode = OPCODES["and"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += REGISTERS[instruction[2]]
+	elif opcode == "or":
+		mcode = OPCODES["or"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += REGISTERS[instruction[2]]
+	elif opcode == "shift_l":
+		mcode = OPCODES["shift_l"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += "{0:06b}".format(int(instruction[2]))
+	elif opcode == "shift_r":
+		mcode = OPCODES["shift_r"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += "{0:06b}".format(int(instruction[2]))
+	elif opcode == "cmp":
+		mcode = OPCODES["cmp"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += REGISTERS[instruction[2]]
+	elif opcode == "j":
+		pass
+	elif opcode == "je":
+		mcode = OPCODES["je"]
+		mcode += REGISTERS[instruction[1]]
+		mcode += "{0:06b}".format(int(instruction[2]))
+	elif opcode == "jne":
+		pass
+	elif opcode == "jg":
+		pass
+	elif opcode == "jge":
+		pass
+	elif opcode == "jl":
+		pass
+	elif opcode == "jle":
+		pass
 
+	# TODO return list of codes instead as some opcodes
+	# actually generate multiple instructions instead of 
+	# just one as we handle now
 	return mcode
 
 def parse_file(source_file):
