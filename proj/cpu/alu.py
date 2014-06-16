@@ -9,7 +9,10 @@ alu_func = enum("add",
                 "not_a",
                 "a_and_b",
                 "a_or_b",
-                )
+                "shift_l",
+                "shift_r",
+                "cmp",
+                "je")
 
 def alu(a, b, operation, result, clk):
     """This module represents an ALU.
@@ -34,5 +37,23 @@ def alu(a, b, operation, result, clk):
             result.next = a & b
         elif operation == alu_func.a_or_b:
             result.next = a | b
+        elif operation == alu_func.shift_l:
+            result.next = a << b
+        elif operation == alu_func.shift_r:
+            result.next = a >> b
+        elif operation == alu_func.cmp:
+            if a < b:
+                result.next = -1
+            elif a == b:
+                result.next = 0
+            elif a > b:
+                result.next = 1 
+        elif operation == alu_func.je:
+            if a == b:
+                #jump where?
+                result.next = a
+            else:
+                result.next = min(a, b)
+
        
     return logic
