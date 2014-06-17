@@ -26,5 +26,3 @@ REGISTERS = {"zero"       :"000000",
 			 "d"          :"001000"}
 
 INSTRUCTION_SIZE = 16
-
-PROGRAM_COUNTER = 0

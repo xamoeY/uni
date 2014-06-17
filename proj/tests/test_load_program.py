@@ -35,6 +35,7 @@ def test_load_program():
     
     @instance
     def stimulus():
+        # read program into memory
         for index, item in enumerate(instructions):
             ro.next = False
             address.next = index
@@ -43,6 +44,7 @@ def test_load_program():
             yield clk.posedge
             yield clk.negedge
 
+        # assert that program has landed in memory properly
         for index, item in enumerate(instructions):
             ro.next = True
             address.next = index
@@ -50,8 +52,10 @@ def test_load_program():
             yield clk.posedge
             yield clk.negedge        
 
-            print item[0], sig_out
             assert item[0] == sig_out
+
+        # run program
+        
  
         raise StopSimulation
 

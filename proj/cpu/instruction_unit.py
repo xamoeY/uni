@@ -1,8 +1,7 @@
 from myhdl import *
 
 def instruction_unit(data_in, opcode, op1, op2, clk):
-
-	
+	"""todo schatz gogo"""
 	
 	@always(clk.posedge)
 	def logic():
