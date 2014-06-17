@@ -1,0 +1,96 @@
+ISA
+
+general specifications:
+	16 bit instructions
+	16 bit words
+	4 registers
+
+instruction specification:
+	opcode [operand1] [operand2]
+
+	4 bit opcode
+	6 bit operand
+
+opcodes:
+	halt    0000
+
+	store   0001	
+	load    0010
+	mov     0011
+	movi    0100
+	
+	add     0101
+	sub     0110
+	mul     0111
+	div     1000
+		
+	not     1001
+	and     1010
+	or      1011
+
+	shift_l 1100
+	shift_r 1101
+	 
+	j       1110
+	jeq     1111
+
+instructions:
+	stop    0000
+
+	store   0001
+	load    0010
+	mov     0011
+	movi    0100
+	
+	add     0101
+	sub     0110
+	mul     0111
+	div     1000
+
+	addi    pseudo
+	subi    pseudo
+	muli    pseudo
+	divi    pseudo
+
+	inc     pseudo
+	dec     pseudo
+		
+	not     1001
+	and     1010
+	or      1011
+
+	shift_l 1100
+	shift_r 1101
+	
+	cmp     1110
+
+	j       pseudo
+	je      1111
+	jne     pseudo
+	jg      pseudo
+	jge     pseudo
+	jl      pseudo
+	jle     pseudo
+
+	noop    pseudo
+
+registers:
+	zero 		000000 # always returns value 0
+	
+	pc			000001 # program counter
+	cmp_result  000010 # result of comparison as defined below
+	jmp_next    000011 # je will go here if the comparison succeeds
+	temp        000100 # temporary register to be used by compiler
+
+	# general purpose registers
+	a       	000101
+	b       	000110
+	c      	 	000111
+	d       	001000
+
+cmp_result:
+	<  -2
+	<= -1
+	=	0
+	>=  1
+	>   2

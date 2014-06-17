@@ -1,3 +1,3 @@
 WIDTH = 16
-DEPTH = 8
+DEPTH = 32
 DEBUG = False

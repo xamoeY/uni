@@ -85,6 +85,56 @@ def test_alu():
         yield clk.negedge
         assert result == 5
 
+        # Test shift left
+        a.next = 6
+        b.next = 1
+        operation.next = alu_func.shift_l
+        yield clk.posedge
+        yield clk.negedge
+        assert result == 12
+
+        # Test shift right
+        a.next = 6
+        b.next = 1
+        operation.next = alu_func.shift_r
+        yield clk.posedge
+        yield clk.negedge
+        assert result == 3
+
+        # Test comparison a is bigger than b. 1 is expected
+        a.next = 8
+        b.next = 1
+        operation.next = alu_func.cmp
+        yield clk.posedge
+        yield clk.negedge
+        assert result == 1
+        assert result != 0
+
+        # Test cmp if a equal to b
+        a.next = 12
+        b.next = 12
+        operation.next = alu_func.cmp
+        yield clk.posedge
+        yield clk.negedge
+        assert result == 0
+        assert result != -1
+
+        # Test je, if a == b
+        a.next = 3
+        b.next = 3
+        operation.next = alu_func.je
+        yield clk.posedge
+        yield clk.negedge
+        assert result == a # and check whether jumped
+
+        # Test je, if a != b
+        a.next = 6
+        b.next = 9
+        operation.next = alu_func.je
+        yield clk.posedge
+        yield clk.negedge
+        assert result == a
+
         raise StopSimulation
 
     return clkgen, monitor, stimulus, dut
