@@ -6,12 +6,12 @@ import struct
 
 def test_load_program():
 
-    ro = Signal(bool(0))
+    we = Signal(bool(0))
     sig_in = Signal(intbv(0)[WIDTH:])
     sig_out = Signal(intbv(0)[WIDTH:])
     address = Signal(intbv(0)[WIDTH:])
     clk = Signal(bool(0))
-    mem = memory(ro, address, sig_in, sig_out, clk)
+    mem = memory(we, address, sig_in, sig_out, clk)
     
 
     instructions = []
@@ -37,7 +37,7 @@ def test_load_program():
     def stimulus():
         # read program into memory
         for index, item in enumerate(instructions):
-            ro.next = False
+            we.next = True
             address.next = index
             sig_in.next = item[0]
             
@@ -46,7 +46,7 @@ def test_load_program():
 
         # assert that program has landed in memory properly
         for index, item in enumerate(instructions):
-            ro.next = True
+            we.next = False
             address.next = index
 
             yield clk.posedge

@@ -5,6 +5,14 @@ import os
 import struct
 from common.isa import *
 
+def get_opcode_bitstring(opcode):
+	c = OPCODES[opcode]
+	return "{0:04b}".format(int(c, 2))
+
+def get_register_bitstring(register):
+	r = REGISTERS[register]
+	return "{0:06b}".format(int(r, 2))
+
 def parse_line(line):
 	instruction = line.split()
 
@@ -14,40 +22,40 @@ def parse_line(line):
 	mcode = "None"
 
 	if opcode == "stop":
-		mcode = OPCODES["stop"]
+		mcode = get_opcode_bitstring("stop")
 		mcode = mcode.ljust(INSTRUCTION_SIZE, "0")
 	elif opcode == "store":
-		mcode = OPCODES["store"]
-		mcode += REGISTERS[instruction[1]]
-		mcode += REGISTERS[instruction[2]]
+		mcode = get_opcode_bitstring("store")
+		mcode += get_register_bitstring(instruction[1])
+		mcode += get_register_bitstring(instruction[2])
 	elif opcode == "load":
-		mcode = OPCODES["load"]
-		mcode += REGISTERS[instruction[1]]
-		mcode += REGISTERS[instruction[2]]
+		mcode = get_opcode_bitstring("load")
+		mcode += get_register_bitstring(instruction[1])
+		mcode += get_register_bitstring(instruction[2])
 	elif opcode == "mov":
-		mcode = OPCODES["mov"]
-		mcode += REGISTERS[instruction[1]]
-		mcode += REGISTERS[instruction[2]]
+		mcode = get_opcode_bitstring("mov")
+		mcode += get_register_bitstring(instruction[1])
+		mcode += get_register_bitstring(instruction[2])
 	elif opcode == "movi":
-		mcode = OPCODES["movi"]
-		mcode += REGISTERS[instruction[1]]
+		mcode = get_opcode_bitstring("movi")
+		mcode += get_register_bitstring(instruction[1])
 		mcode += "{0:06b}".format(int(instruction[2]))
 	elif opcode == "add":
-		mcode = OPCODES["add"]
-		mcode += REGISTERS[instruction[1]]
-		mcode += REGISTERS[instruction[2]]
+		mcode = get_opcode_bitstring("add")
+		mcode += get_register_bitstring(instruction[1])
+		mcode += get_register_bitstring(instruction[2])
 	elif opcode == "sub":
-		mcode = OPCODES["sub"]
-		mcode += REGISTERS[instruction[1]]
-		mcode += REGISTERS[instruction[2]]
+		mcode = get_opcode_bitstring("sub")
+		mcode += get_register_bitstring(instruction[1])
+		mcode += get_register_bitstring(instruction[2])
 	elif opcode == "mul":
-		mcode = OPCODES["mul"]
-		mcode += REGISTERS[instruction[1]]
-		mcode += REGISTERS[instruction[2]]
+		mcode = get_opcode_bitstring("mul")
+		mcode += get_register_bitstring(instruction[1])
+		mcode += get_register_bitstring(instruction[2])
 	elif opcode == "div":
-		mcode = OPCODES["div"]
-		mcode += REGISTERS[instruction[1]]
-		mcode += REGISTERS[instruction[2]]
+		mcode = get_opcode_bitstring("div"]
+		mcode += get_register_bitstring(instruction[1])
+		mcode += get_register_bitstring(instruction[2])
 	elif opcode == "addi":
 		pass
 	elif opcode == "subi":
@@ -61,34 +69,34 @@ def parse_line(line):
 	elif opcode == "dec":
 		pass
 	elif opcode == "not":
-		mcode = OPCODES["not"]
-		mcode += REGISTERS[instruction[1]]
+		mcode = get_opcode_bitstring("not")
+		mcode += get_register_bitstring(instruction[1])
 		mcode = mcode.ljust(INSTRUCTION_SIZE, "0")
 	elif opcode == "and":
-		mcode = OPCODES["and"]
-		mcode += REGISTERS[instruction[1]]
-		mcode += REGISTERS[instruction[2]]
+		mcode = get_opcode_bitstring("and")
+		mcode += get_register_bitstring(instruction[1])
+		mcode += get_register_bitstring(instruction[2])
 	elif opcode == "or":
-		mcode = OPCODES["or"]
-		mcode += REGISTERS[instruction[1]]
-		mcode += REGISTERS[instruction[2]]
+		mcode = get_opcode_bitstring("or")	
+		mcode += get_register_bitstring(instruction[1])
+		mcode += get_register_bitstring(instruction[2])
 	elif opcode == "shift_l":
-		mcode = OPCODES["shift_l"]
-		mcode += REGISTERS[instruction[1]]
+		mcode = get_opcode_bitstring("shift_l")
+		mcode += get_register_bitstring(instruction[1])
 		mcode += "{0:06b}".format(int(instruction[2]))
 	elif opcode == "shift_r":
-		mcode = OPCODES["shift_r"]
-		mcode += REGISTERS[instruction[1]]
+		mcode = get_opcode_bitstring("shift_r")
+		mcode += get_register_bitstring(instruction[1])
 		mcode += "{0:06b}".format(int(instruction[2]))
 	elif opcode == "cmp":
-		mcode = OPCODES["cmp"]
-		mcode += REGISTERS[instruction[1]]
-		mcode += REGISTERS[instruction[2]]
+		mcode = get_opcode_bitstring("cmp")
+		mcode += get_register_bitstring(instruction[1])
+		mcode += get_register_bitstring(instruction[2])
 	elif opcode == "j":
 		pass
 	elif opcode == "je":
-		mcode = OPCODES["je"]
-		mcode += REGISTERS[instruction[1]]
+		mcode = get_opcode_bitstring("je")
+		mcode += get_register_bitstring(instruction[1])
 		mcode += "{0:06b}".format(int(instruction[2]))
 	elif opcode == "jne":
 		pass

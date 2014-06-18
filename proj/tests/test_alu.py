@@ -7,7 +7,7 @@ def test_alu():
     a = Signal(intbv(0)[8:])
     b = Signal(intbv(0)[8:])
     result = Signal(intbv(0)[8:])
-    opcode = Signal(alu_func.sub)
+    opcode = Signal(intbv(0)[4:])
     clk = Signal(bool(0))
     period = 10
 
@@ -26,7 +26,7 @@ def test_alu():
         # test_add
         a.next = 5
         b.next = 2
-        opcode.next = alu_func.add
+        opcode.next = OPCODES["add"]
         yield clk.posedge
         yield clk.negedge
         assert result == 7
@@ -34,7 +34,7 @@ def test_alu():
         # test_sub
         a.next = 5
         b.next = 2
-        opcode.next = alu_func.sub
+        opcode.next = OPCODES["sub"]
         yield clk.posedge
         yield clk.negedge
         assert result == 3
@@ -42,37 +42,36 @@ def test_alu():
         # test_mul
         a.next = 5
         b.next = 5
-        opcode.next = alu_func.mul
+        opcode.next = OPCODES["mul"]
         yield clk.posedge
         yield clk.negedge
         assert result == 25
 
         # test_inc
-        a.next = 5
-        opcode.next = alu_func.inc
-        yield clk.posedge
-        yield clk.negedge
-        assert result == 6
+        # a.next = 5
+        # opcode.next = alu_func.inc
+        # yield clk.posedge
+        # yield clk.negedge
+        # assert result == 6
 
-        # test_dec
-        a.next = 5
-        opcode.next = alu_func.dec
-        yield clk.posedge
-        yield clk.negedge
-        assert result == 4
+        # # test_dec
+        # a.next = 5
+        # opcode.next = alu_func.dec
+        # yield clk.posedge
+        # yield clk.negedge
+        # assert result == 4
 
         # test_not_a
         a.next = 5
-        opcode.next = alu_func.not_a
+        opcode.next = OPCODES["not"]
         yield clk.posedge
         yield clk.negedge
-        print result
         assert result.signed() == -6
 
         # test_b_and_a
         a.next = 5
         b.next = 5
-        opcode.next = alu_func.a_and_b
+        opcode.next = OPCODES["and"]
         yield clk.posedge
         yield clk.negedge
         assert result == 5
@@ -80,7 +79,7 @@ def test_alu():
         # test_a_or_b
         a.next = 5
         b.next = 5
-        opcode.next = alu_func.a_or_b
+        opcode.next = OPCODES["or"]
         yield clk.posedge
         yield clk.negedge
         assert result == 5
@@ -88,7 +87,7 @@ def test_alu():
         # Test shift left
         a.next = 6
         b.next = 1
-        opcode.next = alu_func.shift_l
+        opcode.next = OPCODES["shift_l"]
         yield clk.posedge
         yield clk.negedge
         assert result == 12
@@ -96,7 +95,7 @@ def test_alu():
         # Test shift right
         a.next = 6
         b.next = 1
-        opcode.next = alu_func.shift_r
+        opcode.next = OPCODES["shift_r"]
         yield clk.posedge
         yield clk.negedge
         assert result == 3
@@ -104,7 +103,7 @@ def test_alu():
         # Test comparison a is bigger than b. 1 is expected
         a.next = 8
         b.next = 1
-        opcode.next = alu_func.cmp
+        opcode.next = OPCODES["cmp"]
         yield clk.posedge
         yield clk.negedge
         assert result == 1
@@ -113,27 +112,27 @@ def test_alu():
         # Test cmp if a equal to b
         a.next = 12
         b.next = 12
-        opcode.next = alu_func.cmp
+        opcode.next = OPCODES["cmp"]
         yield clk.posedge
         yield clk.negedge
         assert result == 0
         assert result != -1
 
         # Test je, if a == b
-        a.next = 3
-        b.next = 3
-        opcode.next = alu_func.je
-        yield clk.posedge
-        yield clk.negedge
-        assert result == a # and check whether jumped
+        # a.next = 3
+        # b.next = 3
+        # opcode.next = alu_func.je
+        # yield clk.posedge
+        # yield clk.negedge
+        # assert result == a # and check whether jumped
 
-        # Test je, if a != b
-        a.next = 6
-        b.next = 9
-        opcode.next = alu_func.je
-        yield clk.posedge
-        yield clk.negedge
-        assert result == a
+        # # Test je, if a != b
+        # a.next = 6
+        # b.next = 9
+        # opcode.next = alu_func.je
+        # yield clk.posedge
+        # yield clk.negedge
+        # assert result == a
 
         raise StopSimulation
 

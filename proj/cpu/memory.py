@@ -1,13 +1,13 @@
 from myhdl import *
 from cpu.constants import *
 
-def memory(ro, address, sig_in, sig_out, clk):
+def memory(we, address, sig_in, sig_out, clk):
 
 	memory = [Signal(intbv(0)[WIDTH:]) for i in range(DEPTH)]
 
 	@always(clk.posedge)
 	def write():
-		if not ro:
+		if we:
 			memory[address].next = sig_in
 			
 	@always_comb
