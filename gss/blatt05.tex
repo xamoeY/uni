@@ -1,0 +1,121 @@
+% Packages & Stuff
+ 
+\documentclass[a4paper,11pt,parskip=half]{scrartcl}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[top=1.3in, bottom=1.2in, left=0.8in, right=0.8in]{geometry}
+\usepackage{amsmath}
+\usepackage{lmodern}
+\usepackage{enumerate}
+\usepackage{fancyhdr}
+\usepackage{pgfplots}
+
+% ------------------------------------------------------
+ 
+% Commands
+ 
+\newcommand{\authorinfo}{A. Struck, S. Haase, E. Böhmecke}
+\newcommand{\titleinfo}{GSS-Übungsblatt 5 zum 18.06.2014}
+\newcommand{\qed}{\ \square}
+\newcommand{\todo}{\textcolor{red}{\textbf{TODO}}}
+\newcommand{\opt}{\textcolor{blue}{\textbf{Optional}}}
+
+% ------------------------------------------------------
+ 
+% Title & Pages
+ 
+\title{\titleinfo}
+\author{\authorinfo}
+ 
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\authorinfo}
+\fancyhead[R]{\titleinfo}
+\fancyfoot[C]{\thepage}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Aufgabe 1}
+\subsection*{1)}
+Bei einem symmetrischen Kryptosystem besitzen beide 
+Kommunikationspartner den gleichen Schluessel. D.h., es wird
+der gleiche Schluessel zum ent- und verschluesseln verwendet.
+\\
+Im asymmetrischen Kryptosystem hingegen besitzen beide 
+Kommunikationspartner jeweils ein eigenes Schluesselpaar aus
+Public Key und Private Key. So kann jeder mit dem oeffentlich
+zugaenglichen Public Key Dokumente verschluesseln, die nur dem
+Besitzer des Private Key zugaenglich sind. Andersherum kann der
+Besitzer des Private Keys Dokumente signieren, wobei jeder
+mit Hilfe des Public Keys die Authentizitaet der Signatur
+ueberpruefen kann.
+
+\subsection*{2)}
+\subsubsection*{a)}
+Falls Alice Bob eine grosze Menge an Daten senden moechte,
+waere es effiezenter, ein hybrides Kryptosystem einzusetzen.
+
+\subsubsection*{b)}
+Dabei wird ein symmetrischer Schluessel generiert, welche die
+gesamten Nutzdaten verschluesselt. Der symmetrische Schluessel
+selbst wird mit Alices asymmetrischen Schluessel verschluesselt
+und ebenfalls uebertragen.
+
+\subsubsection*{c)}
+Den Nutzdaten der Nachricht geht der mit Bobs Public Key
+verschluesselte symmetrische Schluessel voraus, mit dem die
+anschliszenden Nutzdaten verschluesselt wurden.
+
+\section*{Aufgabe 2}
+\subsection*{2)}
+Es scheint moeglich zu sein, sich die verguenstigungen auf
+jedes Ticket ''aufzustempeln'', da diese nicht in eine größere
+Checksumme aufgenommen werden. Es handelt sich um einfache
+Zahlen, die an den eigentlich Code prependiert werden. \\
+Angreifermodell:
+\begin{itemize}
+	\item Rolle: Benutzer
+    \item Verbreitung: Systemfehler des Parkhauses (systemweit)
+    \item Verhalten: aktiv (Druck eigener/Veränderung von vorhandenen Tickets)
+    \item Rechenkapazität: Keine herkömmliche (vielleicht Drucker). Ansonsten so lange, wie der Angreifer braucht das Muster zu finden
+\end{itemize}
+
+\subsection*{3)}
+Alle Daten muessen Teil einer groszen Checksumme
+werden, welche dann mit einem dem System bekannten Schluessel
+verschluesselt wird. Das Resultat davon wird als Barcode auf
+die Karte gedruckt.
+
+\section*{Aufgabe 3}
+\subsection*{3.1.:}
+Passiver Angriff: (abhören von Kommunikation von c) => Anmeldung (je nach \(E_k\)) dauerhaft oder einmalig durch Angreifer möglich, daten abfragen möglich
+Aktiver Angriff: (Zugang, wie beim passivem Angriff), ändert Daten auf dem Server. 
+	MiM-Angriff, tut so als ob der Angreifer der Server wäre. Kann durch Angriff auf den User \(k\) erlangen und somit durch \(c\) möglicherweise \(E_k\) reverse Engineeren.
+
+\subsection{3.2.:}
+Das reverse Engineering von \(E_k\) wird erschwert.
+So lange r nicht serverseitig generiert UND sicher übertragen wird, ändert sich an Angriffen nichts
+
+\subsection{3.3.:}
+Durch Mitschneiden der gesamten Kommunikation ist das Abfangen der Kommunikation noch möglich
+
+
+\section*{Aufgabe 5}
+\subsection*{2)}
+\begin{align}
+\Phi(n) = (p-1)(q-1)\\
+\Phi(n) = (281-1)(389-1)\\
+\Phi(n) = 108640
+\end{align}
+Modulare inverse von 67 mod 108640 = d = 3243
+\\\\
+Der entschlüsselte Text lautet:
+\\
+Fuer die GSS-Klausur sind folgende Themen wichtig: Schutzziele, Angreifermodelle, Rainbow Tables, die (Un-)Sicherheit von Passwoertern und dazugehoerige Angriffe, Zugangs- und Zugriffskontrolle, Biometrische Verfahren, Timing-Attack und Power-Analysis, Grundlagen der KryptographieQ2 Authentifikationsprotokolle, das RSA-Verfahren und natuerlich alle anderen Inhalte, die wir in der Uebung und der Vorlesung behandelt haben :-)
+
+
+\end{document}
