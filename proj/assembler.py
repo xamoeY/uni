@@ -61,30 +61,60 @@ def parse_line(line):
     elif opcode == "addi":
         code1 = get_opcode_bitstring("movi")
         code1 += get_register_bitstring("temp")
-        coce1 += "{0:06b}".format(int(instruction[2]))
+        code1 += "{0:06b}".format(int(instruction[2]))
         code2 = get_opcode_bitstring("add")
         code2 += get_register_bitstring(instruction[1])
         code2 += get_register_bitstring("temp")
         mcodes.append(code1)
         mcodes.append(code2)
     elif opcode == "subi":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("movi")
+        code1 += get_register_bitstring("temp")
+        code1 += "{0:06b}".format(int(instruction[2]))
+        code2 = get_opcode_bitstring("sub")
+        code2 += get_register_bitstring(instruction[1])
+        code2 += get_register_bitstring("temp")
+        mcodes.append(code1)
+        mcodes.append(code2)
     elif opcode == "muli":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("movi")
+        code1 += get_register_bitstring("temp")
+        code1 += "{0:06b}".format(int(instruction[2]))
+        code2 = get_opcode_bitstring("mul")
+        code2 += get_register_bitstring(instruction[1])
+        code2 += get_register_bitstring("temp")
+        mcodes.append(code1)
+        mcodes.append(code2)
     elif opcode == "divi":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("movi")
+        code1 += get_register_bitstring("temp")
+        code1 += "{0:06b}".format(int(instruction[2]))
+        code2 = get_opcode_bitstring("div")
+        code2 += get_register_bitstring(instruction[1])
+        code2 += get_register_bitstring("temp")
+        mcodes.append(code1)
+        mcodes.append(code2)
     elif opcode == "inc":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("movi")
+        code1 += get_register_bitstring("temp")
+        code1 += "{0:06b}".format(1)
+        code2 = get_opcode_bitstring("add")
+        code2 += get_register_bitstring(instruction[1])
+        code2 += get_register_bitstring("temp")
+        mcodes.append(code1)
+        mcodes.append(code2)
     elif opcode == "dec":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("movi")
+        code1 += get_register_bitstring("temp")
+        code1 += "{0:06b}".format(1)
+        code2 = get_opcode_bitstring("sub")
+        code2 += get_register_bitstring(instruction[1])
+        code2 += get_register_bitstring("temp")
+        mcodes.append(code1)
+        mcodes.append(code2)
     elif opcode == "not":
         mcode = get_opcode_bitstring("not")
-        mcode += get_register_bitstring(instruction[1])
+        mcode += get_register_bitstring(int(instruction[1]))
         mcode = mcode.ljust(INSTRUCTION_SIZE, "0")
         mcodes.append(mcode)
     elif opcode == "and":
@@ -113,28 +143,72 @@ def parse_line(line):
         mcode += get_register_bitstring(instruction[2])
         mcodes.append(mcode)
     elif opcode == "j":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("mov")
+        code1 += get_register_bitstring("pc")
+        code1 += get_register_bitstring(instruction[1])
+        mcode.append(code1) 
     elif opcode == "je":
         mcode = get_opcode_bitstring("je")
         mcode += get_register_bitstring(instruction[1])
         mcode += "{0:06b}".format(int(instruction[2]))
         mcodes.append(mcode)
     elif opcode == "jne":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("cmp")
+        code1 += get_register_bitstring(instruction[1])
+        code1 += get_register_bitstring(instruction[2])
+        code2 = get_opcode_bitstring("je")
+        code2 += "{0:06b}".format(-1)
+        code2 += get_register_bitstring("cmp_result")
+        code3 = get_opcode_bitstring("je")
+        code3 += "{0:06b}".format(1)
+        code3 += get_register_bitstring("cmp_result")
+        mcodes.append(code1)
+        mcodes.append(code2)
+        mcodes.append(code3)
     elif opcode == "jg":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("cmp")
+        code1 += get_register_bitstring(instruction[1])
+        code1 += get_register_bitstring(instruction[2])
+        code2 = get_opcode_bitstring("je")
+        code2 += "{0:06b}".format(1)
+        code2 += get_register_bitstring("cmp_result")
+        mcodes.append(code1)
+        mcodes.append(code2)
     elif opcode == "jge":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("cmp")
+        code1 += get_register_bitstring(instruction[1])
+        code1 += get_register_bitstring(instruction[2])
+        code2 = get_opcode_bitstring("je")
+        code2 += "{0:06b}".format(1)
+        code2 += get_register_bitstring("cmp_result")
+        code3 = get_opcode_bitstring("je")
+        code3 += "{0:06b}".format(0)
+        code3 += get_register_bitstring("cmp_result")
+        mcodes.append(code1)
+        mcodes.append(code2)
+        mcodes.append(code3)
     elif opcode == "jl":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("cmp")
+        code1 += get_register_bitstring(instruction[1])
+        code1 += get_register_bitstring(instruction[2])
+        code2 = get_opcode_bitstring("je")
+        code2 += "{0:06b}".format(-1)
+        code2 += get_register_bitstring("cmp_result")
+        mcodes.append(code1)
+        mcodes.append(code2)
     elif opcode == "jle":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("cmp")
+        code1 += get_register_bitstring(instruction[1])
+        code1 += get_register_bitstring(instruction[2])
+        code2 = get_opcode_bitstring("je")
+        code2 += "{0:06b}".format(-1)
+        code2 += get_register_bitstring("cmp_result")
+        code3 = get_opcode_bitstring("je")
+        code3 += "{0:06b}".format(0)
+        code3 += get_register_bitstring("cmp_result")
+        mcodes.append(code1)
+        mcodes.append(code2)
+        mcodes.append(code3)
 
     return mcodes
 
