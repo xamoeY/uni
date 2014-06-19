@@ -80,25 +80,33 @@ def cpu_simulation():
             # This is basically our Control Unit
             if opcode == OPCODES["store"]:
                 if DEBUG: print "=> store {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                m_address.next = op2
-                r_register.next = op1
-                yield r_sig_out
-                m_sig_in.next = r_sig_out
+                reg_current.next = op1
+                yield clk.posedge
+                ram_we.next = True
+                ram_addr.next = op2
+                ram_din.next = reg_dout
+                yield clk.posedge
+                ram_we.next = False
             elif opcode == OPCODES["load"]:
                 if DEBUG: print "=> load {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                m_address.next = op2
-                r_register.next = op1
-                yield m_sig_out
-                r_sig_in.next = m_sig_out
+                ram_addr.next = op2
+                yield clk.posedge
+                reg_we.next = True
+                reg_current.next = op1
+                reg_din.next = ram_dout
+                yield clk.posedge
+                reg_we.next = False
+                yield clk.posedge
             elif opcode == OPCODES["mov"]:
                 if DEBUG: print "=> mov {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                temp = None
-                r_register.next = op1
-                yield r_sig_out
-                temp = r_sig_out
-                r_register.next = op2
-                yield r_sig_out
-                r_sig_in.next = temp
+                reg_current.next = op2
+                yield clk.posedge
+                reg_op2 = Signal(reg_dout)
+
+                reg_we.next = True
+                reg_current.next = op1
+                reg_din = reg_op2
+                yield clk.posedge
             elif opcode == OPCODES["movi"]:
                 if DEBUG: print "=> movi {} {}".format(RREGISTERS[int(op1)], int(op2))
                 reg_current.next = op1
@@ -109,46 +117,142 @@ def cpu_simulation():
                 if DEBUG: print "=> add {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
                 reg_current.next = op2
                 yield clk.posedge
-                reg_temp = reg_dout
+                reg_op2 = Signal(reg_dout)
 
                 reg_current.next = op1
                 yield clk.posedge
+                reg_op1 = reg_dout
+
                 reg_we.next = True
-                reg_din.next = reg_dout + reg_temp
+                reg_din.next = reg_op1 + reg_op2
                 yield clk.posedge
                 reg_we.next = False
             elif opcode == OPCODES["sub"]:
                 if DEBUG: print "=> sub {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                result.next = a - b
+                reg_current.next = op2
+                yield clk.posedge
+                reg_op2 = Signal(reg_dout)
+
+                reg_current.next = op1
+                yield clk.posedge
+                reg_op1 = reg_dout
+
+                reg_we.next = True
+                reg_din.next = reg_op1 - reg_op2
+                yield clk.posedge
+                reg_we.next = False
             elif opcode == OPCODES["mul"]:
                 if DEBUG: print "=> mul {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                result.next = a * b
+                reg_current.next = op2
+                yield clk.posedge
+                reg_op2 = Signal(reg_dout)
+
+                reg_current.next = op1
+                yield clk.posedge
+                reg_op1 = reg_dout
+
+                reg_we.next = True
+                reg_din.next = reg_op1 * reg_op2
+                yield clk.posedge
+                reg_we.next = False
             elif opcode == OPCODES["div"]:
                 if DEBUG: print "=> div {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                result.next = a // b
+                reg_current.next = op2
+                yield clk.posedge
+                reg_op2 = Signal(reg_dout)
+
+                reg_current.next = op1
+                yield clk.posedge
+                reg_op1 = reg_dout
+
+                reg_we.next = True
+                reg_din.next = reg_op1 // reg_op2
+                yield clk.posedge
+                reg_we.next = False
             elif opcode ==  OPCODES["not"]:
                 if DEBUG: print "=> not {}".format(RREGISTERS[int(op1)])
-                result.next = ~a
+                reg_current.next = op1
+                yield clk.posedge
+                reg_we.next = True
+                reg_din.next = ~reg_op1
+                yield clk.posedge
+                reg_we.next = False
             elif opcode == OPCODES["and"]:
                 if DEBUG: print "=> and {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                result.next = a & b
+                reg_current.next = op2
+                yield clk.posedge
+                reg_op2 = Signal(reg_dout)
+
+                reg_current.next = op1
+                yield clk.posedge
+                reg_op1 = reg_dout
+
+                reg_we.next = True
+                reg_din.next = reg_op1 & reg_op2
+                yield clk.posedge
+                reg_we.next = False
             elif opcode == OPCODES["or"]:
                 if DEBUG: print "=> or {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                result.next = a | b
+                reg_current.next = op2
+                yield clk.posedge
+                reg_op2 = Signal(reg_dout)
+
+                reg_current.next = op1
+                yield clk.posedge
+                reg_op1 = reg_dout
+
+                reg_we.next = True
+                reg_din.next = reg_op1 | reg_op2
+                yield clk.posedge
+                reg_we.next = False
             elif opcode == OPCODES["shift_l"]:
                 if DEBUG: print "=> shift_l {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                result.next = a << b
+                reg_current.next = op2
+                yield clk.posedge
+                reg_op2 = Signal(reg_dout)
+
+                reg_current.next = op1
+                yield clk.posedge
+                reg_op1 = reg_dout
+
+                reg_we.next = True
+                reg_din.next = reg_op1 << reg_op2
+                yield clk.posedge
+                reg_we.next = False
             elif opcode == OPCODES["shift_r"]:
                 if DEBUG: print "=> shift_r {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                result.next = a >> b
+                reg_current.next = op2
+                yield clk.posedge
+                reg_op2 = Signal(reg_dout)
+
+                reg_current.next = op1
+                yield clk.posedge
+                reg_op1 = reg_dout
+
+                reg_we.next = True
+                reg_din.next = reg_op1 >> reg_op2
+                yield clk.posedge
+                reg_we.next = False
             elif opcode == OPCODES["cmp"]:
                 if DEBUG: print "=> cmp {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
-                if a < b:
-                    result.next = -1
-                elif a == b:
-                    result.next = 0
-                elif a > b:
-                    result.next = 1
+                reg_current.next = op2
+                yield clk.posedge
+                reg_op2 = Signal(reg_dout)
+
+                reg_current.next = op1
+                yield clk.posedge
+                reg_op1 = reg_dout
+
+                reg_we.next = True
+                reg_current.next = REGISTERS["cmp_result"]
+                if reg_op1 < reg_op2:
+                    reg_din.next = -1
+                elif reg_op1 == reg_op2:
+                    reg_din.next = 0
+                elif reg_op1 > reg_op2:
+                    reg_din.next = 1
+                yield clk.posedge
+                reg_we.next = False
             elif opcode == OPCODES["je"]:
                 if DEBUG: print "=> je {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
 

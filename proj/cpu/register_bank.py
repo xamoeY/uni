@@ -32,6 +32,6 @@ def RegisterBank(dout, din, reg, we, clk):
 
     @always_comb
     def read():
-        dout.next = din
+        dout.next = registers[reg]
 
     return read, write
