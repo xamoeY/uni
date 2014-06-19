@@ -1,3 +1,8 @@
+INSTRUCTION_SIZE = 16
+WIDTH = 16
+DEPTH = 32
+DEBUG = True
+
 OPCODES = {"stop"    :0b0000,
            "store"   :0b0001,
            "load"    :0b0010,
@@ -25,7 +30,6 @@ REGISTERS = {"zero"       :0b000000,
              "c"          :0b000111,
              "d"          :0b001000}
 
-INSTRUCTION_SIZE = 16
-WIDTH = 16
-DEPTH = 32
-DEBUG = False
+# Reverse dict to lookup OPCODES or REGISTERS by int
+ROPCODES = {v:k for k,v in OPCODES.items()}
+RREGISTERS = {v:k for k,v in REGISTERS.items()}

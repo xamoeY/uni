@@ -3,7 +3,6 @@ from cpu.memory import *
 from cpu.constants import *
 
 def test_memory():
-    
     we = Signal(bool(0))
     sig_in = Signal(intbv(0)[WIDTH:])
     sig_out = Signal(intbv(0)[WIDTH:])

@@ -1,13 +1,13 @@
 from myhdl import *
 
-def instruction_unit(data_in, opcode, op1, op2, clk):
-	"""Decodes next instruction"""
-	
-	@always(clk.posedge)
-	def logic():
-		opcode.next = data_in[0:4]
-		op1.next = data_in[4:10]
-		op2.next = data_in[10:16]
+def InstructionUnit(din, opcode, op1, op2):
+    """Decodes incoming instruction"""
 
-	return logic
+    @always_comb
+    def decode_instruction():
+        opcode.next = din[16:12]
+        op1.next = din[12:6]
+        op2.next = din[6:0]
+
+    return decode_instruction
 

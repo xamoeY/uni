@@ -7,7 +7,7 @@ def control_unit(opcode, op1, op2, clk,
                  m_we, m_sig_in, m_sig_out, m_address,
                  r_sig_in, r_sig_out, r_register, r_we):
     """Control unit, manages control operations.
-    If alu operations accure, redirects them to alu
+    If alu operations occur, redirects them to alu
     """
 
     @instance
