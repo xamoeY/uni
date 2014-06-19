@@ -76,7 +76,7 @@ def cpu_simulation():
         if DEBUG: print "program start"
         yield clk.posedge
         while opcode != 0:
-            print "PC {}".format(pc)
+            print "PC{}".format(pc),
             # This is basically our Control Unit
             if opcode == OPCODES["store"]:
                 if DEBUG: print "=> store {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
@@ -257,19 +257,42 @@ def cpu_simulation():
             elif opcode == OPCODES["je"]:
                 if DEBUG: print "=> je {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
 
-            # After instruction, increase pc
-            pc.next = pc + 1
+            # Synchronise pc variable into pc register to allow for manipulation
+            # inside of a program.
+            reg_current.next = REGISTERS["pc"]
+            yield clk.posedge
+            reg_we.next = True
+            reg_din.next = reg_dout + 1
+            yield reg_dout
+            reg_we.next = False
+            pc.next = reg_dout
             yield clk.posedge
         if DEBUG: print "program end"
 
         # At end of program, show registers and memory
         if DEBUG:
+            def fmtcols(mylist, cols):
+                lines = ("\t".join(mylist[i:i+cols]) for i in xrange(0,len(mylist),cols))
+                return '\n'.join(lines)
+
+            reg_we.next = False
+            print "-" * 20
             print "registers:"
+            reg_debug = []
             for i in range(9):
                 reg_current.next = i
                 yield clk.posedge
-                reg_we.next = False
-                print "{}: {}".format(RREGISTERS[i], reg_dout)
+                reg_debug.append("{}: {}".format(RREGISTERS[i], reg_dout))
+            print fmtcols(reg_debug, 1)
+
+            ram_we.next = False
+            print "memory:"
+            mem_debug = []
+            for i in range(DEPTH):
+                ram_addr.next = i
+                yield clk.posedge
+                mem_debug.append("{}: {}".format(i, int(ram_dout)))
+            print fmtcols(mem_debug, 4)
 
         raise StopSimulation
 
