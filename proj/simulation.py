@@ -247,11 +247,11 @@ def cpu_simulation():
                 reg_we.next = True
                 reg_current.next = REGISTERS["cmp_result"]
                 if reg_op1 < reg_op2:
-                    reg_din.next = -1
+                    reg_din.next = 1
                 elif reg_op1 == reg_op2:
                     reg_din.next = 0
                 elif reg_op1 > reg_op2:
-                    reg_din.next = 1
+                    reg_din.next = 2
                 yield clk.posedge
                 reg_we.next = False
             elif opcode == OPCODES["je"]:

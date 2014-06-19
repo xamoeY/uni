@@ -7,6 +7,10 @@ from common.isa import *
 from common.utils import *
 
 def parse_line(line):
+    """Parses a single line
+
+    returns list of resulting machine code instructions"""
+
     instruction = line.split()
 
     # opcode is always the leftmost string
@@ -36,7 +40,13 @@ def parse_line(line):
     elif opcode == "movi":
         mcode = get_opcode_bitstring("movi")
         mcode += get_register_bitstring(instruction[1])
-        mcode += "{0:06b}".format(int(instruction[2]))
+
+        # Special handling for labels
+        # We will replace it with the correct line later
+        if instruction[2].startswith('.'):
+            mcode += instruction[2]
+        else:
+            mcode += "{0:06b}".format(int(instruction[2]))
         mcodes.append(mcode)
     elif opcode == "add":
         mcode = get_opcode_bitstring("add")
@@ -146,7 +156,7 @@ def parse_line(line):
         code1 = get_opcode_bitstring("mov")
         code1 += get_register_bitstring("pc")
         code1 += get_register_bitstring(instruction[1])
-        mcode.append(code1) 
+        mcode.append(code1)
     elif opcode == "je":
         mcode = get_opcode_bitstring("je")
         mcode += get_register_bitstring(instruction[1])
@@ -157,10 +167,10 @@ def parse_line(line):
         code1 += get_register_bitstring(instruction[1])
         code1 += get_register_bitstring(instruction[2])
         code2 = get_opcode_bitstring("je")
-        code2 += "{0:06b}".format(-1)
+        code2 += "{0:06b}".format(1)
         code2 += get_register_bitstring("cmp_result")
         code3 = get_opcode_bitstring("je")
-        code3 += "{0:06b}".format(1)
+        code3 += "{0:06b}".format(2)
         code3 += get_register_bitstring("cmp_result")
         mcodes.append(code1)
         mcodes.append(code2)
@@ -170,7 +180,7 @@ def parse_line(line):
         code1 += get_register_bitstring(instruction[1])
         code1 += get_register_bitstring(instruction[2])
         code2 = get_opcode_bitstring("je")
-        code2 += "{0:06b}".format(1)
+        code2 += "{0:06b}".format(2)
         code2 += get_register_bitstring("cmp_result")
         mcodes.append(code1)
         mcodes.append(code2)
@@ -179,7 +189,7 @@ def parse_line(line):
         code1 += get_register_bitstring(instruction[1])
         code1 += get_register_bitstring(instruction[2])
         code2 = get_opcode_bitstring("je")
-        code2 += "{0:06b}".format(1)
+        code2 += "{0:06b}".format(2)
         code2 += get_register_bitstring("cmp_result")
         code3 = get_opcode_bitstring("je")
         code3 += "{0:06b}".format(0)
@@ -192,7 +202,7 @@ def parse_line(line):
         code1 += get_register_bitstring(instruction[1])
         code1 += get_register_bitstring(instruction[2])
         code2 = get_opcode_bitstring("je")
-        code2 += "{0:06b}".format(-1)
+        code2 += "{0:06b}".format(1)
         code2 += get_register_bitstring("cmp_result")
         mcodes.append(code1)
         mcodes.append(code2)
@@ -201,7 +211,7 @@ def parse_line(line):
         code1 += get_register_bitstring(instruction[1])
         code1 += get_register_bitstring(instruction[2])
         code2 = get_opcode_bitstring("je")
-        code2 += "{0:06b}".format(-1)
+        code2 += "{0:06b}".format(1)
         code2 += get_register_bitstring("cmp_result")
         code3 = get_opcode_bitstring("je")
         code3 += "{0:06b}".format(0)
@@ -209,14 +219,36 @@ def parse_line(line):
         mcodes.append(code1)
         mcodes.append(code2)
         mcodes.append(code3)
+    elif opcode.startswith('.'):
+        # This is a label, special care required. Put it in there for now. We
+        # will deal with this properly in the post-processing.
+        mcodes.append(opcode)
 
     return mcodes
 
 def parse_file(source_file):
+    """Parses a file
+
+    returns a list of machine code instructions"""
+
     instructions = []
 
     for number, value in enumerate(source_file):
         instructions += parse_line(value)
+
+    # Second pass to collect all labels
+    labels = {}
+    for number, value in enumerate(instructions):
+        if value.startswith('.'):
+            labels[value] = number
+
+    # Remove all elements that are only labels
+    for k, v in labels.items():
+        instructions.remove(k)
+
+    # Change all labels within instructions to their proper values
+    for k, v in labels.items():
+        instructions = [instr.replace(k, "{0:06b}".format(v)) for instr in instructions]
 
     return instructions
 

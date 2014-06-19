@@ -89,6 +89,6 @@ registers:
 	d       	001000
 
 cmp_result:
-	<  -1
-	=	0
-	>   1
+	= 0
+	< 1
+	> 2
