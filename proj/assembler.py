@@ -59,8 +59,14 @@ def parse_line(line):
         mcode += get_register_bitstring(instruction[2])
         mcodes.append(mcode)
     elif opcode == "addi":
-        mcode = None
-        mcodes.append(mcode)
+        code1 = get_opcode_bitstring("movi")
+        code1 += get_register_bitstring("temp")
+        coce1 += "{0:06b}".format(int(instruction[2]))
+        code2 = get_opcode_bitstring("add")
+        code2 += get_register_bitstring(instruction[1])
+        code2 += get_register_bitstring("temp")
+        mcodes.append(code1)
+        mcodes.append(code2)
     elif opcode == "subi":
         mcode = None
         mcodes.append(mcode)
