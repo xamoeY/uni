@@ -256,6 +256,22 @@ def cpu_simulation():
                 reg_we.next = False
             elif opcode == OPCODES["je"]:
                 if DEBUG: print "=> je {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
+                reg_current.next = op2
+                yield clk.posedge
+                reg_op2 = Signal(reg_dout)
+
+                reg_current.next = op1
+                yield clk.posedge
+                if reg_dout == reg_op2:
+                    reg_current.next = REGISTERS['jmp_next']
+                    yield clk.posedge
+                    reg_temp = Signal(reg_dout)
+
+                    reg_current.next = REGISTERS['pc']
+                    reg_we.next = True
+                    reg_din.next = reg_temp
+                    yield clk.posedge
+                    reg_we.next = False
 
             # Synchronise pc variable into pc register to allow for manipulation
             # inside of a program.
