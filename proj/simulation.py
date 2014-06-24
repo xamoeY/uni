@@ -107,6 +107,7 @@ def cpu_simulation():
                 reg_current.next = op1
                 reg_din.next = reg_op2
                 yield clk.posedge
+                reg_we.next = False
             elif opcode == OPCODES["movi"]:
                 if DEBUG: print "=> movi {} {}".format(RREGISTERS[int(op1)], int(op2))
                 reg_current.next = op1
@@ -176,7 +177,7 @@ def cpu_simulation():
                 yield clk.posedge
                 reg_we.next = True
                 reg_din.next = ~reg_op1
-                yield clk.posedge
+                yield reg_currentclk.posedge
                 reg_we.next = False
             elif opcode == OPCODES["and"]:
                 if DEBUG: print "=> and {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
@@ -295,7 +296,7 @@ def cpu_simulation():
             print "-" * 20
             print "registers:"
             reg_debug = []
-            for i in range(9):
+            for i in range(14):
                 reg_current.next = i
                 yield clk.posedge
                 reg_debug.append("{}: {}".format(RREGISTERS[i], reg_dout))

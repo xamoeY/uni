@@ -41,11 +41,15 @@ instructions:
 	load    0010
 	mov     0011
 	movi    0100
+
+	swap    pseudo
 	
 	add     0101
 	sub     0110
 	mul     0111
 	div     1000
+
+	mod		pseudo
 
 	addi    pseudo
 	subi    pseudo
@@ -53,11 +57,16 @@ instructions:
 	divi    pseudo
 
 	inc     pseudo
+	
 	dec     pseudo
 		
 	not     1001
 	and     1010
 	or      1011
+	
+	xor 	pseudo
+	nand	pseudo
+	nor     pseudo
 
 	shift_l 1100
 	shift_r 1101
@@ -80,13 +89,18 @@ registers:
 	pc			000001 # program counter
 	cmp_result  000010 # result of comparison as defined below
 	jmp_next    000011 # je will go here if the comparison succeeds
-	temp        000100 # temporary register to be used by compiler
+	tmp1        000100 # temporary register to be used by compiler
+	tmp2		000101 # another temporary register
 
 	# general purpose registers
-	a       	000101
-	b       	000110
-	c      	 	000111
-	d       	001000
+	a       	000110
+	b       	000111
+	c      	 	001000
+	d       	001001
+	e       	001010
+	f       	001011
+	g      	 	001100
+	h       	001101
 
 cmp_result:
 	= 0

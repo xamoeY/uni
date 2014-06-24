@@ -4,7 +4,7 @@ from common.isa import *
 def RegisterBank(dout, din, reg, we, clk):
     """Register Bank"""
 
-    registers = [Signal(intbv(0)[WIDTH:]) for i in range(9)]
+    registers = [Signal(intbv(0)[WIDTH:]) for i in range(14)]
 
     @always(clk.posedge)
     def write():
