@@ -177,7 +177,7 @@ def cpu_simulation():
                 yield clk.posedge
                 reg_we.next = True
                 reg_din.next = ~reg_op1
-                yield reg_currentclk.posedge
+                yield clk.posedge
                 reg_we.next = False
             elif opcode == OPCODES["and"]:
                 if DEBUG: print "=> and {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
