@@ -1,0 +1,25 @@
+\documentclass[11pt,twoside,a4paper]{article}
+
+
+\begin{document}
+\title{Development and programming of a micro processor}
+\author{Alisa Dammer and Sven-Hendrik Haase}
+\maketitle
+
+\section{Introduction}
+A central processing unit (CPU) is a heart of a computer. It presents arithmnetical logic, logic operations and input-output operations. Nowadays one computer can have more than one CPU, called multiprocessors. But in this project we have concentrated our attention on one single microprocessor.\\
+In order to work properly and execute commands (perform certain operations), CPU needs to go through several stages:\\
+\begin{enumerate}
+	\item[1.] Fetch: read the program, that is stored in memory as instructions. (We implemented an Assambeler, that translates the program from "human" language to instructions. More about it in  section "CPU implementation"). To keep an eye on right order of instructions Program Counter (PC) keeps the address of the next executable instruction.
+	\item[2.] Decode: Instruction is a representation of a assembly command in 0 and 1. During this stage every executable instruction is broken up into several parts. The amount and length of these pieces depend on the type of instruction (more details in the next section). 
+	\item[3.] Execute: According to what kind of instruction has to be performed, different units of the CPU can be involved. For example: ALU and two registers, or CU and register etc. Normally modern CPUs have overflow flags, that are "activated", if the output is too big for restricted CPU (by "restricted" we mean, that all CPUs are by design implemented to deal with limited values).
+	\item[4.] Writeback: During this stage the result of an instruction is "returned" to some memory part, so that it could be used later on.
+	
+\end{enumerate}
+All these 4 steps repeat until the "stop" instruction is reached (logical end of the program). As was mentioned above in Fetch-stage, PC holds the address of the next executable instruction, incrementing each time the instruction is executed. Some of control instructions like "jump" change PC according to needs of the program, for example by implementing a cycle.
+
+\section{CPU implementation}
+\section{Results}
+
+\end{document}
+
