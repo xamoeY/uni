@@ -94,7 +94,65 @@ PC2 => add a tmp1
 program end
 --------------------
 \end{verbatim}
+Another example for a pseudo instruction would be "modulo" program, 45 mod 10 = 5
+\begin{verbatim}
+movi a 45
+movi b 9
+mod a b
+stop
+\end{verbatim}
+But it will result in:
+\begin{verbatim}
+program start
+PC0 => movi a 45
+PC1 => movi b 10
+PC2 => mov tmp1 a
+PC3 => div a b
+PC4 => mul a b
+PC5 => sub tmp1 a
+PC6 => mov a tmp1
+program end
+--------------------
+registers:
+pc: 7
+tmp1: 5
+a: 5
+b: 10
+\end{verbatim}
+Apart from instructions (opcodes) and general information ISA gives information about REGISTERS: general and special purpose.
+\begin{verbatim}
+registers:
+	zero 		000000 # always returns value 0
+	
+	pc			000001 # program counter
+	cmp_result  000010 # result of comparison as defined below
+	jmp_next    000011 # je will go here if the comparison succeeds
+	tmp1        000100 # temporary register to be used by compiler
+	tmp2		000101 # another temporary register
 
+	# general purpose registers
+	a       	000110
+	b       	000111
+	c      	 	001000
+	d       	001001
+	e       	001010
+	f       	001011
+	g      	 	001100
+	h       	001101
+\end{verbatim}
+In our project we decided not to implement both ALU and CU, but unite them in control Unit. Execution of a programm in our cese goes through following stages:
+\begin{enumerate}
+	\item[1.] Encode - assembly programm is "translated" with the help of written Assembler to binary string. Outout file gets an extention ".o" and consist of N 16bit strings, where N is a number of "actual instructions" (here, if pseudo instruction is used in the programm, it is translated into several actual instructions for further executing). So, as the resukt we get Machine Code.
+	\item[2.] Decode - every instruction in output file is split into 3 parts: opcode, operand 1 and ooperand 2 according to number of bits specified in ISA. So, as the result of this stage we get executable instructions, where we know what operations with what operands should be performed. 
+	\item[3.] Execution - actual performing of operations with given values, using memory and registers according to the originally written .asm programm. As the result of executing a program we get the result "stored" in desirable memory location or register (if specified in the program), or by default in the last "mentioned" left register.\\
+Our CPU can be presented as following schema:
+\begin{center}
+\includegraphics[scale=0.7]{ourCPU.png}
+\end{center}
 
+\newpage
+\subsection{Assembler}
+	
+\end{enumerate} 
 \end{document}
 
