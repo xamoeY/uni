@@ -1,4 +1,4 @@
-\documentclass[11pt,twoside,a4paper]{article}
+\documentclass[11pt,a4paper]{article}
 \usepackage{amsmath}
 \usepackage{mathtools}
 \usepackage{graphicx}
@@ -162,8 +162,60 @@ As was told earlier, our first stage of the program execution is encoding of the
 For example with modulus binary file will look like this:
 \begin{verbatim}
 alisa@comrade ~/u/proj> python2 assembler.py programs/test.asm
-['0100000110101101', '0100000111001001', '0011000100000110', '1000000110000111', '0111000110000111', '0110000100000110', '0011000110000100', '0000000000000000']
+['0100000110101101', '0100000111001001', '0011000100000110',
+ '1000000110000111', '0111000110000111', '0110000100000110',
+ '0011000110000100', '0000000000000000']
 \end{verbatim} 
+Assembler contains "translating rules" for all instructions mentioned in ISA, so that Control Unit (in our case also ALU) deals only with actual opcodes and executes only them.\\
+
+\subsection{Memory and Registers}
+Since our CPU is quite limited, we don't need a many registers to work with, also we have implemented special registers to partially substitute flags and some units. For example we have "pc" register, that gets the adress of next instruction directly from CU (we don't have selfseficient Program Counter, in our case the number of next instruction is the number of the line, where particular instruction is located).\\
+Apart from Register Bank, we have RAM and ROM. Where ROM gives "the number of certain actual instruction" back.\\
+RAM is limited with 32 cells. Both RAM and ROM can hold value up to 2(to the power of 16). \\
+Also in our implementation we have only one channel.
+Single-channeling is mostly the result of our wrong descision made in the ver beginning: we decided to implement a register bank along with memory, but we used the naive realization - a list of registers. We could built distinct registers inside of control unit, so that we had access to separate registers without any time dependency (here the dependency between registers at one clk.posedge is meant).\\
+
+\subsection{Instruction Unit}
+Since we have restricted the lenght of words and instruction size to the same value (16bit, or 2byte), decoding an instruction became really easy:
+according to in ISA specified instruction type opcode gets first 4bit, than operand1 gets next 6 bit and the last 6bit gets operand2. Some opcodes require only one operand ("not"). It is implemented so, that if you type in second operand, it is won't influence the result, because by the implementation second operand is ignored.
+for example:
+\begin{verbatim}
+movi a 3
+movi b 9
+not a b
+stop
+\end{verbatim}
+Will result in:
+\begin{verbatim}
+program start
+PC0 => movi a 45
+PC1 => movi b 9
+PC2 => not a
+program end
+--------------------
+registers:
+zero: 0
+pc: 3
+cmp_result: 0
+jmp_next: 0
+tmp1: 0
+tmp2: 0
+a: 65533
+b: 9
+\end{verbatim}
+As you can see, the second operand is really ignored.\\
+
+\newpage
+\subsection{Control Unit}
+Classically CU manages operation of the whole prozessor, it manages communication between in- and output devices, interprets and executes them itself, or via ALU. Also, Control Unit provides control signals, like clock (clk in our code). CU performs all four stages of executing a program.\\
+In our project the Control Unit is implemented inside of cpu-simulation, and the instances of RAM, ROM; Register Bank and Instruction Unit are controlled by CU but as separate units. This leads to some inefficiency, like singlethreading: one register at a time can be used.\\
+Program Counter, normally selfseficient unit implemented outside the CU, in our case is build-in the Control Unit. Since we have a special register for address of the next instruction, CU depending on two cases changes the value in pc-register. These two cases are:
+\begin{enumerate}
+	\item[1.] The instruction is already executed, and certain operations are successfully performed. Afterwards the value in pc-register is just incremeted (in "Memory and Registers" section it was shown how pc tracks the executable insruction and how does ROM is initialized). 
+	\item[2.] The second possibility to chanhe the PC is by using flow control instruction. These are jump-opcodes. Here in special-purpose register "jmp\_next" the location of the jump (the adress of the next desirable instruction) is stored. If it conditions of the jump-operation match the result, than pc gets the value from "jmp\_next" register. This way cycles are implemented in assembly.
+\end{enumerate} 
+
+
 
 \end{document}
 
