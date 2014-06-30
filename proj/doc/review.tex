@@ -146,13 +146,24 @@ In our project we decided not to implement both ALU and CU, but unite them in co
 	\item[2.] Decode - every instruction in output file is split into 3 parts: opcode, operand 1 and ooperand 2 according to number of bits specified in ISA. So, as the result of this stage we get executable instructions, where we know what operations with what operands should be performed. 
 	\item[3.] Execution - actual performing of operations with given values, using memory and registers according to the originally written .asm programm. As the result of executing a program we get the result "stored" in desirable memory location or register (if specified in the program), or by default in the last "mentioned" left register.\\
 Our CPU can be presented as following schema:
+\end{enumerate} 
 \begin{center}
 \includegraphics[scale=0.7]{ourCPU.png}
 \end{center}
 
 \newpage
 \subsection{Assembler}
-	
-\end{enumerate} 
+As was told earlier, our first stage of the program execution is encoding of the program for futher use. This happens in assempler.py unit in following order:
+\begin{enumerate}
+	\item[1.] First, the input file with .asm extention is opend into source file for reading, splited into root and extenion. And binary file is created with extention .o.
+	\item[2.] This binary file for every code line	"translates" human code into bit-string, that machine can interprete.
+	\item[3.] Depending on type of instruction, whether it is an actual or pseudo instruction command will be converted into 1 or more bit-strings. (examples of pseudo instructions are given above). Every bit-string is added to the binary file. As the result we get a list containing N bit-strings.
+\end{enumerate}
+For example with modulus binary file will look like this:
+\begin{verbatim}
+alisa@comrade ~/u/proj> python2 assembler.py programs/test.asm
+['0100000110101101', '0100000111001001', '0011000100000110', '1000000110000111', '0111000110000111', '0110000100000110', '0011000110000100', '0000000000000000']
+\end{verbatim} 
+
 \end{document}
 

@@ -338,7 +338,8 @@ def parse_line(line):
 def parse_file(source_file):
     """Parses a file
 
-    returns a list of machine code instructions"""
+    returns a list of machine code instructions
+    """
 
     instructions = []
 
