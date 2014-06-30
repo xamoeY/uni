@@ -3,7 +3,9 @@ ISA
 general specifications:
 	16 bit instructions
 	16 bit words
-	4 registers
+	14 registers 
+		8 general purpose registers
+		6 special purpose registers
 
 instruction specification:
 	opcode [operand1] [operand2]
