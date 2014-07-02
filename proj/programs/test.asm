@@ -1,4 +1,4 @@
-movi a 63
-movi b 8
-mod a b
+movi a 7
+movi b 4
+xor a b
 stop

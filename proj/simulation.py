@@ -13,7 +13,7 @@ from cpu.register_bank import RegisterBank
 def load_program(path):
     """Load program into list of instructions
 
-    returns list of instructions a unsigned shorts
+    returns list of instructions as unsigned shorts
     """
     instructions = []
     file_in = open(path, "rb")
@@ -173,11 +173,13 @@ def cpu_simulation():
                 reg_we.next = False
             elif opcode ==  OPCODES["not"]:
                 if DEBUG: print "=> not {}".format(RREGISTERS[int(op1)])
-                reg_current.next = op1
                 yield clk.posedge
+                reg_current.next = op1
+                reg_op1 = Signal(reg_dout)
+
                 reg_we.next = True
                 reg_din.next = ~reg_op1
-                yield reg_currentclk.posedge
+                yield clk.posedge
                 reg_we.next = False
             elif opcode == OPCODES["and"]:
                 if DEBUG: print "=> and {} {}".format(RREGISTERS[int(op1)], RREGISTERS[int(op2)])
@@ -315,5 +317,7 @@ def cpu_simulation():
 
     return clk_driver, stimulus, rom, ram, iu, rb
 
-sim = Simulation(cpu_simulation())
+
+test_sim = traceSignals(cpu_simulation)
+sim = Simulation(test_sim)
 sim.run()
