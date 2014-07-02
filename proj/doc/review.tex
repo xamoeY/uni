@@ -225,6 +225,113 @@ So the way our CPU works is following:
 \newpage
 \section{Results}
 \subsection{Test of the CPU}
+Now, let us test all features of the cpu and its workability all together with the help of more complicated programm: Euclidean algorithm.\\
+Euclidean algorithm is well known algorithm for computing the greatest common divisor (GCD) of two (usually positive) integers, also known as the greatest common factor (GCF) or highest common factor (HCF).\\
+The way this algorithm works is:
+\begin{verbatim}
+function gcd(a, b)
+    while b ≠ 0
+       t := b
+       b := a mod b
+       a := t
+    return a
+\end{verbatim}
+The smallest number is substructed from the biggest number until they are equal and a holds the GCD.\\
+First we need to write the program in assembly:
+\begin{verbatim}
+0.  movi a 45
+1.  movi e 3
+2.  movi f 2
+3.  movi b 3
+4.  shift_l a e
+5.  shift_l b f
+6.  mov g a
+7.  mov h b
+8.  movi c 0
+9. .loop
+10. movi jmp_next .loop
+11. mov d b
+12. mod a b
+13. mov b a
+14. mov a d
+15. jne b c
+16. stop
+\end{verbatim}
+The Assembly encoding of this looks like:
+\begin{verbatim}
+alisa@comrade ~/u/proj> python2 assembler.py programs/ggt.asm
+['0100000110101101', '0100001010000011', '0100001011000010',
+ '0100000111000011', '1100000110001010', '1100000111001011',
+ '0011001100000110', '0011001101000111', '0100001000000000',
+ '0100000011001001', '0011001001000111', '0011000100000110',
+ '1000000110000111', '0111000110000111', '0110000100000110',
+ '0011000110000100', '0011000111000110', '0011000110001001',
+ '1110000111001000', '0100000100000001', '1111000100000010',
+ '0100000100000010', '1111000100000010', '0000000000000000']
+\end{verbatim}
+Binary file has 24 instructions because of several pseudo instructions in the original program. Since the Control Unit in our project deals only with opcodes of the actual operations assembler writes back the composition of actual instructions for each pseudo instruction used in the code.\\
+The next step is simulation of the program, using the output file "ggt.o"
+\begin{verbatim}
+alisa@comrade ~/u/proj> python2 simulation.py programs/ggt.o
+program start
+PC0 => movi a 45
+PC1 => movi e 3
+PC2 => movi f 2
+PC3 => movi b 3
+PC4 => shift_l a e
+PC5 => shift_l b f
+PC6 => mov g a
+PC7 => mov h b
+PC8 => movi c 0
+PC9 => movi jmp_next 9
+PC10 => mov d b
+PC11 => mov tmp1 a
+PC12 => div a b
+PC13 => mul a b
+PC14 => sub tmp1 a
+PC15 => mov a tmp1
+PC16 => mov b a
+PC17 => mov a d
+PC18 => cmp b c
+PC19 => movi tmp1 1
+PC20 => je tmp1 cmp_result
+PC21 => movi tmp1 2
+PC22 => je tmp1 cmp_result
+program end
+--------------------
+registers:
+zero: 0
+pc: 23
+cmp_result: 0
+jmp_next: 9
+tmp1: 2
+tmp2: 0
+a: 12
+b: 0
+c: 0
+d: 12
+e: 3
+f: 2
+g: 360
+h: 12
+memory:
+0: 0    1: 0    2: 0    3: 0
+4: 0    5: 0    6: 0    7: 0
+8: 0    9: 0    10: 0   11: 0
+12: 0   13: 0   14: 0   15: 0
+16: 0   17: 0   18: 0   19: 0
+20: 0   21: 0   22: 0   23: 0
+24: 0   25: 0   26: 0   27: 0
+28: 0   29: 0   30: 0   31: 0
+\end{verbatim}
+Result of the program is stored in first used operand in opcode "mod". A has value equal to 12, that is indeed the GCD of 360 (shift\_l 45 3) and 12 (shift\_l 3 2).\\
+In this program we havn't used RAM (but we could potentialy run the computation through the memory or keep some result there).
+Also, in order to see the clock synchronization, you can look on the wave diagram of the project
+			(here is wave diagram - how to export? need help with formating)
+
+\subsection{Possible improvements}
+
+
 
 \end{document}
 
