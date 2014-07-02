@@ -317,5 +317,7 @@ def cpu_simulation():
 
     return clk_driver, stimulus, rom, ram, iu, rb
 
-sim = Simulation(cpu_simulation())
+
+test_sim = traceSignals(cpu_simulation)
+sim = Simulation(test_sim)
 sim.run()
