@@ -326,12 +326,18 @@ memory:
 \end{verbatim}
 Result of the program is stored in first used operand in opcode "mod". A has value equal to 12, that is indeed the GCD of 360 (shift\_l 45 3) and 12 (shift\_l 3 2).\\
 In this program we havn't used RAM (but we could potentialy run the computation through the memory or keep some result there).
-Also, in order to see the clock synchronization, you can look on the wave diagram of the project
+Also, in order to see the clock synchronization, you can look on the wave diagram of the project:\\
 			(here is wave diagram - how to export? need help with formating)
-
+\newpage
 \subsection{Possible improvements}
+During the realisation of the project we have used MyHDL, which is python2 library for VHDL (also converting to verilog is possible). According to choosen language we had some limitations and run into some problems.\\
+The first difficult was the synchronizing. In the beginning we decided to implement "classical" circuit - all units had to be implemented seperatly (distinct unit on a circuit), but we ran into asynchronious work of all units when uniting them in simulation module. According to naive implementation we had multiple cloks. This problem was decided by substituting multiple units with memory units (includong registers), encoding unit (IU) and built-in CU in the simulation modul with main clock initializing\\
+Next difficulty was single-threading. It is not a problem for a university project, but pottentially such slow COU won't be produced (In fact modern micro processors are multi-threaded). This is mostly the consequence of the not optimal architecture, that we have chosen. By implementing each register-cell seperatly in the simulation mode will give us opportunity to use all of them in one tick and would reduce amount of code and needed tricks inside of Control Unit implementation.\\
+The obvious limitation for word- and instruction-size gave us pseudo instructions-problem. This results in extending of the program for several additional instructions and thus increasing the time the program needs to be completely executed.\\
+But overall our simple CPU can perform simple and middle-difficult math operations, algorithms. 
 
-
+\newpage
+\section*{used literature:}  
 
 \end{document}
 
