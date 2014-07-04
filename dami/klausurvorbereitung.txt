@@ -1,0 +1,99 @@
+L01
+- DM applications
+- Techniques
+- Tasks/Challenges
+- Knowledge-based System Structure
+- Knowledge Discovery in Business Intelligence
+
+L02
+- Characteristics of structured data
+- Types of data
+- Data objects
+- Attributes
+- Dimensionality
+- Preparing Data
+- Representing Data
+- Outlier Detection
+- Plots
+
+L03
+- Data quality
+- Data preprocessing
+- Data cleaning
+- Missing data
+- Noisy data
+- Data integration
+- Data reduction
+- Principal Component Analysis
+
+L04
+- Machine Learning
+- Data Mining tasks
+- Data Warehouse
+
+L05
+- Decision Boundaries
+- (Un)supervised Learning
+- Prediction Problems
+- Decision Trees
+- Information Gain
+
+L06
+- Learning Problems
+- Perceptrons
+- Neural Networks
+- Perceptron Network
+- Linear Separability
+- Multi Layer Network
+- Network Topology
+- Sigmoid neurons
+- Error terms
+- Overfitting
+- Testing
+- Validation
+- Evaluation
+
+L07
+- associative memory
+- Radial Basis Function Network
+- MLP vs RBF
+- Simple Recurrent Network
+- Neural News Routing
+- Sequence Learning Diagrams
+- Document Subspace Clusters
+
+L08
+- Cluster Analysis
+- Clustering Quality
+- Data matrix and dissimilarity matrix
+- Distance between clusters
+- Minkowski Distance
+- K-Means clustering
+- AGNES
+- DIANA
+- Self-Organizing Feature Map
+- Network Size
+
+L09
+- Genetic Algorithms
+- Fitness Function
+- Parent Selection
+- Variation: Crossover
+- Variation: Mutation
+- Survivor Selection
+- Phases of GA
+- Travelling Salesman
+- Schema Theory
+- Classification and Clustering
+- Fuzzy logic
+- Fuzzy sets
+- Membership Functions
+- Fuzzy rules
+- Fuzzification
+- Defuzzificatiomn
+
+L10
+- Ensemble Learning
+- Boosting
+- Hopfield Network
+- Democratic Cue Integration
