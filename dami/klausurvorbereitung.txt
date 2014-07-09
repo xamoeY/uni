@@ -7,18 +7,111 @@ L01
 
 L02
 - Characteristics of structured data
+    - Dimensionalitaet
+    - Sparsity / Seltenheit
+    - Resolution
+    - Distribution
 - Types of data
+    - Structured
+        - Relational Records
+        - Tables
+    - Sequential and semi-structured
+        - Documents with text data
+        - Video Data
+        - Temporal data
+        ...
+    - Graph and Network
+        - World wide web 
+        - Molecular Structures
 - Data objects
+    - Described by attributes
+    - database rows-> data objects
+    - database columns -> attributes
 - Attributes
+    - Types:
+        - Nominal
+            - categories, states, names
+        - Binary
+            - symmetric binary -> both outcomes equally important
+            - asymmetric binary -> outcomes not equally important
+        - Numeric
+            - values with meaningful order, but no magnitude between them
+                -> small, medium, large
+                -> grades
+    -Numeric attribute types
+        - Quantity
+        - Interval
+        - Ratio
+    - Discrete Attribute
+        - finite or countable infinite set of valous
+    - Continuous Attribute
+        - continuous values
+    - Static, temporal attributes (self explaining)
+    - Experimental, observational Data (self explaining)
 - Dimensionality
+    - Exponential increase of data points with increasing dimensionality to achieve the same density of data
+    - A larger radius is needed to enclose the same fraction of data points in a high-dimensional space
+        e(p)=p^(1/d)
+
+        p: pre-sepcified fraction of sample
+        d: number of dimensions
+
+    - Almost every point is closer to an edge than to another samplepoint in high-dimensional space.
+        D(d,n)=1/2 * (1/n)^(1/d)
+        
+        D: expected distance
+        d: dimensional space
+        n: sample size
+
 - Preparing Data
-- Representing Data
+    - standart form is relational table
+    - preprocessing
+    - dimensionality reduction
+
+- Measuring the Central Tendency
+    - Mean: Usual average
+    - Median: Middle value
+    - Mode: Value that occurs most often in the data
+    - Quartiles: Q1=25% , Q3=75%
+    - Inter-quartile range: IQR=Q3-Q1
+    - Five number summary: min, Q1, median, Q3, max
+    
+    - Boxplot
+        - Ends of the box are quartiles
+        - median is marked
+        - outlier are individually
+            - usually a value higher/lower than 1.5 * IQR
+        - Whiskers mark Minimum and Maximum
+
 - Outlier Detection
-- Plots
+    - Build profile of `normal` behavior
+    - Check for outliers with previous profile
+
+    Graphical approach:
+        - Boxplot
+        - Scatter plot
+    Statistical approach:
+        - Data distribution
+        - Parameter of distribution
+        - Number of expected outliers
+        
+        Limitations:
+            - Most are for a single attribute
+            - data distribution may be unknown
+            - difficulties to estimate distribution in high dimensional data
+    
+    Distance based approaches
+        - Nearest Neighbor-based
+        - Density-based
+        - Clustering-based
+
+- Minkowski Distance
+    -???? Brauchen wir den shit ???
+
 
 L03
-- Data quality
 - Data preprocessing
+- Data quality
 - Data cleaning
 - Missing data
 - Noisy data
