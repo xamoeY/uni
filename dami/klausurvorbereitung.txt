@@ -111,16 +111,70 @@ L02
 
 L03
 - Data preprocessing
-- Data quality
+    - Accuracy, Completeness, Consistency, Timeliness, Believability, Interpretability
+    - Data quality
+        - Fill in missing values
+        - Smooth noisy data
+        - Identify or remove outliers
+        - resolve inconsistencies
+    - Data integration
+        - Integration of multiple databases
+    - Data reduction
+        - Compression
+        - Dimensionality reduction
+    - Data transformation/ discretization
+        - Normalization
+        - Concept hierarchy generation
 - Data cleaning
-- Missing data
-- Noisy data
+    - Missing data
+        - Fill manually
+        - Ignore tuple
+        - Fill with mean
+        - Fill with most probable value
+    - Noisy data
+        - Binning
+            - Partition into equal frequency bins
+            - smooth by bin means, bin median etc.
+        - Regression
+            - Fitting data into regression functions
+        - Clustering
+            - Detect and remove outliers
+        - Combined compute and  human inspection
+            - Detect suspicious values und check by human
 - Data integration
+    - Combining data from multiple sources into a coherent store
+    - Handling redundancy in data integration
+        - Object identification
+        - Derivable data
+        - X^2 (Chi-square) test
+            - X^2 = sum((Observed - Expected)^2/Expected)
+            - Cells with highest values are those who differ most from expectation
+            - Expected frequency e_ij = (count(A=a_i) * count(B=b_j))/N
+                - N: Number of tuples
+                - count() number of tuples having value a_i for A
+        - Chi merge!! Anschauen!!!
 - Data reduction
+    - 
 - Principal Component Analysis
 
 L04
 - Machine Learning
+    - How to learn with a Learning Machine
+        - Inductive Principle: What has to be done with data. E.g. cost function 
+    - Learning method:
+        - How to obtain an estimate
+    - Loss funtion (error function) L(y, f(X,w)):
+        - Measure of a difference between y_i and f(X_i, w) for each sample
+            - y: Output produced by system
+            - X: Set of inputs
+            - f(X, w): Output produced by learning machine for selected approximating function
+            - w: Set of parameters in the approximating functions
+    - Risk function R(w):
+        - Measure of accuracy of the learning machine
+            - R(W): Integral (Integral (L(y, f[X,w]) p(X,y) dX dy))
+            - p(X,y): Probability distribution of samples
+Statistical learning theory
+    - Anschauen!!
 - Data Mining tasks
 - Data Warehouse
 
