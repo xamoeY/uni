@@ -13,30 +13,30 @@
 
 \section{Introduction}
 \subsection{General information: How does CPU work}
-A central processing unit (CPU) is a heart of a computer. It presents arithmnetical logic, logic operations and input-output operations. Nowadays one computer can have more than one CPU, such computers are called multiprocessors. But in this project we have concentrated our attention on one single microprocessor.\\
-In order to work properly and execute commands (perform certain operations), CPU needs to go through several stages:
+A Central Processing Unit (CPU) is a heart of a computer. It presents arithmnetical logic, logic operations and input-output operations. Nowadays one computer can have more than one CPU, such computers are called multiprocessors. But in this project we have concentrated our attention on one single microprocessor.\\
+In order to work properly and execute commands (perform certain operations), a CPU needs to go through several stages:
 \begin{enumerate}
-	\item[1.] Fetch: read the program, that is stored in memory as a stack of instructions. (We implemented an Assambeler, that translates the program from "human" language to "machine code". More about it in  section "CPU implementation"). To keep an eye on right order of instructions Program Counter (PC) keeps the address of the next executable instruction.
+	\item[1.] Fetch: read the program, that is stored in memory as a stack of instructions. (We implemented an Assambeler, that translates the program from "human" language to "machine code". More about it in the section "CPU implementation"). To keep an eye on right order of the instructions, Program Counter (PC) keeps the address of the next executable instruction.
 	\item[2.] Decode: Instruction is a representation of a assembly command in 0 and 1. During this stage every instruction is broken up into several parts. The amount and length of these pieces depend on the type of instruction (more details in the next section). 
-	\item[3.] Execute: According to what kind of instruction has to be performed, different units of the CPU can be involved. For example: ALU and two registers, or CU and register etc. Normally modern CPUs have overflow flags, that are "activated" if the output is too big for restricted CPU (by saying "restricted" we mean, that all CPUs are by design implemented to deal with limited values).
+	\item[3.] Execute: According to what kind of instruction has to be performed, different units of the CPU can be involved. For example: an ALU and two registers, or a CU and a register bank etc. Normally modern CPUs have overflow flags, that are "activated" if the output is too big for restricted CPU (by saying "restricted" we mean, that all CPUs are by design implemented to deal with limited values).
 	\item[4.] Writeback: During this stage the result of an instruction is "returned" to some memory part, so that it could be used later on.
 \end{enumerate}
 
-All these 4 steps are repeated for every instruction until the "stop" instruction is reached (logical end of the program, normally has an opcode consisting from 0 only), which is normally refers to "no action" or "terminate". As was mentioned above in Fetch-stage, PC holds the address of the next executable instruction, incrementing each time the instruction is executed. Some of control instructions like "jump" change PC according to needs of the program, for example by implementing a cycle.\\
+For every instruction in a progarm all 4 phases are repeated executed. The cycle works until the "stop" instruction is reached (logical end of the program, normally has an opcode consisting from 0 only), which is normally refers to "no action" or "terminate". As was mentioned above in the Fetch-stage, Program Counter holds the address of the next executable instruction, incrementing each time the instruction is executed. Some of the control instructions like "jump" change PC according to needs of the program, for example by implementing a cycle.\\
 \subsection{Main components of a simple CPU}
-Every CPU's design starts with Instruction Set Architecture (ISA) definition, that describes what particular processor is capable of: general specification (word length, instruction length), instruction specifications and opcodes (operations, that can be presented in binary form), type of memory that is used (number of special purpose and general purpose registers), and other specific infromation if needed. \\
+Every CPU's design starts with an Instruction Set Architecture (ISA) definition, that describes what particular processor is capable of: general specification (word length, instruction length), instruction specifications and opcodes (operations, that can be presented in binary form), type of memory that is used (number of special purpose and general purpose registers), and other specific infromation if needed. \\
 In order to make the processor perform things listed in ISA all microprozessors have certain units like: Program Counter (PC), Control Unit (CU), Aruthmetic Logic Unit (ALU), Registers (Register Bank), Buses.\\
 \begin{center}
 \includegraphics[scale=0.4]{pics/simpleCPU3.png}\\
 Figure 1. General microprocessor schema
 \end{center}
 
-However our implementation differs from existing ones. It is pretty simple and have one units bilt-in the otheer units, so no explicit selfseficient Program Counter, for example. This will be shown in details in next section.\\ 
+However our implementation differs from existing ones. It is pretty simple and have one units bilt-in the other units, for example, we don't have separate selfseficient Program Counter. This will be shown in details in next section.\\ 
 
 \newpage
 \section{CPU implementation}
 \subsection{Instruction Set Architecture}
-As it was mentioned in the previous section, ISA defines all specifications of a CPU. In this project we decided to stop on 16bit instructions, that have the same lenght as word, so we didn't have to think about instructions consisting of more than one word and how to deal with splitting properly, which also makes Instruction Unit (our "instruction breaker") easier to implement.
+As it was mentioned in the previous section, ISA defines all specifications of a CPU. In this project we decided to stop on 16bit instructions, that have the same lenght as word, so that we didn't have to think about instructions consisting of more than one word and thus we didn't need to deal with proper splitting of the instruction, which also makes Instruction Unit (our "instruction breaker", decoding in this particular case in easy to perform with obvious rules) easier to implement.
 \begin{verbatim}
 general specifications:
 	16 bit instructions
@@ -50,7 +50,7 @@ The CPU in our implementation uses only one type of instructions, also we don't 
 \includegraphics[scale=0.7]{pics/instruction1.png}\\
 figure 2. Instruction type
 \end{center}
-Because we have set the lenght of opcode to 4 bits, we could have only 16 = 2²(to the power of 2) But we have 16 opcodes for "real" instructions and 18 "pseudo" instructions without opcode, but they are replaced with composition of actual instructions (sequence of actual instructions that leads to the same result). For example, instruction "add" opeartes with two registers, saving result of the operation to the left (or first) register:
+Because we have set the lenght of opcode to 4 bits, we could have only 16 = $2^{4}$ But we have 16 opcodes for "real" instructions and 18 "pseudo" instructions without an opcode, but they are replaced with a composition of the actual instructions (sequence of actual instructions that leads to the same result). For example, an instruction "add" opeartes with two registers, saving result of the operation to the left (or to the first) register:
 \begin{verbatim}
 movi a 5
 movi b 4
@@ -81,7 +81,7 @@ f: 0
 g: 0
 h: 0
 \end{verbatim}
-Here as first example all registers, that we have are shown, later on only registers that get some value will be shown. "Program end" - is our "stop" instruction (Mostly known as HALT). As the result register "a" gets the value 11 = 7 + 4. We didn't implement any special output register, because we can always store (or move to desirable "output"-register) data manually to certain location in the memory, that we agreed will hold the final result.\\
+In this example  example all registers, that we have are shown, later on only registers that get some value will be shown. "Program end" - is our "stop" instruction (Mostly known as HALT). As the result register "a" gets the value 11 = 7 + 4. We didn't implement any special output register, because we can always store (or move to desirable "output"-register) data manually to certain location in the memory, that we agreed will hold the final result.\\
 Both only actual instruction list and all-instruction list can be found in our isa.txt file.\\
 Pseudo instructions as we already said can be represented by composition of actual instructions. Some of them consist of two instructions, some of them contain up to 5 instructions. For example:
 \begin{verbatim}
@@ -89,7 +89,7 @@ movi a 7
 addi a 5
 stop
 \end{verbatim}
-The original program consist of 3 instructions, but it results in program with 4, because addi is a pseudo instruction replaced with movi and add instructions.
+The original program consist of 3 instructions, but it results in program with 4 instructions, because addi is a pseudo instruction and it consist of composition of  movi and add instructions.
 \begin{verbatim}
 program start
 PC0 => movi a 7
@@ -144,13 +144,13 @@ registers:
 	g      	 	001100
 	h       	001101
 \end{verbatim}
-In our project we decided not to implement both ALU and CU (actuallyat the beginning we tried to implement all units separatly and then unite them inside of Control Unit, but we run into difficulties we that), but to bild them in into the Control Unit.\\
+In our project we have decided not to implement both ALU and CU (actually, at the beginning we tried to implement all units separately and then unite them inside of the Control Unit, but we have run into difficulties), but to bild them in into the Control Unit.\\
 Execution of a programm in our case goes through following stages:
 \begin{enumerate}
-	\item[1.] Encode - assembly programm is "translated" with the help of  Assembler to binary string. The output file gets an extention ".o" and consist of N 16bit strings, where N is a number of "actual instructions" (here, if pseudo instruction is used in the programm, it is translated into several actual instructions for further executing). So, as the result we get "Machine Code".
+	\item[1.] Encode - assembly programm is "translated" with the help of the Assembler module to binary string. The output file gets an extention ".o" and consist of N 16bit strings, where N is a number of "actual instructions" (here, if pseudo instruction is used in the programm, it is translated into several actual instructions for further executing). So, as the result we get "Machine Code".
 	\item[2.] Decode - every instruction in output file is split into 3 parts: opcode, operand1 and operand2 accordingly to the number of bits specified in ISA. As the result of this stage we get executable instructions, where the Control Unit knows what operations with what operands to be performed. 
-	\item[3.] Execution - is an actual performing of operations with given values, using memory and registers according to the originally written .asm programm. As the result of executing a program we get the result "stored" in desirable memory location or register (if specified in the program), or by default in the last "mentioned" left register.\\
-Our CPU can be presented as following schema:
+	\item[3.] Execution - is an actual performing of the operations with the given values, using both memory and registers accordingly to the originally written .asm programm. As the result of the executing of a program we get the result "stored" in desirable memory location or register (if specified in the program), or by default in the last "mentioned" left register.\\
+Our CPU can be presented as the following schema:
 \end{enumerate} 
 \begin{center}
 \includegraphics[scale=0.6]{pics/ourCPU.png}\\
@@ -159,11 +159,11 @@ Figure 3. Our CPU schema
 
 \newpage
 \subsection{Assembler}
-As it was mentioned earlier, our first stage of the program execution is encoding of the program. This happens in assempler.py unit in following order:
+As it was mentioned earlier, our first stage of the program execution is the encoding of the program. This happens in assempler.py unit in following order:
 \begin{enumerate}
 	\item[1.] First, the file with .asm extention is opend into source file for reading, splited into root and extenion. And binary file is created with extention .o.
 	\item[2.] This binary file for every code line	"translates" human code into bit-string, that machine can interprete.
-	\item[3.] Depending on type of instruction, whether it is an actual or pseudo instruction, the command will be converted into 1 or more bit-strings. (examples of pseudo instructions are given above). Every bit-string is added to the binary file. As the result we get a list containing N bit-strings. You have seen the executing of the program with pseudo instruction (Modulus program). Lower you can see the encoded "machine code". 
+	\item[3.] Depending on type of instruction, whether it is an actual or pseudo instruction, the command will be converted into 1 or more bit-strings. (examples of pseudo instructions are given above). Every bit-string is added to the binary file. As the result we get a list containing N bit-strings. You have seen the execution of the program with pseudo instruction (Modulus program). Lower you can see the encoded "machine code". 
 \end{enumerate}
 For example with modulus binary file will look like this:
 \begin{verbatim}
@@ -172,23 +172,23 @@ alisa@comrade ~/u/proj> python2 assembler.py programs/test.asm
  '1000000110000111', '0111000110000111', '0110000100000110',
  '0011000110000100', '0000000000000000']
 \end{verbatim} 
-Assembler contains "translating rules" for all instructions mentioned in ISA, so that Control Unit (in our case also ALU) deals only with actual opcodes and executes only them - this is the reason why during encoding stage the program becomes bigger, than could have been expected.\\
+Our Assembler contains "translating rules" for all instructions mentioned in the ISA, so that the Control Unit (in our case also ALU) deals only with actual opcodes and executes only them, since in the CU we deal with memory locations and sertain values, what can be only possible with exicting opcodes and thus actual instructions - this is the reason why the program becomes bigger during the encoding stage.\\
 
 \subsection{Memory and Registers}
 Every Processor has a memory unit - physical device for working with the program. There are two memory types existing: non-volatile (flash memory,  ROM/PROM/EPROM/EEPROM) and volatile (RAM, DRAM).\\
 Non-volatile memory is normally used for storing information for long-term use without its change (overwritting is possible, but it requires much more time and thus not efficient for temporary and "local" computations).\\
-In our Implementation ROM gets the instructions and gives "the number of actual instruction" back - holds the address of the instructions. ROM is initialized inside simulation program as well as Control Unit.\\
-In the implementation ROM has 3 parameters: Rom(dout, addr, CONTENT). The first two are pretty clear. The third parameter of ROM is initialized with the help of special function "load\_program(path)", implemented in Control Unit, that loads the program into list of instructions (bitstring) and returns the list of instructions as unsigned shorts. Afterwards every decoded instruction is assigned an  unique integer, which represents certain location (adrress) in static memory.\\
-Currently most commonly used types of a volatile memory (RAM) are static RAM (SRAM) and dynamic RAM (DRAM). But it is mostly hardware (production difference), since we have a simulation only, we didn't have to work with specific memory type.\\
+In our Implementation ROM gets the instructions and gives "the number of actual instruction" back - holds the address of the instructions. ROM is initialized inside the simulation program as well as the Control Unit.\\
+In our implementation ROM has 3 parameters: Rom(dout, addr, CONTENT). The first two are pretty clear. The third parameter of ROM is initialized with the help of special function "load\_program(path)",that is implemented in the Control Unit, that loads the program into list of instructions (bitstring) and returns the list of instructions as unsigned shorts. Afterwards every decoded instruction is assigned an  unique integer, which represents certain location (adrress) in static memory.\\
+Currently the most commonly used types of a volatile memory (RAM) are static RAM (SRAM) and dynamic RAM (DRAM). But it is mostly hardware (production difference), since we have a simulation only, we didn't have to work with a specific memory type.\\
 In this project RAM is limited with 32 memory-cells. Both RAM and ROM can hold value up to 2 to the power of 2. \\
 In order to  work with both static and non-static memory bus is used. In modern processors piplinening is used: several actions (reading and writing back the value) can be performed simultaneously.
-In the implementation of this project we have only one channel. Single-channeling is mostly the result of our wrong descision made in the very beginning: we decided to implement a register bank along with memory, but we used the naive realization - a list of registers. We could built distinct registers inside of control unit, so that we had access to separate registers without any time dependency (here the dependency between registers at one clk.posedge is meant).\\ 
-Apart from non- and volatile memory we have implemented Register Bank, that consists of 14 registers splited into two groups: general purpose and special purpose registers.\\
-Since our CPU is quite limited, we don't need many registers to work with. We have implemented special registers to partially substitute flags and some hardware units. For example we have "pc" register, that gets the adress of next instruction directly from CU (we don't have selfseficient Program Counter, in our case the number of next instruction is the number of the line, where particular instruction is located).\\
+In the implementation of this project we have only one channel. Single-channeling is mostly the result of our wrong descision made in the very beginning: we decided to implement a register bank along with memory, but we used the naive realization - a list of registers. We could built distinct registers inside of the Control Unit, so that we had access to separate registers without any time dependency (here the dependency between registers at one clk.posedge is meant).\\ 
+Apart from the non- and volatile memory we have implemented a Register Bank, that consists of 14 registers splited into two groups: general purpose and special purpose registers.\\
+Since our CPU is quite limited, we don't need many registers to work with. We have implemented several special-purpose registers to partially substitute flags and some hardware units. For example we have a "pc-register, that gets/holds the adress of the next instruction directly from the CU (we don't have a selfseficient Program Counter, in our case the number of the next instruction is the number of the line, where particular instruction is located).\\
 
 \subsection{Instruction Unit}
 Since we have restricted the lenght of words and instruction size to the same value (16bit, or 2byte), decoding an instruction became really easy:
-according to in ISA specified instruction type opcode gets first 4bit, than operand1 gets next 6 bit and the last 6bit gets operand2 (it is also shown in the figure 2). Some opcodes require only one operand ("not"). It is implemented the way, that typing in second operand (supposed mistyping), does not influence the result and does not throw an error or emergency program stop, because by the implementation second operand is ignored.\\
+according to in ISA specified instruction type an opcode gets first 4bit, than an operand1 gets next 6 bit and the last 6bit gets an operand2 (it is also shown in the figure 2). Some opcodes require only one operand ("not"). It is implemented the way, that typing in the second operand (supposed mistyping), does not influence the result and does not throw an error or an emergency program stop, because in the implementation the second operand is ignored.\\
 For example:
 \newpage
 \begin{verbatim}
@@ -215,27 +215,27 @@ tmp2: 0
 a: 65533
 b: 9
 \end{verbatim}
-As you can see, the second operand really doesn't influence the program neither the executing, nor the correctness of the result.\\
+As you can see, the second operand really doesn't influence neither the executing of the program, nor the correctness of the result.\\
 
 \newpage
 \subsection{Control Unit}
-Classically, the Control Unit (CU) handles the operation of the whole prozessor, it manages communication between in- and output devices, interprets and executes them itself (in our case), or via ALU. Also, Control Unit provides control signals, like clock (clk in our code). CU performs all four stages of executing a program.\\
-In our project the Control Unit is implemented inside of cpu-simulation module, and the instances of RAM, ROM; Register Bank and Instruction Unit are controlled by CU but as separate units (instances are innitialized before the implementation of the Control Unot itself). This leads to some inefficiency, like (already mentioned above) singlethreading: one register at a time can be used. Program Counter, normallyis a selfseficient unit that is implemented outside the CU, but in our case is also build-in in the Control Unit. Since we have a special register for address of the next instruction ("pc"-register), CU presents two cases changing the value in pc-register. These two cases are:
+Classically, the Control Unit (CU) handles the operation of the whole prozessor, it manages communication between in- and output devices, interprets and executes them itself (in our case), or via ALU. Also, the Control Unit provides control signals, like clock (clk in our code). The CU performs all four stages of a program execution.\\
+In our project the Control Unit is implemented inside of the cpu-simulation module, and the instances of RAM, ROM; Register Bank and Instruction Unit are controlled by the CU but as separate units (instances are innitialized before the implementation of the Control Unot itself). This leads to some inefficiency, like (already mentioned above) single-threading: one register at a time can be used. The Program Counter, normally is a selfseficient unit that is implemented outside the CU, but in our case is also build-in in the Control Unit. Since we have a special register for the address of the next instruction ("pc"-register), the CU presents two cases changing the value in pc-register. These two cases are:
 \begin{enumerate}
-	\item[1.] The instruction is already executed, and certain operations are successfully performed. Afterwards the value in pc-register is just incremeted (in "Memory and Registers" section it was shown how pc tracks the executable insruction and how does ROM is initialized). 
-	\item[2.] The second possibility to change the PC is by using flow control instruction. These are jump-opcodes. Here in special-purpose register "jmp\_next" the location of the jump (the adress of the next desirable instruction) is stored. If the condition of the jump-operation match the result, than pc gets the value from "jmp\_next" register. This way cycles are normally implemented in assembly.	
+	\item[1.] The instruction is already executed, and certain operations are successfully performed. Afterwards the value in the pc-register is just incremeted (in "Memory and Registers" section it was shown how pc tracks the executable insruction and how does ROM is initialized). 
+	\item[2.] The second possibility to change the PC is using flow-control instruction (Jump-instructions, see Appendix). These are jump-opcodes. Here in special-purpose register "jmp\_next" the location of the jump (the adress of the next desirable instruction) is stored. If the condition of the jump-operation match the result, the pc gets the value from jmp\_next-register. This way cycles are normally implemented in assembly.	
 \end{enumerate} 
 The way our CPU works is following:
 \begin{enumerate}
 	\item[1.] The program, written in Assembly is encoded by assembler.py (concerete examples and explanations are in "assembler" subsection).
 	\item[2.] In the module "simulation.py" firts the programm is decoded with function "load\_program(path)"; the result is used as the third parameter for ROM initialization (all instructions in the program get their unique id for futher pc addressing). Also RAM, RegisterBank, Clock and Instruction Unit are initialized for futher operation of the Control Unit.
-	\item[3.] In CU for every instruction opcode is defined and the proper action is performed with operands given in the instruction until opcode "stop" (0000) is reached. All nessussary output is printed.  
+	\item[3.] In the CU for every instruction an opcode is defined and the proper action is performed with the operands given in the instruction until the opcode "stop" (0000) is reached. All nessussary output is printed.  
 \end{enumerate}
 
 \newpage
 \section{Results}
 \subsection{Test of the CPU}
-Now, let us test all features of the cpu and its workability all together with the help of more complicated programm: Euclidean algorithm.\\
+Now, let us test all features of the CPU and its workability all together with the help of more complicated programm: Euclidean algorithm.\\
 Euclidean algorithm is well known algorithm for computing the greatest common divisor (GCD) of two (usually positive) integers, also known as the greatest common factor (GCF) or highest common factor (HCF).\\
 The way this algorithm works is:
 \begin{verbatim}
@@ -246,7 +246,7 @@ function gcd(a, b)
        a := t
     return a
 \end{verbatim}
-The smallest number is substructed from the biggest number until they are equal and a holds the GCD.\\
+The smallest number is substructed from the biggest number until they are equal and a-register holds the GCD.\\
 First we need to write the program in assembly:
 \begin{verbatim}
 0.  movi a 45
@@ -267,7 +267,7 @@ First we need to write the program in assembly:
 15. jne b c
 16. stop
 \end{verbatim}
-The Assembly encoding of this looks like:
+The Assembly encoding of the program looks like:
 \begin{verbatim}
 alisa@comrade ~/u/proj> python2 assembler.py programs/ggt.asm
 ['0100000110101101', '0100001010000011', '0100001011000010',
@@ -279,7 +279,7 @@ alisa@comrade ~/u/proj> python2 assembler.py programs/ggt.asm
  '1110000111001000', '0100000100000001', '1111000100000010',
  '0100000100000010', '1111000100000010', '0000000000000000']
 \end{verbatim}
-Binary file has 24 instructions because of several pseudo instructions in the original program. Since the Control Unit in our project deals only with opcodes of the actual operations assembler writes back the composition of actual instructions for each pseudo instruction used in the code.\\
+The binary file has 24 instructions because of the several pseudo instructions in the original program. Since the Control Unit in our project deals only with the opcodes of the actual operations assembler writes back the composition of actual instructions for each pseudo instruction used in the code.\\
 The next step is simulation of the program, using the output file "ggt.o"
 \begin{verbatim}
 alisa@comrade ~/u/proj> python2 simulation.py programs/ggt.o
@@ -334,7 +334,7 @@ memory:
 24: 0   25: 0   26: 0   27: 0
 28: 0   29: 0   30: 0   31: 0
 \end{verbatim}
-The result of the program is stored in first used operand in opcode "mod". register "A" has value = 12, that is indeed the GCD of 360 (shift\_l 45 3) and 12 (shift\_l 3 2).\\
+The result of the program is stored in the first used operand in opcode "mod" (pretty much the core function of the algorithm). The register "a" has value = 12, that is indeed the GCD of 360 (shift\_l 45 3) and 12 (shift\_l 3 2).\\
 In this program we havn't used RAM (but we could potentialy run the computation through the memory or keep some result there).
 Also, in order to see the clock synchronization, you can look on the wave diagram of the project:\\
 \begin{center}
