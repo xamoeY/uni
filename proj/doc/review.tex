@@ -28,7 +28,7 @@ A Central Processing Unit (CPU) is the heart of a computer. It performs arithmet
 
 In order to work properly and execute commands (perform certain operations), a CPU needs to go through several stages:
 \begin{enumerate}
-	\item Fetch: Read a program that is stored in memory as a list of instructions. We implemented an assambler that translates the program from a human-readable language to machine code. More about it in the section "CPU implementation". To keep an eye on the correct order of the instructions, the program Counter (PC) keeps track of the address of the next executable instruction in ROM.
+	\item Fetch: Read a program that is stored in memory as a list of instructions. We implemented an assembler that translates the program from a human-readable language to machine code. More about it in the section "CPU implementation". To keep an eye on the correct order of the instructions, the program Counter (PC) keeps track of the address of the next executable instruction in ROM.
 	\item Decode: An instruction is a representation of an assembly command in one or more bitstrings. During this stage every instruction is broken up into several parts. The amount and length of these pieces depend on the type of instruction (more details in the next section). 
 	\item Execute: According to what kind of instruction has to be performed, different units of the CPU can be involved. For example: an ALU and two registers, or a CU and a register bank etc. Normally modern CPUs have overflow flags, that are "activated" if the output is larger than the register can deal with.
 	\item Return: During this stage the result of an instruction is returned to a register so that it could be used later on.
@@ -150,7 +150,7 @@ In our project we have decided not to implement ALU and Control Unit separately 
 
 The complete pipeline for running a program written in our assembly has the following stages:
 \begin{enumerate}
-	\item Encode - Assembly programm is translated with the help of the Assembler. The output file is an object file that the CPU can directly load and execute. The output file consists of N 16-bit bitstrings, where N is the number of actual instructions (here, if a pseudo instruction is used in the program, it is translated into several actual instructions for further executing). So, as the result we get machine code.
+	\item Encode - Assembly program is translated with the help of the Assembler. The output file is an object file that the CPU can directly load and execute. The output file consists of N 16-bit bitstrings, where N is the number of actual instructions (here, if a pseudo instruction is used in the program, it is translated into several actual instructions for further executing). So, as the result we get machine code.
 	\item Program Loading - The program needs to be loaded into ROM in order to be accessible to the CPU. In our case, the simulation takes care of that and puts the instructions into the ROM as a list of 16-bit integers.
 	\item Decode - The current instructed pointed at by the PC is loaded into the Instruction Unit which splits it into three parts: opcode, operand1 and operand2. As the result of this stage we get executable instructions, where the Control Unit knows what operations with which operands is to be performed. 
 	\item Execution - At this point the Control Unit actually runs the operations with the given values, using both memory and registers accordingly. As the result of the executing of a program we get the result as a change of CPU state in either RAM or registers.\\
@@ -192,7 +192,7 @@ Currently the most commonly used types of a volatile memory (RAM) are static RAM
 
 In this project RAM is limited with to 32 memory cells that can store a word each. As such, both RAM and ROM can hold value up to $2^{16}$.
 
-We can simultanously operate on a register, RAM and ROM at the same time as they all have different buses. Perhaps the only mistake we made in the implementation of the memory system is that we can only communicate with the registers using a single channel as opposed to having one channel per register. This effectively makes registers just as inefficient as using RAM directly.
+We can simultaneously operate on a register, RAM and ROM at the same time as they all have different buses. Perhaps the only mistake we made in the implementation of the memory system is that we can only communicate with the registers using a single channel as opposed to having one channel per register. This effectively makes registers just as inefficient as using RAM directly.
 
 Apart from the (non-)volatile memory we have implemented a register bank that consists of 14 registers split into two groups: general purpose and special purpose registers.
 
@@ -235,7 +235,7 @@ b: 9
 As you can see, the second operand influences neither the execution of the program, nor the correctness of the result.
 
 \subsection{Control Unit}
-Classically, the Control Unit (CU) handles the operation of the whole processor, it manages communication between input and output devices, interpretes and executes them itself (in our case), or via delegation of some operations to the ALU. Also, the Control Unit provides control signals, like clock (clk in our code). The CU performs all four stages of a program execution.\\
+Classically, the Control Unit (CU) handles the operation of the whole processor, it manages communication between input and output devices, interprets and executes them itself (in our case), or via delegation of some operations to the ALU. Also, the Control Unit provides control signals, like clock (clk in our code). The CU performs all four stages of a program execution.\\
 In our project the Control Unit is implemented inside of the simulation module. Register Bank and Instruction Unit are controlled by the CU but as separate units (instances are initialized before the implementation of the Control Unit itself). The Program Counter, usually, is a self-sufficient unit that is implemented outside the CU but in our case is also built-in into the Control Unit. Since we have a special register for the address of the next instruction (\texttt{pc} register), the CU has two ways of changing the \texttt{pc} register. These two ways are:
 \begin{enumerate}
 	\item The instruction is already executed, and certain operations are successfully performed. Afterwards the value in the \texttt{pc} register is  incremented (in the \textbf{Memory and Registers} section it was shown how the PC tracks the executable instruction). 
@@ -347,7 +347,7 @@ memory:
 \end{verbatim}
 
 The result of the program is stored register a. It has value = 12, that is indeed the GCD of 360 (shift\_l 45 3) and 12 (shift\_l 3 2).\\
-In this program we havn't used RAM (but we could potentialy run the computation through the memory or keep some result there).
+In this program we haven't used RAM (but we could potentially run the computation through the memory or keep some result there).
 Also, in order to see the clock synchronization, you can look on the wave diagram of the project:
 
 \begin{figure}[h]
@@ -360,7 +360,7 @@ Also, in order to see the clock synchronization, you can look on the wave diagra
 During the realization of the project we have used MyHDL, which is a Python library for HDL. It enables VHDL and Verilog output.
 
 We also ran into a bunch of issues that working in a highly parallel environment comes with.
-The first difficulty was the synchronizing. In the beginning we decided to implement "classical" circuit - all units had to be implemented seperatly (distinct unit on a circuit), which was a problem without a central place to clock and synchronize all the units.
+The first difficulty was the synchronizing. In the beginning we decided to implement "classical" circuit - all units had to be implemented separately (distinct unit on a circuit), which was a problem without a central place to clock and synchronize all the units.
 
 The obvious limitation for word and instruction size didn't give us a lot of room for opcodes. As a result, we had to resort to adding lots of pseudo instructions which in turn results in more code being generated and thus increasing the time the program needs to be completely executed. 
 
@@ -390,7 +390,7 @@ Class & Operation & Example & Binary Example\\
 & nand & nand a b & pseudo\\
 & nor & nor a b & pseudo\\
 \hline
-\multirow{2}{*}{Shift} & shifl\_l & shift\_l a b & 1100 000110 000111\\
+\multirow{2}{*}{Shift} & shift\_l & shift\_l a b & 1100 000110 000111\\
 & shifl\_r & shift\_r a b & 1101 000110 000111\\
 \hline
 \multirow{7}{*}{Jump} & j & j & pseudo \\
