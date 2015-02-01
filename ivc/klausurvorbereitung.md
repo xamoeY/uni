@@ -1,19 +1,21 @@
-Bisschen povray Code schreiben 
-Skizzen 
-Modellierungswerkzeuge
-Konzeptionelle Fragen
-Einführung und Grundbegriffe (Computergrafik vs Bildverarbeitung) 
-Prozesse der grafischen Datenverarbeitung 
-BDRF
-Generalitaetsprinzip
-Bewegungsstereo
-Tiefenmessung
-Projektion
-Transformationen zwischen Koordinatensystemen
-Farbtemperatur
-Globale/Lokale Beleuchtungsmodelle
-Flat/Gouraud/Phong
-Zwei/Dreipunktprojektion
+# Kram der in der Klausur angeblich vorkommt:
+
+* Bisschen povray Code schreiben 
+* Skizzen 
+* Modellierungswerkzeuge
+* Konzeptionelle Fragen
+* Einführung und Grundbegriffe (Computergrafik vs Bildverarbeitung) 
+* Prozesse der grafischen Datenverarbeitung 
+* BDRF
+* Generalitaetsprinzip
+* Bewegungsstereo
+* Tiefenmessung
+* Projektion
+* Transformationen zwischen Koordinatensystemen
+* Farbtemperatur
+* Globale/Lokale Beleuchtungsmodelle
+* Flat/Gouraud/Phong
+* Zwei/Dreipunktprojektion
 
 # Pruefungsunterlagen Teil 1
 
@@ -108,6 +110,8 @@ baren Phänomenen).
 
 # Pruefungsunterlagen Teil 2
 
+## 2D-Koordinatensysteme
+
 Koordinatensysteme fuer die Angabe der Positionen und Transformationen von Objekten.
 
 2D-Koordinatensysteme dienen in der Computergrafik und Bildverarbeitung zur Beschreibung der relativen Anordnung von Bildelementen.
@@ -121,10 +125,27 @@ Die verschiedenen Weltkoordinatensysteme werden meist vor der Abbildung auf die 
 ## Hierarchie der Koordinatensysteme
 
 **Weltkoordinatensystem:** Anordnung der Szenenobjekte, Betrachtungsparameter.
+
 **Objektkoordinatensystem:** Anordnung der Komponenten von Objekten, relativ zum Objekt definiert.
+
 **Bildkoordinatensystem:** Anordnung der Bildkomponenten.
+
 **Koordinatensysteme der Grafiksysteme:**
 
 * Normalisierte Gerätekoordinaten
 * Viewport-Koordinaten
 * Bildschirmkoordinaten
+
+## 2D-Transformationen
+
+2D-Transformationen dienen zur Manipulation von ebenen grafischen Darstellungen, beispielsweise:
+
+* einfache Animationen
+* Grafikeditoren
+* Koordinatensystemwechsel
+
+Es gibt elementare (**Translation**, **Rotation**, **Skalierung**, **Scherung**) und zusammengesetzte Transformationen (Koordinatentransformation).
+
+* **Translation:** Verschiebung (P + t)
+* **Rotation:** Drehung (x*cos(a)-y*sin(a))
+* **Skalierung:** Vergroezerung/Verkleinerung (x * s_x, y * s_y)
