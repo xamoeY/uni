@@ -432,12 +432,20 @@ Bei Translation keine. Bei Skalierung Ursprung. Bei Rotation Zentrum. und Scheru
 
 (g) Gegeben seien die Punkte P 1 = (1,2,3,4), P 2 = (2,4,6,8) und P 3 = (0.75,1,1.5,2) in homogenen Koordinaten. Welche Punkte sind identisch?
 
+P1 und P2, is ja klar.
+
 
 ## Projektionen:
 
 (a) Erkären Sie den Unterschied zwischen orthogonaler und schiefer Parallelprojektion.
 
+Bei ortogonaler Parallelprojektion sehen wir genau eine Achse hinunter, sind also senkrecht auf der Bildebene (z.b. bei Grundrissen). Bei schiefen Parallelprojektionen sehen wir keiner alleinigen Achse hinunter und stehen nicht senkrecht auf der Bildebene.
+
 (b) Nennen Sie Vor- und Nachteile und wichtige Anwendungen der einzelnen Projektionen.
+
+Orthogonale Projektion: Schwierig erkennbar fuer ungeuebte Augen aber fuer technische Zeichnungen sehr wichtig und sinnvoll aufgrund der vereinfachten und uniformen Struktur. Teilweise mehrere Ansichten notwendig. Nicht immer eindeutig.
+Schiefe Parallelprojektion: Fuer mathematische Zeichnungen, fuer Schaubilder
+
 
 (c) Was sind Hauptfluchtpunkte und wo liegen diese im Bild?
 
