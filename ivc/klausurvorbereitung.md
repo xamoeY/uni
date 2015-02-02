@@ -208,7 +208,122 @@ Rotation und Haendigkeit:
 
 Wenn wir die Finger um die Drehachse legen und dabei den Daumen in die positive Richtung der Drehachse zeigen lassen, dann zeigen die Finger in Richtung der positiven Drehwinkel (linke Hand für ein linkshändiges System, rechte Hand für ein rechtshändiges).
 
+
+## Transformation zwischen Koordinatensystemen
+
+(Gleichungskram)
+
+
 # Pruefungsunterlagen Teil 3
+
+## Geometrisches Modellieren
+
+Zweck: Halt CAD.
+
+Es gibt zwei grundsätzlich unterschiedliche Methoden, geometrische Modelle zu repräsentieren:
+
+* Volumenbasierte Repräsentation
+* Begrenzungsbasierte Repräsentation
+
+### Volumenbasierte Repräsentationsformen
+
+* Octree (Minecraft)
+* Constructive Solid Geometry (Union, Subtract, etc)
+
+
+# Pruefungsunterlagen Teil 4
+
+## Projektion
+
+Eine Projektion ist die Abbildung eines Vektors x aus einem n-dimensionalen Vektorraum X auf einen Vektor u in einem m-dimensionalen Unterraum U für m < n. Also halt einfach ein fucking Schatten.
+
+**Zentralprojektion:** Eine Zentralprojektion wird festgelegt durch die Angabe
+
+• eines Projektionszentrums (Augpunkt)
+• und einer Projektionsebene.
+
+**Projektionsstrahlen** sind Geraden durch den Augpunkt und die abzubildenden Punkte.
+Das Abbild des Punktes ist der Schnittpunkt seines Projektionsstrahls mit der Bildebene (die Projektion).
+
+## Parallelprojektion
+
+* Die Punkte des Objekts werden entlang paralleler Strahlen auf die Projektionsebene abgebildet.
+* Parallele Linien bleiben parallel.
+* Wird die Bildebene parallel zu den Projektionsstrahlen verschoben, bleibt das Bild gleich
+
+Die Parallelprojektionen werden in Abhängigkeit vom Winkel, unter dem die Projektionsstrahlen die Bildebene schneiden, in zwei Gruppen unterteilt:
+
+* Orthogonale Projektion
+* Schiefe Parallelprojektion
+
+
+## Orthogonale Projektion
+
+Grundrisse, Snap To Axis
+
+
+### Normalaxonometrische Projektion:
+
+Eine orthogonale Projektion heißt Normalaxonometrische Projektion, wenn keine Achse des Weltkoordinatensystems senkrecht zur Bildebene ist. Die normalaxonometrischen Projektionen werden danach unterschieden, wie die Bildebene die Achsen des Koordinatensystems schneidet.
+
+**Isometrische Projektion:** Die Schnittpunkte der Bildebene mit den Hauptachsen sind alle gleich weit vom Ursprung entfernt: alle Koordinaten werden gleich verkürzt.
+**Dimetrische Projektion:** Zwei Koordinatenachsen werden in der gleichen Entfernung vom Ursprung geschnitten.
+**Trimetrische Projektion:** Alle Koordinatenachsen werden in unterschiedlicher Entfernung vom Ursprung von der Bildebene geschnitten, d.h. alle Koordinaten werden paarweise ungleich verkürzt.
+
+
+## Schiefe Parallelprojektion
+
+Schrägriß
+ 
+Die Projektionsstrahlen stehen nicht senkrecht auf der Bildebene, Angabe durch α und β.
+
+
+## Zentralprojektion
+
+* Die Zentralprojektion entspricht der Abbildung durch eine Sammellinse (Kameras, unser Auge) oder eine Lochkamera.
+* Sie vermittelt durch die perspektivische Verkürzung einen räumlichen Eindruck.
+* Die Abbildungen paralleler Geraden enden in einem Fluchtpunkt.
+* Winkel bleiben nur dann erhalten, wenn die Geraden parallel zur Bildebene sind.
+
+(Projektionsgleichung)
+
+
+## Projektionsgleichung für Weltkoordinaten
+
+(Projektionsgleichung)
+
+## Perspektivische Effekte
+
+### Hauptfluchtpunkte
+
+Es gibt mindestens einen und höchstens drei Hauptfluchtpunkte.
+
+Entsprechend der Anzahl der Hauptfluchtpunkte klassifiziert man die Zentralprojektionen:
+
+* Einpunktprojektion: Ein Hauptfluchtpunkt.
+* Zweipunktprojektion: Zwei Hauptfluchtpunkte.
+* Dreipunktprojektion: Drei Hauptfluchtpunkte.
+
+### Der Fluchtpunkt von vertikalen Geraden
+
+Vereinfachte Projektionsgleichung: Alle Parameter gleich Null, mit Ausnahme des Neigungswinkels ϕ und der Brennweite f.
+
+(Gleichungskram)
+
+
+### Der Fluchtpunkt von horizontalen Geraden
+
+Vereinfachte Projektionsgleichung: Alle Parameter gleich Null, mit Ausnahme des Neigungswinkels ϕ, der Brennweite f und der Höhe über der Grundebene.
+
+
+(Gleichungskram)
+
+### Konjugierte Fluchtpunkte
+
+Die Fluchtpunkte x_1 und x_2 der zueinander senkrechten Geraden g_1 ⊥ g_2 parallel zur Grundebene heißen konjugierte Fluchtpunkte.
+
+
+
 
 # POV-Ray Kram
 
@@ -226,3 +341,10 @@ Wenn wir die Finger um die Drehachse legen und dabei den Daumen in die positive 
     rotate 20 * x
     rotate 10 * y
     rotate 3 * z
+
+    camera {
+        perspective
+        location <−20, 30, −40>
+        look_at <0, 10, 0>
+        angle 70
+    }
