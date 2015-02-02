@@ -148,4 +148,81 @@ Es gibt elementare (**Translation**, **Rotation**, **Skalierung**, **Scherung**)
 
 * **Translation:** Verschiebung (P + t)
 * **Rotation:** Drehung (x*cos(a)-y*sin(a))
-* **Skalierung:** Vergroezerung/Verkleinerung (x * s_x, y * s_y)
+* **Skalierung:** Vergroezerung/Verkleinerung (x * s_x, y * s_y) *Allgemeine Skalierung:* unterschiedliche s_x/s_y, *uniforme Skalierung:* gleiche s_x/s_y.
+
+### Zusammengesetzte Transformationen
+
+Bei der Abbildung von Weltkoordinaten auf Gerätekoordinaten ist eine Folge von Transformationen auszuführen, die für viele Punkt gleich sind.
+
+* Um Rechenzeit zu sparen und um möglichst wenig Genauigkeit zu verlieren, werden elementare Transformationen zu zusammengesetzten Transformationen komponiert.
+* Alle bisher angesprochenen Transformationen lassen sich in **homogenen Koordinaten** als Matrixoperation darstellen.
+* Homogene Koordinaten sind notwendig, da sonst nicht alle Transformationen linear wären.
+
+
+**Homogene Koordinaten:** Ein Punkt P(x,y) wird in homogenen Koordinaten durch das Tripel P = [x · w,y · w,w] repräsentiert, mit w != 0.
+
+### Rechenregeln
+
+Es gilt das **Assoziativgesetz:** (A · B) · C = A · (B · C), ((P · A) · B) · C = P · (A · B · C).
+
+Das **Kommutativgesetz** gilt meistens **nicht**: A · B != B · A,
+
+nur innerhalb derselben Gruppe von Transformationen (z.B. eine Folge von Rotationen oder Skalierungen) gilt: R(α) · R(β) = R(β) · R(α)
+
+T(t_x1, t_y1) · T(t_x2 ,t_y2) = T(t_x1 + t_x2 ,t_y1 + t_y2)
+
+S(s_x1, s_y1) · S(s_x2 ,s_y2) = S(s_x1 · s_x2, s_y1 · s_y2)
+
+R(δ_1) · R(δ_2) = R(δ_1 + δ_2)
+
+Eine Transformation heißt affin, wenn die Transformationsmatrix A die folgende Form hat:
+
+    A = [a d 0
+         b e 0
+         c f 1]
+
+* Grafikpakete führen für jedes Objekt eine Transformationsmatrix, in der alle anfallenden Transformationen akkumuliert werden werden.
+* Diese Matrix wird mit der Einheitsmatrix initialisiert.
+* Der Rechenaufwand für die Anzeige ist konstant und unabhängig von der Zahl der Transformationen.
+* Rundungsfehler durch die Abbildung auf ganzzahlige Raster werden klein gehalten, da erst am Ende gerundet wird.
+
+## 3D-Koordinatensysteme
+
+**Haendigkeit:**
+
+* Linkshändiges Koordinatensystem: Die Z-Achse zeigt vom Betrachter weg in die Tiefe.
+* Rechtshändiges Koordinatensystem: Die Z-Achse zeigt zum Betrachter
+
+
+## 3D-Transformationen
+
+Ansich aehnlich aber halt mit einem Drechachstenvektor bei Rotationen und die Matrix hat jetzt 4x4 Komponenten.
+
+Eine 3D-Rotation wird durch
+
+* einen Punkt ( das Rotationszentrum),
+* einen Vektor (die Richtung der Drehachse)
+* und den Rotationswinkel angegeben.
+
+Rotation und Haendigkeit:
+
+Wenn wir die Finger um die Drehachse legen und dabei den Daumen in die positive Richtung der Drehachse zeigen lassen, dann zeigen die Finger in Richtung der positiven Drehwinkel (linke Hand für ein linkshändiges System, rechte Hand für ein rechtshändiges).
+
+# Pruefungsunterlagen Teil 3
+
+# POV-Ray Kram
+
+    translate < tx , ty , tz > // Translation mit dem Vektor ( tx , ty , tz )
+    translate y * 3 // Translation entlang der Y−Achse (3 * y = <0,3,0>)
+    translate y * 3+x // 3 * y+x = <1,3,0>
+
+    #declare stardot = sphere { 0, 0.7
+    texture { T_Gold_1B }
+    }
+    object { stardot
+    translate < 0.839746, −14.392706, 12.386859>}
+
+    rotate <20, 10, 3>
+    rotate 20 * x
+    rotate 10 * y
+    rotate 3 * z
