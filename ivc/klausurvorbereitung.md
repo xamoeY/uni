@@ -323,6 +323,134 @@ Vereinfachte Projektionsgleichung: Alle Parameter gleich Null, mit Ausnahme des 
 Die Fluchtpunkte x_1 und x_2 der zueinander senkrechten Geraden g_1 ⊥ g_2 parallel zur Grundebene heißen konjugierte Fluchtpunkte.
 
 
+# Pruefungsunterlagen Teil 5
+
+## Elektromagnetische Strahlung
+
+
+# Pruefungsunterlagen Teil 6
+
+
+# Pruefungsunterlagen Teil 7
+
+
+# Pruefungsunterlagen Teil 8
+
+
+# Pruefungsunterlagen Teil 9
+
+
+# Pruefungsunterlagen Teil 10
+
+
+# Zur Prüfungsvorbereitung: Verständnisfragen
+## Koordinaten und Transformationen
+
+(a) Wie unterscheiden sich das linkshändige und das rechtshändige Koordinatensystem?
+
+(b) Geben Sie die Matrizen für grundlegende Transformationen im 2D und 3D an.
+
+(c) Welche Transformationen sind kommutativ, welche nicht?
+
+(d) Welche Transformationen benötigen Sie, um den Radius einer Kugel zu verdoppeln, deren Mittelpunkt die Koordinaten (1,1,2) hat? Geben Sie die Matrizen an.
+
+(e) Gegeben sei ein achsenparalleler Einheitswürfel zentriert um den Ursprung und direkt daneben, zentriert um die positive X-Achse, eine Einheitkugel. Welche Transformation ist nötig, um die Kugel direkt mittig über den Würfel zu setzen?
+
+(f) Welche Fixpunkte haben Translation, Rotation und Scherung?
+
+(g) Gegeben seien die Punkte P 1 = (1,2,3,4), P 2 = (2,4,6,8) und P 3 = (0.75,1,1.5,2) in homogenen Koordinaten. Welche Punkte sind identisch?
+
+
+## Projektionen:
+
+(a) Erkären Sie den Unterschied zwischen orthogonaler und schiefer Parallelprojektion.
+
+(b) Nennen Sie Vor- und Nachteile und wichtige Anwendungen der einzelnen Projektionen.
+
+(c) Was sind Hauptfluchtpunkte und wo liegen diese im Bild?
+
+(d) Gegeben sei eine Kamera, die auf der Y-Achse über der XZ-Ebene steht und leicht nach unten geneigt ist. Wie verändert sich die Lage der Hauptfluchtpunkte, wenn Sie die Kamera etwas stärker nach unten neigen? Wie verändert sich die Lage der Hauptfluchtpunkte, wenn Sie die die Brennweite der Kamera verdoppeln?
+
+(e) Was sind konjugierte Fluchtpunkte? Wo liegt der konjugierte Fluchtpunkt zu einem Fluchtpunkt auf der Horizontlinie?
+
+(f) Ist die Zentralprojektion invertierbar?
+
+(g) Geben Sie die Projektionsmatrix für die Zentralprojektion und die inverse Zentralprojektion an.
+
+(h) Was ist die perspektivische Verkürzung?
+
+(i) Erklären Sie die Illusion des Ames-Raumes.
+
+(j) Wie unterscheidet sich die Abbildung durch eine Lochkamera von der Abbildung durch eine Linsenkamera?
+
+(k) Was sind Nahpunkt und Fernpunkt und wovon hängt deren Lage ab?
+
+
+## Licht und Farbe:
+
+(a) Wie hängen Wellenlänge, Frequenz, Geschwindigkeit und Far-
+be des Lichtes zusammen?
+
+(b) Wie hängt die Farbe einer Lichtquelle mit der Temperatur der Lichtquelle zusammen?
+
+(c) Nennen Sie einige Farbmodelle.
+
+(d) Wie können Farben aus Grundfarben gemischt werden?
+
+(e) Was sind Komplementärfarben?
+
+(f) Nennen Sie die Komplementärfarbe zu „rot“ im RGB- und im CMY-System.
+
+(g) Welche Farbe erhalten Sie bei der additiven Mischung von „rot“ und „blau“ und welche bei der subtraktiven Mischung?
+
+(h) Was ist die chromatische Aberration? Welche Konsequenzen hat sie für das Farbensehen?
+
+(i) Welche Farbe können wir am schlechtesten wahrnehmen? Warum?
+
+(j) Was ist Dispersion?
+
+
+## Fraktale und Texturen:
+
+(a) Nennen Sie wichtige Eigenschaften der quadratischen Kochkurve.
+
+(b) Wie können Fraktale eingesetzt werden, um Oberflächen zu modellieren?
+
+(c) Was sind Drachenkurven?
+
+(d) Warum sind Texturen für die photorealistische Computergrafik wichtig?
+
+(e) Warum sind Texturen für die räumliche Wahrnehmung wichtig?
+
+
+## Ikonische Bildverarbeitung:
+
+(a) Welche Teilaufgaben sind zu lösen, um aus einem kontinuierlichen Bildsignal ein Digitalbild zu machen?
+
+(b) Wie kann der Kontrast eines Bildes erhöht werden?
+
+(c) Was ist beim Verkleinern eines Bildes zu beachten?
+
+(d) Was ist Aliasing und wann tritt dieser Effekt auf?
+
+(e) Wie kann Aliasing vermieden werden?
+
+(f) Wodurch kann die Schärfe eine Bildes erhöht werden?
+
+(g) Wodurch können systematische Bildstörungen mit einer typischen Frequenz beseitigt werden?
+
+(h) Was bewirkt ein Tiefpaßfilter?
+
+
+## Segmentieren von Bildern:
+
+(a) Nennen Sie einige Kantenfinder und beschreiben Sie die Algorithmen.
+
+(b) Welche Rolle spielen Gradienten beim Kantenfinden?
+
+(c) Wie können mit dem Laplace-Operator Kanten gefunden werden?
+
+(d) Welcher Kanten-Operator ist besonders rauschempfindlich umd warum?
 
 
 # POV-Ray Kram
