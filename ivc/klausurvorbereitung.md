@@ -348,15 +348,87 @@ Die Fluchtpunkte x_1 und x_2 der zueinander senkrechten Geraden g_1 ⊥ g_2 para
 
 (a) Wie unterscheiden sich das linkshändige und das rechtshändige Koordinatensystem?
 
+Linkshaendig: Z geht von uns weg. Rechtshaending: Z kommt auf uns zu.
+
 (b) Geben Sie die Matrizen für grundlegende Transformationen im 2D und 3D an.
 
+2D-Translation:
+
+    [xy1] * | 1 | 0 | 0 |
+            | 0 | 1 | 0 |
+            |t_x|t_y| 1 |
+            
+2D-Skalierung:
+
+    [xy1] * |s_x| 0 | 0 |
+            | 0 |s_y| 0 |
+            | 0 | 0 | 1 |
+
+2D-Rotation:
+
+    [xy1] * |cos(a) |sin(a)| 0 |
+            |-sin(a)|cos(a)| 0 |
+            |     0 |    0 | 1 |
+
+2D-Scherung:
+
+    [xy1] * |   1 |sch_y| 0 |
+            |sch_x|    1| 0 |
+            |   0 |    0| 1 |
+
+3D-Translation:
+
+    [xyz1] * | 1 | 0 | 0 | 0 |
+             | 0 | 1 | 0 | 0 |
+             | 0 | 0 | 1 | 0 |
+             |t_x|t_y|t_z| 1 |
+             
+3D-Skalierung:
+
+    [xyz1] * |s_x| 0 | 0 | 0 |
+             | 0 |s_y| 0 | 0 |
+             | 0 | 0 |s_z| 0 |
+             | 0 | 0 | 0 | 1 |
+
+3D-Rotation:
+
+    [xyz1] * |cos(a) |sin(a)| 0 | 0 |
+             |-sin(a)|cos(a)| 0 | 0 |
+             |     0 |    0 | 1 | 0 |
+             |     0 |    0 | 0 | 1 |
+    
+    
 (c) Welche Transformationen sind kommutativ, welche nicht?
+
+Alle Transformationen gleichen Typs sind kommutativ.
 
 (d) Welche Transformationen benötigen Sie, um den Radius einer Kugel zu verdoppeln, deren Mittelpunkt die Koordinaten (1,1,2) hat? Geben Sie die Matrizen an.
 
+    |  1 |  0 |  0 | 0 |
+    |  0 |  1 |  0 | 0 |
+    |  0 |  0 |  1 | 0 |
+    | -1 | -1 | -2 | 1 |
+
+    |  2 |  0 |  0 | 0 |
+    |  0 |  2 |  0 | 0 |
+    |  0 |  0 |  2 | 0 |
+    |  0 |  0 |  0 | 1 |
+
+    |  1 |  0 |  0 | 0 |
+    |  0 |  1 |  0 | 0 |
+    |  0 |  0 |  1 | 0 |
+    |  1 |  1 |  2 | 1 |
+
 (e) Gegeben sei ein achsenparalleler Einheitswürfel zentriert um den Ursprung und direkt daneben, zentriert um die positive X-Achse, eine Einheitkugel. Welche Transformation ist nötig, um die Kugel direkt mittig über den Würfel zu setzen?
 
+    |  1 |  0 |  0 | 0 |
+    |  0 |  1 |  0 | 0 |
+    |  0 |  0 |  1 | 0 |
+    |  -(kantenlaenge/2 + radius/2) |  (kantenlaenge/2 + radius/2) |  0 | 1 |
+
 (f) Welche Fixpunkte haben Translation, Rotation und Scherung?
+
+Bei Translation keine. Bei Skalierung Ursprung. Bei Rotation Zentrum. und Scherung dunno lol.
 
 (g) Gegeben seien die Punkte P 1 = (1,2,3,4), P 2 = (2,4,6,8) und P 3 = (0.75,1,1.5,2) in homogenen Koordinaten. Welche Punkte sind identisch?
 
