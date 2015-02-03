@@ -589,30 +589,50 @@ Aliasing ist bei Bildern eine Art der Treppenbildung und tritt auf wenn die Abta
 
 (e) Wie kann Aliasing vermieden werden?
 
-Hauefiger Abtasten.
+Hauefiger Abtasten (Beachtung des Abtasttheorems).
 
 (f) Wodurch kann die Schärfe eine Bildes erhöht werden?
 
-Scharfzeichnungsfilter.
+Scharfzeichnungsfilter (Inverser Weichzeichnungsfilter).
 
 (g) Wodurch können systematische Bildstörungen mit einer typischen Frequenz beseitigt werden?
 
-Tiefpaßfilter.
+Tief-, Hoch- oder Bandpassfilter.
 
 (h) Was bewirkt ein Tiefpaßfilter?
 
-
+Besonders hohe Frequenzen werden aus dem Bild entfernt.
 
 ## Segmentieren von Bildern:
 
 (a) Nennen Sie einige Kantenfinder und beschreiben Sie die Algorithmen.
 
+- Diskrete Ableitungen: 
+    - Roberts-Cross: Differenz zwischen diagonal benachbarten Pixeln
+    - Sobel: Differenz der Nachbarn in x und y-Richtung in einem 9x9 Feld mit Gewichtung:
+    x:
+    -1 0 1
+    -2 0 2
+    -1 0 1
+    y:
+    -1 -2 -1
+     0  0  0
+     1  2  1
+
+- Durchgänge der zweiten Ableitung: Laplace, Mexican Hat, Canny (Kombination aus vorherigen beiden)
+    - Approximierter Laplace: 
+
 (b) Welche Rolle spielen Gradienten beim Kantenfinden?
+
+Höhepunkte des Gradienten weisen auf Wendepunkte in der Bildfunktion hin, was eine Steigung der Bildfunktion und somit Kanten bedeuten könnte.
 
 (c) Wie können mit dem Laplace-Operator Kanten gefunden werden?
 
+Approximation der partiellen 2. Ableitungen: Differenz zwischen Mittelwert der vier umliegenden Pixel und dem Pixel selbst.
+
 (d) Welcher Kanten-Operator ist besonders rauschempfindlich umd warum?
 
+Laplace, da er auf der 2. Ableitung basiert. Die 2. Ableitung ist sehr exakt und findet jeden Höhepunkt der 1. Ableitung, dh. jeden Wendepunkt der Bildfunktion. Ein verrauschtes Bild hat sehr viele Wendepunkte.
 
 # POV-Ray Kram
 
