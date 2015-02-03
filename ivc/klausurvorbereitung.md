@@ -503,28 +503,44 @@ Wellenlaenge bestimmt Farbe des Lichtes.
 
 (b) Wie hängt die Farbe einer Lichtquelle mit der Temperatur der Lichtquelle zusammen?
 
-
+Man nimmt hierfuer als Vergleich einen schwarzen Koerper, der so stark erhitzt wird, dass er das Licht der Farbe ausstrahlt, das man erhalten moechte. Die Temperatur dieses schwarzen Koerpers entspricht dann der Temperatur des Lichtes.
 
 (c) Nennen Sie einige Farbmodelle.
 
-RGB, CMYK
+RGB, CMYK, CIE, YIQ
 
 (d) Wie können Farben aus Grundfarben gemischt werden?
 
-
+Per Skript: Für Menschen mit normaler Farbtüchtigkeit lassen sich alle Farbtöne selbstleuchtender Farben durch die drei Primärfarben (Rot, Grün, Blau) hinreichend und eindeutig beschreiben.
 
 (e) Was sind Komplementärfarben?
 
+Komplementärfarben sind Paare von Farben, deren additive Mischung weiß ergibt, bzw. schwarz bei subtraktiver Mischung,
+
 (f) Nennen Sie die Komplementärfarbe zu „rot“ im RGB- und im CMY-System.
+
+Cyan jeweils.
 
 (g) Welche Farbe erhalten Sie bei der additiven Mischung von „rot“ und „blau“ und welche bei der subtraktiven Mischung?
 
+Bei additive: Magenta, bei subtraktiv: Schwarz
+
 (h) Was ist die chromatische Aberration? Welche Konsequenzen hat sie für das Farbensehen?
+
+Das sichtbare Licht bestesht aus verschiedenen Wellenlaengen. Chromatische Aberration fuehrt dazu, dass Linsen die verschiedene Brechungsindices fuer verschiedene Wellenlaengen haben, ein geisterhaftes Bild erzeugen.
 
 (i) Welche Farbe können wir am schlechtesten wahrnehmen? Warum?
 
+Blau koennen wir am schlechtesten sehen, da nur 2% der Zapfen blau-empfindlich sind.
+
 (j) Was ist Dispersion?
 
+Per Skript:
+
+* Die Komponenten eines Gemischs von Licht unterschiedlicher Wellenlängen werden unterschiedlich stark gebrochen.
+* Beim Durchgang von weißem Licht durch ein Prisma tritt daher eine Dispersion ein.
+* Die Brennpunkte von Linsen aus nur einem Material sind für jede Wellenlänge anders (Chromatische Aberration).
+* Zur Korrektur von solchen Farbfehlern werden Objektive aus mehreren Linsen mit unterschiedlicher Brechzahl hergestellt.
 
 ## Fraktale und Texturen:
 
