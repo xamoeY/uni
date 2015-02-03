@@ -445,37 +445,73 @@ Bei ortogonaler Parallelprojektion sehen wir genau eine Achse hinunter, sind als
 
 Orthogonale Projektion: Schwierig erkennbar fuer ungeuebte Augen aber fuer technische Zeichnungen sehr wichtig und sinnvoll aufgrund der vereinfachten und uniformen Struktur. Teilweise mehrere Ansichten notwendig. Nicht immer eindeutig.
 Schiefe Parallelprojektion: Fuer mathematische Zeichnungen, fuer Schaubilder
-
+Perspektivische Projeketionen: Besser fuer Visualisierungen fuer ungeuebte Menschen. Interior Design. Winkel gehen verloren.
 
 (c) Was sind Hauptfluchtpunkte und wo liegen diese im Bild?
 
+Per Definition: Ein Hauptfluchtpunkt ist der Fluchtpunkt von Geraden, die parallel zu einer der Achsen des Weltkoordinatensystems sind.
+
 (d) Gegeben sei eine Kamera, die auf der Y-Achse über der XZ-Ebene steht und leicht nach unten geneigt ist. Wie verändert sich die Lage der Hauptfluchtpunkte, wenn Sie die Kamera etwas stärker nach unten neigen? Wie verändert sich die Lage der Hauptfluchtpunkte, wenn Sie die die Brennweite der Kamera verdoppeln?
+
+Bei der Neigung nach unten wandern die Fluchtpunkte nach oben. Bei Verdoppelung der Brennweite der Kamera wandern die Fluchtpunkte in die Mitte des Bildes.
 
 (e) Was sind konjugierte Fluchtpunkte? Wo liegt der konjugierte Fluchtpunkt zu einem Fluchtpunkt auf der Horizontlinie?
 
+Per Definition: Die Fluchtpunkte x_1 und x_2 der zueinander senkrechten Geraden g_1 ⊥ g_2 parallel zur Grundebene heißen konjugierte Fluchtpunkte.
+
 (f) Ist die Zentralprojektion invertierbar?
+
+Nein, da wir Informationen ueber Winkel verlieren.
 
 (g) Geben Sie die Projektionsmatrix für die Zentralprojektion und die inverse Zentralprojektion an.
 
+P_z= |  1 |  0 |  0 | 0 |
+     |  0 |  1 |  0 | 0 |
+     |  0 |  0 |  0 |1/f|
+     |  0 |  0 |  0 | 1 |
+
+P_z = |  1 |  0 |  0 |  0 |
+      |  0 |  1 |  0 |  0 |
+      |  0 |  0 |  1 |1/f|
+      |  0 |  0 |  0 |  1 |
+
 (h) Was ist die perspektivische Verkürzung?
+
+Alle x und y-Koordinaten werden bei der Projektion ins Bild proportional zur Entfernung z verkürzt.
+
+Die Verkürzung ist umso stärker, je kleiner f ist.
 
 (i) Erklären Sie die Illusion des Ames-Raumes.
 
+Texturverzerrung und Raumdeformation um optische Taeuschung zu erschaffen. Die Person links steht in Wirklichkeit tiefer im Raum, aber wirkt so als ob sie neben der Person rechts stuende.
+
 (j) Wie unterscheidet sich die Abbildung durch eine Lochkamera von der Abbildung durch eine Linsenkamera?
+
+Eine Lochkamera ist unscharf, wenn das Loch grosz ist, aber wenn man das Loch vergroeszert, wird das Bild schnell unscharf. Linsenkameras kompensieren das Problem dadurch, dass das Licht gebuendelt wird, bevor es den Brennpunkt erreicht.
 
 (k) Was sind Nahpunkt und Fernpunkt und wovon hängt deren Lage ab?
 
+Per Definition: Die Ebenen, die den Bereich begrenzen, in dem bei einer gegeben Einstellebene die Zerstreuungskreise kleiner sind als die Auflösung des Bildes, heißen Nahpunktsebene und Fernpunktsebene, die Schnittpunkte dieser Ebenen mit der optischen Achse heißen entsprechend Nahpunkt t_N und Fernpunkt t_F .
 
 ## Licht und Farbe:
 
-(a) Wie hängen Wellenlänge, Frequenz, Geschwindigkeit und Far-
-be des Lichtes zusammen?
+(a) Wie hängen Wellenlänge, Frequenz, Geschwindigkeit und Farbe des Lichtes zusammen?
+
+Wellenlaenge = Geschwindigkeit/Frequenz
+
+Wellenlaenge bestimmt Farbe des Lichtes.
 
 (b) Wie hängt die Farbe einer Lichtquelle mit der Temperatur der Lichtquelle zusammen?
 
+
+
 (c) Nennen Sie einige Farbmodelle.
 
+RGB, CMYK
+
 (d) Wie können Farben aus Grundfarben gemischt werden?
+
+
 
 (e) Was sind Komplementärfarben?
 
