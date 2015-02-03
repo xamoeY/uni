@@ -546,32 +546,61 @@ Per Skript:
 
 (a) Nennen Sie wichtige Eigenschaften der quadratischen Kochkurve.
 
+Per Skript:
+
+* Selbstähnlichkeit: Wird ein beliebiger Abschnitt um den Faktor 3 vergrößert, so erhält man das Original.
+* Stetigkeit: Die Kurve ist überall stetig, aber nicht überall glatt.
+* Tangenten: Es gibt nirgendwo eine Tangente, da es zwischen zwei beliebigen Punkten beliebig viele „zick-zack“-Kurven gibt.
+* ∞-Länge zwischen zwei Punkten: Die Länge der Kurve geht gegen ∞
+
 (b) Wie können Fraktale eingesetzt werden, um Oberflächen zu modellieren?
+
+Wir koennen mit Hilfe von sehr speichereffizienten mathematischen Funktionen beliebig detaillierte Oberflaechen beschreiben. Dies eignet sich besonders fuer natuerliche Oberflaechen wie Pflanzen, Wolken, usw.
 
 (c) Was sind Drachenkurven?
 
+Fraktale.
+
 (d) Warum sind Texturen für die photorealistische Computergrafik wichtig?
+
+Menschen brauchen Texturen, um sich in der Welt zurechtzufinden. Sie bieten Informationen ueber Maszstaebe und Farben sowie Licht.
 
 (e) Warum sind Texturen für die räumliche Wahrnehmung wichtig?
 
+Menschen brauchen Texturen, um sich in der Welt zurechtzufinden. Sie bieten Informationen ueber Maszstaebe und Farben sowie Licht.
 
 ## Ikonische Bildverarbeitung:
 
 (a) Welche Teilaufgaben sind zu lösen, um aus einem kontinuierlichen Bildsignal ein Digitalbild zu machen?
 
+Diskretisierung von Zeit und Amplitude mit Hilfe von Rasterung, Abtasten und Quantelung.
+
 (b) Wie kann der Kontrast eines Bildes erhöht werden?
+
+Mit Requantisierung.
 
 (c) Was ist beim Verkleinern eines Bildes zu beachten?
 
+
+
 (d) Was ist Aliasing und wann tritt dieser Effekt auf?
+
+Aliasing ist bei Bildern eine Art der Treppenbildung und tritt auf wenn die Abtastrate zu niedrig gewaehlt wurde.
 
 (e) Wie kann Aliasing vermieden werden?
 
+Hauefiger Abtasten.
+
 (f) Wodurch kann die Schärfe eine Bildes erhöht werden?
+
+Scharfzeichnungsfilter.
 
 (g) Wodurch können systematische Bildstörungen mit einer typischen Frequenz beseitigt werden?
 
+Tiefpaßfilter.
+
 (h) Was bewirkt ein Tiefpaßfilter?
+
 
 
 ## Segmentieren von Bildern:
