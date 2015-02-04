@@ -22,18 +22,16 @@
 ## Computergrafik vs. Bildverarbeitung
 
 ### Definition: 1 (Computergrafik)
-Die Computergrafik ist die Wissenschaft von den Methoden und Techniken
-zur Konvertierung von Daten in und aus grafischer Darstellung mit Hilfe von
-elektronischen Rechenanlagen. (ISO)
+Die Computergrafik ist die Wissenschaft von den Methoden und Techniken zur Konvertierung von Daten in und aus grafischer Darstellung mit Hilfe von elektronischen Rechenanlagen. (ISO)
+
 Sie hat die drei Teilgebiete:
+
 * Grafische Datenverarbeitung,
 * Bildverarbeitung,
 * Bildverstehen / Mustererkennung.
 
 ### Definition: 2 (Grafische Datenverarbeitung)
-Die grafische Datenverarbeitung umfaßt Verfahren zur Eingabe und Mani-
-pulation von Bildbeschreibungen sowie deren Umwandlung in grafische Dar-
-stellungen.
+Die grafische Datenverarbeitung umfaßt Verfahren zur Eingabe und Manipulation von Bildbeschreibungen sowie deren Umwandlung in grafische Darstellungen.
 
 
 ## Prozesse der grafischen DV
@@ -445,7 +443,7 @@ Bei ortogonaler Parallelprojektion sehen wir genau eine Achse hinunter, sind als
 
 Orthogonale Projektion: Schwierig erkennbar fuer ungeuebte Augen aber fuer technische Zeichnungen sehr wichtig und sinnvoll aufgrund der vereinfachten und uniformen Struktur. Teilweise mehrere Ansichten notwendig. Nicht immer eindeutig.
 Schiefe Parallelprojektion: Fuer mathematische Zeichnungen, fuer Schaubilder
-Perspektivische Projeketionen: Besser fuer Visualisierungen fuer ungeuebte Menschen. Interior Design. Winkel gehen verloren.
+Zentralprojektion: Besser fuer Visualisierungen fuer ungeuebte Menschen. Interior Design. Winkel gehen verloren.
 
 (c) Was sind Hauptfluchtpunkte und wo liegen diese im Bild?
 
@@ -461,19 +459,19 @@ Per Definition: Die Fluchtpunkte x_1 und x_2 der zueinander senkrechten Geraden 
 
 (f) Ist die Zentralprojektion invertierbar?
 
-Nein, da wir Informationen ueber Winkel verlieren.
+Nein, da wir Informationen ueber Winkel und Dimensionen verlieren.
 
 (g) Geben Sie die Projektionsmatrix für die Zentralprojektion und die inverse Zentralprojektion an.
 
-P_z= |  1 |  0 |  0 | 0 |
-     |  0 |  1 |  0 | 0 |
-     |  0 |  0 |  0 |1/f|
-     |  0 |  0 |  0 | 1 |
-
-P_z = |  1 |  0 |  0 |  0 |
-      |  0 |  1 |  0 |  0 |
-      |  0 |  0 |  1 |1/f|
-      |  0 |  0 |  0 |  1 |
+    P_z= |  1 |  0 |  0 | 0 |
+         |  0 |  1 |  0 | 0 |
+         |  0 |  0 |  0 |1/f|
+         |  0 |  0 |  0 | 1 |
+    
+    P_z = |  1 |  0 |  0 | 0 |
+          |  0 |  1 |  0 | 0 |
+          |  0 |  0 |  1 |1/f|
+          |  0 |  0 |  0 | 1 |
 
 (h) Was ist die perspektivische Verkürzung?
 
