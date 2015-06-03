@@ -1,7 +1,4 @@
 \documentclass[
-  % Replace twoside with oneside if you are printing your thesis on a single side
-  % of the paper, or for viewing on screen.
-  %oneside,
   twoside,
   11pt, a4paper,
   footinclude=true,
@@ -10,24 +7,15 @@
 ]{scrbook}
 
 \usepackage{lipsum}
-\usepackage[linedheaders,parts,pdfspacing]{classicthesis}
+\usepackage[ngerman,english]{babel}
 \usepackage{amsmath}
 \usepackage{amsthm}
-\usepackage{acronym}
+\usepackage{graphicx}
 \usepackage{listings}
-
-\title{Analysis Of the Feasibility Of Pathtracing In Interactive Media}
-\author{Sven-Hendrik Haase}
 
 \begin{document}
 
-\maketitle
-
-\include{frontbackmatter/abstract}
-\include{frontbackmatter/dedication}
-\include{frontbackmatter/acknowledgements}
-\include{frontbackmatter/declaration}
-\include{frontbackmatter/contents}
+\input{frontbackmatter/title.tex}
 
 \part{First Part of My Thesis}
 
@@ -51,7 +39,6 @@
 \chapter{Yet Another Chapter}
 \lipsum[1] % This is just some filler text. Remove before you start writing
   
-\
 \part{}
 \chapter{Chapter}
 \lipsum[1]

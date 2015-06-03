@@ -1,6 +1,7 @@
 .PHONY: clean
-main.pdf: main.tex
-	rubber -d $<
+
+default:
+	rubber -d main.tex
 
 clean:
 	rm main.pdf
