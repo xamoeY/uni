@@ -4,7 +4,7 @@
   footinclude=true,
   headinclude=true,
   cleardoublepage=empty
-]{scrbook}
+]{scrreprt}
 
 \usepackage{lipsum}
 \usepackage[ngerman,english]{babel}
@@ -12,35 +12,98 @@
 \usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{lmodern}
+\usepackage{setspace}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
 
 \begin{document}
 
 \input{frontbackmatter/title.tex}
 
-\part{First Part of My Thesis}
+\chapter*{Abstract}
+\onehalfspace
+As part of the quest for ever-improving game graphics, researchers, graphics hardware developers
+and video game developers alike have been coming up with more and more convoluted and technically
+challenging ways of improving the graphics in interactive media such as games in order to give
+users a deeper sense of immersion or to provide special effects artists with faster feedback.
 
-\chapter{A Chapter}
-\lipsum[1] % This is just some filler text. Remove before you start writing
+While rendering techniques are currently shifting from the traditional fixed pipeline approach
+towards the new, fully programmable approach that lets developers implement deferred renderers that
+can more closely mimic reality by using multiple combined shading and lighting algorithms, the
+fundamental concept of rasterization-based rendering has remained the same.
 
-\section{A Section}
-\lipsum[1] % This is just some filler text. Remove before you start writing
+The real world photon-collecting approach that actual cameras has so far not been adopted for
+interactive media by the industry in any capacity because the computational cost has historically
+been prohibitively expensive.
+This paper presents the results of my research about the feasibility of using a physically-based
+technique called \textbf{path tracing} in lieu of classical techniques in interactive media. I
+present the idea, algorithm and complexity behind path tracing and extrapolate feasibility
+according to the current state of technology and trends. As part of the research, I have implemented a path tracing 3D engine in C++.
+
+In general, I have found path tracing to be a viable rendering solution on commodity hardware in
+about 6 years.
+\singlespace
+
+\chapter*{Acknowledgements}
+\doublespacing
+I would like to express my sincere gratitude to the teachers throughout school and university for
+the knowledge they've passed on.
+
+I thank my friends for the laughs we've shared and for the experiences we've made and had together.
+
+Furthermore, none of this would have been possible without the incredible efforts and love of my
+parents who have supported me throughout the years and enabled me to live a carefree life until I
+was ready to fend for myself.
+
+Last, but certainly not least, I would like to declare my gratefulness to Alisa, whose endless love
+has given my life a new meaning.
+
+\singlespace
+
+\clearpage
+\vspace*{\fill}
+\thispagestyle{empty} % suppress showing of page number
+\begin{quotation}
+    \em
+    We all make choices in life, but in the end, our choices make us.
+
+    \medskip
+    \raggedleft
+    Andrew Ryan
+\end{quotation}
+\vspace*{\fill}
+
+\tableofcontents
+
+\part{Current State of Technology}
+
+\chapter{Introduction}
+\lipsum[1]
+
+\section{M}
+\lipsum[1]
 
 \section{Another Section}
-\lipsum[1] % This is just some filler text. Remove before you start writing
+\lipsum[1]
 
 \chapter{Another Chapter}
-\lipsum[1] % This is just some filler text. Remove before you start writing
-
-\section{Yet Another Section}
-\lipsum[1] % This is just some filler text. Remove before you start writing
-
-\part{Another Part}
-
-\chapter{Yet Another Chapter}
-\lipsum[1] % This is just some filler text. Remove before you start writing
-  
-\part{}
-\chapter{Chapter}
 \lipsum[1]
+
+\section{Conclusion and Outlook}
+\lipsum[1]
+
+\listoffigures
+ 
+\listoftables
+
+\begin{thebibliography}{9}
+    \bibitem{lamport94}
+        Leslie Lamport,
+        \emph{\LaTeX: a document preparation system},
+        Addison Wesley, Massachusetts,
+        2nd edition,
+        1994.
+\end{thebibliography}
     
 \end{document}
