@@ -14,6 +14,7 @@
 \usepackage{listings}
 \usepackage{lmodern}
 \usepackage{setspace}
+\usepackage{url}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 
@@ -23,40 +24,35 @@
 
 \chapter*{Abstract}
 \onehalfspace
-As part of the quest for ever-improving game graphics, researchers, graphics hardware developers
-and video game developers alike have been coming up with more and more convoluted and technically
-challenging ways of improving the graphics in interactive media such as games in order to give
-users a deeper sense of immersion or to provide special effects artists with faster feedback.
+This study aims to investigate the viability of a physically-based technique called
+\textbf{path tracing} in lieu of or in corporation with classical techniques in interactive media such as video
+games and visual effects tools.
 
-While rendering techniques are currently shifting from the traditional fixed pipeline approach
-towards the new, fully programmable approach that lets developers implement deferred renderers that
-can more closely mimic reality by using multiple combined shading and lighting algorithms, the
-fundamental concept of rasterization-based rendering has remained the same.
+Real time path tracing has been prohibitively expensive in regards to computational
+complexity. However, modern GPUs and even CPUs have finally gotten fast enough for real time path
+tracing to become a viable alternative to traditional real time approaches to rendering.  Based on
+that assumption, this thesis presents the idea, algorithm and complexity behind path tracing in the
+first part and extrapolates feasibility and suitability of real time path tracing on consumer
+hardware according to the current state of technology and trends in the second part.
 
-The real world photon-collecting approach that actual cameras use has so far not been adopted for
-interactive media by the industry in any capacity because the computational cost has historically
-been prohibitively expensive.
-This paper presents the results of my research about the feasibility of using a physically-based
-technique called \textbf{path tracing} in lieu of or in corporation with classical techniques in interactive media. I
-present the idea, algorithm and complexity behind path tracing and extrapolate feasibility
-according to the current state of technology and trends. As part of the research, I have implemented a path tracing 3D engine in C++.
-
-In general, I have found path tracing to be a viable rendering solution on commodity hardware in
-about 6 years.
+As part of the research, the author has implemented a path tracing 3D engine in modern C++ in order
+to empirically test the assumptions made in this thesis. The study found path tracing
+to be a viable rendering technique for average commodity hardware in approximately 4 years.
 \singlespace
 
-\chapter*{Acknowledgements}
+\chapter*{Acknowledgments}
 \doublespacing
 I would like to express my sincere gratitude to the teachers throughout school and university for
 the knowledge they've passed on.
 
-I thank my friends for the laughs we've shared and for the experiences we've made and had together.
+I thank my friends for the laughs, horrible mistakes and awesome successes we shared with
+one another.
 
 Furthermore, none of this would have been possible without the incredible efforts and love of my
 parents who have supported me throughout the years and enabled me to live a carefree life until I
 was ready to fend for myself.
 
-Last, but certainly not least, I would like to declare my gratefulness to Alisa, whose endless love
+Lastly, but certainly not least, I would like to declare my gratefulness to Alisa, whose endless love
 has given my life a new meaning.
 
 \singlespace
@@ -77,10 +73,43 @@ has given my life a new meaning.
 \tableofcontents
 
 \chapter{Introduction}
-\lipsum[1]
+As part of the quest for ever-improving game graphics, researchers, graphics hardware developers
+and video game developers alike have been coming up with more and more convoluted and technically
+challenging ways of improving the graphics in interactive media such as games and visualizations in order to give
+users a deeper sense of immersion or to provide special effects artists with faster feedback.
+
+While rendering techniques are currently shifting from the traditional fixed pipeline approach
+towards the new, fully programmable approach that lets developers implement deferred renderers that
+can more closely mimic reality by using multiple combined shading and lighting algorithms and
+rendering the scene multiple times for different buffers, the
+fundamental concept of rasterization-based rendering has largely remained the same.
+
+The real world photon-collecting approach that actual cameras use has so far not been adopted for
+interactive media by the industry in any capacity because the computational cost has historically
+been prohibitively expensive. It is, however, used extensively (and has been in use since decades)
+for offline, non-interactive rendering of computer-generated movies and visualizations of scientific simulations.
+
+This study assumes that the next logical step for the industry will be to adopt
+this method for real time media as well. For the purpose of this thesis, a renderer is considered
+\textit{real time} when it manages to render a frame within \(16.67ms\) since that equals 60 frames per second
+which is the current de-facto standard for most available computer screens.
 
 \section{Motivation}
-\lipsum[1]
+Real time path tracing (and physically based rendering in general) offers many
+benefits over traditional real time rendering methods such as better visuals
+and simpler implementation but also allows for completely new types of graphics
+such as realistic caustics \cite{wiki:caustics} and even light dispersion
+\cite{wiki:dispersion} (using a prism, for instance) since path tracers might simulate wavelenghts
+instead of plain RGB colors. Modern video games tend
+to rely on a growing number of tricks to keep them visually appealing as the
+consumer grows more demanding. They're called \textit{tricks} in this study
+because they merely trick the beholder into seeing something that appears to be
+physically accurate when it is, in fact, not the result of a physically-based
+calculation and as such this study aims to keep tricks and emergent phenomena
+separated by language. Some notable tricks include screen-space ambient occlusion (SSAO)
+\cite{wiki:ssao}, motion blur \cite{wiki:motion-blur}, lens flare
+\cite{wiki:lens-flare}, chromatic aberration \cite{wiki:chromatic-aberration},
+depth of field \cite{wiki:depth-of-field} and light mapping \cite{wiki:lightmap}.
 
 \chapter{Path Tracing Explained}
 \lipsum[1]
@@ -92,9 +121,10 @@ has given my life a new meaning.
 \lipsum[1]
 
 \section{History of Path Tracing}
-\lipsum[1]
+omg
 
 \section{Current State of Technology}
+lol
 \lipsum[1]
 
 \chapter{Research}
@@ -116,13 +146,7 @@ has given my life a new meaning.
  
 \listoftables
 
-\begin{thebibliography}{9}
-    \bibitem{lamport94}
-        Leslie Lamport,
-        \emph{\LaTeX: a document preparation system},
-        Addison Wesley, Massachusetts,
-        2nd edition,
-        1994.
-\end{thebibliography}
+\bibliographystyle{unsrt}
+\bibliography{main}
     
 \end{document}
