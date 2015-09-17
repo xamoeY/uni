@@ -92,7 +92,11 @@ for offline, non-interactive rendering of computer-generated movies and visualiz
 This study assumes that the next logical step for the industry will be to adopt
 this method for real time media as well. For the purpose of this thesis, a renderer is considered
 \textit{real time} when it manages to render a frame within \(16.67ms\) since that equals 60 frames per second
-which is the current de-facto standard for most available computer screens.
+which is the current de-facto standard refresh rate for most available computer screens.
+Conversely, a renderer is called \textit{offline} when it is not designed for interactive rendering
+which usually means that it will renderer an image or a batch of images over the course of a few
+days. The differences of real time and offline path tracing renderers will be explained in the next
+chapter.
 
 \section{Motivation}
 Real time path tracing (and physically based rendering in general) offers many
@@ -111,14 +115,18 @@ separated by language. Some notable tricks include screen-space ambient occlusio
 \cite{wiki:lens-flare}, chromatic aberration \cite{wiki:chromatic-aberration},
 depth of field \cite{wiki:depth-of-field} and light mapping \cite{wiki:lightmap}.
 
-\chapter{Path Tracing Explained}
-\lipsum[1]
+\chapter{Real Time Path Tracing Explained}
+This chapter will explain the concepts, mathematics and algorithms behind path tracing, how real
+time path tracing differs from offline path tracing and what the difference in speed means for
+quality. It will also explain how path tracing differs from rasterization and other global
+illumination techniques.
 
 \section{Theoretical Basis}
 \lipsum[1]
 
 \section{Path Tracing in Comparison to Other Techniques}
-\lipsum[1]
+\subsection{Comparison to Rasterization}
+\subsection{Comparison to Other Algorithms}
 
 \section{History of Path Tracing}
 omg
