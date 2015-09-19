@@ -13,10 +13,14 @@
 \usepackage{graphicx}
 \usepackage{listings}
 \usepackage{lmodern}
+\usepackage{float}
+\usepackage{csquotes}
+\usepackage{sidecap}
 \usepackage{setspace}
 \usepackage{url}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
+\graphicspath{ {images/} }
 
 \begin{document}
 
@@ -125,11 +129,71 @@ illumination techniques.
 \lipsum[1]
 
 \section{Path Tracing in Comparison to Other Techniques}
+
 \subsection{Comparison to Rasterization}
+
 \subsection{Comparison to Other Algorithms}
 
 \section{History of Path Tracing}
-omg
+As with so many things in computer science and science in general, the modern idea of physically
+based rendering using path tracing builds upon many important past discoveries and algorithms
+such as ray tracing and ray casting.
+Arthur Appel is generally credited as being the father of
+\emph{ray casting} as he was the first to describe the algorithm in a 1968 paper
+\cite{inproceedings:raycasting}.
+
+Ray casting is an important idea needed for \emph{ray tracing} which was
+first published in a paper in 1980 by Turner Whitted \cite{article:raytracing}.
+
+\begin{figure}[h]
+    \includegraphics{early-raytracing-whitted}
+    \centering
+    \caption{Turner Whitted's original 1980 \cite{article:raytracing} image showing off the usage of ray tracing for
+    reflection, refraction and shadows.}
+    \label{fig:early-raytracing-whitted}
+\end{figure}
+
+Building upon ray tracing, an improved algorithm was published in 1986 by James T. Kajiya which used ray tracing
+combined with a Monte Carlo algorithm in order to create a new algorithm that was called \emph{Monte
+Carlo ray tracing} \cite{inproceedings:pathtracing}. Nowadays, Monte Carlo ray tracing is better
+known as \emph{path tracing}.
+
+It took another decade for path tracing to become the
+physically based rendering approach that it is known for today. In 1996, Eric Lafortune improved
+the algorithm by suggesting the usage of bidirectional path tracing \cite{techreport:pbr} and
+finally the Metropolis light transport was suggested in 1997 by Eric Veach and Leonidas J. Guibas \cite{inproceedings:metropolis} to
+improve performance in complex scenes.
+
+This was the last notable improvement to the algorithm,
+though many micro optimizations have since been published. All of these achievements and
+improvements are generally collapsed into the term \emph{path tracing} since they do not diverge
+from the general algorithm but instead improve upon it.
+
+It took longer still for the industry to become interested in path tracing. The early interest in
+ray tracing was of mostly academical and recreational nature. One of the most notable creations of
+the early days of ray tracing is The Juggler created and published by Eric Graham in 1986
+\cite{site:juggler} on an Amiga 1000. It was a prerendered animation using ray tracing. Eric Graham
+stated that it took the Amiga 1 hour to render each frame \cite{site:juggler}.
+
+\begin{figure}[H]
+    \includegraphics[scale=0.5]{amiga-juggler}
+    \centering
+    \caption{Eric Graham's Juggler}
+    \label{fig:amiga-juggler}
+\end{figure}
+
+While the animation seems very primitive compared to the animations of today, it was exceptional at
+the time. Ernie Wright's statement about The Juggler provides some contemporary context:
+\blockquote[\cite{site:juggler}]{Turner Whitted's paper (1980) is widely regarded as the first modern
+description of raytracing methods in computer graphics. This paper's famous image of balls floating
+above a checkerboard floor took 74 minutes to render on a DEC VAX 11/780 mainframe, a \$400,000
+computer. The Juggler would appear a mere six years later, created and displayed on a \$2000 Amiga.}
+
+The first feature-length computer-animated film,
+\textit{Toy Story}, released in 1995 \cite{wiki:toy-story}, is sometimes miscredited as being the
+first film using a ray tracing-like algorithm. However, it actually used traditional scanline
+rendering. The first feature-length film using ray tracing \textit{Cars} was released much later,
+in 2006 \cite{wiki:cars} \cite{inproceedings:cars} and started a wave of interest in the movie industry.
 
 \section{Current State of Technology}
 lol
