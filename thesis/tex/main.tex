@@ -15,12 +15,12 @@
 \usepackage{listings}
 \usepackage{lmodern}
 \usepackage{float}
-\usepackage{csquotes}
 \usepackage{sidecap}
 \usepackage{acronym}
 \usepackage{setspace}
 \usepackage[customcolors]{hf-tikz}
 \usepackage{url}
+\usepackage{csquotes}
 \usepackage[T1]{fontenc}
 \graphicspath{ {images/} }
 
@@ -234,8 +234,8 @@ contained in \(\Omega\).
         \tikzmarkin[set fill color=green!50!lime!30,set border color=green!40!black]{brdf'}(0.1,-0.15)(-0.1,0.35)
             f_{\text{r}}(\mathbf x,\, \omega_{\text{i}},\ \omega_{\text{o}})
         \tikzmarkend{brdf'}
-        \)\, is the \textbf{\ac{brdf}} which determines how much light is reflected from
-        \(\omega_{\text{i}}\) to \(\omega_{\text{o}}\) at \(\mathbf x\).
+\)\, is the \textbf{\ac{brdf}} which determines how much light is reflected from
+\(\omega_{\text{i}}\) to \(\omega_{\text{o}}\) at \(\mathbf x\).
 
 \noindent
 \(
@@ -251,7 +251,7 @@ been reflected.
         \tikzmarkin[set fill color=magenta!100!lime!30,set border color=pink!40!black]{attenuation'}(0.1,-0.15)(-0.1,0.35)
             (\omega_{\text{i}}\,\cdot\,\mathbf n)
         \tikzmarkend{attenuation'}
-    \)\, is the \textbf{normal attenuation} at \(\mathbf x\). The incoming light \(\omega_{\text{i}}\) is
+\)\, is the \textbf{normal attenuation} at \(\mathbf x\). The incoming light \(\omega_{\text{i}}\) is
 weakened depending on the cosine of the angle between \(\omega_{\text{i}}\) and the surface normal
 \(\mathbf n\).
 
@@ -307,9 +307,9 @@ stated that it took the Amiga 1 hour to render each frame \cite{site:juggler}.
     \caption{Eric Graham's Juggler}
     \label{fig:amiga-juggler}
 \end{figure}
-
 While the animation seems very primitive compared to the animations of today, it was exceptional at
 the time. Ernie Wright's statement about The Juggler provides some contemporary context:
+
 \blockquote[\cite{site:juggler}]{Turner Whitted's paper (1980) is widely regarded as the first modern
 description of ray tracing methods in computer graphics. This paper's famous image of balls floating
 above a checkerboard floor took 74 minutes to render on a DEC VAX 11/780 mainframe, a \$400,000
@@ -328,9 +328,27 @@ example of this is the WebGL Path Tracing by Evan Wallace made in 2010
 \cite{site:webgl-path-tracing} which runs in most modern web browsers, making path tracing very
 accessible.
 
+\begin{figure}[H]
+    \includegraphics[scale=0.4]{webgl-pathtracer}
+    \centering
+    \caption{WebGL Path Tracer by Evan Wallace}
+    \label{fig:webgl-pathtracer}
+\end{figure}
+
+Another example is the demo \textit{5 faces} by Fairlight from 2013
+\cite{wiki:5faces-fairlight} which
+uses a real time ray tracer running on the \acs{gpu} to render a complex scene at 30 \acs{fps}.
+
+\begin{figure}[H]
+    \includegraphics[scale=0.5]{5faces}
+    \centering
+    \caption{5 faces by Fairlight}
+    \label{fig:5faces}
+\end{figure}
+
 In the past, some critics have offered critical insights about why it might not be a viable
 alternative to rasterization on consumer hardware in the short
-term.\cite{site:raytracing-vs-rasterization} \cite{site:codinghorror-raytracing}
+term \cite{site:raytracing-vs-rasterization} \cite{site:codinghorror-raytracing}.
 
 \section{Current State of Technology}
 lol
