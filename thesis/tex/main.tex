@@ -7,6 +7,7 @@
 ]{scrreprt}
 
 \usepackage{lipsum}
+\usepackage[utf8]{inputenc}
 \usepackage[ngerman,english]{babel}
 \usepackage{amsmath}
 \usepackage{amsthm}
@@ -18,9 +19,9 @@
 \usepackage{sidecap}
 \usepackage{acronym}
 \usepackage{setspace}
+\usepackage[customcolors]{hf-tikz}
 \usepackage{url}
 \usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
 \graphicspath{ {images/} }
 
 \begin{document}
@@ -30,19 +31,19 @@
 \chapter*{Abstract}
 \onehalfspace
 This study aims to investigate the viability of a physically-based technique called
-\textbf{path tracing} in lieu of or in corporation with classical techniques in interactive media such as video
-games and visual effects tools.
+\textbf{path tracing} in lieu of or in corporation with classical techniques in interactive media
+such as video games and visual effects tools.
 
-Real time path tracing has been prohibitively expensive in regards to computational
-complexity. However, modern \acs{gpu}s and even \acs{cpu}s have finally gotten fast enough for real time path
+Real time path tracing has been prohibitively expensive in regards to computational complexity.
+However, modern \acs{gpu}s and even \acs{cpu}s have finally gotten fast enough for real time path
 tracing to become a viable alternative to traditional real time approaches to rendering.  Based on
 that assumption, this thesis presents the idea, algorithm and complexity behind path tracing in the
 first part and extrapolates feasibility and suitability of real time path tracing on consumer
 hardware according to the current state of technology and trends in the second part.
 
 As part of the research, the author has implemented a path tracing 3D engine in modern C++ in order
-to empirically test the assumptions made in this thesis. The study found path tracing
-to be a viable rendering technique for average commodity hardware in approximately 4 years.
+to empirically test the assumptions made in this thesis. The study found path tracing to be a
+viable rendering technique for average commodity hardware in approximately 4 years.
 \singlespace
 
 \chapter*{Acknowledgments}
@@ -121,7 +122,7 @@ This study assumes that the next logical step for the industry will be to adopt 
 real time media as well. For the purpose of this thesis, a renderer is considered
 \textit{real time} when it manages to render a frame within \(16.67ms\) since that equals 60
 \ac{fps} which is
-the current de-facto standard refresh rate for most available computer screens. Conversely, a
+the current de facto standard refresh rate for most available computer screens. Conversely, a
 renderer is called \textit{offline} when it is not designed for interactive rendering which usually
 means that it will renderer an image or a batch of images over the course of a few days. The
 differences of real time and offline path tracing renderers will be explained in the next chapter.
@@ -144,14 +145,115 @@ separated by language. Some notable tricks include \ac{ssao}
 depth of field \cite{wiki:depth-of-field} and light mapping \cite{wiki:lightmap}.
 
 \chapter{Real Time Path Tracing Explained}
-This chapter will explain the concepts, mathematics and algorithms behind path tracing, how real
-time path tracing differs from offline path tracing and what the difference in speed means for
-quality. It will also explain how path tracing differs from rasterization and other global
-illumination techniques.
+This chapter will explain the concepts, mathematics, physics and algorithms behind path tracing,
+how real time path tracing differs from offline path tracing and the trade-offs made to achieve
+acceptable performance. It will also explain how path tracing differs from rasterization and other
+global illumination techniques.
 
 \section{Theoretical Basis}
-This explanation will
-\lipsum[1]
+The fundamental problem solved by path tracing is the \emph{rendering equation} originally
+described by James Kajiya \cite{inproceedings:pathtracing}. This thesis uses the form from
+Wikipedia \cite{wiki:rendering-equation} since the author considers it easier to read:
+
+\[
+        L_{\text{o}}(\mathbf x,\, \omega_{\text{o}},\, \lambda,\, t) \,=
+        \, L_{\text{e}}(\mathbf x,\, \omega_{\text{o}},\, \lambda,\, t) \ +
+        \, \int_\Omega f_{\text{r}}(\mathbf x,\, \omega_{\text{i}},\ \omega_{\text{o}},\, \lambda,\, t)
+        \, L_{\text{i}}(\mathbf x,\, \omega_{\text{i}},\, \lambda,\, t)\,
+        (\omega_{\text{i}}\,\cdot\,\mathbf n)\, \operatorname d \omega_{\text{i}}
+\]
+
+For our purposes, this can be simplified by removing the time and wavelength components which we
+will not make use of:
+
+\[
+        L_{\text{o}}(\mathbf x,\, \omega_{\text{o}}) \,=
+        \, L_{\text{e}}(\mathbf x,\, \omega_{\text{o}}) \ +
+        \, \int_\Omega f_{\text{r}}(\mathbf x,\, \omega_{\text{i}},\ \omega_{\text{o}})
+        \, L_{\text{i}}(\mathbf x,\, \omega_{\text{i}})\,
+        (\omega_{\text{i}}\,\cdot\,\mathbf n)\, \operatorname d \omega_{\text{i}}
+\]
+
+This equation can be broken down into its individual parts to make it easier to explain and
+understand:
+
+\[
+        \tikzmarkin[set fill color=red!50!brown!30,set border color=red!40!black]{outgoing}
+            L_{\text{o}}(\mathbf x,\, \omega_{\text{o}})
+        \tikzmarkend{outgoing}
+        \, = \,
+        \tikzmarkin[set fill color=cyan!70!lime!30,set border color=cyan!40!black]{emitted}
+        L_{\text{e}}(\mathbf x,\, \omega_{\text{o}})
+        \tikzmarkend{emitted}
+        \ + \,
+        \tikzmarkin[set fill color=yellow!50!lime!30,set border color=yellow!40!black]{integral}(0.1,-0.4)(-0.1,0.6)
+            \int_\Omega
+        \tikzmarkin[set fill color=green!50!lime!30,set border color=green!40!black]{brdf}(0.0,-0.2)(-0.0,0.4)
+            f_{\text{r}}(\mathbf x,\, \omega_{\text{i}},\ \omega_{\text{o}})
+        \tikzmarkend{brdf}
+        \,
+        \tikzmarkin[set fill color=blue!50!lime!30,set border color=blue!40!black]{incoming}(0.0,-0.2)(-0.0,0.4)
+            L_{\text{i}}(\mathbf x,\, \omega_{\text{i}})
+        \tikzmarkend{incoming}
+        \,
+        \tikzmarkin[set fill color=magenta!100!lime!30,set border color=pink!40!black]{attenuation}(0.0,-0.2)(-0.0,0.4)
+            (\omega_{\text{i}}\,\cdot\,\mathbf n)
+        \tikzmarkend{attenuation}
+        \,
+            \operatorname d \omega_{\text{i}}
+        \tikzmarkend{integral}
+\]
+
+\noindent
+\(
+        \tikzmarkin[set fill color=red!50!brown!30,set border color=red!40!black]{outgoing'}(0.1,-0.15)(-0.1,0.35)
+        L_{\text{o}}(\mathbf x,\, \omega_{\text{o}})
+        \tikzmarkend{outgoing'}
+\)\, is the \textbf{outgoing light} with \(\mathbf x\) being a point on a surface from which the light is
+reflected from into direction \(\omega_{\text{o}}\).
+
+\noindent
+\(
+        \tikzmarkin[set fill color=cyan!70!lime!30,set border color=cyan!40!black]{emitted'}(0.1,-0.15)(-0.1,0.35)
+        L_{\text{e}}(\mathbf x,\, \omega_{\text{o}})
+        \tikzmarkend{emitted'}
+\)\, is the \textbf{emitted light} from point \(\mathbf x\). Usually surfaces don't emit light themselves unless
+they are area lights.
+
+\noindent
+\(
+        \tikzmarkin[set fill color=yellow!50!lime!30,set border color=yellow!40!black]{integral'}(0.1,-0.2)(-0.1,0.35)
+        \int_\Omega \, \ldots \, \operatorname d \omega_{\text{i}}
+        \tikzmarkend{integral'}
+\)\, is the integral over \(\Omega\) which is the hemisphere at \(\mathbf x\) (and thusly
+centered around \(\mathbf n\)). All possible values for \(\omega_{\text{i}}\) are therefore
+contained in \(\Omega\).
+
+\noindent
+\(
+        \tikzmarkin[set fill color=green!50!lime!30,set border color=green!40!black]{brdf'}(0.1,-0.15)(-0.1,0.35)
+            f_{\text{r}}(\mathbf x,\, \omega_{\text{i}},\ \omega_{\text{o}})
+        \tikzmarkend{brdf'}
+        \)\, is the \textbf{\ac{brdf}} which determines how much light is reflected from
+        \(\omega_{\text{i}}\) to \(\omega_{\text{o}}\) at \(\mathbf x\).
+
+\noindent
+\(
+        \tikzmarkin[set fill color=blue!50!lime!30,set border color=blue!40!black]{incoming'}(0.1,-0.15)(-0.1,0.35)
+            L_{\text{i}}(\mathbf x,\, \omega_{\text{i}})
+        \tikzmarkend{incoming'}
+\)\, is the \textbf{incoming light} at \(\mathbf x\) from \(\omega_{\text{o}}\). It is not necessarily
+\emph{direct light}. The rendering equation also considers \emph{indirect light} which is light that has already
+been reflected.
+
+\noindent
+\(
+        \tikzmarkin[set fill color=magenta!100!lime!30,set border color=pink!40!black]{attenuation'}(0.1,-0.15)(-0.1,0.35)
+            (\omega_{\text{i}}\,\cdot\,\mathbf n)
+        \tikzmarkend{attenuation'}
+    \)\, is the \textbf{normal attenuation} at \(\mathbf x\). The incoming light \(\omega_{\text{i}}\) is
+weakened depending on the cosine of the angle between \(\omega_{\text{i}}\) and the surface normal
+\(\mathbf n\).
 
 \section{Path Tracing in Comparison to Other Techniques}
 
@@ -177,7 +279,6 @@ first published in a paper in 1980 by Turner Whitted \cite{article:raytracing}.
     reflection, refraction and shadows.}
     \label{fig:early-raytracing-whitted}
 \end{figure}
-
 Building upon ray tracing, an improved algorithm was published in 1986 by James T. Kajiya which used ray tracing
 combined with a Monte Carlo algorithm in order to create a new algorithm that was called \emph{Monte
 Carlo ray tracing} \cite{inproceedings:pathtracing}. Nowadays, Monte Carlo ray tracing is better
@@ -219,6 +320,17 @@ The first feature-length computer-animated film,
 first film using a ray tracing-like algorithm. However, it actually used traditional scanline
 rendering. The first feature-length film using ray tracing, \textit{Cars}, was released much later,
 in 2006 \cite{wiki:cars} \cite{inproceedings:cars} and started a wave of interest in the movie industry.
+
+The first example of \emph{real time} path tracing was likely produced by the demo scene
+\cite{wiki:demoscene} which was quick to adopt it \cite{site:realtime-radiosity-demos}
+for the purpose of producing complex graphics rendered and generated on the fly. One notable
+example of this is the WebGL Path Tracing by Evan Wallace made in 2010
+\cite{site:webgl-path-tracing} which runs in most modern web browsers, making path tracing very
+accessible.
+
+In the past, some critics have offered critical insights about why it might not be a viable
+alternative to rasterization on consumer hardware in the short
+term.\cite{site:raytracing-vs-rasterization} \cite{site:codinghorror-raytracing}
 
 \section{Current State of Technology}
 lol
