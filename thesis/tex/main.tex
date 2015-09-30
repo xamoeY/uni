@@ -150,7 +150,37 @@ how real time path tracing differs from offline path tracing and the trade-offs 
 acceptable performance. It will also explain how path tracing differs from rasterization and other
 global illumination techniques.
 
+\section{Physically Based Approach}
+In our physical world, we see pictures because our eyes collect photons emitted by light
+sources which then bounce around various surfaces until they eventually hit our eyes'
+photoreceptor cells. On every bounce, a bit of light is absorbed which is why light loses intensity
+when it bounces. Some surfaces absorb a particular band of wavelengths of the light when it bounces
+which we perceive as a change in the light's color. Cameras work exactly like this as far as
+collection of photons is concerned.
+
+This physical approach would be extremely wasteful and
+computationally complex to simulate, however, since most photons never reach an observer. Consider,
+for instance, that only an extremely small percentage of all the photons sent by the Sun actually
+reach Earth and an even smaller percentage of those are ever observed (although photons
+don't have to be observed to have a physical effect, of course). Since we only care for photons that
+are relevant to the image that we are trying to render, it makes more sense to use
+\emph{backwards ray tracing} in which rays (which simulate streams of photons) are shot from the
+observer into the scene for every sensor. It is called \textit{backwards} because the rays go
+the reverse direction compared to their physical counterparts.
+
+This is efficient since we usually only care about a
+single observer (the scene camera) for which we will trace every single ray that it can possibly
+perceive. In computer graphics terms, we will trace a ray for every pixel of the camera (and for
+now we will assume that the viewport is exactly the same resolution as the camera simplicity's
+sake). For every ray, we check for intersections with geometry and then either bounce a few more
+times or shoot directly towards a light. We might do this multiple times per pixel to improve image
+quality. This is called \emph{sampling}. The more iterations we spend on sampling, the better the
+quality of our image becomes. This is called \emph{converging}.
+There are a few approaches that improve on this such as bidirectional path tracing
+\cite{techreport:pbr} and the \ac{mlt} \cite{inproceedings:metropolis}.
+
 \section{Theoretical Basis}
+\subsection{The Rendering Equation}
 The fundamental problem solved by path tracing is the \emph{rendering equation} originally
 described by James Kajiya \cite{inproceedings:pathtracing}. This thesis uses the form from
 Wikipedia \cite{wiki:rendering-equation} since the author considers it easier to read:
@@ -254,8 +284,56 @@ been reflected.
 \)\, is the \textbf{normal attenuation} at \(\mathbf x\). The incoming light \(\omega_{\text{i}}\) is
 weakened depending on the cosine of the angle between \(\omega_{\text{i}}\) and the surface normal
 \(\mathbf n\).
+\\
 
-\section{Path Tracing in Comparison to Other Techniques}
+Path tracing offers a numerical solution to the integral found in this equation. For every pixel,
+every bounce and every sample of the camera, the rendering equation is solved. It becomes apparent
+why this is an expensive algorithm to run. For practical reasons, not every possible value for
+\(\Omega\) is sampled since this would take a vast amount of time to calculate at physical photon
+density. Instead, only a few possible values for \(\Omega\) are calculated each bounce. Depending
+on the exact algorithm used, usually only a low number of samples (approximately 20) is required for the
+image to converge to an acceptable level of quality.
+
+\subsection{Algorithm}
+Python-like pseudocode:
+\begin{lstlisting}[language=Python]
+max_depth = 5
+
+def trace_ray(ray, depth):
+    if depth >= max_depth:
+        # Return black since we haven't hit anything but we're
+        # at our limit for bounces
+        return RGB(0, 0, 0) 
+
+    collision = ray.check_collision()
+    if not collision:
+        # If we haven't hit anything, we can't bounce again so
+        # we return black
+        return RGB(0, 0, 0)
+
+    material = collision.material;
+    emittance = material.emittance # kill this
+
+    # shoot a ray into random direction and recurse
+    next_ray = Ray()
+    next_ray.origin = collision.position
+    next_ray.direction = random_vector_on_hemisphere(collision.normal)
+
+    reflectance_theta = dot(next_ray.direction, collision.normal)
+    brdf = 2 * material.reflectance * reflectance_theta
+    reflected = trace_ray(next_ray, depth + 1)
+
+    return emittance + (brdf * reflecte)
+
+for pixel in pixels:
+    trace_path(pixel)
+\end{lstlisting}
+
+
+\section{Properties of Path Tracing}
+Advantages and Disadvantages blah
+
+\subsection{Comparison to Traditional Ray Tracing}
 
 \subsection{Comparison to Rasterization}
 
@@ -287,7 +365,7 @@ known as \emph{path tracing}.
 It took another decade for path tracing to become the
 physically based rendering approach that it is known for today. In 1996, Eric Lafortune improved
 the algorithm by suggesting the usage of bidirectional path tracing \cite{techreport:pbr} and
-finally the Metropolis light transport was suggested in 1997 by Eric Veach and Leonidas J. Guibas \cite{inproceedings:metropolis} to
+finally the \ac{mlt} was suggested in 1997 by Eric Veach and Leonidas J. Guibas \cite{inproceedings:metropolis} to
 improve performance in complex scenes.
 
 This was the last notable improvement to the algorithm,
