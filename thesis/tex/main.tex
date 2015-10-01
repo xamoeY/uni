@@ -16,6 +16,7 @@
 \usepackage{lmodern}
 \usepackage{float}
 \usepackage{sidecap}
+\usepackage{todonotes}
 \usepackage{acronym}
 \usepackage{setspace}
 \usepackage[customcolors]{hf-tikz}
@@ -148,7 +149,7 @@ depth of field \cite{wiki:depth-of-field} and light mapping \cite{wiki:lightmap}
 This chapter will explain the concepts, mathematics, physics and algorithms behind path tracing,
 how real time path tracing differs from offline path tracing and the trade-offs made to achieve
 acceptable performance. It will also explain how path tracing differs from rasterization and other
-global illumination techniques.
+\ac{gi} techniques.
 
 \section{Physically Based Approach}
 In our physical world, we see pictures because our eyes collect photons emitted by light
@@ -295,7 +296,7 @@ on the exact algorithm used, usually only a low number of samples (approximately
 image to converge to an acceptable level of quality.
 
 \subsection{Algorithm}
-Python-like pseudocode:
+The algorithm for path tracing and be Python-like pseudocode:
 \begin{lstlisting}[language=Python]
 max_depth = 5
 
@@ -326,18 +327,84 @@ def trace_ray(ray, depth):
     return emittance + (brdf * reflecte)
 
 for pixel in pixels:
-    trace_path(pixel)
+    trace_path(ray_from_pixel(pixel), 0)
 \end{lstlisting}
 
 
 \section{Properties of Path Tracing}
 Advantages and Disadvantages blah
 
+Slow
+Sharp caustics hard
+Subsurface scattering
+Light spectrum stuff: chromatic aberration, fluorescence, iridescence
+Accurate global lighting
+Good for dynamic scenes
+
+
+\missingfigure{Figure explaining how path tracers work}
+
 \subsection{Comparison to Traditional Ray Tracing}
+\missingfigure{Figure explaining how ray tracers work}
 
 \subsection{Comparison to Rasterization}
 
-\subsection{Comparison to Other Algorithms}
+\subsection{Comparison to Other Global Illumination Algorithms}
+This section compares some of the more popular \ac{gi} algorithms beside ray tracing and
+path tracing. In general, \ac{gi} is considered to be a group of algorithms that calculate
+direct light as well as indirect light for computer graphics scenes. However, not all algorithms
+that fulfill this purpose are in fact physically accurate. We will therefore take a look at how
+some of these algorithms compare to path tracing.
+
+The algorithms that are compared to path tracing in this section are: \emph{photon mapping},
+\emph{radiosity} and
+\emph{ambient occlusion}. These were chosen due to their widespread use and their varied approaches.
+Other \ac{gi} algorithms include: Lightcuts (and its variants), Point Based Global Illumination
+and Spherical harmonic lighting.
+
+To note: This thesis considers path tracing at the current state of research which means that path
+tracing, bidirectional path tracing and the \ac{mlt} are shortened to just \emph{path tracing} and
+will therefore not be individually compared.
+
+\subsubsection{Photon Mapping}
+Photon mapping is a two-step process that was developed in 1996 by Henrik Wann Jensen \cite{inproceedings:photon-mapping} as
+an approximate way to simulate charged particles (\emph{photons}) traversing the scene.
+
+In the first step, every photon carries a \emph{charge} and is traced through the scene. On every
+collision with scene geometry, it is stored to the \emph{photon map} at that location. Afterwards,
+the photon is either reflected, refracted, scattered or absorbed depending on the material and
+loses a bit of its charge. The photon map serves as a cache for the second step in which a ray
+tracing-like process is used to calculate the radiance of the resulting image.
+
+Compared to path tracing, photon mapping has a few advantages and a few disadvantages. In
+particular, photon mapping can simulate subsurface scattering and volume caustics which path
+tracing can't accurately calculate. On the other hand, photon mapping is unsuitable for real time
+applications with dynamic scenes since the photon map can only be used as long as the scene
+geometry or light position doesn't change. In the case the scene geometry changes, the cache is invalidated and a new
+photon map has to be calculated which is a slow process.
+
+\subsubsection{Radiosity}
+Made originally for simulating heat transfer in 1984 by Goral et al.\cite{article:radiosity},
+radiosity is one of the oldest algorithms for calculating \ac{gi}. It outputs a light value for
+every patch (a smaller part of a surface) on a cache or map. It is a physically accurate way of
+simulating light transfer but cannot simulate volume scattering, fog, caustics, transparent
+objects or mirrors. These limitations make it unsuitable to use in complex modern scenes.
+Additionally, the cache is invalidated whenever the scene changes and therefore it is also
+usually not usable for dynamic scenes.
+
+\subsubsection{Ambient Occlusion}
+The idea for \ac{ao} was first presented by Gavin Miller in 1994
+\cite{inproceedings:ambient-occlusion}. It is meant as an algorithm to calculate realistic
+occlusion of every point in a scene and cannot generate an accurate image on its own. It is
+usually used with a classic rasterization renderer whose output image is multiplied with the result
+of the \ac{ao} and its resulting image is multiplied. The output of this algorithm is sometimes
+called the \emph{ambient occlusion map} which serves as a cache. As such, rendering is extremely
+fast once the cache has been calculated. However, this cache is invalidated once the scene changes
+and is the algorithm is therefore unsuitable for dynamic scenes.
+
+For real time applications, a variant of \ac{ao} called \acf{ssao} is usually used. While \ac{ssao}
+is inaccurate from a physical point of view, it results in some very fast and acceptable
+approximations that are suitable for real time applications.
 
 \section{History of Path Tracing}
 As with so many things in computer science and science in general, the modern idea of physically
