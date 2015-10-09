@@ -296,7 +296,8 @@ on the exact algorithm used, usually only a low number of samples (approximately
 image to converge to an acceptable level of quality.
 
 \subsection{Algorithm}
-The algorithm for path tracing and be Python-like pseudocode:
+The general, naive algorithm for path tracing in Python-like pseudocode can be written as follows:
+
 \begin{lstlisting}[language=Python]
 max_depth = 5
 
@@ -326,14 +327,31 @@ def trace_ray(ray, depth):
 
     return emittance + (brdf * reflecte)
 
-for pixel in pixels:
-    trace_path(ray_from_pixel(pixel), 0)
+for sample in range(samples):
+    for pixel in pixels:
+        trace_path(ray_from_pixel(pixel), 0)
 \end{lstlisting}
 
+The algorithmic complexity of this algorithm is not immediately obvious because of its pseudocode
+character and a few methods whose implementations are as of yet unknown. It is known, however, that
+the output image \(O\) will be a 2D matrix with dimensions given by width \(w\) and height \(h\).
+Additionally, for every pixel, multiple samples \(S\) are required in order for the algorithm to
+converge to an image of acceptable quality. Every ray has a certain maximum depth \(D\). So far,
+this yields the following formula:
+
+\[ O_w \times O_h \times S \times D \]
+
+This assumes, however, that the scene lookup time for every ray is \(1\) which is only
+the case for scenes with a single triangle in them.
+
+With a suitable spatial data structure, the scene lookup time per ray is in \(O(\log n)\).
 
 \section{Properties of Path Tracing}
-Advantages and Disadvantages blah
+This section summarises the general properties of path tracing.
 
+\begin{enumerate}
+    \item Computationally expensive. 
+\end{enumerate}
 Slow
 Sharp caustics hard
 Subsurface scattering
@@ -497,14 +515,18 @@ term \cite{site:raytracing-vs-rasterization} \cite{site:codinghorror-raytracing}
 
 \section{Current State of Technology}
 Recently the interested in real time path tracing seems to be at peak levels. The most notable
-example of this is Jacco Bikker's and Jeroen van Schijndel's Brigade Renderer \cite{article:brigade}
+example of this is Jacco Bikker's and Jeroen van Schijndel's \emph{Brigade Renderer} \cite{article:brigade}
 \cite{site:brigade}. This renderer is aimed at game developers and is meant to run on commodity
 hardware in real time. Its company, OTOY, is also developing a cloud-based rendering solution
-called OctaneRender \cite{site:octane} for animation professionals.
+called Octane Render \cite{site:octane} for animation professionals.
 
 Microsoft's DirectX 12 \cite{site:dx12-raytracing} is receiving \emph{Hybrid Ray-Traced Shadows}, a
 technology that combines real time ray tracing with rasterization to create fast high quality
 shadows.
+
+A video game using actual real time path tracing and physics called \emph{Sfera} was created by
+David Bucciarelli \cite{site:sfera} in 2011. It uses OpenCL for calculating the paths and OpenGL to
+render them to the screen.
 
 It's important to keep in mind that while the real time graphics industry has mostly been driven by
 video games, the most important hardware currently exist in game consoles which generally evolve at
