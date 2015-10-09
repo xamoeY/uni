@@ -496,8 +496,22 @@ alternative to rasterization on consumer hardware in the short
 term \cite{site:raytracing-vs-rasterization} \cite{site:codinghorror-raytracing}.
 
 \section{Current State of Technology}
-lol
-\lipsum[1]
+Recently the interested in real time path tracing seems to be at peak levels. The most notable
+example of this is Jacco Bikker's and Jeroen van Schijndel's Brigade Renderer \cite{article:brigade}
+\cite{site:brigade}. This renderer is aimed at game developers and is meant to run on commodity
+hardware in real time. Its company, OTOY, is also developing a cloud-based rendering solution
+called OctaneRender \cite{site:octane} for animation professionals.
+
+Microsoft's DirectX 12 \cite{site:dx12-raytracing} is receiving \emph{Hybrid Ray-Traced Shadows}, a
+technology that combines real time ray tracing with rasterization to create fast high quality
+shadows.
+
+It's important to keep in mind that while the real time graphics industry has mostly been driven by
+video games, the most important hardware currently exist in game consoles which generally evolve at
+a much slower pace than desktop computers in terms of hardware power and their graphics hardware
+especially is usually non-upgradeable. This means that it wouldn't be economically viable to
+develop a real time path tracing renderer that only ran on current generation desktop computers
+because most consumers would not be able to benefit from the technology.
 
 \chapter{Research}
 \lipsum[1]
