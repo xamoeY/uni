@@ -17,6 +17,7 @@
 \usepackage{float}
 \usepackage{sidecap}
 \usepackage{todonotes}
+\usepackage{siunitx}
 \usepackage{acronym}
 \usepackage{setspace}
 \usepackage[customcolors]{hf-tikz}
@@ -335,16 +336,31 @@ for sample in range(samples):
 The algorithmic complexity of this algorithm is not immediately obvious because of its pseudocode
 character and a few methods whose implementations are as of yet unknown. It is known, however, that
 the output image \(O\) will be a 2D matrix with dimensions given by width \(w\) and height \(h\).
-Additionally, for every pixel, multiple samples \(S\) are required in order for the algorithm to
-converge to an image of acceptable quality. Every ray has a certain maximum depth \(D\). So far,
-this yields the following formula:
+Additionally, for every pixel, multiple samples \(s\) are required in order for the algorithm to
+converge to an image of acceptable quality. Every ray has a certain maximum depth \(d\).
 
-\[ O_w \times O_h \times S \times D \]
+So far, this lets us determine the total worst number of rays required per image. In the worst
+case, no ray exits early. The resulting formula is:
 
-This assumes, however, that the scene lookup time for every ray is \(1\) which is only
-the case for scenes with a single triangle in them.
+\[ O_w \times O_h \times s \times d \]
 
-With a suitable spatial data structure, the scene lookup time per ray is in \(O(\log n)\).
+For example, an image with a resolution of \(1920 \times 1080\) at 30 samples and a ray depth of 5
+would have \[1920 \times 1080 \times 30 \times 5 = \num{311040000}\, \text{rays}\]
+
+This does still not yield the algorithmic complexity, however, since there is no input size \(n\)
+in it. We will assume the lookup time for every ray to be \(O(\log n)\) in a suitable data
+structure. Hence, the formula becomes:
+
+\[ O_w \times O_h \times s \times d \times \log n \]
+
+The result of this formula yields the number of total lookups per image.
+Continuing the example from above given a scene with 2 million triangles thus results in
+
+\[1920 \times 1080 \times 30 \times 5 \times \log \num{2000000} = \num{1959872370}\, \text{lookups}\]
+
+
+\subsection{Acceleration Data Structure}
+
 
 \section{Properties of Path Tracing}
 This section summarises the general properties of path tracing.
@@ -510,8 +526,10 @@ uses a real time ray tracer running on the \acs{gpu} to render a complex scene a
 \end{figure}
 
 In the past, some critics have offered critical insights about why it might not be a viable
-alternative to rasterization on consumer hardware in the short
-term \cite{site:raytracing-vs-rasterization} \cite{site:codinghorror-raytracing}.
+alternative to rasterization on consumer hardware in the short term
+\cite{site:raytracing-vs-rasterization} \cite{site:codinghorror-raytracing}. Even John Carmack of
+id Software was sceptical of real time ray tracing in games in 2012 in a comment on Ars Technica
+\cite{site:carmack-scepticism}.
 
 \section{Current State of Technology}
 Recently the interested in real time path tracing seems to be at peak levels. The most notable
