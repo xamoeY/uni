@@ -344,8 +344,12 @@ case, no ray exits early. The resulting formula is:
 
 \[ O_w \times O_h \times s \times d \]
 
-For example, an image with a resolution of \(1920 \times 1080\) at 30 samples and a ray depth of 5
-would have \[1920 \times 1080 \times 30 \times 5 = \num{311040000}\, \text{rays}\]
+Running this for a single pixel with 30 samples and a ray depth of 5 would require
+\[30 \times 5 = \num{150}\]
+rays per pixel.
+
+For example, an image with a resolution of \(1920 \times 1080\)
+would have \[1920 \times 1080 \times 30 \times 5 \approx \num{300000000}\] rays per frame.
 
 This does still not yield the algorithmic complexity, however, since there is no input size \(n\)
 in it. We will assume the lookup time for every ray to be \(O(\log n)\) in a suitable data
@@ -355,33 +359,74 @@ structure. Hence, the formula becomes:
 
 The result of this formula yields the number of total lookups per image.
 Continuing the example from above given a scene with 2 million triangles thus results in
+\[1920 \times 1080 \times 30 \times 5 \times \log \num{2000000} \approx \num{2000000000}\]
+lookups per frame.
 
-\[1920 \times 1080 \times 30 \times 5 \times \log \num{2000000} = \num{1959872370}\, \text{lookups}\]
+In the context of this thesis, a goal was set to reach 60 \ac{fps} which means that
+\[1920 \times 1080 \times 30 \times 5 \times \log \num{2000000} \times 60 \approx \num{120000000000}\]
+lookups per second.
 
+Thankfully, the whole formula can be reduced to just the lookup time \(O(\log n)\) because the other
+formula elements are covariants.
 
 \subsection{Acceleration Data Structure}
-
+The data structure used for the underlying scene is the principal factor for the performance of the
+path tracing algorithm.
 
 \section{Properties of Path Tracing}
 This section summarises the general properties of path tracing.
 
-\begin{enumerate}
-    \item Computationally expensive. 
-\end{enumerate}
-Slow
-Sharp caustics hard
-Subsurface scattering
-Light spectrum stuff: chromatic aberration, fluorescence, iridescence
-Accurate global lighting
-Good for dynamic scenes
+\subsection{Computational Cost}
+Even though path tracing has a high initial cost, the lookup time for ray collisions is in
+\(O(\log n)\) which means that as scenes increase in complexity, the time spent on doing the
+lookups is fairly small. The initial cost of path tracing heavily depends upon screen resolution
+and desired quality. Due to the high initial cost, path tracing is generally considered slow and
+it made real time path tracing infeasible up until recent years.
 
+\subsection{Dynamic Scenes}
+Path tracing is well suited for dynamic scenes since it doesn't depend on pre-computations. This
+makes it viable for use in interactive applications. The scene data structure must allow for
+dynamic scenes in this case, though.
+
+\subsection{Global Illumination}
+Commonly \acf{gi} means that every object's illumination affects every other object and that the
+renderer doesn't make a distinction between reflected light and light sources.
+
+\subsection{Problems}
+Due to the random way a ray is reflected from surfaces, it takes a long time for path tracing to
+produce sharp caustics as most rays don't "know" to hit objects with caustic properties. This makes
+it especially difficult for real time path tracing to produce sharp caustics. This can be
+alleviated by tweaking the algorithm or by using an additional photon map.
+
+Another problem is that subsurface scattering and can't be addressed by classic Monte Carlo path
+tracers. This can be addressed by using \emph{volumetric path tracing}.
+\cite{wiki:volumetric-path-tracing} \cite{incollection:volumetric-path-tracing}
+
+Since path tracers do not simulate light wavelengths, natural phenomena caused by chromatic
+aberration, fluorescence and iridescence can not be realistically simulated. A fairly new
+improvement to path tracing called \emph{spectral path tracing} with realistic lenses can produce
+physically accurate images in those cases. \cite{inproceedings:realistic-lenses} \cite{site:lambda}
+\cite{site:luculentus} \cite{site:robigo-luculenta}
 
 \missingfigure{Figure explaining how path tracers work}
 
 \subsection{Comparison to Traditional Ray Tracing}
+Ray tracing is the fundamental algorithm behind path tracing. The only difference is that when a
+ray hits an object, it doesn't keep bouncing but instead fires off one ray to every light source
+directly. This subtle difference means that ray tracing can only calculate direct lighting as
+opposed to \ac{gi}.
 \missingfigure{Figure explaining how ray tracers work}
 
 \subsection{Comparison to Rasterization}
+Rasterization is widely implemented in the industry and most interactive 3D applications use it to
+render their scene. Its fundamental algorithm has a complexity of \(O(n)\) and is therefore
+theoretically slower than path tracing. However, a wide array of algorithmic improvements such as
+back-face culling exist and additionally its initial cost is very low.
+
+Unlike path tracing, it does not automatically simulate a wide range range of physical phenomena.
+Physical effects such as shadows, global illumination and caustics have to be calculated separately
+in other algorithms and then be composited on top of the rasterized scene. This makes rasterization
+complicated to use for when many physical effects are desired.
 
 \subsection{Comparison to Other Global Illumination Algorithms}
 This section compares some of the more popular \ac{gi} algorithms beside ray tracing and
