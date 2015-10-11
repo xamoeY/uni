@@ -1,0 +1,3 @@
+[submodule "thesis/trac0r"]
+	path = thesis/trac0r
+	url = git@github.com:svenstaro/trac0r.git
