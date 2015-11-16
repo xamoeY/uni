@@ -129,6 +129,10 @@ renderer is called \textit{offline} when it is not designed for interactive rend
 means that it will renderer an image or a batch of images over the course of a few days. The
 differences of real time and offline path tracing renderers will be explained in the next chapter.
 
+The focus of this research is, first and foremost, interactivity. Therefore, whenever a trade-off between
+interactivity and image quality is considered, we will always prefer rendering speed if the target
+of 60 \ac{fps} would otherwise not be reached anymore.
+
 \section{Motivation}
 Real time path tracing (and physically based rendering in general) offers many
 benefits over traditional real time rendering methods such as better visuals
