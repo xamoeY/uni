@@ -403,10 +403,11 @@ Commonly \acf{gi} means that every object's illumination affects every other obj
 renderer doesn't make a distinction between reflected light and light sources.
 
 \subsection{Problems}
-Due to the random way a ray is reflected from surfaces, it takes a long time for path tracing to
-produce sharp caustics as most rays don't "know" to hit objects with caustic properties. This makes
+Due to the unbiased and random way rays are reflected from surfaces, it takes a long time for
+classic path tracing to
+produce sharp caustics as rays tend to very rarely hit objects with caustic properties. This makes
 it especially difficult for real time path tracing to produce sharp caustics. This can be
-alleviated by tweaking the algorithm or by using an additional photon map.
+alleviated by using bidirectional path tracing or by using an additional photon map.
 
 Another problem is that subsurface scattering and can't be addressed by classic Monte Carlo path
 tracers. This can be addressed by using \emph{volumetric path tracing}.
@@ -418,14 +419,11 @@ improvement to path tracing called \emph{spectral path tracing} with realistic l
 physically accurate images in those cases. \cite{inproceedings:realistic-lenses} \cite{site:lambda}
 \cite{site:luculentus} \cite{site:robigo-luculenta}
 
-\missingfigure{Figure explaining how path tracers work}
-
 \subsection{Comparison to Traditional Ray Tracing}
 Ray tracing is the fundamental algorithm behind path tracing. The only difference is that when a
 ray hits an object, it doesn't keep bouncing but instead fires off one ray to every light source
 directly. This subtle difference means that ray tracing can only calculate direct lighting as
 opposed to \ac{gi}.
-\missingfigure{Figure explaining how ray tracers work}
 
 \subsection{Comparison to Rasterization}
 Rasterization is widely implemented in the industry and most interactive 3D applications use it to
