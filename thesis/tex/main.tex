@@ -52,9 +52,7 @@ viable rendering technique for average commodity hardware in approximately 4 yea
 \doublespacing
 I would like to express my sincere gratitude to the teachers throughout school and university for
 the knowledge they've passed on.
-
-I thank my friends for the laughs, horrible mistakes and awesome successes we shared with
-one another.
+I thank my friends for the laughs, mistakes and triumphs we shared with one another.
 
 Furthermore, none of this would have been possible without the incredible efforts and love of my
 parents who have supported me throughout the years and enabled me to live a carefree life until I
@@ -83,8 +81,10 @@ has given my life a new meaning.
 \chapter*{Acronyms}
 \begin{acronym}
     \acro{aabb}[AABB]{axis-aligned bounding box}
+    \acroplural{aabb}[AABBs]{axis-aligned bounding boxes}
     \acro{ao}[AO]{ambient occlusion}
     \acro{brdf}[BRDF]{bidirectional reflection distribution function}
+    \acro{bvh}[BVH]{bounding volume hierarchy}
     \acro{bsp}[BSP]{binary space partitioning}
     \acro{cpu}[CPU]{central processing unit}
     \acro{csg}[CSG]{constructive solid geometry}
@@ -609,10 +609,69 @@ develop a real time path tracing renderer that only ran on current generation de
 because most consumers would not be able to benefit from the technology.
 
 \chapter{Research}
-\lipsum[1]
+Alongside this thesis, a Monte Carlo Path path tracer called \textit{trac0r} was implemented in C++. It can optionally
+make use of OpenCL or OpenMP in order to speed up computation. A conscious decision was made to
+only implement triangles for geometric primitives due to two reasons. Firstly, since every
+other geometric shape can be expressed easily using an amount of triangles, it seems unnecessary to
+add additional complexity (although using triangles to approximate other shapes will be less
+efficient from a performance perspective). Secondly, real world applications very rarely make use of perfect
+mathematical shapes such as spheres, boxes and tori when rendering. Most modern mesh modeling
+approximates these shapes using triangles. Since this renderer is supposed to be used for real
+world application such as games and interactive visualizations, it didn't seem necessary to
+implement anything in addition to what mesh modeling tools will export. 
+
+Additionally to triangles, \acp{aabb} were implemented with the aim to speed up rendering. While
+\textit{trac0r} does not implement any advanced acceleration structures (such as BVHs or kd-trees),
+it uses \acp{aabb} to
+dramatically decrease the number of triangle intersection tests. Every ray first tests for
+intersections with every \ac{aabb} in the scene and upon a hit tests every triangle enclosed by the
+\ac{aabb}. The fast Möller–Trumbore intersection algorithm \cite{wiki:moller-trumbore} is used for
+triangle intersection tests.
+
+The program does not currently support importing of externally defined scenes or meshes. Scenes are
+defined in-code. Utilities for generating planes, boxes and icosahedra out of triangles are
+provided. A properly sized \ac{aabb} is built around every shape.
+
+It uses classic reverse path tracing and implements four basic materials:
+\begin{enumerate}
+    \item Emitter: Arguably the most important material as it is the one providing the light to a
+        scene. This simulates a black body heated to a certain temperature and as such serves as an
+        area light when applied to geometry. Any ray hitting geometry using the emitter material is
+        terminated. A scene without any geometry using emitter material will be utterly dark.
+    \item Diffuse: A matte material that scatters light to a random location on the hemisphere
+        around the normal of the intersected geometry.
+    \item Glass: A material that will choose between reflection and refraction depending on the
+        Fresnel coefficients \cite{wiki:fresnel}. It is the only material capable of handling
+        intersections within an object.
+    \item Glossy: A metal-like material that will reflect a ray towards a cone centered around the
+        direction of the outgoing light \(\omega_\text{o}\). A roughness parameter determines 
+        the opening angle of that cone. A roughness of 0 will result in a perfect mirror while a roughness
+        of 1 will produce a cone with an angle of \(\pi\).
+\end{enumerate}
+
+Russian roulette is used as a ray terminator with \[\text{continuation\_probability} = 1 - \frac 1
+{\text{max\_depth} - \text{depth}}.\]
+
+Rays are randomly offset within a pixel which results in anti-aliasing. For generating random
+numbers, it uses \texttt{xorshift*} generators.
+
+A secondary program was implemented additionally to the renderer called \textit{trac0r\_viewer}
+which allows for interactive scene navigation.
 
 \section{Results}
-\lipsum[1]
+\begin{figure}[h]
+    \includegraphics[scale=0.5]{trac0r_viewer1.png}
+    \centering
+    \caption{trac0r\_viewer viewport after 2 seconds of sampling}
+    \label{fig:trac0r_viewer1}
+\end{figure}
+
+\begin{figure}[h]
+    \includegraphics[scale=0.5]{trac0r_viewer2.png}
+    \centering
+    \caption{trac0r\_viewer viewport after 30 seconds of sampling}
+    \label{fig:trac0r_viewer2}
+\end{figure}
 
 \section{Evaluation}
 \lipsum[1]
@@ -621,6 +680,8 @@ because most consumers would not be able to benefit from the technology.
 \lipsum[1]
 
 \section{Outlook}
+% could be improved by: image filtering (bilateral filtering), bidirectional path tracing, memory
+% optimizations, acceleration structures
 \lipsum[1]
 
 \listoffigures
