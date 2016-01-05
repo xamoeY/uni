@@ -672,15 +672,23 @@ which allows for interactive scene navigation.
 \end{figure}
 
 \section{Evaluation}
-\lipsum[1]
 
 \chapter{Conclusion}
-\lipsum[1]
 
 \section{Outlook}
-% could be improved by: image filtering (bilateral filtering), bidirectional path tracing, memory
-% optimizations, acceleration structures
-\lipsum[1]
+Scene lookup performance could be drastically improved by employing an acceleration structure such
+as BVH or kd-trees.
+
+Convergence performance could be best improved by making use of bidirectional path tracing.
+
+The implementation's usage of memory architectures is likely far from optimal and could be
+improved.
+
+Lastly, overall image quality could be improved by running an image filter over the rendered image
+before displaying it to the user. A suitable image filtering algorithm should be non-linear and
+edge-preserving as well as energy-preserving so that it won't lower the quality of the resulting
+image. A notable filter fulfilling those requirements is the \textit{bilateral filter}. Popular but
+unsuitable algorithms include the \textit{box filter} and the \textit{gaussian filter}.
 
 \listoffigures
  
