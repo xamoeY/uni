@@ -16,6 +16,7 @@
 \usepackage{lmodern}
 \usepackage{float}
 \usepackage{sidecap}
+\usepackage{pgfplots}
 \usepackage{todonotes}
 \usepackage{siunitx}
 \usepackage{acronym}
@@ -87,11 +88,15 @@ has given my life a new meaning.
     \acro{bvh}[BVH]{bounding volume hierarchy}
     \acro{bsp}[BSP]{binary space partitioning}
     \acro{cpu}[CPU]{central processing unit}
+    \acroplural{cpu}[CPUs]{central processing units}
     \acro{csg}[CSG]{constructive solid geometry}
     \acro{fps}[FPS]{frames per second}
     \acro{gi}[GI]{global illumination}
     \acro{gpu}[GPU]{graphics processing unit}
+    \acro{psnr}[PSNR]{Peak signal-to-noise ratio}
+    \acroplural{gpu}[GPUs]{graphics processing units}
     \acro{hdr}[HDR]{high dynamic range}
+    \acro{gflops}[GFLOPS]{billions of floating point operations per second}
     \acro{mlt}[MLT]{Metropolis light transport}
     \acro{pbr}[PBR]{physically based rendering}
     \acro{rt}[RT]{real time}
@@ -379,9 +384,14 @@ lookups per second.
 Thankfully, the whole formula can be reduced to just the lookup time \(O(\log n)\) because the other
 formula elements are covariants.
 
-\subsection{Acceleration Data Structure}
+\subsection{Acceleration Data Structures}
 The data structure used for the underlying scene is the principal factor for the performance of the
 path tracing algorithm.
+
+Scene lookup performance could be drastically improved by employing an acceleration structure such
+as BVH or kd-trees.
+
+% TODO
 
 \section{Properties of Path Tracing}
 This section summarises the general properties of path tracing.
@@ -607,6 +617,12 @@ develop a real time path tracing renderer that only ran on current generation de
 because most consumers would not be able to benefit from the technology.
 
 \chapter{Research}
+The entirety of the research in this thesis was done with a Monte Carlo path tracer called trac0r.
+An effort was made to find an existing open source implementation of a path tracer focused on
+real time applications but none seem to exist as of this writing. The most likely cause for that is
+the enormous hardware cost currently still associated with doing real time path tracing.
+
+\section{Implementation}
 Alongside this thesis, a Monte Carlo Path path tracer called \textit{trac0r} was implemented in C++. It can optionally
 make use of OpenCL or OpenMP in order to speed up computation. A conscious decision was made to
 only implement triangles for geometric primitives due to two reasons. Firstly, since every
@@ -657,21 +673,113 @@ A secondary program was implemented additionally to the renderer called \textit{
 which allows for interactive scene navigation.
 
 \section{Results}
-\begin{figure}[h]
+\begin{figure}[H]
     \includegraphics[scale=0.5]{trac0r_viewer1.png}
     \centering
     \caption{trac0r\_viewer viewport after 2 seconds of sampling}
     \label{fig:trac0r_viewer1}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \includegraphics[scale=0.5]{trac0r_viewer2.png}
     \centering
     \caption{trac0r\_viewer viewport after 30 seconds of sampling}
     \label{fig:trac0r_viewer2}
 \end{figure}
 
+Comparing \ac{fps} is not a particularly good criterion between different path tracing since
+usually \ac{fps} doesn't correlate to rate of convergence. That is, one path tracer might be able
+to iterate at 60 \ac{fps} but takes three seconds to converge while a different path tracer may
+only be able to do 10 \ac{fps} but takes only 2 seconds to converge. This might seem unintuitive at
+first but remember that path tracing is a very different algorithm compared to rasterization. In
+rasterization, once a frame is rendered, the image is "done", it won't improve by rendering the
+same scene a second time. In path tracing, particularly Monte Carlo path tracing, an image will be
+improved with every new frame that is rendered using the same parameters due to how Monte Carlo
+integration works.
+
+In spite of that, this thesis uses \ac{fps} as the primary criterion for two reasons. Firstly, we are not
+comparing different path tracers to the one made as part of the thesis. We only compare it
+against itself in different scene and hardware configurations. Secondly, \ac{fps} is a much easier
+to work with and compare than image quality. One might use \ac{psnr} to do the latter but that
+still leaves open the question of when to measure the image as even a single frame might take
+longer than a second to render under specific circumstances.
+
+\begin{tikzpicture}
+\begin{axis}[
+    title={GFLOPS of tested graphics cards by year of release},
+    xlabel={Year of release},
+    ylabel={Peak single precision performance [GFLOPS]},
+    xmin=2008, xmax=2016,
+    xtick={2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016},
+    ytick={100, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000},
+    legend pos=north west,
+    ymajorgrids=true,
+    grid style=dashed,
+    nodes near coords,
+    x label style={below=5mm},
+    x tick label style={align=center, rotate=45},
+    /pgf/number format/.cd,
+    use comma,
+    1000 sep={}
+]
+ 
+\addplot+[
+    color=blue,
+    only marks,
+    point meta=explicit symbolic
+    ]
+    coordinates {
+        (2010,1405) [\tiny NVDIA Geforce GTX 570]
+        (2013,5046) [\tiny NVDIA Geforce GTX 780 Ti]
+        (2013,4848) [\tiny AMD R9 290]
+        (2014,3494) [\tiny NVDIA Geforce GTX 970]
+    };
+    \legend{GPUs}
+\end{axis}
+\end{tikzpicture}
+
 \section{Evaluation}
+In order to properly rate the results seen above, they need to be put into perspective. Performance
+of \acp{cpu} and \acp{gpu} varies enormously depending on their year of release due to technical
+progress.
+\begin{tikzpicture}
+\begin{axis}[
+    title={GFLOPS of tested graphics cards by year of release},
+    xlabel={Year of release},
+    ylabel={Peak single precision performance [GFLOPS]},
+    xmin=2008, xmax=2016,
+    xtick={2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016},
+    ytick={100, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000},
+    legend pos=north west,
+    ymajorgrids=true,
+    grid style=dashed,
+    nodes near coords,
+    x label style={below=5mm},
+    x tick label style={align=center, rotate=45},
+    /pgf/number format/.cd,
+    use comma,
+    1000 sep={}
+]
+ 
+\addplot+[
+    color=blue,
+    only marks,
+    point meta=explicit symbolic
+    ]
+    coordinates {
+        (2010,1405) [\tiny NVDIA Geforce GTX 570]
+        (2013,5046) [\tiny NVDIA Geforce GTX 780 Ti]
+        (2013,4848) [\tiny AMD R9 290]
+        (2014,3494) [\tiny NVDIA Geforce GTX 970]
+    };
+    \legend{GPUs}
+\end{axis}
+\end{tikzpicture}
+
+All \ac{gflops} numbers are taken from the chip designers' official sites.
+
+It should be noted that while \ac{gflops} isn't the only relevant criterion to estimating the
+performance of a \ac{gpu}, it's likely the most important one.
 
 \chapter{Conclusion}
 
@@ -679,7 +787,8 @@ which allows for interactive scene navigation.
 Scene lookup performance could be drastically improved by employing an acceleration structure such
 as BVH or kd-trees.
 
-Convergence performance could be best improved by making use of bidirectional path tracing.
+Convergence performance could be best improved by making use of bidirectional path tracing and
+better sampling techniques such as \textit{Multiple Importance Sampling}.
 
 The implementation's usage of memory architectures is likely far from optimal and could be
 improved.
