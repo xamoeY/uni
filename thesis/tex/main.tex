@@ -35,7 +35,7 @@
 
 \chapter*{Abstract}
 \onehalfspace
-This study aims to investigate the viability of a physically-based technique called
+This study aims to investigate the viability of a physically based technique called
 \textbf{path tracing} in lieu of or in corporation with classical techniques in interactive media
 such as video games and visual effects tools.
 
@@ -150,7 +150,7 @@ instead of plain \ac{rgb} colors. Modern video games tend
 to rely on a growing number of tricks to keep them visually appealing as the
 consumer grows more demanding. They're called \textit{tricks} in this study
 because they merely trick the beholder into seeing something that appears to be
-physically accurate when it is, in fact, not the result of a physically-based
+physically accurate when it is, in fact, not the result of a physically based
 calculation and as such this study aims to keep tricks and emergent phenomena
 separated by language. Some notable tricks include \ac{ssao}
 \cite{wiki:ssao}, motion blur \cite{wiki:motion-blur}, lens flares
@@ -322,6 +322,7 @@ on the exact algorithm used, usually only a low number of samples (approximately
 image to converge to an acceptable level of quality.
 
 \subsection{Algorithm}
+\label{algorithm}
 The general naive algorithm for path tracing in Python-like pseudocode for diffuse and
 emissive materials can be written as follows:
 
@@ -419,14 +420,14 @@ structures. The most commonly used ones are the \ac{bvh} and the kd-tree. By usi
 structures, scene lookup performance per ray could be drastically improved to \(O(\log n)\) at the
 cost of a tree rebuild once per frame. This is usually a good trade-off since a scene is looked up
 millions of times per frame but the tree only has to be rebuilt once. While there are multiple
-ways to build a \ac{bvh}, most of them have a complexity close to \(O(n(\log n)^2)\) while building
-a kd-tree can be done in \(O(n\log n)\).
+ways to build a \ac{bvh}, most of them have a complexity close to \(O(n(\log n))\). A kd-tree is
+usually built in \(O(n(\log n))\) as well.
 
 \section{Properties of Path Tracing}
 This section summarises the general properties of path tracing.
 
 \subsection{Computational Cost}
-Even though path tracing has a high initial cost, the lookup time for ray collisions is in
+Even though path tracing has a high initial cost as shown in section~\ref{algorithm}, the lookup time for ray collisions is in
 \(O(\log n)\) which means that as scenes increase in complexity, the time spent on doing the
 lookups is fairly small. The initial cost of path tracing heavily depends upon screen resolution
 and desired quality. Due to the high initial cost, path tracing is generally considered slow and
@@ -448,7 +449,8 @@ produce sharp caustics as rays tend to very rarely hit objects with caustic prop
 it especially difficult for real time path tracing to produce sharp caustics. This can be
 alleviated by using bidirectional path tracing or by using an additional photon map.
 
-Another problem is that subsurface scattering and can't be addressed by classic Monte Carlo path
+Another problem is that subsurface scattering and participating media such as smoke can't be
+calculated by classic Monte Carlo path
 tracers. This can be addressed by using \emph{volumetric path tracing}.
 \cite{wiki:volumetric-path-tracing} \cite{incollection:volumetric-path-tracing}
 
@@ -462,7 +464,9 @@ physically accurate images in those cases. \cite{inproceedings:realistic-lenses}
 Ray tracing is the fundamental algorithm behind path tracing. The only difference is that when a
 ray hits an object, it doesn't keep bouncing but instead fires off one ray to every light source
 directly. This subtle difference means that ray tracing can only calculate direct lighting as
-opposed to \ac{gi}.
+opposed to \ac{gi}. It also makes ray tracing much less expensive from a stand point of
+computation. Images produced with this method lack realism and depth. Many physical effects can't
+be calculated this way.
 
 \subsection{Comparison to Rasterization}
 Rasterization is widely implemented in the industry and most interactive 3D applications use it to
@@ -473,7 +477,7 @@ back-face culling exist and additionally its initial cost is very low.
 Unlike path tracing, it does not automatically simulate a wide range range of physical phenomena.
 Physical effects such as shadows, global illumination and caustics have to be calculated separately
 in other algorithms and then be composited on top of the rasterized scene. This makes rasterization
-complicated to use for when many physical effects are desired.
+complicated to use for when many physically based effects are desired.
 
 \subsection{Comparison to Other Global Illumination Algorithms}
 This section compares some of the more popular \ac{gi} algorithms beside ray tracing and
