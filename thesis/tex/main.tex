@@ -21,6 +21,7 @@
 \usepackage{minted}
 \usepackage{siunitx}
 \usepackage{acronym}
+\usepackage{subfig}
 \usepackage{setspace}
 \usepackage[customcolors]{hf-tikz}
 \usepackage{url}
@@ -853,20 +854,41 @@ A secondary program was implemented additionally to the renderer called \textit{
 which allows for interactive scene navigation.
 
 \section{Results}
+\subsection{Visual Results}
 \begin{figure}[H]
-    \includegraphics[scale=0.5]{trac0r_viewer1.png}
+    \subfloat[\(n = 1\)]{\includegraphics[scale=0.15]{trac0r-1.png}}
+    \subfloat[\(n = 2\)]{\includegraphics[scale=0.15]{trac0r-2.png}}
+    \subfloat[\(n = 3\)]{\includegraphics[scale=0.15]{trac0r-3.png}}
     \centering
-    \caption{trac0r\_viewer viewport after 2 seconds of sampling}
-    \label{fig:trac0r_viewer1}
+    
+    \subfloat[\(n = 4\)]{\includegraphics[scale=0.15]{trac0r-4.png}}
+    \subfloat[\(n = 5\)]{\includegraphics[scale=0.15]{trac0r-5.png}}
+    \subfloat[\(n = 10\)]{\includegraphics[scale=0.15]{trac0r-10.png}}
+    \centering
+    
+    \subfloat[\(n = 20\)]{\includegraphics[scale=0.15]{trac0r-20.png}}
+    \subfloat[\(n = 50\)]{\includegraphics[scale=0.15]{trac0r-50.png}}
+    \subfloat[\(n = 100\)]{\includegraphics[scale=0.15]{trac0r-100.png}}
+    \centering
+    \caption{trac0r\_viewer viewport after integrating \(n\) frames}
+    \label{fig:trac0r_n_frames}
 \end{figure}
 
 \begin{figure}[H]
-    \includegraphics[scale=0.5]{trac0r_viewer2.png}
+    \includegraphics[scale=0.5]{trac0r-debug1.png}
     \centering
-    \caption{trac0r\_viewer viewport after 30 seconds of sampling}
-    \label{fig:trac0r_viewer2}
+    \caption{trac0r\_viewer debug view}
+    \label{fig:trac0r_debug1}
 \end{figure}
 
+\begin{figure}[H]
+    \includegraphics[scale=0.5]{trac0r-debug2.png}
+    \centering
+    \caption{trac0r\_viewer debug view while interactively navigating the scene}
+    \label{fig:trac0r_debug2}
+\end{figure}
+
+\subsection{Performance Results}
 Comparing \ac{fps} is not a particularly good criterion between different path tracing since
 usually \ac{fps} doesn't correlate to rate of convergence. That is, one path tracer might be able
 to iterate at 60 \ac{fps} but takes three seconds to converge while a different path tracer may
