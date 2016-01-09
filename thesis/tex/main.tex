@@ -404,7 +404,11 @@ comparisons is a lot lower.
 
 The next iteration on top of simple \acp{aabb} is provided by tree-based acceleration data
 structures. The most commonly used ones are the \ac{bvh} and the kd-tree. By using these data
-structures, scene lookup performance could be drastically improved to \(O(\log n)\).
+structures, scene lookup performance per ray could be drastically improved to \(O(\log n)\) at the
+cost of a tree rebuild once per frame. This is usually a good trade-off since a scene is looked up
+millions of times per frame but the tree only has to be rebuilt once. While there are multiple
+ways to build a \ac{bvh}, most of them have a complexity close to \(O(n(\log n)^2)\) while building
+a kd-tree can be done in \(O(n\log n)\).
 
 \section{Properties of Path Tracing}
 This section summarises the general properties of path tracing.
