@@ -531,7 +531,7 @@ Arthur Appel is generally credited as being the father of
 Ray casting is an important idea needed for \emph{ray tracing} which was
 first published in a paper in 1980 by Turner Whitted \cite{article:raytracing}.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \includegraphics{early-raytracing-whitted}
     \centering
     \caption{Turner Whitted's original 1980 \cite{article:raytracing} image showing off the usage of ray tracing for
@@ -656,7 +656,7 @@ Additionally to triangles, \acp{aabb} were implemented with the aim to speed up 
 it uses \acp{aabb} to
 dramatically decrease the number of triangle intersection tests. Every ray first tests for
 intersections with every \ac{aabb} in the scene and upon a hit tests every triangle enclosed by the
-\ac{aabb}. The fast Möller–Trumbore intersection algorithm \cite{wiki:moller-trumbore} is used for
+\ac{aabb}. The fast Möller–Trumbore intersection algorithm \cite{inproceedings:moller2005fast} is used for
 triangle intersection tests.
 
 The program does not currently support importing of externally defined scenes or meshes. Scenes are
