@@ -1,7 +1,7 @@
 .PHONY: clean
 
 default:
-	rubber -d main.tex
+	rubber --unsafe -d main.tex
 
 clean:
 	rm main.pdf

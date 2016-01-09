@@ -18,6 +18,7 @@
 \usepackage{sidecap}
 \usepackage{pgfplots}
 \usepackage{todonotes}
+\usepackage{minted}
 \usepackage{siunitx}
 \usepackage{acronym}
 \usepackage{setspace}
@@ -312,9 +313,10 @@ on the exact algorithm used, usually only a low number of samples (approximately
 image to converge to an acceptable level of quality.
 
 \subsection{Algorithm}
-The general, naive algorithm for path tracing in Python-like pseudocode can be written as follows:
+The general naive algorithm for path tracing in Python-like pseudocode for diffuse and
+emissive materials can be written as follows:
 
-\begin{lstlisting}[language=Python]
+\begin{minted}{python}
 max_depth = 5
 
 def trace_ray(ray, depth):
@@ -330,7 +332,7 @@ def trace_ray(ray, depth):
         return RGB(0, 0, 0)
 
     material = collision.material;
-    emittance = material.emittance # kill this
+    emittance = material.emittance
 
     # shoot a ray into random direction and recurse
     next_ray = Ray()
@@ -346,7 +348,7 @@ def trace_ray(ray, depth):
 for sample in range(samples):
     for pixel in pixels:
         trace_path(ray_from_pixel(pixel), 0)
-\end{lstlisting}
+\end{minted}
 
 The algorithmic complexity of this algorithm is not immediately obvious because of its pseudocode
 character and a few methods whose implementations are as of yet unknown. It is known, however, that
@@ -386,12 +388,23 @@ formula elements are covariants.
 
 \subsection{Acceleration Data Structures}
 The data structure used for the underlying scene is the principal factor for the performance of the
-path tracing algorithm.
+path tracing algorithm. The most commonly used naive data structure for path tracing is a simple
+list of shapes. Upon scene lookup, a ray is tested for intersection with every shape. The
+complexity in this case is \(O(n)\) where \(n\) is the number of shapes which is comparable to rasterization but a lot worse than it
+could be with a proper acceleration data structure.
 
-Scene lookup performance could be drastically improved by employing an acceleration structure such
-as BVH or kd-trees.
+Assuming a flat list of shapes as the current data structure, the next logical step to improve
+scene look up time is to add \acp{aabb} around clusters of smaller shapes. For instance, an
+\ac{aabb} might surround an icosahedron shape that is made up of hundreds of triangles. This way,
+the triangles inside the \ac{aabb} are only tested for ray intersections if the ray intersects the
+\ac{aabb} that surrounds the shape. The complexity is now \(O(m \dot n)\) where \(m\) is the number
+of shapes (which is equal to the number of \acp{aabb}) and \(n\) is the number of triangles. This
+might seem like a worse complexity class compared to before but in practice the number of
+comparisons is a lot lower.
 
-% TODO
+The next iteration on top of simple \acp{aabb} is provided by tree-based acceleration data
+structures. The most commonly used ones are the \ac{bvh} and the kd-tree. By using these data
+structures, scene lookup performance could be drastically improved to \(O(\log n)\).
 
 \section{Properties of Path Tracing}
 This section summarises the general properties of path tracing.
@@ -699,44 +712,44 @@ integration works.
 
 In spite of that, this thesis uses \ac{fps} as the primary criterion for two reasons. Firstly, we are not
 comparing different path tracers to the one made as part of the thesis. We only compare it
-against itself in different scene and hardware configurations. Secondly, \ac{fps} is a much easier
+against itself in different scene and hardware configurations. Secondly, \ac{fps} is much easier
 to work with and compare than image quality. One might use \ac{psnr} to do the latter but that
 still leaves open the question of when to measure the image as even a single frame might take
 longer than a second to render under specific circumstances.
 
-\begin{tikzpicture}
-\begin{axis}[
-    title={GFLOPS of tested graphics cards by year of release},
-    xlabel={Year of release},
-    ylabel={Peak single precision performance [GFLOPS]},
-    xmin=2008, xmax=2016,
-    xtick={2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016},
-    ytick={100, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000},
-    legend pos=north west,
-    ymajorgrids=true,
-    grid style=dashed,
-    nodes near coords,
-    x label style={below=5mm},
-    x tick label style={align=center, rotate=45},
-    /pgf/number format/.cd,
-    use comma,
-    1000 sep={}
-]
- 
-\addplot+[
-    color=blue,
-    only marks,
-    point meta=explicit symbolic
+\begin{figure}[H]
+    \begin{tikzpicture}
+    \begin{axis}[
+        title={Performance in correlation to scene complexity},
+        xlabel={Triangles},
+        ylabel={FPS},
+        legend pos=north east,
+        ymajorgrids=true,
+        grid style=dashed,
+        smooth,
+        nodes near coords,
+        x label style={below=5mm},
+        x tick label style={align=center, rotate=45},
     ]
-    coordinates {
-        (2010,1405) [\tiny NVDIA Geforce GTX 570]
-        (2013,5046) [\tiny NVDIA Geforce GTX 780 Ti]
-        (2013,4848) [\tiny AMD R9 290]
-        (2014,3494) [\tiny NVDIA Geforce GTX 970]
-    };
-    \legend{GPUs}
-\end{axis}
-\end{tikzpicture}
+     
+    \addplot+[
+        color=blue,
+        ]
+        coordinates {
+            (56,26)
+            (116,19.5)
+            (356,8.9)
+            (1316,2.8)
+            (5156,0.73)
+        };
+    \end{axis}
+    \end{tikzpicture}
+    \centering
+    \caption{Scene complexity benchmark on an NVIDIA Geforce GTX 570}
+    \label{fig:benchmark-scene-complexity}
+\end{figure}
+
+lol \ref{fig:benchmark-scene-complexity}
 
 \section{Evaluation}
 In order to properly rate the results seen above, they need to be put into perspective. Performance
@@ -767,10 +780,10 @@ progress.
     point meta=explicit symbolic
     ]
     coordinates {
-        (2010,1405) [\tiny NVDIA Geforce GTX 570]
-        (2013,5046) [\tiny NVDIA Geforce GTX 780 Ti]
+        (2010,1405) [\tiny NVIDIA Geforce GTX 570]
+        (2013,5046) [\tiny NVIDIA Geforce GTX 780 Ti]
         (2013,4848) [\tiny AMD R9 290]
-        (2014,3494) [\tiny NVDIA Geforce GTX 970]
+        (2014,3494) [\tiny NVIDIA Geforce GTX 970]
     };
     \legend{GPUs}
 \end{axis}
