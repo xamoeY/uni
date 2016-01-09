@@ -12,7 +12,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{graphicx}
-\usepackage{listings}
+\usepackage{caption}
 \usepackage{lmodern}
 \usepackage{float}
 \usepackage{sidecap}
@@ -191,11 +191,19 @@ single observer (the scene camera) for which we will trace every single ray that
 perceive. In computer graphics terms, we will trace a ray for every pixel of the camera (and for
 now we will assume that the viewport is exactly the same resolution as the camera simplicity's
 sake). For every ray, we check for intersections with geometry and then either bounce a few more
-times or shoot directly towards a light. We might do this multiple times per pixel to improve image
-quality. This is called \emph{sampling}. The more iterations we spend on sampling, the better the
+times or shoot directly towards a light. We might do this multiple times per pixel and integrate
+all resulting values to improve image
+quality. This type of sampling is called \emph{Monte Carlo integration}.
+The more iterations we spend on sampling, the better the
 quality of our image becomes. This is called \emph{converging}.
-There are a few approaches that improve on this such as bidirectional path tracing
-\cite{techreport:pbr} and the \ac{mlt} \cite{inproceedings:metropolis}.
+There are a many approaches that improve this completely random approach to sampling. While the
+most straightforward approach is given by uniform sampling, other methods such as stratified
+sampling \cite{veach1997robust} and importance sampling \cite{veach1997robust} will usually provide
+a clear advantage in terms of time to
+convergence. Other, more complicated approaches are bidirectional path tracing
+\cite{techreport:pbr} and the \ac{mlt} \cite{inproceedings:metropolis} which shoot rays from both
+the light and the camera and then connect all the intersection points in order to form a light
+path.
 
 \section{Theoretical Basis}
 \subsection{The Rendering Equation}
@@ -316,42 +324,45 @@ image to converge to an acceptable level of quality.
 The general naive algorithm for path tracing in Python-like pseudocode for diffuse and
 emissive materials can be written as follows:
 
-\begin{minted}{python}
-max_depth = 5
+\begin{minted}[linenos, autogobble]{python}
+    max_depth = 5
 
-def trace_ray(ray, depth):
-    if depth >= max_depth:
-        # Return black since we haven't hit anything but we're
-        # at our limit for bounces
-        return RGB(0, 0, 0) 
+    def trace_ray(ray, depth):
+        if depth >= max_depth:
+            # Return black since we haven't hit anything but we're
+            # at our limit for bounces
+            return RGB(0, 0, 0) 
 
-    collision = ray.check_collision()
-    if not collision:
-        # If we haven't hit anything, we can't bounce again so
-        # we return black
-        return RGB(0, 0, 0)
+        collision = ray.check_collision()
+        if not collision:
+            # If we haven't hit anything, we can't bounce again so
+            # we return black
+            return RGB(0, 0, 0)
 
-    material = collision.material;
-    emittance = material.emittance
+        material = collision.material;
+        emittance = material.emittance
 
-    # shoot a ray into random direction and recurse
-    next_ray = Ray()
-    next_ray.origin = collision.position
-    next_ray.direction = random_vector_on_hemisphere(collision.normal)
+        # shoot a ray into random direction and recurse
+        next_ray = Ray()
+        next_ray.origin = collision.position
+        next_ray.direction = random_vector_on_hemisphere(collision.normal)
 
-    reflectance_theta = dot(next_ray.direction, collision.normal)
-    brdf = 2 * material.reflectance * reflectance_theta
-    reflected = trace_ray(next_ray, depth + 1)
+        reflectance_theta = dot(next_ray.direction, collision.normal)
+        brdf = 2 * material.reflectance * reflectance_theta
+        reflected = trace_ray(next_ray, depth + 1)
 
-    return emittance + (brdf * reflecte)
+        return emittance + (brdf * reflecte)
 
-for sample in range(samples):
-    for pixel in pixels:
-        trace_path(ray_from_pixel(pixel), 0)
+    for sample in range(samples):
+        for pixel in pixels:
+            trace_path(ray_from_pixel(pixel), 0)
 \end{minted}
+\captionof{listing}{Naive path tracing algorithm\label{lst:naive-path-tracing}}
+
+\vspace{1cm}
 
 The algorithmic complexity of this algorithm is not immediately obvious because of its pseudocode
-character and a few methods whose implementations are as of yet unknown. It is known, however, that
+character and a few methods whose implementations are not provided. It is known, however, that
 the output image \(O\) will be a 2D matrix with dimensions given by width \(w\) and height \(h\).
 Additionally, for every pixel, multiple samples \(s\) are required in order for the algorithm to
 converge to an image of acceptable quality. Every ray has a certain maximum depth \(d\).
@@ -570,8 +581,8 @@ While the animation seems very primitive compared to the animations of today, it
 the time. Ernie Wright's statement about The Juggler provides some contemporary context:
 
 \blockquote[\cite{site:juggler}]{Turner Whitted's paper (1980) is widely regarded as the first modern
-description of ray tracing methods in computer graphics. This paper's famous image of balls floating
-above a checkerboard floor took 74 minutes to render on a DEC VAX 11/780 mainframe, a \$400,000
+    description of ray tracing methods in computer graphics. This paper's famous image of balls floating
+    above a checkerboard floor took 74 minutes to render on a DEC VAX 11/780 mainframe, a \$400,000
 computer. The Juggler would appear a mere six years later, created and displayed on a \$2000 Amiga.}
 
 The first feature-length computer-animated film,
@@ -663,7 +674,11 @@ The program does not currently support importing of externally defined scenes or
 defined in-code. Utilities for generating planes, boxes and icosahedra out of triangles are
 provided. A properly sized \ac{aabb} is built around every shape.
 
-It uses classic reverse path tracing and implements four basic materials:
+It uses classic reverse path tracing and implements four basic materials.
+
+\subsection{Materials}
+
+The materials implemented are as follows:
 \begin{enumerate}
     \item Emitter: Arguably the most important material as it is the one providing the light to a
         scene. This simulates a black body heated to a certain temperature and as such serves as an
@@ -679,6 +694,154 @@ It uses classic reverse path tracing and implements four basic materials:
         the opening angle of that cone. A roughness of 0 will result in a perfect mirror while a roughness
         of 1 will produce a cone with an angle of \(\pi\).
 \end{enumerate}
+
+\begin{minted}[linenos, autogobble]{c++}
+    struct Material {
+        /**
+        * @brief Used to determine the material type used.
+        * Refer to the table below:
+        *        m_type = 1: Emissive
+        *        m_type = 2: Diffuse
+        *        m_type = 3: Glass
+        *        m_type = 4: Glossy
+        */
+        uint8_t m_type = 1;
+
+        /**
+        * @brief Used as the basic color for most materials.
+        */
+        glm::vec3 m_color = {0.9f, 0.5f, 0.1f};
+
+        /**
+        * @brief Used to determine the ratio between reflection and diffusion
+        * for some materials. Value must be between 0.0 and 1.0.
+        */
+        float m_roughness = 0.f;
+
+        /**
+        * @brief Index of refraction (IOR) is used to determine how
+        * strongly light is bent inside a glass material.
+        */
+        float m_ior = 1.f;
+
+        /**
+        * @brief Luminous emittance provides the strength of emissive
+        * material. Values can be larger than 1.0.
+        */
+        float m_emittance = 0.f;
+    };
+\end{minted}
+\captionof{listing}{Material struct in trac0r\label{lst:trac0r-material}. Depending on the
+\texttt{m\_type} set, different attributes of this material are used.}
+
+\subsection{Sampling}
+trac0r provides a few different methods for geometric sampling.
+
+\begin{minted}[linenos, autogobble]{c++}
+    /**
+    * @brief Selects a random point on a sphere with uniform distribution.
+    * point on a uniform.
+    *
+    * @return A random point on the surface of a sphere
+    */
+    inline glm::vec3 uniform_sample_sphere() {
+        glm::vec3 rand_vec =
+            glm::vec3(rand_range(-1.f, 1.f),
+                      rand_range(-1.f, 1.f),
+                      rand_range(-1.f, 1.f));
+        return glm::normalize(rand_vec);
+    }
+\end{minted}
+\captionof{listing}{Function to sample random points on the surface of a sphere implemented from
+\cite{marsaglia1972choosing}\label{lst:trac0r-uniform-sampling}}
+
+\begin{minted}[linenos, autogobble]{c++}
+    /**
+    * @brief Given a direction vector, this will return a random uniform
+    * point on a sphere on the hemisphere around dir.
+    *
+    * @param dir A vector that represents the hemisphere's center
+    *
+    * @return A random point the on the hemisphere
+    */
+    inline glm::vec3 oriented_uniform_hemisphere_sample(glm::vec3 dir) {
+        glm::vec3 v = uniform_sample_sphere();
+        return v * glm::sign(glm::dot(v, dir));
+    }
+\end{minted}
+\captionof{listing}{Function to sample uniform points on a hemisphere given by
+\texttt{dir}\label{lst:trac0r-oriented-uniform-sampling}}
+
+\begin{minted}[linenos, autogobble]{c++}
+    /**
+    * @brief Selects a random point on a sphere with uniform or
+    * cosine-weighted distribution.
+    *
+    * @param dir A vector around which the hemisphere will be centered
+    * @param power 0.f means uniform distribution while 1.f means
+    * cosine-weighted
+    * @param angle When a full hemisphere is desired, use pi/2.
+    * 0 equals perfect reflection. The value
+    * should therefore be between 0 and pi/2. This angle is equal
+    * to half the cone width.
+    *
+    * @return A random point on the surface of a sphere
+    */
+    inline glm::vec3 sample_hemisphere(glm::vec3 dir, float power, float angle) {
+        // Code adapted from Mikael Hvidtfeldt Christensen's resource
+        // at http://blog.hvidtfeldts.net/index.php/2015/01/path-tracing-3d-fractals/
+        // Thanks!
+
+        glm::vec3 o1 = glm::normalize(ortho(dir));
+        glm::vec3 o2 = glm::normalize(glm::cross(dir, o1));
+        glm::vec2 r = glm::vec2{rand_range(0.f, 1.f),
+                                rand_range(glm::cos(angle), 1.f)};
+        r.x = r.x * glm::two_pi<float>();
+        r.y = glm::pow(r.y, 1.f / (power + 1.f));
+        float oneminus = glm::sqrt(1.f - r.y * r.y);
+        return glm::cos(r.x) * oneminus * o1 +
+            glm::sin(r.x) * oneminus * o2 + r.y * dir;
+    }
+\end{minted}
+\captionof{listing}{Function to sample cosine-weighted points on a hemisphere given by
+\texttt{dir}. \texttt{power} is used to determine whether to generate uniform samples or
+cosine-weighted ones. If \texttt{power} is \texttt{0.f}, uniform samples are generated. If it's
+\texttt{1.f}, cosine-weighted samples are generated. \texttt{angle} provides the opening angle of
+the cone that rays will be generated inside of.\label{lst:trac0r-hemisphere-sampling}}
+
+\begin{minted}[linenos, autogobble]{c++}
+    /**
+    * @brief Given a direction vector, this will return a random
+    * cosine-weighted point on a sphere on the hemisphere around dir.
+    *
+    * @param dir A vector that represents the hemisphere's center
+    *
+    * @return A random point the on the hemisphere
+    */
+    inline glm::vec3 oriented_cosine_weighted_hemisphere_sample(glm::vec3 dir) {
+        return sample_hemisphere(dir, 1.f, glm::half_pi<float>());
+    }
+\end{minted}
+\captionof{listing}{Helper function to get samples from an entire hemisphere making use of
+\ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling}}
+
+\begin{minted}[linenos, autogobble]{c++}
+    /**
+    * @brief Selects a random point on a cone with cosine-weighted
+    * distribution.
+    *
+    * @param dir Direction in which the cone is oriented
+    * @param angle Angle of the cone in radians
+    *
+    * @return A random point on the surface of a cone
+    */
+    inline glm::vec3 oriented_cosine_weighted_cone_sample(glm::vec3 dir, float angle) {
+        return sample_hemisphere(dir, 1.f, angle);
+    }
+\end{minted}
+\captionof{listing}{Helper function to get samples from a partial hemisphere making use of
+the code in listing
+\ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling-sone}}
 
 Russian roulette is used as a ray terminator with \[\text{continuation\_probability} = 1 - \frac 1
 {\text{max\_depth} - \text{depth}}.\]
@@ -723,30 +886,30 @@ longer than a second to render under specific circumstances.
 
 \begin{figure}[H]
     \begin{tikzpicture}
-    \begin{axis}[
-        title={Performance in correlation to scene complexity},
-        xlabel={Triangles},
-        ylabel={FPS},
-        legend pos=north east,
-        ymajorgrids=true,
-        grid style=dashed,
-        smooth,
-        nodes near coords,
-        x label style={below=5mm},
-        x tick label style={align=center, rotate=45},
-    ]
-     
-    \addplot+[
-        color=blue,
-        ]
-        coordinates {
-            (56,26)
-            (116,19.5)
-            (356,8.9)
-            (1316,2.8)
-            (5156,0.73)
-        };
-    \end{axis}
+        \begin{axis}[
+                title={Performance in correlation to scene complexity},
+                xlabel={Triangles},
+                ylabel={FPS},
+                legend pos=north east,
+                ymajorgrids=true,
+                grid style=dashed,
+                smooth,
+                nodes near coords,
+                x label style={below=5mm},
+                x tick label style={align=center, rotate=45},
+            ]
+
+            \addplot+[
+                    color=blue,
+                ]
+                coordinates {
+                    (56,26)
+                    (116,19.5)
+                    (356,8.9)
+                    (1316,2.8)
+                    (5156,0.73)
+                };
+        \end{axis}
     \end{tikzpicture}
     \centering
     \caption{Scene complexity benchmark on an NVIDIA Geforce GTX 570}
@@ -760,37 +923,37 @@ In order to properly rate the results seen above, they need to be put into persp
 of \acp{cpu} and \acp{gpu} varies enormously depending on their year of release due to technical
 progress.
 \begin{tikzpicture}
-\begin{axis}[
-    title={GFLOPS of tested graphics cards by year of release},
-    xlabel={Year of release},
-    ylabel={Peak single precision performance [GFLOPS]},
-    xmin=2008, xmax=2016,
-    xtick={2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016},
-    ytick={100, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000},
-    legend pos=north west,
-    ymajorgrids=true,
-    grid style=dashed,
-    nodes near coords,
-    x label style={below=5mm},
-    x tick label style={align=center, rotate=45},
-    /pgf/number format/.cd,
-    use comma,
-    1000 sep={}
-]
- 
-\addplot+[
-    color=blue,
-    only marks,
-    point meta=explicit symbolic
-    ]
-    coordinates {
-        (2010,1405) [\tiny NVIDIA Geforce GTX 570]
-        (2013,5046) [\tiny NVIDIA Geforce GTX 780 Ti]
-        (2013,4848) [\tiny AMD R9 290]
-        (2014,3494) [\tiny NVIDIA Geforce GTX 970]
-    };
-    \legend{GPUs}
-\end{axis}
+    \begin{axis}[
+            title={GFLOPS of tested graphics cards by year of release},
+            xlabel={Year of release},
+            ylabel={Peak single precision performance [GFLOPS]},
+            xmin=2008, xmax=2016,
+            xtick={2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016},
+            ytick={100, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000},
+            legend pos=north west,
+            ymajorgrids=true,
+            grid style=dashed,
+            nodes near coords,
+            x label style={below=5mm},
+            x tick label style={align=center, rotate=45},
+            /pgf/number format/.cd,
+            use comma,
+            1000 sep={}
+        ]
+
+        \addplot+[
+                color=blue,
+                only marks,
+                point meta=explicit symbolic
+            ]
+            coordinates {
+                (2010,1405) [\tiny NVIDIA Geforce GTX 570]
+                (2013,5046) [\tiny NVIDIA Geforce GTX 780 Ti]
+                (2013,4848) [\tiny AMD R9 290]
+                (2014,3494) [\tiny NVIDIA Geforce GTX 970]
+            };
+        \legend{GPUs}
+    \end{axis}
 \end{tikzpicture}
 
 All \ac{gflops} numbers are taken from the chip designers' official sites.
@@ -817,7 +980,7 @@ image. A notable filter fulfilling those requirements is the \textit{bilateral f
 unsuitable algorithms include the \textit{box filter} and the \textit{gaussian filter}.
 
 \listoffigures
- 
+\listoflistings
 \listoftables
 
 \bibliographystyle{unsrt}
@@ -834,5 +997,5 @@ gemacht. Ich versichere weiterhin, dass ich die Arbeit vorher nicht in einem
 anderen Prüfungsverfahren eingereicht habe und die eingereichte schriftliche
 Fassung der auf dem elektronischen Speichermedium entspricht.“
 \singlespace
-    
+
 \end{document}
