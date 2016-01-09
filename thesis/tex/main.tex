@@ -36,7 +36,7 @@
 \chapter*{Abstract}
 \onehalfspace
 This study aims to investigate the viability of a physically based technique called
-\textbf{path tracing} in lieu of or in corporation with classical techniques in interactive media
+\emph{path tracing} in lieu of or in corporation with classical techniques in interactive media
 such as video games and visual effects tools.
 
 Real time path tracing has been prohibitively expensive in regards to computational complexity.
@@ -88,6 +88,7 @@ has given my life a new meaning.
     \acro{ao}[AO]{ambient occlusion}
     \acro{brdf}[BRDF]{bidirectional reflection distribution function}
     \acro{bvh}[BVH]{bounding volume hierarchy}
+    \acroplural{bvh}[BVHs]{bounding volume hierarchies}
     \acro{bsp}[BSP]{binary space partitioning}
     \acro{cpu}[CPU]{central processing unit}
     \acroplural{cpu}[CPUs]{central processing units}
@@ -160,7 +161,7 @@ depth of field \cite{wiki:depth-of-field} and light mapping \cite{wiki:lightmap}
 \section{Leading Questions and Goals}
 The primary research objective of this thesis is finding out when real time path tracing will be a
 viable alternative to rasterization on commodity hardware. This question is explored by looking at
-theoretical indicators (such as Moore's Law) and practical indicators (by implementing a real time
+theoretical indicators (such as Moore's Law and performance projections) and practical indicators (by implementing a real time
 path tracer and benchmarking it) about its performance and the current state of the industry.
 
 \chapter{Real Time Path Tracing Explained}
@@ -410,7 +411,7 @@ Assuming a flat list of shapes as the current data structure, the next logical s
 scene look up time is to add \acp{aabb} around clusters of smaller shapes. For instance, an
 \ac{aabb} might surround an icosahedron shape that is made up of hundreds of triangles. This way,
 the triangles inside the \ac{aabb} are only tested for ray intersections if the ray intersects the
-\ac{aabb} that surrounds the shape. The complexity is now \(O(m \dot n)\) where \(m\) is the number
+\ac{aabb} that surrounds the shape. The complexity is now \(O(m \cdot n)\) where \(m\) is the number
 of shapes (which is equal to the number of \acp{aabb}) and \(n\) is the number of triangles. This
 might seem like a worse complexity class compared to before but in practice the number of
 comparisons is a lot lower.
@@ -426,39 +427,41 @@ usually built in \(O(n(\log n))\) as well.
 \section{Properties of Path Tracing}
 This section summarises the general properties of path tracing.
 
-\subsection{Computational Cost}
-Even though path tracing has a high initial cost as shown in section~\ref{algorithm}, the lookup time for ray collisions is in
-\(O(\log n)\) which means that as scenes increase in complexity, the time spent on doing the
-lookups is fairly small. The initial cost of path tracing heavily depends upon screen resolution
-and desired quality. Due to the high initial cost, path tracing is generally considered slow and
-it made real time path tracing infeasible up until recent years.
+\begin{description}
+    \item[Computational Cost]
+        Even though path tracing has a high initial cost as shown in section~\ref{algorithm}, the lookup time for ray collisions is in
+        \(O(\log n)\) which means that as scenes increase in complexity, the time spent on doing the
+        lookups is fairly small. The initial cost of path tracing heavily depends upon screen resolution
+        and desired quality. Due to the high initial cost, path tracing is generally considered slow and
+        it made real time path tracing infeasible up until recent years.
 
-\subsection{Dynamic Scenes}
-Path tracing is well suited for dynamic scenes since it doesn't depend on pre-computations. This
-makes it viable for use in interactive applications. The scene data structure must allow for
-dynamic scenes in this case, though.
+    \item[Dynamic Scenes]
+        Path tracing is well suited for dynamic scenes since it doesn't depend on pre-computations. This
+        makes it viable for use in interactive applications. The scene data structure must allow for
+        dynamic scenes in this case, though.
 
-\subsection{Global Illumination}
-Commonly \acf{gi} means that every object's illumination affects every other object and that the
-renderer doesn't make a distinction between reflected light and light sources.
+    \item[Global Illumination]
+        Commonly \acf{gi} means that every object's illumination affects every other object and that the
+        renderer doesn't make a distinction between reflected light and light sources.
 
-\subsection{Problems}
-Due to the unbiased and random way rays are reflected from surfaces, it takes a long time for
-classic path tracing to
-produce sharp caustics as rays tend to very rarely hit objects with caustic properties. This makes
-it especially difficult for real time path tracing to produce sharp caustics. This can be
-alleviated by using bidirectional path tracing or by using an additional photon map.
+    \item[Problems]
+        Due to the unbiased and random way rays are reflected from surfaces, it takes a long time for
+        classic path tracing to
+        produce sharp caustics as rays tend to very rarely hit objects with caustic properties. This makes
+        it especially difficult for real time path tracing to produce sharp caustics. This can be
+        alleviated by using bidirectional path tracing or by using an additional photon map.
 
-Another problem is that subsurface scattering and participating media such as smoke can't be
-calculated by classic Monte Carlo path
-tracers. This can be addressed by using \emph{volumetric path tracing}.
-\cite{wiki:volumetric-path-tracing} \cite{incollection:volumetric-path-tracing}
+        Another problem is that subsurface scattering and participating media such as smoke can't be
+        calculated by classic Monte Carlo path
+        tracers. This can be addressed by using \emph{volumetric path tracing}.
+        \cite{wiki:volumetric-path-tracing} \cite{incollection:volumetric-path-tracing}
 
-Since path tracers do not simulate light wavelengths, natural phenomena caused by chromatic
-aberration, fluorescence and iridescence can not be realistically simulated. A fairly new
-improvement to path tracing called \emph{spectral path tracing} with realistic lenses can produce
-physically accurate images in those cases. \cite{inproceedings:realistic-lenses} \cite{site:lambda}
-\cite{site:luculentus} \cite{site:robigo-luculenta}
+        Since path tracers do not simulate light wavelengths, natural phenomena caused by chromatic
+        aberration, fluorescence and iridescence can not be realistically simulated. A fairly new
+        improvement to path tracing called \emph{spectral path tracing} with realistic lenses can produce
+        physically accurate images in those cases. \cite{inproceedings:realistic-lenses} \cite{site:lambda}
+        \cite{site:luculentus} \cite{site:robigo-luculenta}
+\end{description}
 
 \subsection{Comparison to Traditional Ray Tracing}
 Ray tracing is the fundamental algorithm behind path tracing. The only difference is that when a
@@ -572,7 +575,7 @@ from the general algorithm but instead improve upon it.
 
 It took longer still for the industry to become interested in path tracing. The early interest in
 ray tracing was of mostly academical and recreational nature. One of the most notable creations of
-the early days of ray tracing is The Juggler created and published by Eric Graham in 1986
+the early days of ray tracing is \emph{The Juggler} created and published by Eric Graham in 1986
 \cite{site:juggler} on an Amiga 1000. It was a pre-rendered animation using ray tracing. Eric Graham
 stated that it took the Amiga 1 hour to render each frame \cite{site:juggler}.
 
@@ -583,7 +586,7 @@ stated that it took the Amiga 1 hour to render each frame \cite{site:juggler}.
     \label{fig:amiga-juggler}
 \end{figure}
 While the animation seems very primitive compared to the animations of today, it was exceptional at
-the time. Ernie Wright's statement about The Juggler provides some contemporary context:
+the time. Ernie Wright's statement about his creation provides some contemporary context:
 
 \blockquote[\cite{site:juggler}]{Turner Whitted's paper (1980) is widely regarded as the first modern
     description of ray tracing methods in computer graphics. This paper's famous image of balls floating
@@ -650,14 +653,21 @@ develop a real time path tracing renderer that only ran on current generation de
 because most consumers would not be able to benefit from the technology.
 
 \chapter{Research}
-The entirety of the research in this thesis was done with a Monte Carlo path tracer called trac0r.
+The entirety of the research in this thesis was done with a Monte Carlo path tracer called
+\emph{trac0r}.
 An effort was made to find an existing open source implementation of a path tracer focused on
 real time applications but none seem to exist as of this writing. The most likely cause for that is
 the enormous hardware cost currently still associated with doing real time path tracing.
 
 \section{Implementation}
-Alongside this thesis, a Monte Carlo Path path tracer called \textit{trac0r} was implemented in C++. It can optionally
-make use of OpenCL or OpenMP in order to speed up computation. A conscious decision was made to
+Alongside this thesis, a Monte Carlo path tracer called trac0r was implemented in
+C++14. It uses a library called glm \cite{site:glm} for linear algebra and most
+other mathematical operations. Since trac0r itself is only a library, a graphical application making use
+of it was implemented to showcase its results. This application is called \emph{trac0r\_viewer} and
+uses SDL2 \cite{wiki:sdl} for input and output. trac0r\_viewer allows for interactive scene
+transversal, visual debugging and automatic benchmarking.
+
+A conscious decision was made to
 only implement triangles for geometric primitives due to two reasons. Firstly, since every
 other geometric shape can be expressed easily using an amount of triangles, it seems unnecessary to
 add additional complexity (although using triangles to approximate other shapes will be less
@@ -668,7 +678,7 @@ world application such as games and interactive visualizations, it didn't seem n
 implement anything in addition to what mesh modeling tools will export. 
 
 Additionally to triangles, \acp{aabb} were implemented with the aim to speed up rendering. While
-\textit{trac0r} does not implement any advanced acceleration structures (such as BVHs or kd-trees),
+trac0r does not implement any advanced acceleration structures (such as \acp{bvh} or kd-trees),
 it uses \acp{aabb} to
 dramatically decrease the number of triangle intersection tests. Every ray first tests for
 intersections with every \ac{aabb} in the scene and upon a hit tests every triangle enclosed by the
@@ -679,26 +689,27 @@ The program does not currently support importing of externally defined scenes or
 defined in-code. Utilities for generating planes, boxes and icosahedra out of triangles are
 provided. A properly sized \ac{aabb} is built around every shape.
 
-It uses classic reverse path tracing and implements four basic materials.
+It uses classic reverse path tracing and can optionally make use of OpenCL or OpenMP in order to
+speed up computation.
 
 \subsection{Materials}
 
-The materials implemented are as follows:
-\begin{enumerate}
-    \item Emitter: Arguably the most important material as it is the one providing the light to a
+trac0r implements the following materials:
+\begin{description}
+    \item[Emitter] Arguably the most important material as it is the one providing the light to a
         scene. This simulates a black body heated to a certain temperature and as such serves as an
         area light when applied to geometry. Any ray hitting geometry using the emitter material is
         terminated. A scene without any geometry using emitter material will be utterly dark.
-    \item Diffuse: A matte material that scatters light to a random location on the hemisphere
+    \item[Diffuse] A matte material that scatters light to a random location on the hemisphere
         around the normal of the intersected geometry.
-    \item Glass: A material that will choose between reflection and refraction depending on the
+    \item[Glass] A material that will choose between reflection and refraction depending on the
         Fresnel coefficients \cite{wiki:fresnel}. It is the only material capable of handling
         intersections within an object.
-    \item Glossy: A metal-like material that will reflect a ray towards a cone centered around the
+    \item[Glossy] A metal-like material that will reflect a ray towards a cone centered around the
         direction of the outgoing light \(\omega_\text{o}\). A roughness parameter determines 
         the opening angle of that cone. A roughness of 0 will result in a perfect mirror while a roughness
         of 1 will produce a cone with an angle of \(\pi\).
-\end{enumerate}
+\end{description}
 
 \begin{minted}[linenos, autogobble]{c++}
     struct Material {
@@ -739,6 +750,20 @@ The materials implemented are as follows:
 \captionof{listing}{Material struct in trac0r\label{lst:trac0r-material}. Depending on the
 \texttt{m\_type} set, different attributes of this material are used.}
 
+\subsection{Random numbers}
+Since the Monte Carlo method lives from random sampling, it needs a solid way of generating random
+numbers. As it turns out, this is actually harder than one might think. While there are a great
+many algorithms out there for getting random numbers, for the purposes of Monte Carlo integration
+in a real time path tracing renderer, the right algorithm has to be chosen very carefully. The most
+important requirement for this purpose is speed of generation. The C standard library comes with
+\texttt{rand()} but sadly it's unusable for our purposes since it uses global state
+shared by all threads which makes it effectively single threaded and therefore too slow.
+The random generators in the C++ standard library provide good quality random numbers but are too
+slow.
+
+In fact, most random number generators are too slow when having to generate tens of millions of numbers per
+second. For generating random numbers, it uses \texttt{xorshift*} generators.
+
 \subsection{Sampling}
 trac0r provides a few different methods for geometric sampling.
 
@@ -751,9 +776,9 @@ trac0r provides a few different methods for geometric sampling.
     */
     inline glm::vec3 uniform_sample_sphere() {
         glm::vec3 rand_vec =
-            glm::vec3(rand_range(-1.f, 1.f),
-                      rand_range(-1.f, 1.f),
-                      rand_range(-1.f, 1.f));
+        glm::vec3(rand_range(-1.f, 1.f),
+        rand_range(-1.f, 1.f),
+        rand_range(-1.f, 1.f));
         return glm::normalize(rand_vec);
     }
 \end{minted}
@@ -800,18 +825,18 @@ trac0r provides a few different methods for geometric sampling.
         glm::vec3 o1 = glm::normalize(ortho(dir));
         glm::vec3 o2 = glm::normalize(glm::cross(dir, o1));
         glm::vec2 r = glm::vec2{rand_range(0.f, 1.f),
-                                rand_range(glm::cos(angle), 1.f)};
+        rand_range(glm::cos(angle), 1.f)};
         r.x = r.x * glm::two_pi<float>();
         r.y = glm::pow(r.y, 1.f / (power + 1.f));
         float oneminus = glm::sqrt(1.f - r.y * r.y);
         return glm::cos(r.x) * oneminus * o1 +
-            glm::sin(r.x) * oneminus * o2 + r.y * dir;
+        glm::sin(r.x) * oneminus * o2 + r.y * dir;
     }
 \end{minted}
 \captionof{listing}{Function to sample cosine-weighted points on a hemisphere given by
-\texttt{dir}. \texttt{power} is used to determine whether to generate uniform samples or
-cosine-weighted ones. If \texttt{power} is \texttt{0.f}, uniform samples are generated. If it's
-\texttt{1.f}, cosine-weighted samples are generated. \texttt{angle} provides the opening angle of
+    \texttt{dir}. \texttt{power} is used to determine whether to generate uniform samples or
+    cosine-weighted ones. If \texttt{power} is \texttt{0.f}, uniform samples are generated. If it's
+    \texttt{1.f}, cosine-weighted samples are generated. \texttt{angle} provides the opening angle of
 the cone that rays will be generated inside of.\label{lst:trac0r-hemisphere-sampling}}
 
 \begin{minted}[linenos, autogobble]{c++}
@@ -828,6 +853,7 @@ the cone that rays will be generated inside of.\label{lst:trac0r-hemisphere-samp
     }
 \end{minted}
 \captionof{listing}{Helper function to get samples from an entire hemisphere making use of
+    the code in listing
 \ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling}}
 
 \begin{minted}[linenos, autogobble]{c++}
@@ -845,17 +871,41 @@ the cone that rays will be generated inside of.\label{lst:trac0r-hemisphere-samp
     }
 \end{minted}
 \captionof{listing}{Helper function to get samples from a partial hemisphere making use of
-the code in listing
+    the code in listing
 \ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling-sone}}
 
-Russian roulette is used as a ray terminator with \[\text{continuation\_probability} = 1 - \frac 1
-{\text{max\_depth} - \text{depth}}.\]
+To achieve anti-aliasing, rays are randomly offset within a pixel which results in smoother borders
+around shapes. This technique is free of additional computational cost with Monte Carlo integration.
+In comparison, rasterization renderers typically require costly methods such as MSAA, FXAA, MLAA
+and so on \cite{site:eurogamer-antialiasing} to achieve the same effect.
 
-Rays are randomly offset within a pixel which results in anti-aliasing. For generating random
-numbers, it uses \texttt{xorshift*} generators.
+\subsection{Russian Roulette}
+A technique called \emph{Russian roulette} \cite{caflisch1998monte} is used for determining when to terminate a ray. This
+technique is commonly used in Monte Carlo path tracers for this purpose. It works by defining a
+criterion that is checked against a random value for every ray before the ray is tested for
+intersection with the scene. If the test is positive, the ray is terminated. Otherwise the ray
+survives and the probability is multiplied with the ray's energy in order to keep the total energy
+constant. This technique can be very useful if the criterion is carefully chosen to have a higher
+chance of terminating rays with lower energy than those with higher energy. The reason for that is
+that rays with lower energy add little new information to the image as compared to those with high
+energy. 
 
-A secondary program was implemented additionally to the renderer called \textit{trac0r\_viewer}
-which allows for interactive scene navigation.
+In this path tracer, the termination criterion used depends on depth as opposed to ray energy
+because a ray with a higher depth will also typically transfer less energy than one with a low
+depth. The formula for the termination heuristic in trac0r is
+
+\[\text{continuation\_probability} = 1 - \frac 1 {\text{max\_depth} - \text{depth}}.\]
+
+In code, this is expressed as:
+
+\begin{minted}[linenos, autogobble]{c++}
+    float continuation_probability = 1.f - (1.f / (max_depth - depth));
+    if (rand_range(0.f, 1.0f) >= continuation_probability) {
+        break;
+    }
+\end{minted}
+\captionof{listing}{Russian roulette in trac0r
+\ref{lst:trac0r-russian-roulette}\label{lst:trac0r-russian-roulette}}
 
 \section{Results}
 \subsection{Visual Results}
@@ -864,12 +914,12 @@ which allows for interactive scene navigation.
     \subfloat[\(n = 2\)]{\includegraphics[scale=0.15]{trac0r-2.png}}
     \subfloat[\(n = 3\)]{\includegraphics[scale=0.15]{trac0r-3.png}}
     \centering
-    
+
     \subfloat[\(n = 4\)]{\includegraphics[scale=0.15]{trac0r-4.png}}
     \subfloat[\(n = 5\)]{\includegraphics[scale=0.15]{trac0r-5.png}}
     \subfloat[\(n = 10\)]{\includegraphics[scale=0.15]{trac0r-10.png}}
     \centering
-    
+
     \subfloat[\(n = 20\)]{\includegraphics[scale=0.15]{trac0r-20.png}}
     \subfloat[\(n = 50\)]{\includegraphics[scale=0.15]{trac0r-50.png}}
     \subfloat[\(n = 100\)]{\includegraphics[scale=0.15]{trac0r-100.png}}
