@@ -13,10 +13,12 @@
 \usepackage{amsthm}
 \usepackage{graphicx}
 \usepackage{caption}
+\usepackage[x11names]{xcolor}
 \usepackage{lmodern}
 \usepackage{float}
 \usepackage{sidecap}
 \usepackage{pgfplots}
+\usepackage{pgfplotstable}
 \usepackage{todonotes}
 \usepackage{minted}
 \usepackage{siunitx}
@@ -970,14 +972,21 @@ longer than a second to render under specific circumstances.
                 ymajorgrids=true,
                 grid style=dashed,
                 smooth,
-                nodes near coords,
                 x label style={below=5mm},
                 x tick label style={align=center, rotate=45},
+                width=15cm
             ]
 
-            \addplot+[
-                    color=blue,
-                ]
+            \addplot
+                coordinates {
+                    (56,16.9)
+                    (116,13.9)
+                    (356,7.4)
+                    (1316,2.6)
+                    (5156,0.72)
+                };
+
+            \addplot
                 coordinates {
                     (56,26)
                     (116,19.5)
@@ -985,10 +994,40 @@ longer than a second to render under specific circumstances.
                     (1316,2.8)
                     (5156,0.73)
                 };
+
+            \addplot
+                coordinates {
+                    (56,17.6)
+                    (116,15.6)
+                    (356,9.5)
+                    (1316,3.7)
+                    (5156,1.0)
+                };
+
+            \addplot
+                coordinates {
+                    (56,24)
+                    (116,21.8)
+                    (356,14)
+                    (1316,5.8)
+                    (5156,1.7)
+                };
+
+            \addplot
+                coordinates {
+                    (56,24)
+                    (116,22.4)
+                    (356,15)
+                    (1316,6.2)
+                    (5156,1.83)
+                };
+            \legend{NVIDIA Geforce GTX 660, NVIDIA Geforce GTX 570,
+                    NVIDIA Geforce GTX 960, NVIDIA Geforce GTX 970,
+                    NVIDIA Geforce GTX 980}
         \end{axis}
     \end{tikzpicture}
     \centering
-    \caption{Scene complexity benchmark on an NVIDIA Geforce GTX 570}
+    \caption{Scene complexity benchmark on a variety of graphics cards}
     \label{fig:benchmark-scene-complexity}
 \end{figure}
 
@@ -1003,32 +1042,53 @@ progress.
             title={GFLOPS of tested graphics cards by year of release},
             xlabel={Year of release},
             ylabel={Peak single precision performance [GFLOPS]},
-            xmin=2008, xmax=2016,
-            xtick={2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016},
-            ytick={100, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000},
+            xmin=2005, xmax=2016,
+            ymin=0,
             legend pos=north west,
             ymajorgrids=true,
             grid style=dashed,
-            nodes near coords,
             x label style={below=5mm},
             x tick label style={align=center, rotate=45},
             /pgf/number format/.cd,
             use comma,
-            1000 sep={}
+            1000 sep={},
+            width=15cm
         ]
 
         \addplot+[
-                color=blue,
                 only marks,
-                point meta=explicit symbolic
+                point meta=explicit symbolic,
+                nodes near coords
             ]
             coordinates {
+                (2006,518) [\tiny NVIDIA Geforce 8800 GTX]
+                (2008,933) [\tiny NVIDIA Geforce GTX 280]
+                (2010,1088) [\tiny NVIDIA Geforce GTX 470]
                 (2010,1405) [\tiny NVIDIA Geforce GTX 570]
                 (2013,5046) [\tiny NVIDIA Geforce GTX 780 Ti]
                 (2013,4848) [\tiny AMD R9 290]
+                (2012,1881) [\tiny NVIDIA Geforce GTX 660]
+                (2015,2308) [\tiny NVIDIA Geforce GTX 960]
                 (2014,3494) [\tiny NVIDIA Geforce GTX 970]
+                (2014,4612) [\tiny NVIDIA Geforce GTX 980]
             };
-        \legend{GPUs}
+
+        \addplot+[
+                smooth,
+                mark=none
+            ]
+            coordinates {
+                (2005,400)
+                (2006,500)
+                (2008,800)
+                (2010,1200)
+                (2012,2000)
+                (2013,2800)
+                (2014,3900)
+                (2015,5000)
+            };
+
+        \legend{GPUs, Mean GFLOPS, lol}
     \end{axis}
 \end{tikzpicture}
 
@@ -1036,31 +1096,30 @@ All \ac{gflops} numbers are taken from the chip designers' official sites.
 
 It should be noted that while \ac{gflops} isn't the only relevant criterion to estimating the
 performance of a \ac{gpu}, it's likely the most important one.
-
+It should be noted that while \ac{gflops} isn't the only relevant criterion to estimating the
 \chapter{Conclusion}
 
 \section{Outlook}
 Scene lookup performance could be drastically improved by employing an acceleration structure such
 as BVH or kd-trees.
-
+Scene lookup performance could be drastically improved by employing an acceleration structure such
 Convergence performance could be best improved by making use of bidirectional path tracing and
 better sampling techniques such as \textit{Multiple Importance Sampling}.
-
+Convergence performance could be best improved by making use of bidirectional path tracing and
 The implementation's usage of memory architectures is likely far from optimal and could be
 improved.
-
+The implementation's usage of memory architectures is likely far from optimal and could be
 Lastly, overall image quality could be improved by running an image filter over the rendered image
 before displaying it to the user. A suitable image filtering algorithm should be non-linear and
 edge-preserving as well as energy-preserving so that it won't lower the quality of the resulting
 image. A notable filter fulfilling those requirements is the \textit{bilateral filter}. Popular but
 unsuitable algorithms include the \textit{box filter} and the \textit{gaussian filter}.
-
+image. A notable filter fulfilling those requirements is the \textit{bilateral filter}. Popular but
 \listoffigures
 \listoflistings
 \listoftables
-
-\bibliographystyle{unsrt}
 \bibliography{main}
+\bibliographystyle{unsrt}
 
 \chapter*{Eidesstattliche Erklärung}
 \onehalfspace
@@ -1073,5 +1132,7 @@ gemacht. Ich versichere weiterhin, dass ich die Arbeit vorher nicht in einem
 anderen Prüfungsverfahren eingereicht habe und die eingereichte schriftliche
 Fassung der auf dem elektronischen Speichermedium entspricht.“
 \singlespace
+Fassung der auf dem elektronischen Speichermedium entspricht.“
+\end{document}
 
 \end{document}
