@@ -688,7 +688,7 @@ intersections with every \ac{aabb} in the scene and upon a hit tests every trian
 triangle intersection tests.
 
 The program does not currently support importing of externally defined scenes or meshes. Scenes are
-defined in-code. Utilities for generating planes, boxes and icosahedra out of triangles are
+defined in-code. Methods for generating planes, boxes and icosahedra out of triangles are
 provided. A properly sized \ac{aabb} is built around every shape.
 
 It uses classic reverse path tracing and can optionally make use of OpenCL or OpenMP in order to
@@ -752,7 +752,102 @@ trac0r implements the following materials:
 \captionof{listing}{Material struct in trac0r\label{lst:trac0r-material}. Depending on the
 \texttt{m\_type} set, different attributes of this material are used.}
 
-\subsection{Random numbers}
+\subsection{Shapes, Triangles and AABBs}
+
+In trac0r, shapes are generators for a collection triangles in a certain configuration. For
+instance, a \texttt{plane} shape generates a list of two triangles that are configured in such a way
+that they will form a quadratic flat surface with an orientation and scale as provided by the
+constructor. In addition, shapes also take care of generating a well-fitting \ac{aabb}.
+
+\begin{minted}[linenos, autogobble]{c++}
+class Shape {
+  public:
+    static Shape make_box(glm::vec3 pos, glm::vec3 orientation,
+                          glm::vec3 size, Material material);
+
+    static Shape make_icosphere(glm::vec3 pos, glm::vec3 orientation,
+                                float radius, size_t iterations,
+                                Material material);
+
+    static Shape make_plane(glm::vec3 pos, glm::vec3 orientation,
+                            glm::vec2 size, Material material);
+
+  protected:
+    glm::vec3 m_pos;
+    glm::vec3 m_orientation;
+    glm::vec3 m_scale;
+    AABB m_aabb;
+    std::vector<Triangle> m_triangles;
+};
+\end{minted}
+\captionof{listing}{Shape class in trac0r\label{lst:trac0r-shape}. The static methods serve as
+factory functions.}
+
+\vspace{1cm}
+
+\acp{aabb} and triangles are rather simple:
+
+\begin{minted}[linenos, autogobble]{c++}
+    struct AABB {
+        glm::vec3 m_min;
+        glm::vec3 m_max;
+    };
+\end{minted}
+\captionof{listing}{\ac{aabb} struct in trac0r\label{lst:trac0r-aabb}. Its extents are set by the
+shape it is part of.}
+
+\begin{minted}[linenos, autogobble]{c++}
+    struct Triangle {
+        glm::vec3 m_v1; // first vertex
+        glm::vec3 m_v2; // second vertex
+        glm::vec3 m_v3; // third vertex
+        Material m_material;
+        glm::vec3 m_normal;
+        glm::vec3 m_centroid;
+        float m_area;
+    }:
+\end{minted}
+\captionof{listing}{Triangle struct in trac0r\label{lst:trac0r-triangle}. \texttt{m\_normal},
+\texttt{m\_centroid} and \texttt{m\_area} are pre-calculated on construction.}
+
+\subsection{Camera and Rays}
+
+The camera is configured during the scene setup and after
+
+\begin{minted}[linenos, autogobble]{c++}
+    class Camera {
+        glm::vec3 m_pos;
+        glm::vec3 m_dir;
+        glm::vec3 m_world_up;
+        glm::vec3 m_right;
+        glm::vec3 m_up;
+        float m_canvas_width;
+        float m_canvas_height;
+        glm::vec3 m_canvas_center_pos;
+        glm::vec3 m_canvas_dir_x;
+        glm::vec3 m_canvas_dir_y;
+        float m_near_plane_dist;
+        float m_far_plane_dist;
+        int m_screen_width;
+        int m_screen_height;
+        float m_vertical_fov;
+        float m_horizontal_fov;
+    }
+\end{minted}
+\captionof{listing}{Camera class in trac0r. Implementation details are left out for the sake
+of brevity. The reader should note, however, that many of the attributes shown here are
+pre-calculated during construction and some are re-calculated every frame.}
+
+\begin{minted}[linenos, autogobble]{c++}
+    struct Ray {
+        glm::vec3 m_origin;
+        glm::vec3 m_dir;
+        glm::vec3 m_invdir;
+    };
+\end{minted}
+\captionof{listing}{Ray struct in trac0r. \texttt{m\_invdir} is pre-calculated upon construction.}
+
+\subsection{Random Numbers}
 Since the Monte Carlo method lives from random sampling, it needs a solid way of generating random
 numbers. As it turns out, this is actually harder than one might think. While there are a great
 many algorithms out there for getting random numbers, for the purposes of Monte Carlo integration
@@ -764,7 +859,35 @@ The random generators in the C++ standard library provide good quality random nu
 slow.
 
 In fact, most random number generators are too slow when having to generate tens of millions of numbers per
-second. For generating random numbers, it uses \texttt{xorshift*} generators.
+second. Eventually, it was decided to use \texttt{xorshift}-type generators from Sebastiano Vigna
+\cite{site:xorshift}. The \texttt{xorshift64star} generator is used to provide the seeds for the
+\texttt{xorshift1024star} generator which is in turn used to generate the actual random numbers.
+Additionally, the \texttt{xorshift1024star} generator is very efficient to use on \acp{gpu} due to
+it not using any expensive operations such as divisions, \texttt{sqrt} or \texttt{pow}.
+
+\begin{minted}[linenos, autogobble]{c++}
+    inline uint64_t xorshift64star(uint64_t x) {
+        x ^= x >> 12; // a
+        x ^= x << 25; // b
+        x ^= x >> 27; // c
+        return x * 2685821657736338717LL;
+    }
+\end{minted}
+\captionof{listing}{Function to quickly generate random numbers with a short period
+\cite{site:xorshift}\label{lst:trac0r-xorshift64star}}
+
+\begin{minted}[linenos, autogobble]{c++}
+    inline int64_t xorshift1024star(uint64_t &p, std::array<uint64_t, 16> &s) {
+    uint64_t s0 = s[p];
+    uint64_t s1 = s[p = (p + 1) & 15];
+    s1 ^= s1 << 31; // a
+    s1 ^= s1 >> 11; // b
+    s0 ^= s0 >> 30; // c
+    return (s[p] = s0 ^ s1) * 1181783497276652981LL;
+}
+\end{minted}
+\captionof{listing}{Function to quickly generate random numbers with a large period
+\cite{site:xorshift}\label{lst:trac0r-xorshift1024star}}
 
 \subsection{Sampling}
 trac0r provides a few different methods for geometric sampling.
@@ -868,7 +991,8 @@ the cone that rays will be generated inside of.\label{lst:trac0r-hemisphere-samp
     *
     * @return A random point on the surface of a cone
     */
-    inline glm::vec3 oriented_cosine_weighted_cone_sample(glm::vec3 dir, float angle) {
+    inline glm::vec3 oriented_cosine_weighted_cone_sample(glm::vec3 dir,
+    float angle) {
         return sample_hemisphere(dir, 1.f, angle);
     }
 \end{minted}
@@ -906,8 +1030,177 @@ In code, this is expressed as:
         break;
     }
 \end{minted}
-\captionof{listing}{Russian roulette in trac0r
-\ref{lst:trac0r-russian-roulette}\label{lst:trac0r-russian-roulette}}
+\captionof{listing}{Russian roulette in trac0r \label{lst:trac0r-russian-roulette}}
+
+\subsection{Scene Setup}
+The scene is hardcoded in the \texttt{setup\_scene} method of trac0r\_viewer. The basic scene setup
+follows these steps:
+
+\begin{enumerate}
+    \item Set up materials
+    \item Set up shapes
+    \item Add shapes to scene
+    \item Set up camera
+\end{enumerate}
+
+In order to understand the code below refer to the Material listing \ref{lst:trac0r-material}.
+
+\begin{minted}[linenos, autogobble]{c++}
+    void Viewer::setup_scene() {
+        trac0r::Material emissive{1, {1.f, 0.93f, 0.85f}, 0.f, 1.f, 15.f};
+        trac0r::Material default_material{2, {0.740063, 0.742313, 0.733934}};
+        trac0r::Material diffuse_red{2, {0.366046, 0.0371827, 0.0416385}};
+        trac0r::Material diffuse_green{2, {0.162928, 0.408903, 0.0833759}};
+        trac0r::Material glass{3, {0.5f, 0.5f, 0.9f}, 0.0f, 1.51714f};
+        trac0r::Material glossy{4, {1.f, 1.f, 1.f}, 0.09f};
+
+        auto wall_left = trac0r::Shape::make_plane({-0.5f, 0.4f, 0},
+        {0, 0, -glm::half_pi<float>()},
+        {1, 1}, diffuse_red);
+        auto wall_right = trac0r::Shape::make_plane({0.5f, 0.4f, 0},
+        {0, 0, glm::half_pi<float>()},
+        {1, 1}, diffuse_green);
+        auto wall_back = trac0r::Shape::make_plane({0, 0.4f, 0.5},
+        {-glm::half_pi<float>(), 0, 0},
+        {1, 1}, default_material);
+        auto wall_top = trac0r::Shape::make_plane({0, 0.9f, 0},
+        {glm::pi<float>(), 0, 0},
+        {1, 1}, default_material);
+        auto wall_bottom = trac0r::Shape::make_plane({0, -0.1f, 0},
+        {0, 0, 0},
+        {1, 1}, default_material);
+        auto lamp = trac0r::Shape::make_plane({0, 0.85f, -0.1},
+        {0, 0, 0}, {0.4, 0.4}, emissive);
+        auto box1 = trac0r::Shape::make_box({0.3f, 0.1f, 0.1f},
+        {0, 0.6f, 0}, {0.2f, 0.5f, 0.2f},
+        default_material);
+        auto box2 = trac0r::Shape::make_box({-0.2f, 0.15f, 0.1f},
+        {0, -0.5f, 0},
+        {0.3f, 0.6f, 0.3f}, glossy);
+        auto sphere1 = trac0r::Shape::make_icosphere({0.f, 0.1f, -0.3f},
+        {0, 0, 0}, 0.15f, 2, glass);
+        auto sphere2 = trac0r::Shape::make_icosphere({0.3f, 0.45f, 0.1f},
+        {0, 0, 0}, 0.15f, 2, glossy);
+
+        Scene::add_shape(m_scene, wall_left);
+        Scene::add_shape(m_scene, wall_right);
+        Scene::add_shape(m_scene, wall_back);
+        Scene::add_shape(m_scene, wall_top);
+        Scene::add_shape(m_scene, wall_bottom);
+        Scene::add_shape(m_scene, lamp); 
+        Scene::add_shape(m_scene, box1);
+        Scene::add_shape(m_scene, box2);
+        Scene::add_shape(m_scene, sphere1);
+        Scene::add_shape(m_scene, sphere2);
+
+        glm::vec3 cam_pos = {0, 0.31, -1.2};
+        glm::vec3 cam_dir = {0, 0, 1};
+        glm::vec3 world_up = {0, 1, 0};
+
+        m_camera = Camera(cam_pos, cam_dir, world_up, 90.f, 0.001, 100.f,
+        m_screen_width, m_screen_height);
+    }
+\end{minted} 
+\captionof{listing}{Scene setup in trac0r\_viewer \label{lst:trac0r-scene-setup}}
+
+\subsection{Tracing a Ray}
+trac0r roughly follows the algorithm outlined in \ref{algorithm}.
+
+\begin{minted}[linenos, autogobble]{c++}
+    // For every horizontal pixel
+    for (uint32_t x = 0; x < m_width; x += stride_x) {
+        // For every vertical pixel
+        for (uint32_t y = 0; y < m_height; y += stride_y) {
+            Ray ray = Camera::pixel_to_ray(m_camera, x, y);
+            glm::vec4 new_color = trace_camera_ray(ray, max_depth);
+            m_luminance[y * m_width + x] = new_color;
+        }
+    }
+\end{minted} 
+\captionof{listing}{Step 1}
+
+\begin{minted}[linenos, autogobble]{c++}
+    IntersectionInfo intersect(const FlatStructure &flatstruct, const Ray &ray) {
+        IntersectionInfo intersect_info;
+
+        // Keep track of closest triangle
+        float closest_dist = std::numeric_limits<float>::max();
+        Triangle closest_triangle;
+        for (const auto &shape : FlatStructure::shapes(flatstruct)) {
+            if (intersect_ray_aabb(ray, Shape::aabb(shape))) {
+                for (auto &tri : Shape::triangles(shape)) {
+                    float dist_to_intersect;
+                    bool intersected = intersect_ray_triangle(ray, tri, dist_to_intersect);
+                    if (intersected) {
+                        // Find closest triangle
+                        if (dist_to_intersect < closest_dist) {
+                            closest_dist = dist_to_intersect;
+                            closest_triangle = tri;
+
+                            intersect_info.m_has_intersected = true;
+                            intersect_info.m_pos = ray.m_origin + ray.m_dir * closest_dist;
+                            intersect_info.m_incoming_ray = ray;
+
+                            intersect_info.m_angle_between = glm::dot(
+                            closest_triangle.m_normal, intersect_info.m_incoming_ray.m_dir);
+
+                            intersect_info.m_normal = closest_triangle.m_normal;
+                            intersect_info.m_material = closest_triangle.m_material;
+                        }
+                    }
+                }
+            }
+        }
+
+        return intersect_info;
+    }
+\end{minted} 
+\captionof{listing}{Scene intersection routine}
+
+\begin{minted}[linenos, autogobble]{c++}
+glm::vec4 Renderer::trace_camera_ray(const Ray &ray, const unsigned max_depth, const Scene &scene) {
+    Ray next_ray = ray;
+    glm::vec3 return_color{0.f};
+    glm::vec3 luminance{1.f};
+    size_t depth = 0;
+
+    // We'll run until terminated by Russian Roulette
+    while (true) {
+        // Russian Roulette here as defined above
+        depth++;
+
+        auto intersect_info = Scene::intersect(scene, next_ray);
+        if (intersect_info.m_has_intersected) {
+            // Emitter Material
+            if (intersect_info.m_material.m_type == 1) {
+                return_color = luminance * intersect_info.m_material.m_color *
+                               intersect_info.m_material.m_emittance / continuation_probability;
+                break;
+            }
+
+            // Diffuse Material
+            else if (intersect_info.m_material.m_type == 2) {
+                // Omitted for brevity
+            }
+
+            // Glass Material
+            else if (intersect_info.m_material.m_type == 3) {
+                // Omitted for brevity
+            }
+
+            // Glossy Material
+            else if (intersect_info.m_material.m_type == 4) {
+                // Omitted for brevity
+            }
+        } else {
+            break;
+        }
+    }
+
+    return glm::vec4(return_color, 1.f);
+}
+\end{minted} 
+\captionof{listing}{Scene intersection routine}
 
 \section{Results}
 \subsection{Visual Results}
@@ -1022,8 +1315,8 @@ longer than a second to render under specific circumstances.
                     (5156,1.83)
                 };
             \legend{NVIDIA Geforce GTX 660, NVIDIA Geforce GTX 570,
-                    NVIDIA Geforce GTX 960, NVIDIA Geforce GTX 970,
-                    NVIDIA Geforce GTX 980}
+                NVIDIA Geforce GTX 960, NVIDIA Geforce GTX 970,
+            NVIDIA Geforce GTX 980}
         \end{axis}
     \end{tikzpicture}
     \centering
@@ -1115,7 +1408,7 @@ unsuitable algorithms include the \textit{box filter} and the \textit{gaussian f
 image. A notable filter fulfilling those requirements is the \textit{bilateral filter}. Popular but
 \listoffigures
 \listoflistings
-\listoftables
+% \listoftables I don't have any tables yet
 \bibliography{main}
 \bibliographystyle{unsrt}
 
@@ -1130,7 +1423,6 @@ gemacht. Ich versichere weiterhin, dass ich die Arbeit vorher nicht in einem
 anderen Prüfungsverfahren eingereicht habe und die eingereichte schriftliche
 Fassung der auf dem elektronischen Speichermedium entspricht.“
 \singlespace
-Fassung der auf dem elektronischen Speichermedium entspricht.“
 \end{document}
 
 \end{document}
