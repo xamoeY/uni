@@ -49,8 +49,8 @@ first part and extrapolates feasibility and suitability of real time path tracin
 hardware according to the current state of technology and trends in the second part.
 
 As part of the research, the author has implemented a path tracing 3D engine in modern C++ in order
-to empirically test the assumptions made in this thesis. The study found path tracing to be a
-viable rendering technique for average commodity hardware in approximately 4 years.
+to empirically test the assumptions made in this thesis. The data suggest that  path tracing may be a
+viable rendering technique for upper level commodity hardware in approximately 4 years.
 \singlespace
 
 \chapter*{Acknowledgments}
@@ -666,7 +666,7 @@ Alongside this thesis, a Monte Carlo path tracer called trac0r was implemented i
 C++14. It uses a library called glm \cite{site:glm} for linear algebra and most
 other mathematical operations. Since trac0r itself is only a library, a graphical application making use
 of it was implemented to showcase its results. This application is called \emph{trac0r\_viewer} and
-uses SDL2 \cite{wiki:sdl} for input and output. trac0r\_viewer allows for interactive scene
+uses SDL2 \cite{wiki:sdl} for input and output.\ trac0r\_viewer allows for interactive scene
 transversal, visual debugging and automatic benchmarking.
 
 A conscious decision was made to
@@ -694,8 +694,28 @@ provided. A properly sized \ac{aabb} is built around every shape.
 It uses classic reverse path tracing and can optionally make use of OpenCL or OpenMP in order to
 speed up computation.
 
-\subsection{Materials}
+\subsection{Design Overview}
+When deciding to implement a path tracer, one first has to assemble a list of requirements and
+components that go into creating it. Not all path tracers are built the same.
 
+The list of requirements for trac0r before it was implemented ordered by descending priority is
+provided below:
+
+\begin{enumerate}
+    \item Speed. In a real time path tracer, rendering speed is of utmost importance as one needs
+        to target interactive frame rates at acceptable image quality. The trade-off here is that
+        the image is allowed to be grainy as long as it can be shown to the user very quickly.
+    \item Ease of implementation
+        
+\end{enumerate}
+
+\begin{description}
+    \item[Random number generation] rofl
+    \item[omg] was
+\end{description}
+
+\subsection{Materials}
+\
 trac0r implements the following materials:
 \begin{description}
     \item[Emitter] Arguably the most important material as it is the one providing the light to a
