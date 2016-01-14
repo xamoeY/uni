@@ -30,6 +30,7 @@
 \usepackage{csquotes}
 \usepackage[T1]{fontenc}
 \graphicspath{ {images/} }
+\pgfplotsset{compat=1.12}
 
 \begin{document}
 
@@ -705,7 +706,7 @@ provided below:
     \item Speed. In a real time path tracer, rendering speed is of utmost importance as one needs
         to target interactive frame rates at acceptable image quality. The trade-off here is that
         the image is allowed to be grainy as long as it can be shown to the user very quickly.
-    \item Ease of implementation
+    \item Ease of implementation. Since the nature of this thesis had t
         
 \end{enumerate}
 
@@ -1285,7 +1286,7 @@ longer than a second to render under specific circumstances.
                 ymajorgrids=true,
                 grid style=dashed,
                 smooth,
-                x label style={below=5mm},
+                cycle list name=exotic,
                 x tick label style={align=center, rotate=45},
                 width=15cm
             ]
@@ -1344,62 +1345,95 @@ longer than a second to render under specific circumstances.
     \label{fig:benchmark-scene-complexity}
 \end{figure}
 
+\begin{table}[H]
+    \centering
+    \begin{tabular}{r | l | l}
+        GPU                     & Average FPS   & GFLOPS \\ \hline
+        NVIDIA Geforce GTX 660  & 8.3           & 1881.6 \\
+        NVIDIA Geforce GTX 570  & 11.6          & 1405.4 \\
+        NVIDIA Geforce GTX 960  & 9.5           & 2308   \\
+        NVIDIA Geforce GTX 970  & 13.5          & 3494   \\
+        NVIDIA Geforce GTX 980  & 13.9          & 4612
+    \end{tabular}
+    \caption{Tested GPU performance and GFLOPS}
+\end{table}
+
 \section{Evaluation}
 In order to properly rate the results seen above, they need to be put into perspective. Performance
 of \acp{cpu} and \acp{gpu} varies enormously depending on their year of release due to technical
 progress.
 \begin{tikzpicture}
     \begin{axis}[
-            title={GFLOPS of tested graphics cards by year of release},
+            title={GFLOPS of highend consumer desktop GPUs by year},
             xlabel={Year of release},
             ylabel={Peak single precision performance [GFLOPS]},
-            xmin=2005, xmax=2016,
+            xmin=2005,
+            xmax=2020,
             ymin=0,
+            ymode=log,
+            log ticks with fixed point,
             legend pos=north west,
             ymajorgrids=true,
             grid style=dashed,
             x label style={below=5mm},
-            x tick label style={align=center, rotate=45},
-            /pgf/number format/.cd,
-            use comma,
-            1000 sep={},
+            x tick label style={align=center, rotate=45, /pgf/number format/1000 sep={}},
             width=15cm
         ]
 
         \addplot+[
+                green!60!black,
                 only marks,
+                mark options={green!60!black},
                 point meta=explicit symbolic,
                 nodes near coords
             ]
             coordinates {
-                (2006,518) [\tiny NVIDIA Geforce 8800 GTX]
-                (2008,933) [\tiny NVIDIA Geforce GTX 280]
-                (2010,1088) [\tiny NVIDIA Geforce GTX 470]
-                (2010,1405) [\tiny NVIDIA Geforce GTX 570]
-                (2013,5046) [\tiny NVIDIA Geforce GTX 780 Ti]
-                (2013,4848) [\tiny AMD R9 290]
-                (2012,1881) [\tiny NVIDIA Geforce GTX 660]
-                (2015,2308) [\tiny NVIDIA Geforce GTX 960]
-                (2014,3494) [\tiny NVIDIA Geforce GTX 970]
-                (2014,4612) [\tiny NVIDIA Geforce GTX 980]
+                (2006,518) [\tiny Geforce 8800 GTX]
+                (2008,648) [\tiny Geforce 9800 GTX]
+                (2008,933) [\tiny Geforce GTX 280]
+                (2010,1345) [\tiny Geforce GTX 480]
+                (2010,1581) [\tiny Geforce GTX 580]
+                (2012,3090) [\tiny Geforce GTX 680]
+                (2013,3977) [\tiny Geforce GTX 780]
+                (2014,4612) [\tiny Geforce GTX 980]
             };
 
         \addplot+[
-                smooth,
-                mark=none
+                red,
+                only marks,
+                mark options={red},
+                point meta=explicit symbolic,
+                nodes near coords
             ]
             coordinates {
-                (2005,400)
-                (2006,500)
-                (2008,800)
-                (2010,1200)
-                (2012,2000)
-                (2013,2800)
-                (2014,3900)
-                (2015,5000)
+                (2007,384) [\tiny Radeon HD 2900 PRO]
+                (2008,1200) [\tiny Radeon HD 4870]
+                (2009,2720) [\tiny Radeon HD 5870]
+                (2011,2703) [\tiny Radeon HD 6970]
+                (2012,3789) [\tiny Radeon HD 7970]
+                (2013,4849) [\tiny Radeon R9 290]
+                (2015,7168) [\tiny Radeon R9 Fury]
             };
 
-        \legend{GPUs, Mean GFLOPS}
+        \addplot+[
+                gray,
+                smooth,
+                mark=none,
+                thick
+            ]
+            coordinates {
+                (2004,250*0.7)
+                (2006,500*0.7)
+                (2008,1000*0.7)
+                (2010,2000*0.7)
+                (2012,4000*0.7)
+                (2014,8000*0.7)
+                (2016,16000*0.7)
+                (2018,32000*0.7)
+                (2020,64000*0.7)
+            };
+
+        \legend{NVIDIA GPUs, AMD GPUs, Mean GFLOPS}
     \end{axis}
 \end{tikzpicture}
 
@@ -1428,7 +1462,7 @@ unsuitable algorithms include the \textit{box filter} and the \textit{gaussian f
 image. A notable filter fulfilling those requirements is the \textit{bilateral filter}. Popular but
 \listoffigures
 \listoflistings
-% \listoftables I don't have any tables yet
+\listoftables
 \bibliography{main}
 \bibliographystyle{unsrt}
 
