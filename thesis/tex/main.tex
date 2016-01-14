@@ -113,6 +113,7 @@ has given my life a new meaning.
 \end{acronym}
 
 \chapter{Introduction}
+\label{introduction}
 As part of the quest for ever-improving game graphics, researchers, graphics hardware developers
 and video game developers alike have been coming up with more and more convoluted and technically
 challenging ways of improving the graphics in interactive media such as games and visualizations in
@@ -703,16 +704,41 @@ The list of requirements for trac0r before it was implemented ordered by descend
 provided below:
 
 \begin{enumerate}
-    \item Speed. In a real time path tracer, rendering speed is of utmost importance as one needs
+    \item \textbf{Speed}. In a real time path tracer, rendering speed is of utmost importance as one needs
         to target interactive frame rates at acceptable image quality. The trade-off here is that
         the image is allowed to be grainy as long as it can be shown to the user very quickly.
-    \item Ease of implementation. Since the nature of this thesis had t
-        
+    \item \textbf{Ease of implementation}. Since the nature and scope of this thesis does not allow for implementing
+        the most advanced algorithms, the only constraint for the implementation is for it to be
+        good enough for benchmarking.
+    \item \textbf{Interactivity}. The path tracer should show off basic interactivity. It should be
+        noted, however, that it will probably not reach the requirements for \emph{real time}
+        as lined out in chapter \ref{introduction} due to hardware constraints.
+    \item \textbf{Portability}. The software should run on different GPUs as well CPUs with different
+        memory and core configurations respectively with minimal effort. It should therefore be
+        written with this portability in mind to make it easier to adapt.
+    \item \textbf{Maintainability}. The software should be easy to understand, well-documented and
+        easy to debug.
 \end{enumerate}
 
+The components that make up the path tracer follow:
+
 \begin{description}
-    \item[Random number generation] rofl
-    \item[omg] was
+    \item[Random number generation] Solid and fast function for pseudo random number generation.
+    \item[Camera] A structure that keeps all camera data as well as some functions to do coordinate
+        transformations.
+    \item[Material system] The path tracer should support four materials: Emitter, diffuse, glossy,
+        glass. Each of them should at least provide their \ac{brdf}.
+    \item[AABBs] A simple way to represent \acp{aabb}.
+    \item[Triangles] The only kind of primitive that materials can be applied unto and in fact the
+        only kind of geometry that is rendered.
+    \item[Shapes and geometry] It should provide a way to generate basic geometric shapes. No
+        mechanism for loading externally defined models is planned.
+    \item[Scene] A way to efficiently save an arbitrary number of shapes. At first this should be
+        implemented as a flat list. If there is enough time, a more efficient method should be
+        considered.
+    \item[Intersection/Scene lookup] Implemented as a ray intersection function for each supported primitive
+        (which in this case means ray-AABB intersection and ray-triangle intersection).
+    \item[Viewer] An interactive viewport that shows off progressive rendering with a sample scene.
 \end{description}
 
 \subsection{Materials}
@@ -1359,94 +1385,103 @@ longer than a second to render under specific circumstances.
 \end{table}
 
 \section{Evaluation}
-In order to properly rate the results seen above, they need to be put into perspective. Performance
+In order to properly rate the results seen above and in figure \ref{fig:benchmark-scene-complexity},
+they need to be put into perspective. Performance
 of \acp{cpu} and \acp{gpu} varies enormously depending on their year of release due to technical
 progress.
-\begin{tikzpicture}
-    \begin{axis}[
-            title={GFLOPS of highend consumer desktop GPUs by year},
-            xlabel={Year of release},
-            ylabel={Peak single precision performance [GFLOPS]},
-            xmin=2005,
-            xmax=2020,
-            ymin=0,
-            ymode=log,
-            log ticks with fixed point,
-            legend pos=north west,
-            ymajorgrids=true,
-            xmajorgrids=true,
-            legend cell align=left,
-            grid style=loosely dashed,
-            extra y ticks={500, 2500, 5000, 20000, 30000},
-            x label style={below=5mm},
-            extra y tick style={log identify minor tick positions=false},
-            x tick label style={align=center, rotate=45, /pgf/number format/1000 sep={}},
-            width=15cm
-        ]
 
-        \addplot+[
-                green!60!black,
-                only marks,
-                mark options={green!60!black},
-                point meta=explicit symbolic,
-                nodes near coords
+\begin{figure}[H]
+    \begin{tikzpicture}
+        \begin{axis}[
+                title={GFLOPS of highend consumer desktop GPUs by year},
+                xlabel={Year of release},
+                ylabel={Peak single precision performance [GFLOPS]},
+                xmin=2005,
+                xmax=2020,
+                ymin=0,
+                ymode=log,
+                log ticks with fixed point,
+                legend pos=north west,
+                ymajorgrids=true,
+                xmajorgrids=true,
+                legend cell align=left,
+                grid style=loosely dashed,
+                extra y ticks={500, 2500, 5000, 20000, 30000},
+                x label style={below=5mm},
+                extra y tick style={log identify minor tick positions=false},
+                x tick label style={align=center, rotate=45, /pgf/number format/1000 sep={}},
+                width=15cm
             ]
-            coordinates {
-                (2006,518) [\tiny Geforce 8800 GTX]
-                (2008,648) [\tiny Geforce 9800 GTX]
-                (2008,933) [\tiny Geforce GTX 280]
-                (2010,1345) [\tiny Geforce GTX 480]
-                (2010,1581) [\tiny Geforce GTX 580]
-                (2012,3090) [\tiny Geforce GTX 680]
-                (2013,3977) [\tiny Geforce GTX 780]
-                (2014,4612) [\tiny Geforce GTX 980]
-            };
 
-        \addplot+[
-                red,
-                only marks,
-                mark options={red},
-                point meta=explicit symbolic,
-                nodes near coords
-            ]
-            coordinates {
-                (2007,384) [\tiny Radeon HD 2900 PRO]
-                (2008,1200) [\tiny Radeon HD 4870]
-                (2009,2720) [\tiny Radeon HD 5870]
-                (2011,2703) [\tiny Radeon HD 6970]
-                (2012,3789) [\tiny Radeon HD 7970]
-                (2013,4849) [\tiny Radeon R9 290]
-                (2015,7168) [\tiny Radeon R9 Fury]
-            };
+            \addplot+[
+                    green!60!black,
+                    only marks,
+                    mark options={green!60!black},
+                    point meta=explicit symbolic,
+                    nodes near coords
+                ]
+                coordinates {
+                    (2006,518) [\tiny Geforce 8800 GTX]
+                    (2008,648) [\tiny Geforce 9800 GTX]
+                    (2008,933) [\tiny Geforce GTX 280]
+                    (2010,1345) [\tiny Geforce GTX 480]
+                    (2010,1581) [\tiny Geforce GTX 580]
+                    (2012,3090) [\tiny Geforce GTX 680]
+                    (2013,3977) [\tiny Geforce GTX 780]
+                    (2014,4612) [\tiny Geforce GTX 980]
+                };
 
-        \addplot+[
-                gray,
-                smooth,
-                mark=none,
-                densely dashed,
-                thick
-            ]
-            coordinates {
-                (2004,250*0.7)
-                (2006,500*0.7)
-                (2008,1000*0.7)
-                (2010,2000*0.7)
-                (2012,4000*0.7)
-                (2014,8000*0.7)
-                (2016,16000*0.7)
-                (2018,32000*0.7)
-                (2020,64000*0.7)
-            };
+            \addplot+[
+                    red,
+                    only marks,
+                    mark options={red},
+                    point meta=explicit symbolic,
+                    nodes near coords
+                ]
+                coordinates {
+                    (2007,384) [\tiny Radeon HD 2900 PRO]
+                    (2008,1200) [\tiny Radeon HD 4870]
+                    (2009,2720) [\tiny Radeon HD 5870]
+                    (2011,2703) [\tiny Radeon HD 6970]
+                    (2012,3789) [\tiny Radeon HD 7970]
+                    (2013,4849) [\tiny Radeon R9 290]
+                    (2015,7168) [\tiny Radeon R9 Fury]
+                };
 
-        \legend{NVIDIA GPUs, AMD GPUs, Mean GFLOPS}
-    \end{axis}
-\end{tikzpicture}
+            \addplot+[
+                    gray,
+                    smooth,
+                    mark=none,
+                    densely dashed,
+                    thick
+                ]
+                coordinates {
+                    (2004,250*0.7)
+                    (2006,500*0.7)
+                    (2008,1000*0.7)
+                    (2010,2000*0.7)
+                    (2012,4000*0.7)
+                    (2014,8000*0.7)
+                    (2016,16000*0.7)
+                    (2018,32000*0.7)
+                    (2020,64000*0.7)
+                };
 
-All \ac{gflops} numbers are taken from the chip designers' official sites.
+            \legend{NVIDIA GPUs, AMD GPUs, Mean GFLOPS}
+        \end{axis}
+    \end{tikzpicture}
+    \centering
+    \caption{Mid-highend GPUs by year vs theoretical single-precision GFLOPS.
+    All \ac{gflops} numbers are taken from the chip designers' official sites.}
+    \label{fig:gpus-by-year}
+\end{figure}
 
 It should be noted that while \ac{gflops} isn't the only relevant criterion to estimating the
-performance of a \ac{gpu}, it's likely the most important one.
-It should be noted that while \ac{gflops} isn't the only relevant criterion to estimating the
+performance of a \ac{gpu}, it's likely the most important one. Memory latency and memory bandwidth
+have certainly become more important as single-precision GPU performance increased rapidly.
+However, memory performance is much harder to express in a single number since it's usually
+multi-tiered where each tier has very different sizes and performance characteristics and it also
+doesn't scale as predictably.
 \chapter{Conclusion}
 
 \section{Outlook}
