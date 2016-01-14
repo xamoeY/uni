@@ -1348,19 +1348,39 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
     \centering
 
     \subfloat[\(n = 20\)]{\includegraphics[scale=0.15]{trac0r-20.png}}
-    \subfloat[\(n = 50\)]{\includegraphics[scale=0.15]{trac0r-50.png}}
-    \subfloat[\(n = 100\)]{\includegraphics[scale=0.15]{trac0r-100.png}}
+    \subfloat[\(n = 50\)]{\includegraphics[scale=0.15]{trac0r-50.png}\label{trac0r-50}}
+    \subfloat[\(n = 100\)]{\includegraphics[scale=0.15]{trac0r-100.png}\label{trac0r-100}}
     \centering
     \caption{trac0r\_viewer viewport after integrating \(n\) frames}
     \label{fig:trac0r_n_frames}
 \end{figure}
 
+While certainly subjective, frame \ref{trac0r-50} and \ref{trac0r-100} begin to start looking
+acceptable. It took an average of 10 seconds to approach this kind of acceptable quality at a
+resolution of 800x640 on an NVIDIA Geforce GTX 570.
+
+\begin{figure}[H]
+    \includegraphics[scale=0.5]{trac0r-5000.png}
+    \centering
+    \caption{trac0r\_viewer after integrating for 5000 frames}
+    \label{fig:trac0r-5000}
+\end{figure}
+
+The image shown in \ref{fig:trac0r-5000} displays an almost fully converged image. It took almost 5
+minutes to converge to this quality given the same parameters and hardware as above.
+
+\subsection{Debug View}
 \begin{figure}[H]
     \includegraphics[scale=0.5]{trac0r-debug1.png}
     \centering
     \caption{trac0r\_viewer debug view}
     \label{fig:trac0r_debug1}
 \end{figure}
+
+Figure \ref{fig:trac0r_debug1} above shows the debug view that can dynamically toggled during
+runtime. It displays lots of useful information in text in the upper left corner of the
+viewport. The yellow boxes display the \acp{aabb} around the shapes because they are usually not
+directly visible. This comes in handy when debugging visibility problems.
 
 \begin{figure}[H]
     \includegraphics[scale=0.5]{trac0r-debug2.png}
@@ -1369,9 +1389,15 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
     \label{fig:trac0r_debug2}
 \end{figure}
 
+As shown in figure \ref{fig:trac0r_debug2}, trac0r\_viewer can be interactively navigated with
+keyboard and mouse controls to control the camera in the scene. Upon every interaction, the scene
+rendering begins accumulating samples anew. While the debug view is not necessary for
+interactivity, it is activated in the image of \ref{fig:trac0r_debug2} to better show the
+transformation.
+
 \subsection{Performance Results}
 Comparing \ac{fps} is not a particularly good criterion between different path tracing since
-usually \ac{fps} doesn't correlate to rate of convergence. That is, one path tracer might be able
+generally \ac{fps} doesn't correlate to rate of convergence. That is, one path tracer might be able
 to iterate at 60 \ac{fps} but takes three seconds to converge while a different path tracer may
 only be able to do 10 \ac{fps} but takes only 2 seconds to converge. This might seem unintuitive at
 first but remember that path tracing is a very different algorithm compared to rasterization. In
@@ -1387,87 +1413,89 @@ to work with and compare than image quality. One might use \ac{psnr} to do the l
 still leaves open the question of when to measure the image as even a single frame might take
 longer than a second to render under specific circumstances.
 
-\begin{figure}[H]
-    \begin{tikzpicture}
-        \begin{axis}[
-                title={Performance in correlation to scene complexity},
-                xlabel={Triangles},
-                ylabel={FPS},
-                legend pos=north east,
-                ymajorgrids=true,
-                grid style=loosely dashed,
-                smooth,
-                cycle list name=exotic,
-                x tick label style={align=center, rotate=45},
-                width=\textwidth
-            ]
+\begin{minipage}{\textwidth}
+    \begin{figure}[H]
+        \begin{tikzpicture}
+            \begin{axis}[
+                    title={Performance in correlation to scene complexity},
+                    xlabel={Triangles},
+                    ylabel={FPS},
+                    legend pos=north east,
+                    ymajorgrids=true,
+                    grid style=loosely dashed,
+                    smooth,
+                    cycle list name=exotic,
+                    x tick label style={align=center, rotate=45},
+                    width=\textwidth
+                ]
 
-            \addplot
-                coordinates {
-                    (56,16.9)
-                    (116,13.9)
-                    (356,7.4)
-                    (1316,2.6)
-                    (5156,0.72)
-                };
+                \addplot
+                    coordinates {
+                        (56,16.9)
+                        (116,13.9)
+                        (356,7.4)
+                        (1316,2.6)
+                        (5156,0.72)
+                    };
 
-            \addplot
-                coordinates {
-                    (56,26)
-                    (116,19.5)
-                    (356,8.9)
-                    (1316,2.8)
-                    (5156,0.73)
-                };
+                \addplot
+                    coordinates {
+                        (56,26)
+                        (116,19.5)
+                        (356,8.9)
+                        (1316,2.8)
+                        (5156,0.73)
+                    };
 
-            \addplot
-                coordinates {
-                    (56,17.6)
-                    (116,15.6)
-                    (356,9.5)
-                    (1316,3.7)
-                    (5156,1.0)
-                };
+                \addplot
+                    coordinates {
+                        (56,17.6)
+                        (116,15.6)
+                        (356,9.5)
+                        (1316,3.7)
+                        (5156,1.0)
+                    };
 
-            \addplot
-                coordinates {
-                    (56,24)
-                    (116,21.8)
-                    (356,14)
-                    (1316,5.8)
-                    (5156,1.7)
-                };
+                \addplot
+                    coordinates {
+                        (56,24)
+                        (116,21.8)
+                        (356,14)
+                        (1316,5.8)
+                        (5156,1.7)
+                    };
 
-            \addplot
-                coordinates {
-                    (56,24)
-                    (116,22.4)
-                    (356,15)
-                    (1316,6.2)
-                    (5156,1.83)
-                };
-            \legend{NVIDIA Geforce GTX 660, NVIDIA Geforce GTX 570,
-                NVIDIA Geforce GTX 960, NVIDIA Geforce GTX 970,
-            NVIDIA Geforce GTX 980}
-        \end{axis}
-    \end{tikzpicture}
-    \centering
-    \caption{Scene complexity benchmark on a variety of graphics cards}
-    \label{fig:benchmark-scene-complexity}
-\end{figure}
+                \addplot
+                    coordinates {
+                        (56,24)
+                        (116,22.4)
+                        (356,15)
+                        (1316,6.2)
+                        (5156,1.83)
+                    };
+                \legend{NVIDIA Geforce GTX 660, NVIDIA Geforce GTX 570,
+                    NVIDIA Geforce GTX 960, NVIDIA Geforce GTX 970,
+                NVIDIA Geforce GTX 980}
+            \end{axis}
+        \end{tikzpicture}
+        \centering
+        \caption{Scene complexity benchmark on a variety of graphics cards}
+        \label{fig:benchmark-scene-complexity}
+    \end{figure}
 
-\begin{table}[H]
-    \centering
-    \begin{tabular}{r | l | l}
-        GPU                     & Average FPS   & GFLOPS \\ \hline
-        NVIDIA Geforce GTX 660  & 8.3           & 1881.6 \\
-        NVIDIA Geforce GTX 570  & 11.6          & 1405.4 \\
-        NVIDIA Geforce GTX 960  & 9.5           & 2308   \\
-        NVIDIA Geforce GTX 970  & 13.5          & 3494   \\
-        NVIDIA Geforce GTX 980  & 13.9          & 4612
-    \end{tabular}
-    \caption{Tested GPU performance and GFLOPS}
-\end{table}
+    \begin{table}[H]
+        \centering
+        \begin{tabular}{l | r | r}
+            GPU                     & Average FPS   & GFLOPS \\ \hline
+            NVIDIA Geforce GTX 660  & 8.3           & 1881.6 \\
+            NVIDIA Geforce GTX 570  & 11.6          & 1405.4 \\
+            NVIDIA Geforce GTX 960  & 9.5           & 2308   \\
+            NVIDIA Geforce GTX 970  & 13.5          & 3494   \\
+            NVIDIA Geforce GTX 980  & 13.9          & 4612
+        \end{tabular}
+        \caption{Tested GPU performance and GFLOPS}
+    \end{table}
+\end{minipage}
 
 \section{Evaluation}
 In order to properly rate the results seen above and in figure \ref{fig:benchmark-scene-complexity},
@@ -1568,8 +1596,11 @@ However, memory performance is much harder to express in a single number since i
 multi-tiered where each tier has very different sizes and performance characteristics and it also
 doesn't scale as predictably.
 \chapter{Conclusion}
+% TODO
 
 \section{Outlook}
+% TODO
+
 Scene lookup performance could be drastically improved by employing an acceleration structure such
 as BVH or kd-trees.
 Scene lookup performance could be drastically improved by employing an acceleration structure such
@@ -1602,6 +1633,4 @@ gemacht. Ich versichere weiterhin, dass ich die Arbeit vorher nicht in einem
 anderen Prüfungsverfahren eingereicht habe und die eingereichte schriftliche
 Fassung der auf dem elektronischen Speichermedium entspricht.“
 \singlespace
-\end{document}
-
 \end{document}
