@@ -1284,7 +1284,7 @@ longer than a second to render under specific circumstances.
                 ylabel={FPS},
                 legend pos=north east,
                 ymajorgrids=true,
-                grid style=dashed,
+                grid style=loosely dashed,
                 smooth,
                 cycle list name=exotic,
                 x tick label style={align=center, rotate=45},
@@ -1374,8 +1374,12 @@ progress.
             log ticks with fixed point,
             legend pos=north west,
             ymajorgrids=true,
-            grid style=dashed,
+            xmajorgrids=true,
+            legend cell align=left,
+            grid style=loosely dashed,
+            extra y ticks={500, 2500, 5000, 20000, 30000},
             x label style={below=5mm},
+            extra y tick style={log identify minor tick positions=false},
             x tick label style={align=center, rotate=45, /pgf/number format/1000 sep={}},
             width=15cm
         ]
@@ -1419,6 +1423,7 @@ progress.
                 gray,
                 smooth,
                 mark=none,
+                densely dashed,
                 thick
             ]
             coordinates {
