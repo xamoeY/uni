@@ -24,6 +24,7 @@
 \usepackage{siunitx}
 \usepackage{acronym}
 \usepackage{subfig}
+\usepackage{tabularx}
 \usepackage{setspace}
 \usepackage[customcolors]{hf-tikz}
 \usepackage{url}
@@ -717,8 +718,11 @@ provided below:
         memory and core configurations respectively with minimal effort. It should therefore be
         written with this portability in mind to make it easier to adapt.
     \item \textbf{Maintainability}. The software should be easy to understand, well-documented and
-        easy to debug.
+        easy to debug. Code should be commented where necessary.
 \end{enumerate}
+
+These requirements and priorities directed and
+influenced many decisions and trade-offs made during the implementation.
 
 The components that make up the path tracer follow:
 
@@ -740,6 +744,48 @@ The components that make up the path tracer follow:
         (which in this case means ray-AABB intersection and ray-triangle intersection).
     \item[Viewer] An interactive viewport that shows off progressive rendering with a sample scene.
 \end{description}
+
+These components are implemented in the following files:
+
+\begin{table}[H]
+    \centering
+    \begin{tabularx}{\textwidth}{l | X}
+        File(s)                    & Description \\ \hline
+        trac0r/aabb.\{cpp,hpp\}      & \texttt{AABB} class implementation. \\
+        trac0r/camera.\{cpp,hpp\}    & \texttt{Camera} class implementation with many helper methods. \\
+        trac0r/flat\_structure.\{cpp,hpp\}  & Simple flat data structure implementation for scene geometry.
+                                     Also contains the intersection logic for all contained
+                                     geometry.\\
+        trac0r/intersection\_info.hpp & Struct containing all relevant information about a single
+                                     intersection. This struct is returned by all intersection
+                                     methods. \\
+        trac0r/intersections.hpp   & Contains functions for testing primitives for intersections. \\
+        trac0r/material.hpp        & \texttt{Material} struct containing all material state. \\
+        trac0r/random.hpp          & Implements functions to generate random floating point
+                                     numbers, integers. Also contains functions for random
+                                     geometric sampling with uniform and cosine-weighted
+                                     distributions. \\
+        trac0r/ray.hpp             & Contains the \texttt{Ray} struct which is used by every ray in
+                                     trac0r.\\
+        trac0r/renderer\_aux.cl    & OpenCL code containing the code for a single trace through the
+                                     scene. Implements the BRDFs for all materials. \\
+        trac0r/renderer\_aux.cpp   & C++ code containing the code for a single trace through the
+                                     scene. Implements the BRDFs for all materials. \\
+        trac0r/renderer.\{cpp,hpp\}  & Contains code for preparing the
+                                     OpenCL and C++ renderer. \\
+        trac0r/scene.\{cpp,hpp\}     & Simple \texttt{Scene} class serving as an abstract interface
+                                     to the underlying data structure. \\
+        trac0r/shape.\{cpp,hpp\}     & Contains a few factory methods for generating different kinds
+                                     of geometry.\\
+        trac0r/timer.hpp           & High-resolution timer for profiling purposes. \\
+        trac0r/triangle.hpp        & A simple struct for expressing a
+                                     triangle. \\
+        trac0r/utils.hpp           & Contains various small helper functions for translating OpenCL
+                                     error codes, packing packing and unpacking colors and
+                                     displaying text.
+    \end{tabularx}
+    \caption{List of files in trac0r}
+\end{table}
 
 \subsection{Materials}
 \
@@ -990,10 +1036,6 @@ trac0r provides a few different methods for geometric sampling.
     * @return A random point on the surface of a sphere
     */
     inline glm::vec3 sample_hemisphere(glm::vec3 dir, float power, float angle) {
-        // Code adapted from Mikael Hvidtfeldt Christensen's resource
-        // at http://blog.hvidtfeldts.net/index.php/2015/01/path-tracing-3d-fractals/
-        // Thanks!
-
         glm::vec3 o1 = glm::normalize(ortho(dir));
         glm::vec3 o2 = glm::normalize(glm::cross(dir, o1));
         glm::vec2 r = glm::vec2{rand_range(0.f, 1.f),
@@ -1009,7 +1051,9 @@ trac0r provides a few different methods for geometric sampling.
     \texttt{dir}. \texttt{power} is used to determine whether to generate uniform samples or
     cosine-weighted ones. If \texttt{power} is \texttt{0.f}, uniform samples are generated. If it's
     \texttt{1.f}, cosine-weighted samples are generated. \texttt{angle} provides the opening angle of
-the cone that rays will be generated inside of.\label{lst:trac0r-hemisphere-sampling}}
+    the cone that rays will be generated inside of.
+    \label{lst:trac0r-hemisphere-sampling}
+    \cite{site:better-sampling} \cite{site:cosine-weighted-hemisphere} \cite{site:path-tracing-3d-fractals}}
 
 \begin{minted}[linenos, autogobble]{c++}
     /**
@@ -1090,6 +1134,14 @@ follows these steps:
     \item Set up camera
 \end{enumerate}
 
+The code listed below in \ref{lst:trac0r-scene-setup} creates a basic test scene showing off all of
+trac0r current materials and shapes. The basic setup resembles that the classic Cornell box. It has
+a red diffuse left wall, a green diffuse right wall, white floor, white back wall and white ceiling.
+A glossy box is placed inside the left half of the room while a white diffuse box is placed on the
+right half of it. A icosahedron with a glass material is placed in its center in front of the
+boxes. A glossy icosahedron is placed on top of the right box. A box with the emitter material is
+placed under the ceiling to serve as a light.
+
 In order to understand the code below refer to the Material listing \ref{lst:trac0r-material}.
 
 \begin{minted}[linenos, autogobble]{c++}
@@ -1101,33 +1153,33 @@ In order to understand the code below refer to the Material listing \ref{lst:tra
         trac0r::Material glass{3, {0.5f, 0.5f, 0.9f}, 0.0f, 1.51714f};
         trac0r::Material glossy{4, {1.f, 1.f, 1.f}, 0.09f};
 
-        auto wall_left = trac0r::Shape::make_plane({-0.5f, 0.4f, 0},
-        {0, 0, -glm::half_pi<float>()},
-        {1, 1}, diffuse_red);
+        auto wall_left = trac0r::Shape::make_plane({-0.5no front wall and f, 0.4f, 0},
+                                    {0, 0, -glm::half_pi<float>()},
+                                    {1, 1}, diffuse_red);
         auto wall_right = trac0r::Shape::make_plane({0.5f, 0.4f, 0},
-        {0, 0, glm::half_pi<float>()},
-        {1, 1}, diffuse_green);
+                                    {0, 0, glm::half_pi<float>()},
+                                    {1, 1}, diffuse_green);
         auto wall_back = trac0r::Shape::make_plane({0, 0.4f, 0.5},
-        {-glm::half_pi<float>(), 0, 0},
-        {1, 1}, default_material);
+                                    {-glm::half_pi<float>(), 0, 0},
+                                    {1, 1}, default_material);
         auto wall_top = trac0r::Shape::make_plane({0, 0.9f, 0},
-        {glm::pi<float>(), 0, 0},
-        {1, 1}, default_material);
+                                    {glm::pi<float>(), 0, 0},
+                                    {1, 1}, default_material);
         auto wall_bottom = trac0r::Shape::make_plane({0, -0.1f, 0},
-        {0, 0, 0},
-        {1, 1}, default_material);
+                                    {0, 0, 0},
+                                    {1, 1}, default_material);
         auto lamp = trac0r::Shape::make_plane({0, 0.85f, -0.1},
-        {0, 0, 0}, {0.4, 0.4}, emissive);
-        auto box1 = trac0r::Shape::make_box({0.3f, 0.1f, 0.1f},
-        {0, 0.6f, 0}, {0.2f, 0.5f, 0.2f},
-        default_material);
+                                    {0, 0, 0}, {0.4, 0.4}, emissive);
+                                    auto box1 = trac0r::Shape::make_box({0.3f, 0.1f, 0.1f},
+                                    {0, 0.6f, 0}, {0.2f, 0.5f, 0.2f},
+                                    default_material);
         auto box2 = trac0r::Shape::make_box({-0.2f, 0.15f, 0.1f},
-        {0, -0.5f, 0},
-        {0.3f, 0.6f, 0.3f}, glossy);
+                                    {0, -0.5f, 0},
+                                    {0.3f, 0.6f, 0.3f}, glossy);
         auto sphere1 = trac0r::Shape::make_icosphere({0.f, 0.1f, -0.3f},
-        {0, 0, 0}, 0.15f, 2, glass);
+                                    {0, 0, 0}, 0.15f, 2, glass);
         auto sphere2 = trac0r::Shape::make_icosphere({0.3f, 0.45f, 0.1f},
-        {0, 0, 0}, 0.15f, 2, glossy);
+                                    {0, 0, 0}, 0.15f, 2, glossy);
 
         Scene::add_shape(m_scene, wall_left);
         Scene::add_shape(m_scene, wall_right);
@@ -1158,13 +1210,18 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
     for (uint32_t x = 0; x < m_width; x += stride_x) {
         // For every vertical pixel
         for (uint32_t y = 0; y < m_height; y += stride_y) {
+            // Make a ray out of this pixel
             Ray ray = Camera::pixel_to_ray(m_camera, x, y);
+
+            // Trace this new ray and save the color
             glm::vec4 new_color = trace_camera_ray(ray, max_depth);
+
+            // Accumulate result into buffer
             m_luminance[y * m_width + x] = new_color;
         }
     }
 \end{minted} 
-\captionof{listing}{Step 1}
+\captionof{listing}{First, make a ray for every pixel, then trace it, finally accumulate the result into a buffer}
 
 \begin{minted}[linenos, autogobble]{c++}
     IntersectionInfo intersect(const FlatStructure &flatstruct, const Ray &ray) {
@@ -1177,7 +1234,8 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
             if (intersect_ray_aabb(ray, Shape::aabb(shape))) {
                 for (auto &tri : Shape::triangles(shape)) {
                     float dist_to_intersect;
-                    bool intersected = intersect_ray_triangle(ray, tri, dist_to_intersect);
+                    bool intersected = 
+                        intersect_ray_triangle(ray, tri, dist_to_intersect);
                     if (intersected) {
                         // Find closest triangle
                         if (dist_to_intersect < closest_dist) {
@@ -1185,14 +1243,18 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
                             closest_triangle = tri;
 
                             intersect_info.m_has_intersected = true;
-                            intersect_info.m_pos = ray.m_origin + ray.m_dir * closest_dist;
+                            intersect_info.m_pos =
+                                ray.m_origin + ray.m_dir * closest_dist;
                             intersect_info.m_incoming_ray = ray;
 
-                            intersect_info.m_angle_between = glm::dot(
-                            closest_triangle.m_normal, intersect_info.m_incoming_ray.m_dir);
+                            intersect_info.m_angle_between =
+                                glm::dot(closest_triangle.m_normal,
+                                         intersect_info.m_incoming_ray.m_dir);
 
-                            intersect_info.m_normal = closest_triangle.m_normal;
-                            intersect_info.m_material = closest_triangle.m_material;
+                            intersect_info.m_normal =
+                                closest_triangle.m_normal;
+                            intersect_info.m_material =
+                                closest_triangle.m_material;
                         }
                     }
                 }
@@ -1205,49 +1267,72 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
 \captionof{listing}{Scene intersection routine}
 
 \begin{minted}[linenos, autogobble]{c++}
-glm::vec4 Renderer::trace_camera_ray(const Ray &ray, const unsigned max_depth, const Scene &scene) {
-    Ray next_ray = ray;
-    glm::vec3 return_color{0.f};
-    glm::vec3 luminance{1.f};
-    size_t depth = 0;
+    glm::vec4 Renderer::trace_camera_ray(const Ray &ray,
+                                         const unsigned max_depth,
+                                         const Scene &scene) {
+        Ray next_ray = ray;
+        glm::vec3 return_color{0.f};
+        glm::vec3 luminance{1.f};
+        size_t depth = 0;
 
-    // We'll run until terminated by Russian Roulette
-    while (true) {
-        // Russian Roulette here as defined above
-        depth++;
+        // We'll run until terminated by Russian Roulette
+        while (true) {
+            // Russian Roulette here as defined above
+            depth++;
 
-        auto intersect_info = Scene::intersect(scene, next_ray);
-        if (intersect_info.m_has_intersected) {
-            // Emitter Material
-            if (intersect_info.m_material.m_type == 1) {
-                return_color = luminance * intersect_info.m_material.m_color *
-                               intersect_info.m_material.m_emittance / continuation_probability;
+            auto intersect_info = Scene::intersect(scene, next_ray);
+            if (intersect_info.m_has_intersected) {
+                // Emitter Material
+                if (intersect_info.m_material.m_type == 1) {
+                    return_color =
+                        luminance *
+                        intersect_info.m_material.m_color *
+                        intersect_info.m_material.m_emittance /
+                        continuation_probability;
+                    break;
+                }
+
+                // Diffuse Material
+                else if (intersect_info.m_material.m_type == 2) {
+                    // Find normal in correct direction
+                    intersect_info.m_normal =
+                        intersect_info.m_normal *
+                        -glm::sign(intersect_info.m_angle_between);
+                    intersect_info.m_angle_between =
+                        intersect_info.m_angle_between *
+                        -glm::sign(intersect_info.m_angle_between);
+
+                    // Find new random direction for diffuse reflection
+
+                    // We're using importance sampling for this since it
+                    // converges much faster than uniform sampling
+                    glm::vec3 new_ray_dir =
+                        oriented_cosine_weighted_hemisphere_sample(
+                            intersect_info.m_normal);
+                    luminance *= intersect_info.m_material.m_color;
+
+                    // Make a new ray
+                    next_ray = Ray{intersect_info.m_pos, new_ray_dir};
+                }
+
+                // Glass Material
+                else if (intersect_info.m_material.m_type == 3) {
+                    // BRDF Omitted for brevity
+                }
+
+                // Glossy Material
+                else if (intersect_info.m_material.m_type == 4) {
+                    // BRDF Omitted for brevity
+                }
+            } else {
                 break;
             }
-
-            // Diffuse Material
-            else if (intersect_info.m_material.m_type == 2) {
-                // Omitted for brevity
-            }
-
-            // Glass Material
-            else if (intersect_info.m_material.m_type == 3) {
-                // Omitted for brevity
-            }
-
-            // Glossy Material
-            else if (intersect_info.m_material.m_type == 4) {
-                // Omitted for brevity
-            }
-        } else {
-            break;
         }
-    }
 
-    return glm::vec4(return_color, 1.f);
-}
+        return glm::vec4(return_color, 1.f);
+    }
 \end{minted} 
-\captionof{listing}{Scene intersection routine}
+\captionof{listing}{Material state machine \cite{site:path-tracing-3d-fractals}}
 
 \section{Results}
 \subsection{Visual Results}
@@ -1314,7 +1399,7 @@ longer than a second to render under specific circumstances.
                 smooth,
                 cycle list name=exotic,
                 x tick label style={align=center, rotate=45},
-                width=15cm
+                width=\textwidth
             ]
 
             \addplot
@@ -1406,11 +1491,11 @@ progress.
                 xmajorgrids=true,
                 legend cell align=left,
                 grid style=loosely dashed,
-                extra y ticks={500, 2500, 5000, 20000, 30000},
+                extra y ticks={500, 2500, 5000, 20000, 40000},
                 x label style={below=5mm},
                 extra y tick style={log identify minor tick positions=false},
                 x tick label style={align=center, rotate=45, /pgf/number format/1000 sep={}},
-                width=15cm
+                width=\textwidth
             ]
 
             \addplot+[
