@@ -1134,15 +1134,16 @@ follows these steps:
     \item Set up camera
 \end{enumerate}
 
-The code listed below in \ref{lst:trac0r-scene-setup} creates a basic test scene showing off all of
+The code listed below in~\ref{lst:trac0r-scene-setup} creates a basic test scene showing off all of
 trac0r current materials and shapes. The basic setup resembles that the classic Cornell box. It has
 a red diffuse left wall, a green diffuse right wall, white floor, white back wall and white ceiling.
 A glossy box is placed inside the left half of the room while a white diffuse box is placed on the
 right half of it. A icosahedron with a glass material is placed in its center in front of the
 boxes. A glossy icosahedron is placed on top of the right box. A box with the emitter material is
-placed under the ceiling to serve as a light.
+placed under the ceiling to serve as a light. An almost fully converged picture of this scene can
+be seen in figure~\ref{fig:trac0r-5000}.
 
-In order to understand the code below refer to the Material listing \ref{lst:trac0r-material}.
+In order to understand the code below refer to the Material listing~\ref{lst:trac0r-material}.
 
 \begin{minted}[linenos, autogobble]{c++}
     void Viewer::setup_scene() {
@@ -1367,7 +1368,8 @@ resolution of 800x640 on an NVIDIA Geforce GTX 570.
 \end{figure}
 
 The image shown in~\ref{fig:trac0r-5000} displays an almost fully converged image. It took almost 5
-minutes to converge to this quality given the same parameters and hardware as above.
+minutes to converge to this quality given the same parameters and hardware as above. The scene
+shown here is described by the code given in~\ref{lst:trac0r-scene-setup}.
 
 \subsection{Debug View}
 \begin{figure}[H]
