@@ -1593,12 +1593,26 @@ progress.
     \label{fig:gpus-by-year}
 \end{figure}
 
+The logarithmic graph in figure~\ref{fig:gpus-by-year} shows the exponential growth of \ac{gflops} since 2004
+when \acp{gpu} had approximately 250 \ac{gflops} of single-precision performance at their disposal.
+The exponential function of the graph is
+
+\[ f(x) = 250 * 2 ^ {0.5 (x-2004)} * 0.7 \]
+and can be used to extrapolate \ac{gpu} performance until 2020 assuming the growth stays constant.
+Following that assumption, there will be a \ac{gpu} capable of 10000 \ac{gflops} in 2016, 20000
+\ac{gflops} in 2018 and 40000 \ac{gflops} in 2020.
+
 It should be noted that while \ac{gflops} isn't the only relevant criterion to estimating the
-performance of a \ac{gpu}, it's likely the most important one. Memory latency and memory bandwidth
-have certainly become more important as single-precision GPU performance increased rapidly.
-However, memory performance is much harder to express in a single number since it's usually
-multi-tiered where each tier has very different sizes and performance characteristics and it also
-doesn't scale as predictably.
+performance of a \ac{gpu}, it's likely the most important one.
+
+On the other hand, memory performance didn't keep up with floating point performance and therefore
+the performance gap between memory and floating point speed widened. This has turned memory latency
+and memory bandwidth into the most common bottleneck for modern \ac{gpu} applications.
+
+Although certainly interesting, no graph for memory performance was created because
+it is much harder to express in a single number since it's usually
+a multi-tiered memory architecture where each tier has very different sizes
+and performance characteristics and it also doesn't scale as predictably.
 
 \chapter{Conclusion}
 The study set out to explore the question of when real time path tracing would become
@@ -1608,8 +1622,9 @@ According to the criteria, real time path tracing would be achieved when a suffi
 frame can be rendered within \(16.67ms\) (which works out to 60 \ac{fps}). The author realizes that
 image quality is subjective but makes an attempt to be critical about quality.
 
-A Monte Carlo path tracer was implemented as part of the study and is used to benchmark current
-graphics hardware to extrapolate from.
+A Monte Carlo path tracer was implemented as part of the study and is used to benchmark a selection
+of current and past graphics hardware to extrapolate from. It also extrapolates graphics hardware
+performance by single-precision \ac{gflops}. 
 
 \section{Outlook}
 Scene lookup performance could be drastically improved by employing an acceleration structure such
