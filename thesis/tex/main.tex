@@ -165,9 +165,10 @@ depth of field \cite{wiki:depth-of-field} and light mapping \cite{wiki:lightmap}
 
 \section{Leading Questions and Goals}
 The primary research objective of this thesis is finding out when real time path tracing will be a
-viable alternative to rasterization on commodity hardware. This question is explored by looking at
-theoretical indicators (such as Moore's Law and performance projections) and practical indicators (by implementing a real time
-path tracer and benchmarking it) about its performance and the current state of the industry.
+viable alternative to rasterization on commodity desktop hardware. This question is explored by looking at
+theoretical indicators (such as GFLOPS by year and performance projections)
+and practical indicators (by implementing a real time
+path tracer and benchmarking it).
 
 \chapter{Real Time Path Tracing Explained}
 This chapter will explain the concepts, mathematics, physics and algorithms behind path tracing,
@@ -1581,6 +1582,7 @@ progress.
                     (2018,32000*0.7)
                     (2020,64000*0.7)
                 };
+                % Formula is: 250*2^(0.5(x-2004))*0.7 x is from 2004 to 2020
 
             \legend{NVIDIA GPUs, AMD GPUs, Mean GFLOPS}
         \end{axis}
@@ -1597,12 +1599,19 @@ have certainly become more important as single-precision GPU performance increas
 However, memory performance is much harder to express in a single number since it's usually
 multi-tiered where each tier has very different sizes and performance characteristics and it also
 doesn't scale as predictably.
+
 \chapter{Conclusion}
-% TODO
+The study set out to explore the question of when real time path tracing would become
+a viable alternative to rasterization on consumer-level desktop hardware. It did so by defining
+performance criteria that were chosen to be considered the minimum threshold for real time path tracing.
+According to the criteria, real time path tracing would be achieved when a sufficiently converged
+frame can be rendered within \(16.67ms\) (which works out to 60 \ac{fps}). The author realizes that
+image quality is subjective but makes an attempt to be critical about quality.
+
+A Monte Carlo path tracer was implemented as part of the study and is used to benchmark current
+graphics hardware to extrapolate from.
 
 \section{Outlook}
-% TODO
-
 Scene lookup performance could be drastically improved by employing an acceleration structure such
 as BVH or kd-trees.
 Scene lookup performance could be drastically improved by employing an acceleration structure such
