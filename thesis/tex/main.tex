@@ -20,6 +20,7 @@
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
 \usepackage{todonotes}
+\usepackage{hyperref}
 \usepackage{minted}
 \usepackage{siunitx}
 \usepackage{acronym}
@@ -47,7 +48,7 @@ Real time path tracing has been prohibitively expensive in regards to computatio
 However, modern \acs{gpu}s and even \acs{cpu}s have finally gotten fast enough for real time path
 tracing to become a viable alternative to traditional real time approaches to rendering.  Based on
 that assumption, this thesis presents the idea, algorithm and complexity behind path tracing in the
-first part and extrapolates feasibility and suitability of real time path tracing on consumer
+first part, and extrapolates feasibility and suitability of real time path tracing on consumer
 hardware according to the current state of technology and trends in the second part.
 
 As part of the research, the author has implemented a path tracing 3D engine in modern C++ in order
@@ -129,7 +130,7 @@ rasterization-based rendering has largely remained the same.
 
 The real world photon-collecting approach that actual cameras use has so far not been adopted for
 interactive media by the industry in any capacity because the computational cost has historically
-been prohibitively expensive. It is, however, used extensively (and has been in use since decades)
+been prohibitively expensive. It is, however, used extensively (and has been in use for decades)
 for offline, non-interactive rendering of computer-generated movies and visualizations of
 scientific simulations.
 
@@ -166,14 +167,13 @@ depth of field \cite{wiki:depth-of-field} and light mapping \cite{wiki:lightmap}
 \section{Leading Questions and Goals}
 The primary research objective of this thesis is finding out when real time path tracing will be a
 viable alternative to rasterization on commodity desktop hardware. This question is explored by looking at
-theoretical indicators (such as GFLOPS by year and performance projections)
-and practical indicators (by implementing a real time
-path tracer and benchmarking it).
+theoretical indicators (such as peak floating point performance and performance projections)
+and practical indicators (by implementing a real time path tracer and benchmarking it).
 
 \chapter{Real Time Path Tracing Explained}
 This chapter will explain the concepts, mathematics, physics and algorithms behind path tracing,
 how real time path tracing differs from offline path tracing and the trade-offs made to achieve
-acceptable performance. It will also explain how path tracing differs from rasterization and other
+acceptable performance. It will also explain how path tracing differs from rasterization and common
 \ac{gi} techniques.
 
 \section{Physically Based Approach}
@@ -191,13 +191,13 @@ reach Earth and an even smaller percentage of those are ever observed (although 
 don't have to be observed to have a physical effect, of course). Since we only care for photons that
 are relevant to the image that we are trying to render, it makes more sense to use
 \emph{backwards ray tracing} in which rays (which simulate streams of photons) are shot from the
-observer into the scene for every sensor. It is called \textit{backwards} because the rays go
-the reverse direction compared to their physical counterparts.
+observer into the scene for every sensor. It is called \textit{backwards} because the rays are
+traced in the reverse direction compared to their physical counterparts.
 
 This is efficient since we usually only care about a
 single observer (the scene camera) for which we will trace every single ray that it can possibly
 perceive. In computer graphics terms, we will trace a ray for every pixel of the camera (and for
-now we will assume that the viewport is exactly the same resolution as the camera simplicity's
+now we will assume that the viewport is exactly the same resolution as the camera for simplicity's
 sake). For every ray, we check for intersections with geometry and then either bounce a few more
 times or shoot directly towards a light. We might do this multiple times per pixel and integrate
 all resulting values to improve image
@@ -216,9 +216,7 @@ path.
 \section{Theoretical Basis}
 \subsection{The Rendering Equation}
 The fundamental problem solved by path tracing is the \emph{rendering equation} originally
-described by James Kajiya \cite{inproceedings:pathtracing}. This thesis uses the form from
-Wikipedia \cite{wiki:rendering-equation} since the author considers it easier to read:
-
+described by James Kajiya \cite{inproceedings:pathtracing}. 
 \[
         L_{\text{o}}(\mathbf x,\, \omega_{\text{o}},\, \lambda,\, t) \,=
         \, L_{\text{e}}(\mathbf x,\, \omega_{\text{o}},\, \lambda,\, t) \ +
@@ -226,10 +224,8 @@ Wikipedia \cite{wiki:rendering-equation} since the author considers it easier to
         \, L_{\text{i}}(\mathbf x,\, \omega_{\text{i}},\, \lambda,\, t)\,
         (\omega_{\text{i}}\,\cdot\,\mathbf n)\, \operatorname d \omega_{\text{i}}
 \]
-
 For our purposes, this can be simplified by removing the time and wavelength components which we
 will not make use of:
-
 \[
         L_{\text{o}}(\mathbf x,\, \omega_{\text{o}}) \,=
         \, L_{\text{e}}(\mathbf x,\, \omega_{\text{o}}) \ +
@@ -237,10 +233,8 @@ will not make use of:
         \, L_{\text{i}}(\mathbf x,\, \omega_{\text{i}})\,
         (\omega_{\text{i}}\,\cdot\,\mathbf n)\, \operatorname d \omega_{\text{i}}
 \]
-
 This equation can be broken down into its individual parts to make it easier to explain and
 understand:
-
 \[
         \tikzmarkin[set fill color=red!50!brown!30,set border color=red!40!black]{outgoing}
             L_{\text{o}}(\mathbf x,\, \omega_{\text{o}})
@@ -321,7 +315,7 @@ weakened depending on the cosine of the angle between \(\omega_{\text{i}}\) and 
 \\
 
 Path tracing offers a numerical solution to the integral found in this equation. For every pixel,
-every bounce and every sample of the camera, the rendering equation is solved. It becomes apparent
+every bounce and every sample of the camera, the rendering equation is solved. Considering this, it becomes apparent
 why this is an expensive algorithm to run. For practical reasons, not every possible value for
 \(\Omega\) is sampled since this would take a vast amount of time to calculate at physical photon
 density. Instead, only a few possible values for \(\Omega\) are calculated each bounce. Depending
@@ -335,6 +329,7 @@ emissive materials can be written as follows:
 
 \begin{minted}[linenos, autogobble]{python}
     max_depth = 5
+    scene = [triangle_1, ..., triangle_n] # Many triangles defined here
 
     def trace_ray(ray, depth):
         if depth >= max_depth:
@@ -342,21 +337,27 @@ emissive materials can be written as follows:
             # at our limit for bounces
             return RGB(0, 0, 0) 
 
-        collision = ray.check_collision()
-        if not collision:
+        intersection = None
+        for triangle in scene:
+            intersection = check_intersection(ray, triangle)
+            if intersection:
+                # Break at first intersection
+                break
+
+        if not intersection:
             # If we haven't hit anything, we can't bounce again so
             # we return black
             return RGB(0, 0, 0)
 
-        material = collision.material;
+        material = intersection.material;
         emittance = material.emittance
 
         # shoot a ray into random direction and recurse
         next_ray = Ray()
-        next_ray.origin = collision.position
-        next_ray.direction = random_vector_on_hemisphere(collision.normal)
+        next_ray.origin = intersection.position
+        next_ray.direction = random_vector_on_hemisphere(intersection.normal)
 
-        reflectance_theta = dot(next_ray.direction, collision.normal)
+        reflectance_theta = dot(next_ray.direction, intersection.normal)
         brdf = 2 * material.reflectance * reflectance_theta
         reflected = trace_ray(next_ray, depth + 1)
 
@@ -368,31 +369,35 @@ emissive materials can be written as follows:
 \end{minted}
 \captionof{listing}{Naive path tracing algorithm\label{lst:naive-path-tracing}}
 
-\vspace{1cm}
+\vspace{0.5cm}
 
 The algorithmic complexity of this algorithm is not immediately obvious because of its pseudocode
 character and a few methods whose implementations are not provided. It is known, however, that
-the output image \(O\) will be a 2D matrix with dimensions given by width \(w\) and height \(h\).
+the output image \(Out\) will be a 2D matrix with dimensions given by width \(w\) and height \(h\).
 Additionally, for every pixel, multiple samples \(s\) are required in order for the algorithm to
 converge to an image of acceptable quality. Every ray has a certain maximum depth \(d\).
+The scene has \(n\) triangles. We will assume the functions \texttt{check\_intersection},
+\texttt{random\_vector\_on\_hemisphere} and \texttt{dot} to run in constant time.
 
-So far, this lets us determine the total worst number of rays required per image. In the worst
-case, no ray exits early. The resulting formula is:
+This way, it is possible to determine the total worst number of scene lookups required per image. In the worst
+case, no ray exits before reaching its maximum depth. The resulting formula is:
 
-\[ O_w \times O_h \times s \times d \]
+\[ Out_w \times Out_h \times s \times d \times n \]
 
-Running this for a single pixel with 30 samples and a ray depth of 5 would require
-\[30 \times 5 = \num{150}\]
+Running this for a single pixel with 30 samples, a ray depth of 5 and 25 triangles would require
+\[30 \times 5 \times 25 = \num{3750}\]
 rays per pixel.
 
-For example, an image with a resolution of \(1920 \times 1080\)
-would have \[1920 \times 1080 \times 30 \times 5 \approx \num{300000000}\] rays per frame.
+For example, an image with a resolution of \(1920 \times 1080\) and a scene consisting of 5000
+triangles
+would have \[1920 \times 1080 \times 30 \times 5 \times 5000 \approx \num{1555200000000}
+(\SI{1.6}{T} rays)\] rays per frame. % TODO das ist quatsch das hier muss ops sein nicht rays ach
 
 This does still not yield the algorithmic complexity, however, since there is no input size \(n\)
 in it. We will assume the lookup time for every ray to be \(O(\log n)\) in a suitable data
 structure. Hence, the formula becomes:
 
-\[ O_w \times O_h \times s \times d \times \log n \]
+\[ Out_w \times Out_h \times s \times d \times \log n \]
 
 The result of this formula yields the number of total lookups per image.
 Continuing the example from above given a scene with 2 million triangles thus results in
@@ -418,9 +423,10 @@ scene look up time is to add \acp{aabb} around clusters of smaller shapes. For i
 \ac{aabb} might surround an icosahedron shape that is made up of hundreds of triangles. This way,
 the triangles inside the \ac{aabb} are only tested for ray intersections if the ray intersects the
 \ac{aabb} that surrounds the shape. The complexity is now \(O(m \cdot n)\) where \(m\) is the number
-of shapes (which is equal to the number of \acp{aabb}) and \(n\) is the number of triangles. This
-might seem like a worse complexity class compared to before but in practice the number of
-comparisons is a lot lower.
+of shapes (which is equal to the number of \acp{aabb}) and \(n\) is the number of triangles. While
+this is a worse complexity class compared to before, the number of comparisons is a lot lower in
+practice because \(m\) is always smaller than \(n\) (usually by magnitudes) and \(n\) is only
+relevant if a shape was hit .
 
 The next iteration on top of simple \acp{aabb} is provided by tree-based acceleration data
 structures. The most commonly used ones are the \ac{bvh} and the kd-tree. By using these data
@@ -447,7 +453,8 @@ This section summarises the general properties of path tracing.
         dynamic scenes in this case, though.
 
     \item[Global Illumination]
-        Commonly \acf{gi} means that every object's illumination affects every other object and that the
+        Path tracing is one of many ways of simulating \acf{gi}.
+        Commonly \ac{gi} means that every object's illumination affects every other object and that the
         renderer doesn't make a distinction between reflected light and light sources.
 
     \item[Problems]
@@ -486,7 +493,7 @@ back-face culling exist and additionally its initial cost is very low.
 Unlike path tracing, it does not automatically simulate a wide range range of physical phenomena.
 Physical effects such as shadows, global illumination and caustics have to be calculated separately
 in other algorithms and then be composited on top of the rasterized scene. This makes rasterization
-complicated to use for when many physically based effects are desired.
+complicated in cases where many physically based effects are desired.
 
 \subsection{Comparison to Other Global Illumination Algorithms}
 This section compares some of the more popular \ac{gi} algorithms beside ray tracing and
@@ -637,7 +644,7 @@ id Software was sceptical of real time ray tracing in games in 2012 in a comment
 \cite{site:carmack-scepticism}.
 
 \section{Current State of Technology}
-Recently the interested in real time path tracing seems to be at peak levels. The most notable
+Recently, the interest in real time path tracing has been surging. The most notable
 example of this is Jacco Bikker's and Jeroen van Schijndel's \emph{Brigade Renderer} \cite{article:brigade}
 \cite{site:brigade}. This renderer is aimed at game developers and is meant to run on commodity
 hardware in real time. Its company, OTOY, is also developing a cloud-based rendering solution
@@ -1370,7 +1377,7 @@ resolution of 800x640 on an NVIDIA Geforce GTX 570.
 
 The image shown in~\ref{fig:trac0r-5000} displays an almost fully converged image. It took almost 5
 minutes to converge to this quality given the same parameters and hardware as above. The scene
-shown here is described by the code given in~\ref{lst:trac0r-scene-setup}.
+shown here is described by the code given in listing~\ref{lst:trac0r-scene-setup}.
 
 \subsection{Debug View}
 \begin{figure}[H]
@@ -1381,7 +1388,8 @@ shown here is described by the code given in~\ref{lst:trac0r-scene-setup}.
 \end{figure}
 
 Figure~\ref{fig:trac0r_debug1} above shows the debug view that can dynamically toggled during
-runtime. It displays lots of useful information in text in the upper left corner of the
+runtime. It displays information about the current state of the camera as well as mouse position
+and other helpful text in the upper left corner of the
 viewport. The yellow boxes display the \acp{aabb} around the shapes because they are usually not
 directly visible. This comes in handy when debugging visibility problems.
 
@@ -1399,7 +1407,7 @@ interactivity, it is activated in the image of~\ref{fig:trac0r_debug2} to better
 transformation.
 
 \subsection{Performance Results}
-Comparing \ac{fps} is not a particularly good criterion between different path tracing since
+Comparing \ac{fps} is not a particularly good criterion between different path tracers since
 generally \ac{fps} doesn't correlate to rate of convergence. That is, one path tracer might be able
 to iterate at 60 \ac{fps} but takes three seconds to converge while a different path tracer may
 only be able to do 10 \ac{fps} but takes only 2 seconds to converge. This might seem unintuitive at
@@ -1482,7 +1490,8 @@ longer than a second to render under specific circumstances.
             \end{axis}
         \end{tikzpicture}
         \centering
-        \caption{Scene complexity benchmark on a variety of graphics cards}
+        \caption{Scene complexity benchmark on a variety of graphics cards. It was benchmarked at
+        a resolution of 800x600.}
         \label{fig:benchmark-scene-complexity}
     \end{figure}
 
@@ -1497,8 +1506,22 @@ longer than a second to render under specific circumstances.
             NVIDIA Geforce GTX 980  & 13.9          & 4612
         \end{tabular}
         \caption{Tested GPU performance and GFLOPS}
+        \label{tbl:benchmark-table}
     \end{table}
 \end{minipage}
+
+Figure~\ref{fig:benchmark-scene-complexity} shows how \ac{fps} behaves in regards to triangle
+count while table~\ref{tbl:benchmark-table} shows average \ac{fps} per \ac{gpu} as well as their
+rated peak single-precision performance in \ac{gflops}.
+
+We can see that the program performs quite poorly as triangle count is increased even at a
+fairly low number of triangles. It should also be noted that we would expect a linear decrease in
+\ac{fps} as triangle count increases as the algorithm used in trac0r is a simple linear search
+through all triangles. It is therefore interesting to see a decrease that is much 
+
+It is also interesting to see that the difference in performance among the \acp{gpu} isn't nearly
+as dramatic as their rated peak \ac{gflops} would suggest. This observation suggests that the
+application is heavily memory bound.
 
 \section{Evaluation}
 In order to properly rate the results seen above and in figure \ref{fig:benchmark-scene-complexity},
