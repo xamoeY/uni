@@ -19,6 +19,7 @@
 \usepackage{sidecap}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
+\usepackage{tabularcalc}
 \usepackage{todonotes}
 \usepackage{hyperref}
 \usepackage{minted}
@@ -379,25 +380,42 @@ converge to an image of acceptable quality. Every ray has a certain maximum dept
 The scene has \(n\) triangles. We will assume the functions \texttt{check\_intersection},
 \texttt{random\_vector\_on\_hemisphere} and \texttt{dot} to run in constant time.
 
-This way, it is possible to determine the total worst number of scene lookups required per image. In the worst
-case, no ray exits before reaching its maximum depth. The resulting formula is:
+This way, it is possible to determine the total worst number of scene intersection tests required per image.
+In the worst case, no ray exits before reaching its maximum depth. The resulting formula is:
 
 \[ Out_w \times Out_h \times s \times d \times n \]
 
 Running this for a single pixel with 30 samples, a ray depth of 5 and 25 triangles would require
 \[30 \times 5 \times 25 = \num{3750}\]
-rays per pixel.
+total intersection tests.
 
+This number quickly escalates once we add more pixels and triangles, however.
 For example, an image with a resolution of \(1920 \times 1080\) and a scene consisting of 5000
-triangles
-would have \[1920 \times 1080 \times 30 \times 5 \times 5000 \approx \num{1555200000000}
-(\SI{1.6}{T} rays)\] rays per frame. % TODO das ist quatsch das hier muss ops sein nicht rays ach
+triangles would have \[1920 \times 1080 \times 30 \times 5 \times 5000 \approx \num{1555200000000}
+\, (\pgfmathprintnumber{1555200000000})\] intersection tests per frame.
 
-This does still not yield the algorithmic complexity, however, since there is no input size \(n\)
-in it. We will assume the lookup time for every ray to be \(O(\log n)\) in a suitable data
-structure. Hence, the formula becomes:
+This becomes even more problematic as the number triangles increases when scenes become more
+complex:
 
-\[ Out_w \times Out_h \times s \times d \times \log n \]
+\begin{table}[H]
+    \centering
+    \vtablecalc[2]{\(n\)}{n=10, 100, 1000, 10000, 100000, 1000000}
+                  {\(O(n)\)}{n}
+                  {\(O(\log(n))\)}{round(ln(n), 0)}
+    \caption{herp}
+    \label{tbl:triangle-intersections-count}
+\end{table}
+
+% \begin{table}[H]
+%     \centering
+%     \begin{tabular}{l | r | r}
+%         Triangles           & \(O(n)\)      & \(O(\log(n))\) \\ \hline
+%         10                  & 10             & 
+%         \foreach \n in {0,10,100,1000,10000,100000,1000000}{\n & 8.3           & 1881.6 \\}
+%     \end{tabular}
+%     \caption{herp}
+%     \label{tbl:triangle-intersections-count}
+% \end{table}
 
 The result of this formula yields the number of total lookups per image.
 Continuing the example from above given a scene with 2 million triangles thus results in
@@ -913,7 +931,7 @@ shape it is part of.}
 
 \subsection{Camera and Rays}
 
-The camera is configured during the scene setup and after
+The camera is configured during the scene setup and after % TODO
 
 \begin{minted}[linenos, autogobble]{c++}
     class Camera {
@@ -1412,7 +1430,7 @@ generally \ac{fps} doesn't correlate to rate of convergence. That is, one path t
 to iterate at 60 \ac{fps} but takes three seconds to converge while a different path tracer may
 only be able to do 10 \ac{fps} but takes only 2 seconds to converge. This might seem unintuitive at
 first but remember that path tracing is a very different algorithm compared to rasterization. In
-rasterization, once a frame is rendered, the image is "done", it won't improve by rendering the
+rasterization, once a frame is rendered, the image is \emph{done}, it won't improve by rendering the
 same scene a second time. In path tracing, particularly Monte Carlo path tracing, an image will be
 improved with every new frame that is rendered using the same parameters due to how Monte Carlo
 integration works.
@@ -1517,7 +1535,7 @@ rated peak single-precision performance in \ac{gflops}.
 We can see that the program performs quite poorly as triangle count is increased even at a
 fairly low number of triangles. It should also be noted that we would expect a linear decrease in
 \ac{fps} as triangle count increases as the algorithm used in trac0r is a simple linear search
-through all triangles. It is therefore interesting to see a decrease that is much 
+through all triangles. It is therefore interesting to see a decrease that is much % TODO
 
 It is also interesting to see that the difference in performance among the \acp{gpu} isn't nearly
 as dramatic as their rated peak \ac{gflops} would suggest. This observation suggests that the
@@ -1618,8 +1636,8 @@ progress.
 
 The logarithmic graph in figure~\ref{fig:gpus-by-year} shows the exponential growth of \ac{gflops} since 2004
 when \acp{gpu} had approximately 250 \ac{gflops} of single-precision performance at their disposal.
-The exponential function of the graph is
-
+The exponential function of the graph
+(where \(x\) is an integer expressing the respective year) is
 \[ f(x) = 250 * 2 ^ {0.5 (x-2004)} * 0.7 \]
 and can be used to extrapolate \ac{gpu} performance until 2020 assuming the growth stays constant.
 Following that assumption, there will be a \ac{gpu} capable of 10000 \ac{gflops} in 2016, 20000
