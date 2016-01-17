@@ -189,7 +189,7 @@ which we perceive as a change in the light's color. Cameras work exactly like th
 collection of photons is concerned.
 
 This physical approach would be extremely wasteful and
-computationally complex to simulate, however, since most photons never reach an observer. Consider,
+computationally complex to simulate since most photons never reach an observer. Consider,
 for instance, that only an extremely small percentage of all the photons sent by the Sun actually
 reach Earth and an even smaller percentage of those are ever observed (although photons
 don't have to be observed to have a physical effect, of course). Since we only care for photons that
@@ -1576,6 +1576,7 @@ It is also interesting to see that the difference in performance among the \acp{
 as dramatic as their rated peak \ac{gflops} would suggest. This observation suggests that the
 application is heavily memory bound.
 
+\clearpage
 \section{Evaluation}
 In order to properly rate the results seen above and in figure \ref{fig:benchmark-scene-complexity},
 they need to be put into perspective. Performance
@@ -1602,7 +1603,7 @@ progress.
                 x label style={below=5mm},
                 extra y tick style={log identify minor tick positions=false},
                 x tick label style={align=center, rotate=45, /pgf/number format/1000 sep={}},
-                width=\textwidth
+                width=12cm
             ]
 
             \addplot+[
