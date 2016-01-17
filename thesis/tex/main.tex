@@ -1460,7 +1460,7 @@ generally \ac{fps} doesn't correlate to rate of convergence. That is, one path t
 to iterate at 60 \ac{fps} but takes three seconds to converge while a different path tracer may
 only be able to do 10 \ac{fps} but takes only 2 seconds to converge. This might seem unintuitive at
 first but remember that path tracing is a very different algorithm compared to rasterization. In
-rasterization, once a frame is rendered, the image is \emph{done}, it won't improve by rendering the
+rasterization, once a frame is rendered, the image is \emph{done}. It won't improve by rendering the
 same scene a second time. In path tracing, particularly Monte Carlo path tracing, an image will be
 improved with every new frame that is rendered using the same parameters due to how Monte Carlo
 integration works.
