@@ -670,14 +670,14 @@ develop a real time path tracing renderer that only ran on current generation de
 because most consumers would not be able to benefit from the technology.
 
 \chapter{Research}
-The entirety of the research in this thesis was done with a Monte Carlo path tracer called
-\emph{trac0r}.
+The entirety of the practical research in this thesis was done with a Monte Carlo path tracer called
+\emph{trac0r} \cite{site:trac0r}.
 An effort was made to find an existing open source implementation of a path tracer focused on
 real time applications but none seem to exist as of this writing. The most likely cause for that is
 the enormous hardware cost currently still associated with doing real time path tracing.
 
 \section{Implementation}
-Alongside this thesis, a Monte Carlo path tracer called trac0r was implemented in
+Alongside this thesis, a Monte Carlo path tracer called trac0r \cite{site:trac0r} was implemented in
 C++14. It uses a library called glm \cite{site:glm} for linear algebra and most
 other mathematical operations. Since trac0r itself is only a library, a graphical application making use
 of it was implemented to showcase its results. This application is called \emph{trac0r\_viewer} and
