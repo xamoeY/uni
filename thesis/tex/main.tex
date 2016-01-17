@@ -380,54 +380,38 @@ converge to an image of acceptable quality. Every ray has a certain maximum dept
 The scene has \(n\) triangles. We will assume the functions \texttt{check\_intersection},
 \texttt{random\_vector\_on\_hemisphere} and \texttt{dot} to run in constant time.
 
-This way, it is possible to determine the total worst number of scene intersection tests required per image.
+If we consider \(s\) and \(d\) to be constant, the remaining variables will be the total number of
+pixels (\(w * h\)) and the total number of triangles (\(n\)). We can then see that the algorithm in
+listing~\ref{lst:naive-path-tracing} runs in \(O(n^2)\) since we have to check every triangle for
+every ray.
+
+Knowing that, it is possible to determine the total worst number of scene intersection tests required per image.
 In the worst case, no ray exits before reaching its maximum depth. The resulting formula is:
 
-\[ Out_w \times Out_h \times s \times d \times n \]
+\begin{equation}\label{eq:complexity}
+    w \times h \times s \times d \times n
+\end{equation}
 
-Running this for a single pixel with 30 samples, a ray depth of 5 and 25 triangles would require
-\[30 \times 5 \times 25 = \num{3750}\]
-total intersection tests.
-
-This number quickly escalates once we add more pixels and triangles, however.
-For example, an image with a resolution of \(1920 \times 1080\) and a scene consisting of 5000
-triangles would have \[1920 \times 1080 \times 30 \times 5 \times 5000 \approx \num{1555200000000}
-\, (\pgfmathprintnumber{1555200000000})\] intersection tests per frame.
-
-This becomes even more problematic as the number triangles increases when scenes become more
-complex:
+Using formula~\ref{eq:complexity}, the maximum number of scene intersection tests can be calculated
+by assigning some sensible real world values to all symbols:
 
 \begin{table}[H]
     \centering
-    \vtablecalc[2]{\(n\)}{n=10, 100, 1000, 10000, 100000, 1000000}
-                  {\(O(n)\)}{n}
-                  {\(O(\log(n))\)}{round(ln(n), 0)}
-    \caption{herp}
+    \tcsetcoltype{r}{|r}
+    \vtablecalc[2]{Number of triangles \(n\)}{n=10, 100, 1000, 10000, 100000, 1000000}
+                  {Intersection in \(O(n)\)}{1920*1080*30*5*n}
+                  {Intersection in \(O(\log(n))\)}{1920*1080*30*5*round(ln(n), 0)}
+    \caption{Worst case number of total scene intersection tests using
+    formula~\ref{eq:complexity} with \(w=1920, h=1080, s=30, d=5\)}
     \label{tbl:triangle-intersections-count}
 \end{table}
 
-% \begin{table}[H]
-%     \centering
-%     \begin{tabular}{l | r | r}
-%         Triangles           & \(O(n)\)      & \(O(\log(n))\) \\ \hline
-%         10                  & 10             & 
-%         \foreach \n in {0,10,100,1000,10000,100000,1000000}{\n & 8.3           & 1881.6 \\}
-%     \end{tabular}
-%     \caption{herp}
-%     \label{tbl:triangle-intersections-count}
-% \end{table}
-
-The result of this formula yields the number of total lookups per image.
-Continuing the example from above given a scene with 2 million triangles thus results in
-\[1920 \times 1080 \times 30 \times 5 \times \log \num{2000000} \approx \num{2000000000}\]
-lookups per frame.
-
-In the context of this thesis, a goal was set to reach 60 \ac{fps} which means that
-\[1920 \times 1080 \times 30 \times 5 \times \log \num{2000000} \times 60 \approx \num{120000000000}\]
-lookups per second.
-
-Thankfully, the whole formula can be reduced to just the lookup time \(O(\log n)\) because the other
-formula elements are covariants.
+As table~\ref{tbl:triangle-intersections-count} shows, the number of scene intersection tests
+quickly escalates as we add more triangles if we use an intersection test that checks
+against every triangle (making it run in \(O(n)\)). The table shows much more manageable numbers assuming
+the scene intersection could be done in \(\log(n)\).
+If the latter were the case, the whole algorithm would run in \(O(n\log(n))\) instead of \(O(n^2)\)
+as in the naive algorithm~\ref{lst:naive-path-tracing}.
 
 \subsection{Acceleration Data Structures}
 The data structure used for the underlying scene is the principal factor for the performance of the
