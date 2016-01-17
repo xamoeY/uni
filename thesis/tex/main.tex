@@ -53,8 +53,8 @@ first part, and extrapolates feasibility and suitability of real time path traci
 hardware according to the current state of technology and trends in the second part.
 
 As part of the research, the author has implemented a path tracing 3D engine in modern C++ in order
-to empirically test the assumptions made in this thesis. The data suggest that  path tracing may be a
-viable rendering technique for upper level commodity hardware in approximately 4 years.
+to empirically test the assumptions made in this thesis. The data suggests that path tracing may be a
+viable rendering technique for upper level commodity hardware in approximately four years.
 \singlespace
 
 \chapter*{Acknowledgments}
@@ -210,7 +210,8 @@ most straightforward approach is given by uniform sampling, other methods such a
 sampling \cite{veach1997robust} and importance sampling \cite{veach1997robust} will usually provide
 a clear advantage in terms of time to
 convergence. Other, more complicated approaches are bidirectional path tracing
-\cite{techreport:pbr} and the \ac{mlt} \cite{inproceedings:metropolis} which shoot rays from both
+\cite{techreport:pbr} in combination with Multiple Importance Sampling \cite{veach1997robust}
+and the \ac{mlt} \cite{inproceedings:metropolis} which shoot rays from both
 the light and the camera and then connect all the intersection points in order to form a light
 path.
 
@@ -464,7 +465,8 @@ This section summarises the general properties of path tracing.
         classic path tracing to
         produce sharp caustics as rays tend to very rarely hit objects with caustic properties. This makes
         it especially difficult for real time path tracing to produce sharp caustics. This can be
-        alleviated by using bidirectional path tracing or by using an additional photon map.
+        alleviated by using bidirectional path tracing \cite{techreport:pbr} or by using an
+        additional photon map as well as Multiple Importance Sampling \cite{veach1997robust}.
 
         Another problem is that subsurface scattering and participating media such as smoke can't be
         calculated by classic Monte Carlo path
@@ -646,7 +648,7 @@ id Software was sceptical of real time ray tracing in games in 2012 in a comment
 \cite{site:carmack-scepticism}.
 
 \section{Current State of Technology}
-Recently, the interest in real time path tracing has been surging. The most notable
+Recent interest in real time path tracing is at peak levels. The most notable
 example of this is Jacco Bikker's and Jeroen van Schijndel's \emph{Brigade Renderer} \cite{article:brigade}
 \cite{site:brigade}. This renderer is aimed at game developers and is meant to run on commodity
 hardware in real time. Its company, OTOY, is also developing a cloud-based rendering solution
@@ -915,7 +917,7 @@ shape it is part of.}
 
 \subsection{Camera and Rays}
 
-The camera is configured during the scene setup and after % TODO
+The camera is configured during the scene setup and sent to the \ac{gpu} every frame.
 
 \begin{minted}[linenos, autogobble]{c++}
     class Camera {
@@ -1409,7 +1411,10 @@ interactivity, it is activated in the image of~\ref{fig:trac0r_debug2} to better
 transformation.
 
 \subsection{Performance Results}
-Comparing \ac{fps} is not a particularly good criterion between different path tracers since
+In order to be able to compare performance, an objective and reliable method and unit of
+measure for doing so has to be decided upon. If this were a rasterizing renderer, \ac{fps} would be
+an easy choice.
+However, comparing \ac{fps} is not a particularly good criterion between different path tracers since
 generally \ac{fps} doesn't correlate to rate of convergence. That is, one path tracer might be able
 to iterate at 60 \ac{fps} but takes three seconds to converge while a different path tracer may
 only be able to do 10 \ac{fps} but takes only 2 seconds to converge. This might seem unintuitive at
@@ -1517,9 +1522,8 @@ count while table~\ref{tbl:benchmark-table} shows average \ac{fps} per \ac{gpu} 
 rated peak single-precision performance in \ac{gflops}.
 
 We can see that the program performs quite poorly as triangle count is increased even at a
-fairly low number of triangles. It should also be noted that we would expect a linear decrease in
-\ac{fps} as triangle count increases as the algorithm used in trac0r is a simple linear search
-through all triangles. It is therefore interesting to see a decrease that is much % TODO
+fairly low number of triangles as predicted with formula~\ref{eq:complexity} and in
+table~\ref{tbl:triangle-intersections-count}.
 
 It is also interesting to see that the difference in performance among the \acp{gpu} isn't nearly
 as dramatic as their rated peak \ac{gflops} would suggest. This observation suggests that the
@@ -1639,7 +1643,7 @@ it is much harder to express in a single number since it's usually
 a multi-tiered memory architecture where each tier has very different sizes
 and performance characteristics and it also doesn't scale as predictably.
 
-\chapter{Conclusion}
+\chapter{Conclusion and Outlook}
 The study set out to explore the question of when real time path tracing would become
 a viable alternative to rasterization on consumer-level desktop hardware. It did so by defining
 performance criteria that were chosen to be considered the minimum threshold for real time path tracing.
@@ -1648,25 +1652,48 @@ frame can be rendered within \(16.67ms\) (which works out to 60 \ac{fps}). The a
 image quality is subjective but makes an attempt to be critical about quality.
 
 A Monte Carlo path tracer was implemented as part of the study and is used to benchmark a selection
-of current and past graphics hardware to extrapolate from. It also extrapolates graphics hardware
-performance by single-precision \ac{gflops}. 
+of current and past graphics hardware to extrapolate from. The path tracer was found to be heavily
+memory bound as the speedup from using a \ac{gpu} with a better single-precision floating
+point performance didn't match expectations. Additionally, the path tracer's implementation is
+mostly naive and therefore doesn't match the current state of the art in terms of algorithmic
+performance. As such, the benchmark results gained from this path tracer will be used as a lower
+bound for expected performance.
 
-\section{Outlook}
-Scene lookup performance could be drastically improved by employing an acceleration structure such
-as BVH or kd-trees.
-Scene lookup performance could be drastically improved by employing an acceleration structure such
-Convergence performance could be best improved by making use of bidirectional path tracing and
-better sampling techniques such as \textit{Multiple Importance Sampling}.
-Convergence performance could be best improved by making use of bidirectional path tracing and
-The implementation's usage of memory architectures is likely far from optimal and could be
-improved.
-The implementation's usage of memory architectures is likely far from optimal and could be
+The study also extrapolates graphics hardware performance by single-precision \ac{gflops} over the
+course of 16 years. It was found that \ac{gpu} performance follows an exponential function and is
+expected to continue in this manner. Extrapolating the data, single \acp{gpu} are expected to reach up to
+40 TFLOPS by 2020.
+
+Ongoing research in path tracing and related topics is likely to yield better better algorithms and
+methods as
+it has in the past. This is especially true for algorithms specifically meant to run on \acp{gpu}
+as this is still a new topic that has yet to be explored in-depth.
+
+While it is certainly hard to estimate when exactly real time path tracing will be viable, a
+combination of modern methods for speeding up image convergence is likely to provide satisfactory
+performance even today on more expensive hardware. The most important improvement over a naive
+implementation of a path tracer
+is most certainly found in employing a tree-based acceleration data structure such as a BVH or kd-tree.
+This decreases
+lookup time from \(O(n)\) to just \(O(\log(n)\) per ray. This would yield an effective speedup of
+one to two orders of magnitude depending on scene complexity.
+Convergence performance could best be improved by making use of bidirectional path tracing and
+better sampling techniques such as \textit{Multiple Importance Sampling}. For scenes that are lit
+mostly by indirect light, these techniques would lead to faster convergence by about a magnitude.
+
+Apart from algorithmic improvements, the implementation's usage of \ac{gpu} memory architecture
+is likely far from optimal and could be improved. \ac{gpu} memory speeds suggest that this would
+lead to a general speedup around factor 5.
+
 Lastly, overall image quality could be improved by running an image filter over the rendered image
 before displaying it to the user. A suitable image filtering algorithm should be non-linear and
 edge-preserving as well as energy-preserving so that it won't lower the quality of the resulting
-image. A notable filter fulfilling those requirements is the \textit{bilateral filter}. Popular but
-unsuitable algorithms include the \textit{box filter} and the \textit{gaussian filter}.
-image. A notable filter fulfilling those requirements is the \textit{bilateral filter}. Popular but
+image. A notable filter fulfilling those requirements is the \textit{bilateral filter}. This could
+be used to display an image before it is fully converged. This is obviously a trade-off of quality
+for performance but for the sake of speed it might be worth it.
+
+All in all, the research suggests that real time path tracing could be a viable alternative to
+rasterization in four years on upper level commodity hardware.
 \listoffigures
 \listoflistings
 \listoftables
