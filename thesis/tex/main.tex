@@ -603,10 +603,10 @@ the early days of ray tracing is \emph{The Juggler} created and published by Eri
 stated that it took the Amiga 1 hour to render each frame \cite{site:juggler}.
 
 \begin{figure}[H]
-    \includegraphics[scale=0.5]{amiga-juggler}
     \centering
-    \caption{Eric Graham's Juggler}
-    \label{fig:amiga-juggler}
+    \subfloat[Eric Graham's Juggler]{\includegraphics[scale=0.5]{amiga-juggler}\label{fig:amiga-juggler}}
+    \hfill
+    \subfloat[WebGL Path Tracer by Evan Wallace]{\includegraphics[scale=0.3]{webgl-pathtracer}\label{fig:webgl-pathtracer}}
 \end{figure}
 While the animation seems very primitive compared to the animations of today, it was exceptional at
 the time. Ernie Wright's statement about his creation provides some contemporary context:
@@ -628,13 +628,6 @@ for the purpose of producing complex graphics rendered and generated on the fly.
 example of this is the WebGL Path Tracing by Evan Wallace made in 2010
 \cite{site:webgl-path-tracing} which runs in most modern web browsers, making path tracing very
 accessible.
-
-\begin{figure}[H]
-    \includegraphics[scale=0.4]{webgl-pathtracer}
-    \centering
-    \caption{WebGL Path Tracer by Evan Wallace}
-    \label{fig:webgl-pathtracer}
-\end{figure}
 
 Another example is the demo \textit{5 faces} by Fairlight from 2013
 \cite{wiki:5faces-fairlight} which
@@ -1716,7 +1709,7 @@ performance even today on more expensive hardware. The most important improvemen
 implementation of a path tracer
 is most certainly found in employing a tree-based acceleration data structure such as a BVH or kd-tree.
 This decreases
-lookup time from \(O(n)\) to just \(O(\log(n)\) per ray. This would yield an effective speedup of
+lookup time from \(O(n)\) to just \(O(\log(n))\) per ray. This would yield an effective speedup of
 one to two orders of magnitude depending on scene complexity.
 Convergence performance could best be improved by making use of bidirectional path tracing and
 better sampling techniques such as \textit{Multiple Importance Sampling}. For scenes that are lit
