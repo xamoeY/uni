@@ -35,6 +35,9 @@
 \graphicspath{ {images/} }
 \pgfplotsset{compat=1.12}
 
+\setlength{\parindent}{1em}
+\setlength{\parskip}{0.5em}
+
 \begin{document}
 
 \input{frontbackmatter/title.tex}
@@ -205,6 +208,7 @@ all resulting values to improve image
 quality. This type of sampling is called \emph{Monte Carlo integration}.
 The more iterations we spend on sampling, the better the
 quality of our image becomes. This is called \emph{converging}.
+
 There are a many approaches that improve this completely random approach to sampling. While the
 most straightforward approach is given by uniform sampling, other methods such as stratified
 sampling \cite{veach1997robust} and importance sampling \cite{veach1997robust} will usually provide
@@ -315,7 +319,6 @@ been reflected.
 weakened depending on the cosine of the angle between \(\omega_{\text{i}}\) and the surface normal
 \(\mathbf n\).
 \\
-
 Path tracing offers a numerical solution to the integral found in this equation. For every pixel,
 every bounce and every sample of the camera, the rendering equation is solved. Considering this, it becomes apparent
 why this is an expensive algorithm to run. For practical reasons, not every possible value for
@@ -369,7 +372,9 @@ emissive materials can be written as follows:
         for pixel in pixels:
             trace_path(ray_from_pixel(pixel), 0)
 \end{minted}
+\begingroup
 \captionof{listing}{Naive path tracing algorithm\label{lst:naive-path-tracing}}
+\endgroup
 
 \vspace{0.5cm}
 
@@ -429,7 +434,7 @@ the triangles inside the \ac{aabb} are only tested for ray intersections if the 
 of shapes (which is equal to the number of \acp{aabb}) and \(n\) is the number of triangles. While
 this is a worse complexity class compared to before, the number of comparisons is a lot lower in
 practice because \(m\) is always smaller than \(n\) (usually by magnitudes) and \(n\) is only
-relevant if a shape was hit .
+relevant if a shape was hit.
 
 The next iteration on top of simple \acp{aabb} is provided by tree-based acceleration data
 structures. The most commonly used ones are the \ac{bvh} and the kd-tree. By using these data
@@ -800,7 +805,6 @@ These components are implemented in the following files:
 \end{table}
 
 \subsection{Materials}
-\
 trac0r implements the following materials:
 \begin{description}
     \item[Emitter] Arguably the most important material as it is the one providing the light to a
@@ -854,8 +858,10 @@ trac0r implements the following materials:
         float m_emittance = 0.f;
     };
 \end{minted}
+\begingroup
 \captionof{listing}{Material struct in trac0r\label{lst:trac0r-material}. Depending on the
 \texttt{m\_type} set, different attributes of this material are used.}
+\endgroup
 
 \subsection{Shapes, Triangles and AABBs}
 
@@ -885,8 +891,10 @@ class Shape {
     std::vector<Triangle> m_triangles;
 };
 \end{minted}
+\begingroup
 \captionof{listing}{Shape class in trac0r\label{lst:trac0r-shape}. The static methods serve as
 factory functions.}
+\endgroup
 
 \vspace{1cm}
 
@@ -898,8 +906,10 @@ factory functions.}
         glm::vec3 m_max;
     };
 \end{minted}
+\begingroup
 \captionof{listing}{\ac{aabb} struct in trac0r\label{lst:trac0r-aabb}. Its extents are set by the
 shape it is part of.}
+\endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
     struct Triangle {
@@ -912,8 +922,10 @@ shape it is part of.}
         float m_area;
     }:
 \end{minted}
+\begingroup
 \captionof{listing}{Triangle struct in trac0r\label{lst:trac0r-triangle}. \texttt{m\_normal},
 \texttt{m\_centroid} and \texttt{m\_area} are pre-calculated on construction.}
+\endgroup
 
 \subsection{Camera and Rays}
 
@@ -939,9 +951,11 @@ The camera is configured during the scene setup and sent to the \ac{gpu} every f
         float m_horizontal_fov;
     }
 \end{minted}
+\begingroup
 \captionof{listing}{Camera class in trac0r. Implementation details are left out for the sake
 of brevity. The reader should note, however, that many of the attributes shown here are
 pre-calculated during construction and some are re-calculated every frame.}
+\endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
     struct Ray {
@@ -950,7 +964,9 @@ pre-calculated during construction and some are re-calculated every frame.}
         glm::vec3 m_invdir;
     };
 \end{minted}
+\begingroup
 \captionof{listing}{Ray struct in trac0r. \texttt{m\_invdir} is pre-calculated upon construction.}
+\endgroup
 
 \subsection{Random Numbers}
 Since the Monte Carlo method lives from random sampling, it needs a solid way of generating random
@@ -978,8 +994,10 @@ it not using any expensive operations such as divisions, \texttt{sqrt} or \textt
         return x * 2685821657736338717LL;
     }
 \end{minted}
+\begingroup
 \captionof{listing}{Function to quickly generate random numbers with a short period
 \cite{site:xorshift}\label{lst:trac0r-xorshift64star}}
+\endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
     inline int64_t xorshift1024star(uint64_t &p, std::array<uint64_t, 16> &s) {
@@ -991,8 +1009,10 @@ it not using any expensive operations such as divisions, \texttt{sqrt} or \textt
     return (s[p] = s0 ^ s1) * 1181783497276652981LL;
 }
 \end{minted}
+\begingroup
 \captionof{listing}{Function to quickly generate random numbers with a large period
 \cite{site:xorshift}\label{lst:trac0r-xorshift1024star}}
+\endgroup
 
 \subsection{Sampling}
 trac0r provides a few different methods for geometric sampling.
@@ -1012,8 +1032,10 @@ trac0r provides a few different methods for geometric sampling.
         return glm::normalize(rand_vec);
     }
 \end{minted}
+\begingroup
 \captionof{listing}{Function to sample random points on the surface of a sphere implemented from
 \cite{marsaglia1972choosing}\label{lst:trac0r-uniform-sampling}}
+\endgroup  
 
 \begin{minted}[linenos, autogobble]{c++}
     /**
@@ -1029,8 +1051,10 @@ trac0r provides a few different methods for geometric sampling.
         return v * glm::sign(glm::dot(v, dir));
     }
 \end{minted}
+\begingroup
 \captionof{listing}{Function to sample uniform points on a hemisphere given by
 \texttt{dir}\label{lst:trac0r-oriented-uniform-sampling}}
+\endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
     /**
@@ -1059,6 +1083,7 @@ trac0r provides a few different methods for geometric sampling.
         glm::sin(r.x) * oneminus * o2 + r.y * dir;
     }
 \end{minted}
+\begingroup
 \captionof{listing}{Function to sample cosine-weighted points on a hemisphere given by
     \texttt{dir}. \texttt{power} is used to determine whether to generate uniform samples or
     cosine-weighted ones. If \texttt{power} is \texttt{0.f}, uniform samples are generated. If it's
@@ -1066,6 +1091,7 @@ trac0r provides a few different methods for geometric sampling.
     the cone that rays will be generated inside of.
     \label{lst:trac0r-hemisphere-sampling}
     \cite{site:better-sampling} \cite{site:cosine-weighted-hemisphere} \cite{site:path-tracing-3d-fractals}}
+\endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
     /**
@@ -1080,9 +1106,11 @@ trac0r provides a few different methods for geometric sampling.
         return sample_hemisphere(dir, 1.f, glm::half_pi<float>());
     }
 \end{minted}
+\begingroup
 \captionof{listing}{Helper function to get samples from an entire hemisphere making use of
     the code in listing
 \ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling}}
+\endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
     /**
@@ -1099,9 +1127,11 @@ trac0r provides a few different methods for geometric sampling.
         return sample_hemisphere(dir, 1.f, angle);
     }
 \end{minted}
+\begingroup
 \captionof{listing}{Helper function to get samples from a partial hemisphere making use of
     the code in listing
 \ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling-sone}}
+\endgroup
 
 To achieve anti-aliasing, rays are randomly offset within a pixel which results in smoother borders
 around shapes. This technique is free of additional computational cost with Monte Carlo integration.
@@ -1133,7 +1163,9 @@ In code, this is expressed as:
         break;
     }
 \end{minted}
+\begingroup
 \captionof{listing}{Russian roulette in trac0r \label{lst:trac0r-russian-roulette}}
+\endgroup
 
 \subsection{Scene Setup}
 The scene is hardcoded in the \texttt{setup\_scene} method of trac0r\_viewer. The basic scene setup
@@ -1213,7 +1245,9 @@ In order to understand the code below refer to the Material listing~\ref{lst:tra
         m_screen_width, m_screen_height);
     }
 \end{minted} 
+\begingroup
 \captionof{listing}{Scene setup in trac0r\_viewer \label{lst:trac0r-scene-setup}}
+\endgroup
 
 \subsection{Tracing a Ray}
 trac0r roughly follows the algorithm outlined in \ref{algorithm}.
@@ -1234,7 +1268,9 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
         }
     }
 \end{minted} 
+\begingroup
 \captionof{listing}{First, make a ray for every pixel, then trace it, finally accumulate the result into a buffer}
+\endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
     IntersectionInfo intersect(const FlatStructure &flatstruct, const Ray &ray) {
@@ -1277,7 +1313,9 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
         return intersect_info;
     }
 \end{minted} 
+\begingroup
 \captionof{listing}{Scene intersection routine}
+\endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
     glm::vec4 Renderer::trace_camera_ray(const Ray &ray,
@@ -1345,7 +1383,9 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
         return glm::vec4(return_color, 1.f);
     }
 \end{minted} 
+\begingroup
 \captionof{listing}{Material state machine \cite{site:path-tracing-3d-fractals}}
+\endgroup
 
 \section{Results}
 \subsection{Visual Results}
