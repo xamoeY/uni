@@ -1199,7 +1199,7 @@ In order to understand the code below refer to the Material listing~\ref{lst:tra
         trac0r::Material glass{3, {0.5f, 0.5f, 0.9f}, 0.0f, 1.51714f};
         trac0r::Material glossy{4, {1.f, 1.f, 1.f}, 0.09f};
 
-        auto wall_left = trac0r::Shape::make_plane({-0.5no front wall and f, 0.4f, 0},
+        auto wall_left = trac0r::Shape::make_plane({-0.5f, 0.4f, 0},
                                     {0, 0, -glm::half_pi<float>()},
                                     {1, 1}, diffuse_red);
         auto wall_right = trac0r::Shape::make_plane({0.5f, 0.4f, 0},
@@ -1216,7 +1216,7 @@ In order to understand the code below refer to the Material listing~\ref{lst:tra
                                     {1, 1}, default_material);
         auto lamp = trac0r::Shape::make_plane({0, 0.85f, -0.1},
                                     {0, 0, 0}, {0.4, 0.4}, emissive);
-                                    auto box1 = trac0r::Shape::make_box({0.3f, 0.1f, 0.1f},
+        auto box1 = trac0r::Shape::make_box({0.3f, 0.1f, 0.1f},
                                     {0, 0.6f, 0}, {0.2f, 0.5f, 0.2f},
                                     default_material);
         auto box2 = trac0r::Shape::make_box({-0.2f, 0.15f, 0.1f},
