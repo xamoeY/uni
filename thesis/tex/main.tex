@@ -1113,6 +1113,7 @@ trac0r provides a few different methods for geometric sampling.
 \ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling}}
 \endgroup
 
+\clearpage
 \begin{minted}[linenos, autogobble]{c++}
     /**
     * @brief Selects a random point on a cone with cosine-weighted
@@ -1387,6 +1388,7 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
 \begingroup
 \captionof{listing}{Material state machine \cite{site:path-tracing-3d-fractals}}
 \endgroup
+\clearpage
 
 \section{Results}
 \subsection{Visual Results}
@@ -1423,6 +1425,10 @@ resolution of 800x640 on an NVIDIA Geforce GTX 570.
 The image shown in~\ref{fig:trac0r-5000} displays an almost fully converged image. It took almost 5
 minutes to converge to this quality given the same parameters and hardware as above. The scene
 shown here is described by the code given in listing~\ref{lst:trac0r-scene-setup}.
+
+Note that there is still some noise on the diffuse surfaces. However, the image has converged
+enough for the caustics of the glassy sphere in the front to become visible. It takes around 25000
+frames for the image to converge so that no visible noise remains.
 
 \subsection{Debug View}
 \begin{figure}[H]
