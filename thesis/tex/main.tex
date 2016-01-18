@@ -32,6 +32,8 @@
 \usepackage{url}
 \usepackage{csquotes}
 \usepackage[T1]{fontenc}
+\usepackage[alldates=long]{biblatex}
+\addbibresource{main.bib}
 \graphicspath{ {images/} }
 \pgfplotsset{compat=1.12}
 
@@ -140,7 +142,7 @@ scientific simulations.
 
 This study assumes that the next logical step for the industry will be to adopt this method for
 real time media as well. For the purpose of this thesis, a renderer is considered
-\textit{real time} when it manages to render a frame within \(16.67ms\) since that equals 60
+\textit{real time} when it manages to render a frame within \(16.67ms\) as that corresponds to 60
 \ac{fps} which is
 the current de facto standard refresh rate for most available computer screens. Conversely, a
 renderer is called \textit{offline} when it is not designed for interactive rendering which usually
@@ -190,9 +192,9 @@ collection of photons is concerned.
 
 This physical approach would be extremely wasteful and
 computationally complex to simulate since most photons never reach an observer. Consider,
-for instance, that only an extremely small percentage of all the photons sent by the Sun actually
+for instance, that only an extremely small percentage of all the photons originating from the Sun actually
 reach Earth and an even smaller percentage of those are ever observed (although photons
-don't have to be observed to have a physical effect, of course). Since we only care for photons that
+don't have to be observed to have a physical effect, of course). Since we only care about photons that
 are relevant to the image that we are trying to render, it makes more sense to use
 \emph{backwards ray tracing} in which rays (which simulate streams of photons) are shot from the
 observer into the scene for every sensor. It is called \textit{backwards} because the rays are
@@ -318,7 +320,7 @@ been reflected.
 \)\, is the \textbf{normal attenuation} at \(\mathbf x\). The incoming light \(\omega_{\text{i}}\) is
 weakened depending on the cosine of the angle between \(\omega_{\text{i}}\) and the surface normal
 \(\mathbf n\).
-\\
+
 Path tracing offers a numerical solution to the integral found in this equation. For every pixel,
 every bounce and every sample of the camera, the rendering equation is solved. Considering this, it becomes apparent
 why this is an expensive algorithm to run. For practical reasons, not every possible value for
@@ -334,7 +336,7 @@ emissive materials can be written as follows:
 
 \begin{minted}[linenos, autogobble]{python}
     max_depth = 5
-    scene = [triangle_1, ..., triangle_n] # Many triangles defined here
+    scene = [triangle_1, ..., triangle_n]  # Many triangles defined here
 
     def trace_ray(ray, depth):
         if depth >= max_depth:
@@ -345,8 +347,7 @@ emissive materials can be written as follows:
         intersection = None
         for triangle in scene:
             intersection = check_intersection(ray, triangle)
-            if intersection:
-                # Break at first intersection
+            if intersection:  # Break at first intersection
                 break
 
         if not intersection:
@@ -366,7 +367,7 @@ emissive materials can be written as follows:
         brdf = 2 * material.reflectance * reflectance_theta
         reflected = trace_ray(next_ray, depth + 1)
 
-        return emittance + (brdf * reflecte)
+        return emittance + (brdf * reflected)
 
     for sample in range(samples):
         for pixel in pixels:
@@ -391,7 +392,7 @@ pixels (\(w * h\)) and the total number of triangles (\(n\)). We can then see th
 listing~\ref{lst:naive-path-tracing} runs in \(O(n^2)\) since we have to check every triangle for
 every ray.
 
-Knowing that, it is possible to determine the total worst number of scene intersection tests required per image.
+Knowing this, it is possible to determine the total worst number of scene intersection tests required per image.
 In the worst case, no ray exits before reaching its maximum depth. The resulting formula is:
 
 \begin{equation}\label{eq:complexity}
@@ -415,9 +416,8 @@ by assigning some sensible real world values to all symbols:
 As table~\ref{tbl:triangle-intersections-count} shows, the number of scene intersection tests
 quickly escalates as we add more triangles if we use an intersection test that checks
 against every triangle (making it run in \(O(n)\)). The table shows much more manageable numbers assuming
-the scene intersection could be done in \(\log(n)\).
-If the latter were the case, the whole algorithm would run in \(O(n\log(n))\) instead of \(O(n^2)\)
-as in the naive algorithm~\ref{lst:naive-path-tracing}.
+the scene intersection tests could be done in \(O(\log(n))\) as is the case when using a tree-based
+acceleration structure.
 
 \subsection{Acceleration Data Structures}
 The data structure used for the underlying scene is the principal factor for the performance of the
@@ -469,8 +469,7 @@ This section summarises the general properties of path tracing.
     \item[Problems]
         Due to the unbiased and random way rays are reflected from surfaces, it takes a long time for
         classic path tracing to
-        produce sharp caustics as rays tend to very rarely hit objects with caustic properties. This makes
-        it especially difficult for real time path tracing to produce sharp caustics. This can be
+        produce sharp caustics as rays tend to very rarely hit objects with caustic properties. This can be
         alleviated by using bidirectional path tracing \cite{techreport:pbr} or by using an
         additional photon map as well as Multiple Importance Sampling \cite{veach1997robust}.
 
@@ -592,7 +591,8 @@ finally the \ac{mlt} was suggested in 1997 by Eric Veach and Leonidas J. Guibas 
 improve performance in complex scenes.
 
 This was the last notable improvement to the algorithm,
-though many micro optimizations have since been published. All of these achievements and
+though many micro optimizations \cite{caflisch1998monte}\cite{inproceedings:moller2005fast}\cite{site:cosine-weighted-hemisphere}\cite{site:better-sampling}
+have since been published. All of these achievements and
 improvements are generally collapsed into the term \emph{path tracing} since they do not diverge
 from the general algorithm but instead improve upon it.
 
@@ -643,7 +643,7 @@ uses a real time ray tracer running on the \acs{gpu} to render a complex scene a
 In the past, some critics have offered critical insights about why it might not be a viable
 alternative to rasterization on consumer hardware in the short term
 \cite{site:raytracing-vs-rasterization} \cite{site:codinghorror-raytracing}. Even John Carmack of
-id Software was sceptical of real time ray tracing in games in 2012 in a comment on Ars Technica
+id Software voiced scepticism of real time ray tracing in games in 2012 in a comment on Ars Technica
 \cite{site:carmack-scepticism}.
 
 \section{Current State of Technology}
@@ -653,7 +653,7 @@ example of this is Jacco Bikker's and Jeroen van Schijndel's \emph{Brigade Rende
 hardware in real time. Its company, OTOY, is also developing a cloud-based rendering solution
 called Octane Render \cite{site:octane} for animation professionals.
 
-Microsoft's DirectX 12 \cite{site:dx12-raytracing} is receiving \emph{Hybrid Ray-Traced Shadows}, a
+Microsoft's DirectX 12 \cite{site:dx12-raytracing} features \emph{Hybrid Ray-Traced Shadows}, a
 technology that combines real time ray tracing with rasterization to create fast high quality
 shadows.
 
@@ -670,7 +670,7 @@ render them to the screen.
 
 It's important to keep in mind that while the real time graphics industry has mostly been driven by
 video games, the most important hardware currently exist in game consoles which generally evolve at
-a much slower pace than desktop computers in terms of hardware power and their graphics hardware
+a much slower pace than desktop computers in terms of hardware power, and their graphics hardware
 especially is usually non-upgradeable. This means that it wouldn't be economically viable to
 develop a real time path tracing renderer that only ran on current generation desktop computers
 because most consumers would not be able to benefit from the technology.
@@ -742,68 +742,72 @@ provided below:
 These requirements and priorities directed and
 influenced many decisions and trade-offs made during the implementation.
 
-The components that make up the path tracer follow:
+\begin{minipage}{\textwidth}
+    The components that make up the path tracer follow:
 
-\begin{description}
-    \item[Random number generation] Solid and fast function for pseudo random number generation.
-    \item[Camera] A structure that keeps all camera data as well as some functions to do coordinate
-        transformations.
-    \item[Material system] The path tracer should support four materials: Emitter, diffuse, glossy,
-        glass. Each of them should at least provide their \ac{brdf}.
-    \item[AABBs] A simple way to represent \acp{aabb}.
-    \item[Triangles] The only kind of primitive that materials can be applied unto and in fact the
-        only kind of geometry that is rendered.
-    \item[Shapes and geometry] It should provide a way to generate basic geometric shapes. No
-        mechanism for loading externally defined models is planned.
-    \item[Scene] A way to efficiently save an arbitrary number of shapes. At first this should be
-        implemented as a flat list. If there is enough time, a more efficient method should be
-        considered.
-    \item[Intersection/Scene lookup] Implemented as a ray intersection function for each supported primitive
-        (which in this case means ray-AABB intersection and ray-triangle intersection).
-    \item[Viewer] An interactive viewport that shows off progressive rendering with a sample scene.
-\end{description}
+    \begin{description}
+        \item[Random number generation] Solid and fast function for pseudo random number generation.
+        \item[Camera] A structure that keeps all camera data as well as some functions to do coordinate
+            transformations.
+        \item[Material system] The path tracer should support four materials: Emitter, diffuse, glossy,
+            glass. Each of them should at least provide their \ac{brdf}.
+        \item[AABBs] A simple way to represent \acp{aabb}.
+        \item[Triangles] The only kind of primitive that materials can be applied unto and in fact the
+            only kind of geometry that is rendered.
+        \item[Shapes and geometry] It should provide a way to generate basic geometric shapes. No
+            mechanism for loading externally defined models is planned.
+        \item[Scene] A way to efficiently save an arbitrary number of shapes. At first this should be
+            implemented as a flat list. If there is enough time, a more efficient method should be
+            considered.
+        \item[Intersection/Scene lookup] Implemented as a ray intersection function for each supported primitive
+            (which in this case means ray-AABB intersection and ray-triangle intersection).
+        \item[Viewer] An interactive viewport that shows off progressive rendering with a sample scene.
+    \end{description}
+\end{minipage}
 
-These components are implemented in the following files:
+\begin{minipage}{\textwidth}
+    These components are implemented in the following files:
 
-\begin{table}[H]
-    \centering
-    \begin{tabularx}{\textwidth}{l | X}
-        File(s)                    & Description \\ \hline
-        trac0r/aabb.\{cpp,hpp\}      & \texttt{AABB} class implementation. \\
-        trac0r/camera.\{cpp,hpp\}    & \texttt{Camera} class implementation with many helper methods. \\
-        trac0r/flat\_structure.\{cpp,hpp\}  & Simple flat data structure implementation for scene geometry.
-                                     Also contains the intersection logic for all contained
-                                     geometry.\\
-        trac0r/intersection\_info.hpp & Struct containing all relevant information about a single
-                                     intersection. This struct is returned by all intersection
-                                     methods. \\
-        trac0r/intersections.hpp   & Contains functions for testing primitives for intersections. \\
-        trac0r/material.hpp        & \texttt{Material} struct containing all material state. \\
-        trac0r/random.hpp          & Implements functions to generate random floating point
-                                     numbers, integers. Also contains functions for random
-                                     geometric sampling with uniform and cosine-weighted
-                                     distributions. \\
-        trac0r/ray.hpp             & Contains the \texttt{Ray} struct which is used by every ray in
-                                     trac0r.\\
-        trac0r/renderer\_aux.cl    & OpenCL code containing the code for a single trace through the
-                                     scene. Implements the BRDFs for all materials. \\
-        trac0r/renderer\_aux.cpp   & C++ code containing the code for a single trace through the
-                                     scene. Implements the BRDFs for all materials. \\
-        trac0r/renderer.\{cpp,hpp\}  & Contains code for preparing the
-                                     OpenCL and C++ renderer. \\
-        trac0r/scene.\{cpp,hpp\}     & Simple \texttt{Scene} class serving as an abstract interface
-                                     to the underlying data structure. \\
-        trac0r/shape.\{cpp,hpp\}     & Contains a few factory methods for generating different kinds
-                                     of geometry.\\
-        trac0r/timer.hpp           & High-resolution timer for profiling purposes. \\
-        trac0r/triangle.hpp        & A simple struct for expressing a
-                                     triangle. \\
-        trac0r/utils.hpp           & Contains various small helper functions for translating OpenCL
-                                     error codes, packing packing and unpacking colors and
-                                     displaying text.
-    \end{tabularx}
-    \caption{List of files in trac0r}
-\end{table}
+    \begin{table}[H]
+        \centering
+        \begin{tabularx}{\textwidth}{l | X}
+            File(s)                    & Description \\ \hline
+            trac0r/aabb.\{cpp,hpp\}      & \texttt{AABB} class implementation. \\
+            trac0r/camera.\{cpp,hpp\}    & \texttt{Camera} class implementation with many helper methods. \\
+            trac0r/flat\_structure.\{cpp,hpp\}  & Simple flat data structure implementation for scene geometry.
+                                         Also contains the intersection logic for all contained
+                                         geometry.\\
+            trac0r/intersection\_info.hpp & Struct containing all relevant information about a single
+                                         intersection. This struct is returned by all intersection
+                                         methods. \\
+            trac0r/intersections.hpp   & Contains functions for testing primitives for intersections. \\
+            trac0r/material.hpp        & \texttt{Material} struct containing all material state. \\
+            trac0r/random.hpp          & Implements functions to generate random floating point
+                                         numbers, integers. Also contains functions for random
+                                         geometric sampling with uniform and cosine-weighted
+                                         distributions. \\
+            trac0r/ray.hpp             & Contains the \texttt{Ray} struct which is used by every ray in
+                                         trac0r.\\
+            trac0r/renderer\_aux.cl    & OpenCL code containing the code for a single trace through the
+                                         scene. Implements the BRDFs for all materials. \\
+            trac0r/renderer\_aux.cpp   & C++ code containing the code for a single trace through the
+                                         scene. Implements the BRDFs for all materials. \\
+            trac0r/renderer.\{cpp,hpp\}  & Contains code for preparing the
+                                         OpenCL and C++ renderer. \\
+            trac0r/scene.\{cpp,hpp\}     & Simple \texttt{Scene} class serving as an abstract interface
+                                         to the underlying data structure. \\
+            trac0r/shape.\{cpp,hpp\}     & Contains a few factory methods for generating different kinds
+                                         of geometry.\\
+            trac0r/timer.hpp           & High-resolution timer for profiling purposes. \\
+            trac0r/triangle.hpp        & A simple struct for expressing a
+                                         triangle. \\
+            trac0r/utils.hpp           & Contains various small helper functions for translating OpenCL
+                                         error codes, packing packing and unpacking colors and
+                                         displaying text.
+        \end{tabularx}
+        \caption{List of files in trac0r}
+    \end{table}
+\end{minipage}
 
 \subsection{Materials}
 trac0r implements the following materials:
@@ -1733,7 +1737,7 @@ Apart from algorithmic improvements, the implementation's usage of \ac{gpu} memo
 is likely far from optimal and could be improved. \ac{gpu} memory speeds suggest that this would
 lead to a general speedup around factor 5.
 
-Lastly, overall image quality could be improved by running an image filter over the rendered image
+Lastly, overall image quality could be improved by applying an image filter over the rendered image
 before displaying it to the user. A suitable image filtering algorithm should be non-linear and
 edge-preserving as well as energy-preserving so that it won't lower the quality of the resulting
 image. A notable filter fulfilling those requirements is the \textit{bilateral filter}. This could
@@ -1746,8 +1750,9 @@ rasterization in four years on upper level commodity hardware.
 \listoffigures
 \listoflistings
 \listoftables
-\bibliography{main}
-\bibliographystyle{unsrt}
+\printbibliography
+% \bibliography{main}
+% \bibliographystyle{unsrt}
 
 \chapter*{Eidesstattliche Erklärung}
 \onehalfspace
