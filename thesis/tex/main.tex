@@ -1140,7 +1140,7 @@ trac0r provides a few different methods for geometric sampling.
     * @return A random point on the surface of a cone
     */
     inline glm::vec3 oriented_cosine_weighted_cone_sample(glm::vec3 dir,
-    float angle) {
+                                                          float angle) {
         return sample_hemisphere(dir, 1.f, angle);
     }
 \end{minted}
@@ -1181,7 +1181,7 @@ In code, this is expressed as:
     }
 \end{minted}
 \begingroup
-\captionof{listing}{Russian roulette in trac0r \label{lst:trac0r-russian-roulette}.}
+\captionof{listing}{Russian roulette in trac0r\label{lst:trac0r-russian-roulette}.}
 \endgroup
 
 \subsection{Scene Setup}
@@ -1291,7 +1291,8 @@ into a buffer.}
 \endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
-    IntersectionInfo intersect(const FlatStructure &flatstruct, const Ray &ray) {
+    IntersectionInfo intersect(const FlatStructure &flatstruct,
+                               const Ray &ray) {
         IntersectionInfo intersect_info;
 
         // Keep track of closest triangle
