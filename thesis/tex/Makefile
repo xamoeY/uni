@@ -1,4 +1,4 @@
-.PHONY: clean
+.PHONY: clean default oneside twoside
 
 oneside:
 	rubber --unsafe -d oneside.tex
