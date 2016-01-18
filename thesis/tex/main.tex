@@ -1,3 +1,14 @@
+% Note about the usage of full stops in captions in this document.
+% The Chicago Manual of Style, 15th Edition (2003), provides the following suggestion:
+%
+% 12.32 ... No punctuation is needed after a caption consisting solely of an incomplete sentence. 
+% If one or more full sentences follow it, each (including the opening phrase) has closing punctuation.
+% In a work in which most captions consist of full sentences, even incomplete ones may be followed by
+% a period for consistency.
+%
+% As such, this thesis will always use full stops in every caption, even if it is an incomplete
+% sentence.
+
 \documentclass[
   twoside,
   11pt, a4paper,
@@ -374,7 +385,7 @@ emissive materials can be written as follows:
             trace_path(ray_from_pixel(pixel), 0)
 \end{minted}
 \begingroup
-\captionof{listing}{Naive path tracing algorithm\label{lst:naive-path-tracing}}
+\captionof{listing}{Naive path tracing algorithm\label{lst:naive-path-tracing}.}
 \endgroup
 
 \vspace{0.5cm}
@@ -409,7 +420,7 @@ by assigning some sensible real world values to all symbols:
                   {Intersection in \(O(n)\)}{1920*1080*30*5*n}
                   {Intersection in \(O(\log(n))\)}{1920*1080*30*5*round(ln(n), 0)}
     \caption{Worst case number of total scene intersection tests using
-    formula~\ref{eq:complexity} with \(w=1920, h=1080, s=30, d=5\)}
+    formula~\ref{eq:complexity} with \(w=1920, h=1080, s=30, d=5\).}
     \label{tbl:triangle-intersections-count}
 \end{table}
 
@@ -555,7 +566,7 @@ usually used with a classic rasterization renderer whose output image is multipl
 of the \ac{ao} and its resulting image is multiplied. The output of this algorithm is sometimes
 called the \emph{ambient occlusion map} which serves as a cache. As such, rendering is extremely
 fast once the cache has been calculated. However, this cache is invalidated once the scene changes
-and is the algorithm is therefore unsuitable for dynamic scenes.
+and the algorithm is therefore unsuitable for dynamic scenes.
 
 For real time applications, a variant of \ac{ao} called \acf{ssao} is usually used. While \ac{ssao}
 is inaccurate from a physical point of view, it results in some very fast and acceptable
@@ -636,7 +647,7 @@ uses a real time ray tracer running on the \acs{gpu} to render a complex scene a
 \begin{figure}[H]
     \includegraphics[scale=0.5]{5faces}
     \centering
-    \caption{5 faces by Fairlight}
+    \caption{5 faces by Fairlight.}
     \label{fig:5faces}
 \end{figure}
 
@@ -664,7 +675,7 @@ render them to the screen.
 \begin{figure}[H]
     \includegraphics[scale=0.32]{sfera}
     \centering
-    \caption{Sfera real time path tracing video game}
+    \caption{Sfera real time path tracing video game.}
     \label{fig:sfera}
 \end{figure}
 
@@ -802,10 +813,10 @@ influenced many decisions and trade-offs made during the implementation.
             trac0r/triangle.hpp        & A simple struct for expressing a
                                          triangle. \\
             trac0r/utils.hpp           & Contains various small helper functions for translating OpenCL
-                                         error codes, packing packing and unpacking colors and
+                                         error codes, packing and unpacking colors and
                                          displaying text.
         \end{tabularx}
-        \caption{List of files in trac0r}
+        \caption{List of files in trac0r.}
     \end{table}
 \end{minipage}
 
@@ -1001,22 +1012,22 @@ it not using any expensive operations such as divisions, \texttt{sqrt} or \textt
 \end{minted}
 \begingroup
 \captionof{listing}{Function to quickly generate random numbers with a short period
-\cite{site:xorshift}\label{lst:trac0r-xorshift64star}}
+\cite{site:xorshift}\label{lst:trac0r-xorshift64star}.}
 \endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
     inline int64_t xorshift1024star(uint64_t &p, std::array<uint64_t, 16> &s) {
-    uint64_t s0 = s[p];
-    uint64_t s1 = s[p = (p + 1) & 15];
-    s1 ^= s1 << 31; // a
-    s1 ^= s1 >> 11; // b
-    s0 ^= s0 >> 30; // c
-    return (s[p] = s0 ^ s1) * 1181783497276652981LL;
-}
+        uint64_t s0 = s[p];
+        uint64_t s1 = s[p = (p + 1) & 15];
+        s1 ^= s1 << 31; // a
+        s1 ^= s1 >> 11; // b
+        s0 ^= s0 >> 30; // c
+        return (s[p] = s0 ^ s1) * 1181783497276652981LL;
+    }
 \end{minted}
 \begingroup
 \captionof{listing}{Function to quickly generate random numbers with a large period
-\cite{site:xorshift}\label{lst:trac0r-xorshift1024star}}
+\cite{site:xorshift}\label{lst:trac0r-xorshift1024star}.}
 \endgroup
 
 \subsection{Sampling}
@@ -1030,16 +1041,15 @@ trac0r provides a few different methods for geometric sampling.
     * @return A random point on the surface of a sphere
     */
     inline glm::vec3 uniform_sample_sphere() {
-        glm::vec3 rand_vec =
-        glm::vec3(rand_range(-1.f, 1.f),
-        rand_range(-1.f, 1.f),
-        rand_range(-1.f, 1.f));
+        glm::vec3 rand_vec = glm::vec3(rand_range(-1.f, 1.f),
+                                       rand_range(-1.f, 1.f),
+                                       rand_range(-1.f, 1.f));
         return glm::normalize(rand_vec);
     }
 \end{minted}
 \begingroup
 \captionof{listing}{Function to sample random points on the surface of a sphere implemented from
-\cite{marsaglia1972choosing}\label{lst:trac0r-uniform-sampling}}
+\cite{marsaglia1972choosing}\label{lst:trac0r-uniform-sampling}.}
 \endgroup  
 
 \begin{minted}[linenos, autogobble]{c++}
@@ -1058,7 +1068,7 @@ trac0r provides a few different methods for geometric sampling.
 \end{minted}
 \begingroup
 \captionof{listing}{Function to sample uniform points on a hemisphere given by
-\texttt{dir}\label{lst:trac0r-oriented-uniform-sampling}}
+\texttt{dir}\label{lst:trac0r-oriented-uniform-sampling}.}
 \endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
@@ -1114,7 +1124,7 @@ trac0r provides a few different methods for geometric sampling.
 \begingroup
 \captionof{listing}{Helper function to get samples from an entire hemisphere making use of
     the code in listing
-\ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling}}
+\ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling}.}
 \endgroup
 
 \clearpage
@@ -1136,7 +1146,7 @@ trac0r provides a few different methods for geometric sampling.
 \begingroup
 \captionof{listing}{Helper function to get samples from a partial hemisphere making use of
     the code in listing
-\ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling-sone}}
+\ref{lst:trac0r-hemisphere-sampling}\label{lst:trac0r-oriented-cosine-weighted-sampling-sone}.}
 \endgroup
 
 To achieve anti-aliasing, rays are randomly offset within a pixel which results in smoother borders
@@ -1170,7 +1180,7 @@ In code, this is expressed as:
     }
 \end{minted}
 \begingroup
-\captionof{listing}{Russian roulette in trac0r \label{lst:trac0r-russian-roulette}}
+\captionof{listing}{Russian roulette in trac0r \label{lst:trac0r-russian-roulette}.}
 \endgroup
 
 \subsection{Scene Setup}
@@ -1252,7 +1262,7 @@ In order to understand the code below refer to the Material listing~\ref{lst:tra
     }
 \end{minted} 
 \begingroup
-\captionof{listing}{Scene setup in trac0r\_viewer \label{lst:trac0r-scene-setup}}
+\captionof{listing}{Scene setup in trac0r\_viewer \label{lst:trac0r-scene-setup}.}
 \endgroup
 
 \subsection{Tracing a Ray}
@@ -1275,7 +1285,8 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
     }
 \end{minted} 
 \begingroup
-\captionof{listing}{First, make a ray for every pixel, then trace it, finally accumulate the result into a buffer}
+\captionof{listing}{First, make a ray for every pixel, then trace it, finally accumulate the result
+into a buffer.}
 \endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
@@ -1320,7 +1331,7 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
     }
 \end{minted} 
 \begingroup
-\captionof{listing}{Scene intersection routine}
+\captionof{listing}{Scene intersection routine.}
 \endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
@@ -1390,7 +1401,7 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
     }
 \end{minted} 
 \begingroup
-\captionof{listing}{Material state machine \cite{site:path-tracing-3d-fractals}}
+\captionof{listing}{Material state machine \cite{site:path-tracing-3d-fractals}.}
 \endgroup
 \clearpage
 
@@ -1411,7 +1422,7 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
     \subfloat[\(n = 50\)]{\includegraphics[scale=0.15]{trac0r-50.png}\label{fig:trac0r-50}}
     \subfloat[\(n = 100\)]{\includegraphics[scale=0.15]{trac0r-100.png}\label{fig:trac0r-100}}
     \centering
-    \caption{trac0r\_viewer viewport after integrating \(n\) frames}
+    \caption{trac0r\_viewer viewport after integrating \(n\) frames.}
     \label{fig:trac0r_n_frames}
 \end{figure}
 
@@ -1422,7 +1433,7 @@ resolution of 800x640 on an NVIDIA Geforce GTX 570.
 \begin{figure}[H]
     \includegraphics[scale=0.5]{trac0r-5000.png}
     \centering
-    \caption{trac0r\_viewer after integrating for 5000 frames}
+    \caption{trac0r\_viewer after integrating for 5000 frames.}
     \label{fig:trac0r-5000}
 \end{figure}
 
@@ -1438,7 +1449,7 @@ frames for the image to converge so that no visible noise remains.
 \begin{figure}[H]
     \includegraphics[scale=0.5]{trac0r-debug1.png}
     \centering
-    \caption{trac0r\_viewer debug view}
+    \caption{trac0r\_viewer debug view.}
     \label{fig:trac0r_debug1}
 \end{figure}
 
@@ -1451,7 +1462,7 @@ directly visible. This comes in handy when debugging visibility problems.
 \begin{figure}[H]
     \includegraphics[scale=0.5]{trac0r-debug2.png}
     \centering
-    \caption{trac0r\_viewer debug view while interactively navigating the scene}
+    \caption{trac0r\_viewer debug view while interactively navigating the scene.}
     \label{fig:trac0r_debug2}
 \end{figure}
 
@@ -1563,7 +1574,7 @@ longer than a second to render under specific circumstances.
             NVIDIA Geforce GTX 970  & 13.5          & 3494   \\
             NVIDIA Geforce GTX 980  & 13.9          & 4612
         \end{tabular}
-        \caption{Tested GPU performance and GFLOPS}
+        \caption{Tested GPU performance and GFLOPS.}
         \label{tbl:benchmark-table}
     \end{table}
 \end{minipage}
