@@ -842,36 +842,36 @@ trac0r implements the following materials:
 \begin{minted}[linenos, autogobble]{c++}
     struct Material {
         /**
-        * @brief Used to determine the material type used.
-        * Refer to the table below:
-        *        m_type = 1: Emissive
-        *        m_type = 2: Diffuse
-        *        m_type = 3: Glass
-        *        m_type = 4: Glossy
-        */
+         * @brief Used to determine the material type used.
+         * Refer to the table below:
+         *        m_type = 1: Emissive
+         *        m_type = 2: Diffuse
+         *        m_type = 3: Glass
+         *        m_type = 4: Glossy
+         */
         uint8_t m_type = 1;
 
         /**
-        * @brief Used as the basic color for most materials.
-        */
+         * @brief Used as the basic color for most materials.
+         */
         glm::vec3 m_color = {0.9f, 0.5f, 0.1f};
 
         /**
-        * @brief Used to determine the ratio between reflection and diffusion
-        * for some materials. Value must be between 0.0 and 1.0.
-        */
+         * @brief Used to determine the ratio between reflection and diffusion
+         * for some materials. Value must be between 0.0 and 1.0.
+         */
         float m_roughness = 0.f;
 
         /**
-        * @brief Index of refraction (IOR) is used to determine how
-        * strongly light is bent inside a glass material.
-        */
+         * @brief Index of refraction (IOR) is used to determine how
+         * strongly light is bent inside a glass material.
+         */
         float m_ior = 1.f;
 
         /**
-        * @brief Luminous emittance provides the strength of emissive
-        * material. Values can be larger than 1.0.
-        */
+         * @brief Luminous emittance provides the strength of emissive
+         * material. Values can be larger than 1.0.
+         */
         float m_emittance = 0.f;
     };
 \end{minted}
@@ -1036,11 +1036,11 @@ trac0r provides a few different methods for geometric sampling.
 
 \begin{minted}[linenos, autogobble]{c++}
     /**
-    * @brief Selects a random point on a sphere with uniform distribution.
-    * point on a uniform.
-    *
-    * @return A random point on the surface of a sphere
-    */
+     * @brief Selects a random point on a sphere with uniform distribution.
+     * point on a uniform.
+     *
+     * @return A random point on the surface of a sphere
+     */
     inline glm::vec3 uniform_sample_sphere() {
         glm::vec3 rand_vec = glm::vec3(rand_range(-1.f, 1.f),
                                        rand_range(-1.f, 1.f),
@@ -1055,13 +1055,13 @@ trac0r provides a few different methods for geometric sampling.
 
 \begin{minted}[linenos, autogobble]{c++}
     /**
-    * @brief Given a direction vector, this will return a random uniform
-    * point on a sphere on the hemisphere around dir.
-    *
-    * @param dir A vector that represents the hemisphere's center
-    *
-    * @return A random point the on the hemisphere
-    */
+     * @brief Given a direction vector, this will return a random uniform
+     * point on a sphere on the hemisphere around dir.
+     *
+     * @param dir A vector that represents the hemisphere's center
+     *
+     * @return A random point the on the hemisphere
+     */
     inline glm::vec3 oriented_uniform_hemisphere_sample(glm::vec3 dir) {
         glm::vec3 v = uniform_sample_sphere();
         return v * glm::sign(glm::dot(v, dir));
@@ -1074,19 +1074,19 @@ trac0r provides a few different methods for geometric sampling.
 
 \begin{minted}[linenos, autogobble]{c++}
     /**
-    * @brief Selects a random point on a sphere with uniform or
-    * cosine-weighted distribution.
-    *
-    * @param dir A vector around which the hemisphere will be centered
-    * @param power 0.f means uniform distribution while 1.f means
-    * cosine-weighted
-    * @param angle When a full hemisphere is desired, use pi/2.
-    * 0 equals perfect reflection. The value
-    * should therefore be between 0 and pi/2. This angle is equal
-    * to half the cone width.
-    *
-    * @return A random point on the surface of a sphere
-    */
+     * @brief Selects a random point on a sphere with uniform or
+     * cosine-weighted distribution.
+     *
+     * @param dir A vector around which the hemisphere will be centered
+     * @param power 0.f means uniform distribution while 1.f means
+     * cosine-weighted
+     * @param angle When a full hemisphere is desired, use pi/2.
+     * 0 equals perfect reflection. The value
+     * should therefore be between 0 and pi/2. This angle is equal
+     * to half the cone width.
+     *
+     * @return A random point on the surface of a sphere
+     */
     inline glm::vec3 sample_hemisphere(glm::vec3 dir, float power, float angle) {
         glm::vec3 o1 = glm::normalize(ortho(dir));
         glm::vec3 o2 = glm::normalize(glm::cross(dir, o1));
@@ -1111,13 +1111,13 @@ trac0r provides a few different methods for geometric sampling.
 
 \begin{minted}[linenos, autogobble]{c++}
     /**
-    * @brief Given a direction vector, this will return a random
-    * cosine-weighted point on a sphere on the hemisphere around dir.
-    *
-    * @param dir A vector that represents the hemisphere's center
-    *
-    * @return A random point the on the hemisphere
-    */
+     * @brief Given a direction vector, this will return a random
+     * cosine-weighted point on a sphere on the hemisphere around dir.
+     *
+     * @param dir A vector that represents the hemisphere's center
+     *
+     * @return A random point the on the hemisphere
+     */
     inline glm::vec3 oriented_cosine_weighted_hemisphere_sample(glm::vec3 dir) {
         return sample_hemisphere(dir, 1.f, glm::half_pi<float>());
     }
@@ -1131,14 +1131,14 @@ trac0r provides a few different methods for geometric sampling.
 \clearpage
 \begin{minted}[linenos, autogobble]{c++}
     /**
-    * @brief Selects a random point on a cone with cosine-weighted
-    * distribution.
-    *
-    * @param dir Direction in which the cone is oriented
-    * @param angle Angle of the cone in radians
-    *
-    * @return A random point on the surface of a cone
-    */
+     * @brief Selects a random point on a cone with cosine-weighted
+     * distribution.
+     *
+     * @param dir Direction in which the cone is oriented
+     * @param angle Angle of the cone in radians
+     *
+     * @return A random point on the surface of a cone
+     */
     inline glm::vec3 oriented_cosine_weighted_cone_sample(glm::vec3 dir,
                                                           float angle) {
         return sample_hemisphere(dir, 1.f, angle);
