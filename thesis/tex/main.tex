@@ -42,6 +42,7 @@
 \usepackage[customcolors]{hf-tikz}
 \usepackage{url}
 \usepackage{csquotes}
+\usepackage{booktabs}
 \usepackage[T1]{fontenc}
 \usepackage[alldates=long]{biblatex}
 \addbibresource{main.bib}
@@ -432,6 +433,7 @@ the scene intersection tests could be done in \(O(\log(n))\) as is the case when
 acceleration structure.
 
 \subsection{Acceleration Data Structures}
+\label{acceleration-data-structures}
 The data structure used for the underlying scene is the principal factor for the performance of the
 path tracing algorithm. The most commonly used naive data structure for path tracing is a simple
 list of shapes. Upon scene lookup, a ray is tested for intersection with every shape. The
@@ -473,10 +475,10 @@ This section summarises the general properties of path tracing.
         dynamic scenes in this case, though.
 
     \item[Global Illumination]
-        Path tracing is one of many ways of simulating \acf{gi}.
-        Commonly \ac{gi} refers to a class of algorithms that simulate direct as well as indirect
+        Commonly \acf{gi} refers to a class of algorithms that simulate direct as well as indirect
         lighting in a scene. This implies that every object's illumination affects every other object and that the
         renderer doesn't make a distinction between reflected light and light sources.
+        Path tracing is one of many ways of simulating \ac{gi}.
 
     \item[Problems]
         Due to the unbiased and random way rays are reflected from surfaces, it takes a long time for
@@ -509,19 +511,22 @@ be calculated this way.
 Rasterization is widely implemented in the industry and most interactive 3D applications use it to
 render their scene. Its fundamental algorithm has a complexity of \(O(n)\) and is therefore
 theoretically slower than path tracing. However, a wide array of algorithmic improvements such as
-back-face culling exist and additionally its initial cost is very low.
+back-face culling exist and additionally its initial cost is very low in comparison to path
+tracing-based techniques due to not requiring sampling. A frame rendered using rasterization is
+finished and doesn't need any additional integration to converge as is the case with path tracing.
 
 Unlike path tracing, it does not automatically simulate a wide range range of physical phenomena.
 Physical effects such as shadows, global illumination and caustics have to be calculated separately
 in other algorithms and then be composited on top of the rasterized scene. This makes rasterization
-complicated in cases where many physically based effects are desired.
+complicated in cases where many physically based effects are desired (e.g.\ many modern games and
+movies).
 
 \subsection{Comparison to Other Global Illumination Algorithms}
 This section compares some of the more popular \ac{gi} algorithms beside ray tracing and
 path tracing. In general, \ac{gi} is considered to be a group of algorithms that calculate
 direct light as well as indirect light for computer graphics scenes. However, not all algorithms
-that fulfill this purpose are in fact physically accurate. We will therefore take a look at how
-some of these algorithms compare to path tracing.
+that fulfill this purpose are in fact physically accurate. It is therefore necessary to take a look
+at how some of these algorithms compare to path tracing.
 
 The algorithms that are compared to path tracing in this section are: \emph{photon mapping},
 \emph{radiosity} and
@@ -529,7 +534,7 @@ The algorithms that are compared to path tracing in this section are: \emph{phot
 Other \ac{gi} algorithms include: Lightcuts (and its variants), Point Based Global Illumination
 and Spherical harmonic lighting.
 
-To note: This thesis considers path tracing at the current state of research which means that path
+To note: This thesis considers path tracing at the current state of research, implying that path
 tracing, bidirectional path tracing and the \ac{mlt} are shortened to just \emph{path tracing} and
 will therefore not be individually compared.
 
@@ -547,8 +552,9 @@ Compared to path tracing, photon mapping has a few advantages and a few disadvan
 particular, photon mapping can simulate subsurface scattering and volume caustics which path
 tracing can't accurately calculate. On the other hand, photon mapping is unsuitable for real time
 applications with dynamic scenes since the photon map can only be used as long as the scene
-geometry or light position doesn't change. In the case the scene geometry changes, the cache is invalidated and a new
-photon map has to be calculated which is a slow process.
+geometry or light position doesn't change. In the case the scene geometry changes, the cache is
+invalidated and a new photon map has to be calculated which is a time consuming process and thus
+unsuitable for realtime use.
 
 \subsubsection{Radiosity}
 Made originally for simulating heat transfer in 1984 by Goral et al.\cite{article:radiosity},
@@ -564,9 +570,9 @@ The idea for \ac{ao} was first presented by Gavin Miller in 1994
 \cite{inproceedings:ambient-occlusion}. It is meant as an algorithm to calculate realistic
 occlusion of every point in a scene and cannot generate an accurate image on its own. It is
 usually used with a classic rasterization renderer whose output image is multiplied with the result
-of the \ac{ao} and its resulting image is multiplied. The output of this algorithm is sometimes
-called the \emph{ambient occlusion map} which serves as a cache. As such, rendering is extremely
-fast once the cache has been calculated. However, this cache is invalidated once the scene changes
+of the \ac{ao} process. The output of this algorithm is sometimes
+called the \emph{ambient occlusion map} and serves as a cache. As such, rendering is extremely
+fast once the cache has been calculated. However, the cache is invalidated once the scene changes
 and the algorithm is therefore unsuitable for dynamic scenes.
 
 For real time applications, a variant of \ac{ao} called \acf{ssao} is usually used. While \ac{ssao}
@@ -703,7 +709,7 @@ uses SDL2 \cite{wiki:sdl} for input and output.\ trac0r\_viewer allows for inter
 navigation, visual debugging and automatic benchmarking.
 
 A conscious decision was made to
-only implement triangles for geometric primitives due to two reasons. Firstly, since every
+only implement triangles for geometric primitives due to two reasons: Firstly, since every
 other geometric shape can be expressed easily using an amount of triangles, it seems unnecessary to
 add additional complexity (although using triangles to approximate other shapes will be less
 efficient from a performance perspective). Secondly, real world applications very rarely make use of perfect
@@ -728,7 +734,7 @@ It uses classic reverse path tracing and can optionally make use of OpenCL or Op
 speed up computation.
 
 \subsection{Design Overview}
-When deciding to implement a path tracer, one first has to assemble a list of requirements and
+When deciding to implement a path tracer, it is necessary to first assemble a list of requirements and
 components that go into creating it. Not all path tracers are built the same.
 
 The list of requirements for trac0r before it was implemented ordered by descending priority is
@@ -761,16 +767,15 @@ influenced many decisions and trade-offs made during the implementation.
         \item[Random number generation] Solid and fast function for pseudo random number generation.
         \item[Camera] A structure that keeps all camera data as well as some functions to do coordinate
             transformations.
-        \item[Material system] The path tracer should support four materials: Emitter, diffuse, glossy,
-            glass. Each of them should at least provide their \ac{brdf}.
+        \item[Material system] The path tracer has to support at least four materials: Emissive,
+            diffuse, glossy and glass. Each of them should at least provide their \ac{brdf}.
         \item[AABBs] A simple way to represent \acp{aabb}.
         \item[Triangles] The only kind of primitive that materials can be applied unto and in fact the
             only kind of geometry that is rendered.
-        \item[Shapes and geometry] It should provide a way to generate basic geometric shapes. No
-            mechanism for loading externally defined models is planned.
+        \item[Shapes and geometry] A way to generate basic geometric shapes should be provided. No
+            mechanism for loading externally defined models is necessary.
         \item[Scene] A way to efficiently save an arbitrary number of shapes. At first this should be
-            implemented as a flat list. If there is enough time, a more efficient method should be
-            considered.
+            implemented as a flat list. Optionally, a more efficient data structure can be implemented.
         \item[Intersection/Scene lookup] Implemented as a ray intersection function for each supported primitive
             (which in this case means ray-AABB intersection and ray-triangle intersection).
         \item[Viewer] An interactive viewport that shows off progressive rendering with a sample scene.
@@ -824,7 +829,7 @@ influenced many decisions and trade-offs made during the implementation.
 \subsection{Materials}
 trac0r implements the following materials:
 \begin{description}
-    \item[Emitter] Arguably the most important material as it is the one providing the light to a
+    \item[Emissive] Arguably the most important material as it is the one providing the light to a
         scene. This simulates a black body heated to a certain temperature and as such serves as an
         area light when applied to geometry. Any ray hitting geometry using the emitter material is
         terminated. A scene without any geometry using emitter material will be utterly dark.
@@ -989,7 +994,7 @@ pre-calculated during construction and some are re-calculated every frame.}
 Since the Monte Carlo method lives from random sampling, it needs a solid way of generating random
 numbers. As it turns out, this is actually harder than one might think. While there are a great
 many algorithms out there for getting random numbers, for the purposes of Monte Carlo integration
-in a real time path tracing renderer, the right algorithm has to be chosen very carefully. The most
+in a real time path tracing renderer, a suitable algorithm has to be chosen very carefully. The most
 important requirement for this purpose is speed of generation. The C standard library comes with
 \texttt{rand()} but sadly it's unusable for our purposes since it uses global state
 shared by all threads which makes it effectively single threaded and therefore too slow.
@@ -997,8 +1002,9 @@ The random generators in the C++ standard library provide good quality random nu
 slow.
 
 In fact, most random number generators are too slow when having to generate tens of millions of numbers per
-second. Eventually, it was decided to use \texttt{xorshift}-type generators from Sebastiano Vigna
-\cite{site:xorshift}. The \texttt{xorshift64star} generator is used to provide the seeds for the
+second. Eventually, the \texttt{xorshift}-type generators from Sebastiano Vigna
+\cite{site:xorshift} proved to be a viable solution. The \texttt{xorshift64star} generator is used to
+provide the seeds for the
 \texttt{xorshift1024star} generator which is in turn used to generate the actual random numbers.
 Additionally, the \texttt{xorshift1024star} generator is very efficient to use on \acp{gpu} due to
 it not using any expensive operations such as divisions, \texttt{sqrt} or \texttt{pow}.
@@ -1104,9 +1110,10 @@ trac0r provides a few different methods for geometric sampling.
     \texttt{dir}. \texttt{power} is used to determine whether to generate uniform samples or
     cosine-weighted ones. If \texttt{power} is \texttt{0.f}, uniform samples are generated. If it's
     \texttt{1.f}, cosine-weighted samples are generated. \texttt{angle} provides the opening angle of
-    the cone that rays will be generated inside of.
+    the cone that rays will be generated inside of
     \label{lst:trac0r-hemisphere-sampling}
-    \cite{site:better-sampling} \cite{site:cosine-weighted-hemisphere} \cite{site:path-tracing-3d-fractals}}
+    \cite{site:better-sampling} \cite{site:cosine-weighted-hemisphere}
+\cite{site:path-tracing-3d-fractals}.}
 \endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
@@ -1166,7 +1173,7 @@ chance of terminating rays with lower energy than those with higher energy. The 
 that rays with lower energy add little new information to the image as compared to those with high
 energy. 
 
-In this path tracer, the termination criterion used depends on depth as opposed to ray energy
+In this implementation, the termination criterion used depends on depth as opposed to ray energy
 because a ray with a higher depth will also typically transfer less energy than one with a low
 depth. The formula for the termination heuristic in trac0r is
 
@@ -1208,41 +1215,27 @@ In order to understand the code below refer to the Material listing~\ref{lst:tra
 
 \begin{minted}[linenos, autogobble]{c++}
     void Viewer::setup_scene() {
-        trac0r::Material emissive{1, {1.f, 0.93f, 0.85f}, 0.f, 1.f, 15.f};
-        trac0r::Material default_material{2, {0.740063, 0.742313, 0.733934}};
-        trac0r::Material diffuse_red{2, {0.366046, 0.0371827, 0.0416385}};
-        trac0r::Material diffuse_green{2, {0.162928, 0.408903, 0.0833759}};
-        trac0r::Material glass{3, {0.5f, 0.5f, 0.9f}, 0.0f, 1.51714f};
-        trac0r::Material glossy{4, {1.f, 1.f, 1.f}, 0.09f};
+        // Create materials
+        trac0r::Material emissive{/* parameters omitted */};
+        trac0r::Material default_grey {/* parameters omitted */};
+        trac0r::Material diffuse_red{/* parameters omitted */};
+        trac0r::Material diffuse_green{/* parameters omitted */};
+        trac0r::Material glass{/* parameters omitted */};
+        trac0r::Material glossy{/* parameters omitted */};
 
-        auto wall_left = trac0r::Shape::make_plane({-0.5f, 0.4f, 0},
-                                    {0, 0, -glm::half_pi<float>()},
-                                    {1, 1}, diffuse_red);
-        auto wall_right = trac0r::Shape::make_plane({0.5f, 0.4f, 0},
-                                    {0, 0, glm::half_pi<float>()},
-                                    {1, 1}, diffuse_green);
-        auto wall_back = trac0r::Shape::make_plane({0, 0.4f, 0.5},
-                                    {-glm::half_pi<float>(), 0, 0},
-                                    {1, 1}, default_material);
-        auto wall_top = trac0r::Shape::make_plane({0, 0.9f, 0},
-                                    {glm::pi<float>(), 0, 0},
-                                    {1, 1}, default_material);
-        auto wall_bottom = trac0r::Shape::make_plane({0, -0.1f, 0},
-                                    {0, 0, 0},
-                                    {1, 1}, default_material);
-        auto lamp = trac0r::Shape::make_plane({0, 0.85f, -0.1},
-                                    {0, 0, 0}, {0.4, 0.4}, emissive);
-        auto box1 = trac0r::Shape::make_box({0.3f, 0.1f, 0.1f},
-                                    {0, 0.6f, 0}, {0.2f, 0.5f, 0.2f},
-                                    default_material);
-        auto box2 = trac0r::Shape::make_box({-0.2f, 0.15f, 0.1f},
-                                    {0, -0.5f, 0},
-                                    {0.3f, 0.6f, 0.3f}, glossy);
-        auto sphere1 = trac0r::Shape::make_icosphere({0.f, 0.1f, -0.3f},
-                                    {0, 0, 0}, 0.15f, 2, glass);
-        auto sphere2 = trac0r::Shape::make_icosphere({0.3f, 0.45f, 0.1f},
-                                    {0, 0, 0}, 0.15f, 2, glossy);
+        // Create geometry
+        auto wall_left = trac0r::Shape::make_plane(/* use diffuse_red material */);
+        auto wall_right = trac0r::Shape::make_plane(/* use diffuse_green material */);
+        auto wall_back = trac0r::Shape::make_plane(/* use diffuse_grey material */);
+        auto wall_top = trac0r::Shape::make_plane(/* use diffuse_grey material */);
+        auto wall_bottom = trac0r::Shape::make_plane(/* use diffuse_grey material */);
+        auto lamp = trac0r::Shape::make_plane(/* use emissive material */);
+        auto box1 = trac0r::Shape::make_box(/* use diffuse_grey material */);
+        auto box2 = trac0r::Shape::make_box(/* use glossy_grey material */);
+        auto sphere1 = trac0r::Shape::make_icosphere(/* use glass_grey material */);
+        auto sphere2 = trac0r::Shape::make_icosphere(/* use glossy_grey material */);
 
+        // Add geometry to the scene
         Scene::add_shape(m_scene, wall_left);
         Scene::add_shape(m_scene, wall_right);
         Scene::add_shape(m_scene, wall_back);
@@ -1254,16 +1247,16 @@ In order to understand the code below refer to the Material listing~\ref{lst:tra
         Scene::add_shape(m_scene, sphere1);
         Scene::add_shape(m_scene, sphere2);
 
+        // Set up camera
         glm::vec3 cam_pos = {0, 0.31, -1.2};
         glm::vec3 cam_dir = {0, 0, 1};
         glm::vec3 world_up = {0, 1, 0};
-
         m_camera = Camera(cam_pos, cam_dir, world_up, 90.f, 0.001, 100.f,
-        m_screen_width, m_screen_height);
+                          m_screen_width, m_screen_height);
     }
 \end{minted} 
 \begingroup
-\captionof{listing}{Scene setup in trac0r\_viewer \label{lst:trac0r-scene-setup}.}
+\captionof{listing}{Scene setup in trac0r\_viewer\label{lst:trac0r-scene-setup}.}
 \endgroup
 
 \subsection{Tracing a Ray}
@@ -1286,8 +1279,7 @@ trac0r roughly follows the algorithm outlined in \ref{algorithm}.
     }
 \end{minted} 
 \begingroup
-\captionof{listing}{First, make a ray for every pixel, then trace it, finally accumulate the result
-into a buffer.}
+\captionof{listing}{Basic Monte Carlo path tracing integrator implementation.}
 \endgroup
 
 \begin{minted}[linenos, autogobble]{c++}
@@ -1298,8 +1290,15 @@ into a buffer.}
         // Keep track of closest triangle
         float closest_dist = std::numeric_limits<float>::max();
         Triangle closest_triangle;
+
+        // Iterate through all shapes in the scene
         for (const auto &shape : FlatStructure::shapes(flatstruct)) {
+
+            // Test for ray intersection with the shape's AABB
             if (intersect_ray_aabb(ray, Shape::aabb(shape))) {
+
+                // If the ray intersected the AABB, test every triangle
+                // in the shape for intersection.
                 for (auto &tri : Shape::triangles(shape)) {
                     float dist_to_intersect;
                     bool intersected = 
@@ -1307,22 +1306,10 @@ into a buffer.}
                     if (intersected) {
                         // Find closest triangle
                         if (dist_to_intersect < closest_dist) {
-                            closest_dist = dist_to_intersect;
-                            closest_triangle = tri;
+                            // Once the closest intersection is found,
+                            // intersect_info is populated
 
-                            intersect_info.m_has_intersected = true;
-                            intersect_info.m_pos =
-                                ray.m_origin + ray.m_dir * closest_dist;
-                            intersect_info.m_incoming_ray = ray;
-
-                            intersect_info.m_angle_between =
-                                glm::dot(closest_triangle.m_normal,
-                                         intersect_info.m_incoming_ray.m_dir);
-
-                            intersect_info.m_normal =
-                                closest_triangle.m_normal;
-                            intersect_info.m_material =
-                                closest_triangle.m_material;
+                            // omitted for brevity
                         }
                     }
                 }
@@ -1387,12 +1374,12 @@ into a buffer.}
 
                 // Glass Material
                 else if (intersect_info.m_material.m_type == 3) {
-                    // BRDF Omitted for brevity
+                    // omitted for brevity
                 }
 
                 // Glossy Material
                 else if (intersect_info.m_material.m_type == 4) {
-                    // BRDF Omitted for brevity
+                    // omitted for brevity
                 }
             } else {
                 break;
@@ -1429,8 +1416,8 @@ into a buffer.}
 \end{figure}
 
 While certainly subjective, frame~\ref{fig:trac0r-50} and~\ref{fig:trac0r-100} begin to start looking
-acceptable. It took an average of 10 seconds to approach this kind of acceptable quality at a
-resolution of 800x640 on an NVIDIA Geforce GTX 570.
+acceptable. It took an average of 10 seconds for the image to converge to an acceptable level of
+quality at a resolution of 800x640 on an NVIDIA Geforce GTX 570.
 
 \begin{figure}[H]
     \includegraphics[scale=0.5]{trac0r-5000.png}
@@ -1459,7 +1446,9 @@ Figure~\ref{fig:trac0r_debug1} above shows the debug view that can dynamically t
 runtime. It displays information about the current state of the camera as well as mouse position
 and other helpful text in the upper left corner of the
 viewport. The yellow boxes display the \acp{aabb} around the shapes because they are usually not
-directly visible. This comes in handy when debugging visibility problems.
+directly visible. This comes in handy when debugging visibility problems. The \acp{aabb} seen in
+this implementation serve the purposes of accelerating ray intersection tests as discussed in
+section~\ref{acceleration-data-structures}.
 
 \begin{figure}[H]
     \includegraphics[scale=0.5]{trac0r-debug2.png}
@@ -1468,8 +1457,9 @@ directly visible. This comes in handy when debugging visibility problems.
     \label{fig:trac0r_debug2}
 \end{figure}
 
-As shown in figure~\ref{fig:trac0r_debug2}, trac0r\_viewer can be interactively navigated with
-keyboard and mouse controls to move the camera around the scene. Upon every interaction, the scene
+Figure~\ref{fig:trac0r_debug2} shows a different camera perspective compared
+to the one used in figure~\ref{fig:trac0r_debug1}. The camera position and direction can be
+manipulated interactively with keyboard and mouse controls. Upon every interaction, the scene
 rendering begins accumulating samples anew. While the debug view is not necessary for
 interactivity, it is activated in the image of~\ref{fig:trac0r_debug2} to better show the
 transformation.
@@ -1479,17 +1469,18 @@ In order to be able to compare performance, an objective and reliable method and
 measure for doing so has to be decided upon. If this were a rasterizing renderer, \ac{fps} would be
 an easy choice.
 However, comparing \ac{fps} is not a particularly good criterion between different path tracers since
-generally \ac{fps} doesn't correlate to rate of convergence. That is, one path tracer might be able
-to iterate at 60 \ac{fps} but takes three seconds to converge while a different path tracer may
-only be able to do 10 \ac{fps} but takes only 2 seconds to converge. This might seem unintuitive at
-first but remember that path tracing is a very different algorithm compared to rasterization. In
-rasterization, once a frame is rendered, the image is \emph{done}. It won't improve by rendering the
+generally \ac{fps} do not correlate to rate of convergence. That is, one path tracer might be able
+to iterate at 60 \ac{fps} but take three seconds to converge while a different path tracer may
+only be able to run at 10 \ac{fps} but take only 2 seconds to converge to an acceptable quality.
+This might seem unintuitive at first but keeping in mind that path tracing is based on Monte Carlo
+integration, it becomes apparent why this is a possibility.
+In rasterization, once a frame is rendered, the image is \emph{done}. It won't improve by rendering the
 same scene a second time. In path tracing, particularly Monte Carlo path tracing, an image will be
 improved with every new frame that is rendered using the same parameters due to how Monte Carlo
 integration works.
 
 In spite of that, this thesis uses \ac{fps} as the primary criterion for two reasons. Firstly, we are not
-comparing different path tracers to the one made as part of the thesis. We only compare it
+comparing different path tracers to the one implemented as part of the thesis. It is only compared
 against itself in different scene and hardware configurations. Secondly, \ac{fps} is much easier
 to work with and compare than image quality. One might use \ac{psnr} to do the latter but that
 still leaves open the question of when to measure the image as even a single frame might take
@@ -1568,13 +1559,14 @@ longer than a second to render under specific circumstances.
 
     \begin{table}[H]
         \centering
-        \begin{tabular}{l | r | r}
-            GPU                     & Average FPS   & GFLOPS \\ \hline
-            NVIDIA Geforce GTX 660  & 8.3           & 1881.6 \\
-            NVIDIA Geforce GTX 570  & 11.6          & 1405.4 \\
-            NVIDIA Geforce GTX 960  & 9.5           & 2308   \\
-            NVIDIA Geforce GTX 970  & 13.5          & 3494   \\
-            NVIDIA Geforce GTX 980  & 13.9          & 4612
+        \begin{tabular}{l | r | r | r}
+            GPU                     & Average FPS   & GFLOPS & \(\frac {\text{Average FPS}}{GFLOPS}\)\\
+            \midrule
+            NVIDIA Geforce GTX 660  & 8.3           & 1881.6 & \num{4.4e-3} \\
+            NVIDIA Geforce GTX 570  & 11.6          & 1405.4 & \num{8.6e-3} \\
+            NVIDIA Geforce GTX 960  & 9.5           & 2308   & \num{4.1e-3} \\
+            NVIDIA Geforce GTX 970  & 13.5          & 3494   & \num{3.9e-3} \\
+            NVIDIA Geforce GTX 980  & 13.9          & 4612   & \num{3.0e-3}
         \end{tabular}
         \caption{Tested GPU performance and GFLOPS.}
         \label{tbl:benchmark-table}
@@ -1583,15 +1575,17 @@ longer than a second to render under specific circumstances.
 
 Figure~\ref{fig:benchmark-scene-complexity} shows how \ac{fps} behaves in regards to triangle
 count while table~\ref{tbl:benchmark-table} shows average \ac{fps} per \ac{gpu} as well as their
-rated peak single-precision performance in \ac{gflops}.
+rated peak single-precision performance in \ac{gflops} and how these numbers are correlated.
 
 We can see that the program performs quite poorly as triangle count is increased even at a
 fairly low number of triangles as predicted with formula~\ref{eq:complexity} and in
 table~\ref{tbl:triangle-intersections-count}.
 
-It is also interesting to see that the difference in performance among the \acp{gpu} isn't nearly
+It is also interesting to see that the difference in performance among the tested \acp{gpu} isn't nearly
 as dramatic as their rated peak \ac{gflops} would suggest. This observation suggests that the
-application is heavily memory bound.
+application is heavily memory bound. The last column in
+table~\ref{tbl:triangle-intersections-count} showing average \ac{fps} per \ac{gflops} reinforces
+this observation as no clear dependence between the variables is indicated.
 
 \clearpage
 \section{Evaluation}
@@ -1694,7 +1688,8 @@ The exponential function of the graph
 \[ f(x) = 250 * 2 ^ {0.5 (x-2004)} * 0.7 \]
 and can be used to extrapolate \ac{gpu} performance until 2020 assuming the growth stays constant.
 Following that assumption, there will be a \ac{gpu} capable of 10000 \ac{gflops} in 2016, 20000
-\ac{gflops} in 2018 and 40000 \ac{gflops} in 2020.
+\ac{gflops} in 2018 and 40000 \ac{gflops} in 2020. The same exponential growth is famously observed
+in Moore's Law \cite{present2000cramming}.
 
 It should be noted that while \ac{gflops} isn't the only relevant criterion to estimating the
 performance of a \ac{gpu}, it's likely the most important one.
@@ -1754,15 +1749,20 @@ Lastly, overall image quality could be improved by applying an image filter over
 before displaying it to the user. A suitable image filtering algorithm should be non-linear and
 edge-preserving as well as energy-preserving so that it won't lower the quality of the resulting
 image. A notable filter fulfilling those requirements is the \textit{bilateral filter}. This could
-be used to display an image before it is fully converged. This is obviously a trade-off of quality
-for performance but for the sake of speed it might be worth it.
+be used to display an image before it is fully converged. This trade-off of quality
+for performance is worth exploring in further studies.
 
 Taking into consideration all of the aforementioned factors,
 the research suggests that real time path tracing could be a viable alternative to
 rasterization in four years on upper level commodity hardware.
+\begingroup
+\footnotesize
 \listoffigures
+\let\clearpage\relax
 \listoflistings
 \listoftables
+\endgroup
+\renewcommand*{\bibfont}{\footnotesize}
 \printbibliography
 % \bibliography{main}
 % \bibliographystyle{unsrt}
@@ -1778,4 +1778,13 @@ gemacht. Ich versichere weiterhin, dass ich die Arbeit vorher nicht in einem
 anderen Prüfungsverfahren eingereicht habe und die eingereichte schriftliche
 Fassung der auf dem elektronischen Speichermedium entspricht.“
 \singlespace
+
+\vspace{1cm}
+
+\begin{tabular}{ll}
+    \centering
+    \makebox[5cm]{\hrulefill} & \makebox[5cm]{\hrulefill}\\
+    Unterschrift & Ort, Datum\\
+\end{tabular}
+
 \end{document}
