@@ -122,6 +122,7 @@ has given my life a new meaning.
     \acroplural{gpu}[GPUs]{graphics processing units}
     \acro{hdr}[HDR]{high dynamic range}
     \acro{gflops}[GFLOPS]{billions of floating point operations per second}
+    \acro{tflops}[TFLOPS]{trillions of floating point operations per second}
     \acro{mlt}[MLT]{Metropolis light transport}
     \acro{pbr}[PBR]{physically based rendering}
     \acro{rt}[RT]{real time}
@@ -1195,7 +1196,7 @@ follows these steps:
 \end{enumerate}
 
 The code listed below in~\ref{lst:trac0r-scene-setup} creates a basic test scene showing off all of
-trac0r current materials and shapes. The basic setup resembles that the classic Cornell box. It has
+trac0r's current materials and shapes. The basic setup resembles that of the classic Cornell box. It has
 a red diffuse left wall, a green diffuse right wall, white floor, white back wall and white ceiling.
 A glossy box is placed inside the left half of the room while a white diffuse box is placed on the
 right half of it. A icosahedron with a glass material is placed in its center in front of the
@@ -1467,7 +1468,7 @@ directly visible. This comes in handy when debugging visibility problems.
 \end{figure}
 
 As shown in figure~\ref{fig:trac0r_debug2}, trac0r\_viewer can be interactively navigated with
-keyboard and mouse controls to control the camera in the scene. Upon every interaction, the scene
+keyboard and mouse controls to move the camera around the scene. Upon every interaction, the scene
 rendering begins accumulating samples anew. While the debug view is not necessary for
 interactivity, it is activated in the image of~\ref{fig:trac0r_debug2} to better show the
 transformation.
@@ -1709,8 +1710,8 @@ and performance characteristics and it also doesn't scale as predictably.
 \chapter{Conclusion and Outlook}
 The study set out to explore the question of when real time path tracing would become
 a viable alternative to rasterization on consumer-level desktop hardware. It did so by defining
-performance criteria that were chosen to be considered the minimum threshold for real time path tracing.
-According to the criteria, real time path tracing would be achieved when a sufficiently converged
+performance criteria that were chosen as the minimum threshold for real time path tracing.
+According to these criteria, real time path tracing would be achieved when a sufficiently converged
 frame can be rendered within \(16.67ms\) (which works out to 60 \ac{fps}). The author realizes that
 image quality is subjective but makes an attempt to be critical about quality.
 
@@ -1725,7 +1726,7 @@ bound for expected performance.
 The study also extrapolates graphics hardware performance by single-precision \ac{gflops} over the
 course of 16 years. It was found that \ac{gpu} performance follows an exponential function and is
 expected to continue in this manner. Extrapolating the data, single \acp{gpu} are expected to reach up to
-40 TFLOPS by 2020.
+40 \ac{tflops} by 2020.
 
 Ongoing research in path tracing and related topics is likely to yield better algorithms and
 methods as
@@ -1736,7 +1737,7 @@ While it is certainly hard to estimate when exactly real time path tracing will 
 combination of modern methods for speeding up image convergence is likely to provide satisfactory
 performance even today on more expensive hardware. The most important improvement over a naive
 implementation of a path tracer
-is most certainly found in employing a tree-based acceleration data structure such as a BVH or kd-tree.
+is most certainly found in employing a tree-based acceleration data structure such as a \ac{bvh} or kd-tree.
 This decreases
 lookup time from \(O(n)\) to just \(O(\log(n))\) per ray. This would yield an effective speedup of
 one to two orders of magnitude depending on scene complexity.
