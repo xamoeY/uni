@@ -1,12 +1,12 @@
-.PHONY: clean default oneside twoside
+.PHONY: clean all oneside twoside
+
+all: oneside twoside
 
 oneside:
 	rubber --unsafe -d oneside.tex
 
 twoside:
 	rubber --unsafe -d twoside.tex
-
-default: oneside twoside
 
 clean:
 	rubber --clean -d oneside.tex
