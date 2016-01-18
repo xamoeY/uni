@@ -37,4 +37,4 @@
 *.tdo
 *.fls
 *.lol
-_minted-main
+_minted-*

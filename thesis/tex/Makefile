@@ -1,8 +1,13 @@
 .PHONY: clean
 
-default:
-	rubber --unsafe -d main.tex
+oneside:
+	rubber --unsafe -d oneside.tex
+
+twoside:
+	rubber --unsafe -d twoside.tex
+
+default: oneside twoside
 
 clean:
-	rm main.pdf
-
+	rubber --clean -d oneside.tex
+	rubber --clean -d twoside.tex
