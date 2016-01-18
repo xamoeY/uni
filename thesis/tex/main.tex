@@ -371,11 +371,12 @@ emissive materials can be written as follows:
         material = intersection.material;
         emittance = material.emittance
 
-        # shoot a ray into random direction and recurse
+        # Shoot a ray into random direction and recurse
         next_ray = Ray()
         next_ray.origin = intersection.position
         next_ray.direction = random_vector_on_hemisphere(intersection.normal)
 
+        # BRDF for diffuse materials
         reflectance_theta = dot(next_ray.direction, intersection.normal)
         brdf = 2 * material.reflectance * reflectance_theta
         reflected = trace_ray(next_ray, depth + 1)
@@ -1784,7 +1785,7 @@ Fassung der auf dem elektronischen Speichermedium entspricht.“
 \begin{tabular}{ll}
     \centering
     \makebox[5cm]{\hrulefill} & \makebox[5cm]{\hrulefill}\\
-    Unterschrift & Ort, Datum\\
+    Ort, Datum & Unterschrift \\
 \end{tabular}
 
 \end{document}
