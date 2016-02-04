@@ -15,13 +15,13 @@
 \usepackage{tabularcalc}
 \usepackage{todonotes}
 \usepackage{hyperref}
-% \usepackage{minted}
+\usepackage{minted}
 % \usepackage{siunitx}
 % \usepackage{acronym}
 % \usepackage{subfig}
 % \usepackage{tabularx}
 % \usepackage{setspace}
-% \usepackage[customcolors]{hf-tikz}
+\usepackage[customcolors]{hf-tikz}
 % \usepackage{url}
 % \usepackage{csquotes}
 % \usepackage{booktabs}
@@ -33,7 +33,7 @@
 \title[Path Tracing]
 {Feasibility Study of Real Time Path Tracing}
 \subtitle{\textit{Or:} How Much Noise Is Too Much?}
-\author[Haase]{Sven-Hendrik Haase}
+\author[Haase]{Sven-Hendrik Haase \\ \footnotesize Matriculation number: 6341873}
 \institute[University of Hamburg]{
     Department of Computer Science\\
     University of Hamburg
@@ -55,21 +55,198 @@
 \subsection{Motivation}
 \begin{frame}
     \frametitle{Motivation}
-    \lipsum[2]
+    \begin{itemize}
+        \item Current generation graphics made up of many complex tricks
+        \pause
+        \item Path tracing is simple in comparison
+        \pause
+        \item Superior graphics quality
+        \pause
+        \item Allows for simulation of caustics, global illumination, light dispersion, etc.
+        \pause
+        \item Real time path tracing appears to be in reach
+    \end{itemize}
+\end{frame}
+
+\subsection{Leading Question and Goals}
+\begin{frame}
+    \frametitle{Leading Question and Goals}
+    \begin{itemize}
+        \item Find out when real time path tracing will be viable
+        \item Theoretical indicators (GPU peak FLOPS)
+        \item Practical indicators (benchmarks)
+        \item Prefer performance to quality
+    \end{itemize}
 \end{frame}
 
 \section{Real Time Path Tracing Explained}
 
 \subsection{Physically Based Approach}
 \begin{frame}
-    \frametitle{Motivation}
-    \lipsum[2]
+    \frametitle{Physically Based Approach}
+    \begin{block}{Forward path tracing}
+        Light source (\(\Rightarrow\) scene interactions) \(\Rightarrow\) observer
+    \end{block}
+    \begin{block}{Backward path tracing}
+        Observer (\(\Rightarrow\) scene interactions) \(\Rightarrow\) light source
+    \end{block}
 \end{frame}
 
 \subsection{Theoretical Basis}
 \begin{frame}
-    \frametitle{Motivation}
-    \lipsum[2]
+    \frametitle{Theoretical Basis}
+    \begin{block}{James Kajiya's rendering equation}
+        \scriptsize
+        \(
+            L_{\text{o}}(\mathbf x,\, \omega_{\text{o}},\, \lambda,\, t) \,=
+            \, L_{\text{e}}(\mathbf x,\, \omega_{\text{o}},\, \lambda,\, t) \ +
+            \, \int_\Omega f_{\text{r}}(\mathbf x,\, \omega_{\text{i}},\ \omega_{\text{o}},\, \lambda,\, t)
+            \, L_{\text{i}}(\mathbf x,\, \omega_{\text{i}},\, \lambda,\, t)\,
+            (\omega_{\text{i}}\,\cdot\,\mathbf n)\, \operatorname d \omega_{\text{i}}
+        \)
+    \end{block}
+    \begin{block}{Simplified rendering equation}
+        \(
+            L_{\text{o}}(\mathbf x,\, \omega_{\text{o}}) \,=
+            \, L_{\text{e}}(\mathbf x,\, \omega_{\text{o}}) \ +
+            \, \int_\Omega f_{\text{r}}(\mathbf x,\, \omega_{\text{i}},\ \omega_{\text{o}})
+            \, L_{\text{i}}(\mathbf x,\, \omega_{\text{i}})\,
+            (\omega_{\text{i}}\,\cdot\,\mathbf n)\, \operatorname d \omega_{\text{i}}
+        \)
+    \end{block}
+
+    \begin{itemize}
+        \item Path tracing is a numerical approximate solution to the rendering equation
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Rendering equation breakdown}
+\[
+    \tikzmarkin[set fill color=red!50!brown!30,set border color=red!40!black]{outgoing}
+    L_{\text{o}}(\mathbf x,\, \omega_{\text{o}})
+    \tikzmarkend{outgoing}
+    \, = \,
+    \tikzmarkin[set fill color=cyan!70!lime!30,set border color=cyan!40!black]{emitted}
+    L_{\text{e}}(\mathbf x,\, \omega_{\text{o}})
+    \tikzmarkend{emitted}
+    \ + \,
+    \tikzmarkin[set fill color=yellow!50!lime!30,set border color=yellow!40!black]{integral}(0.1,-0.4)(-0.1,0.6)
+    \int_\Omega
+    \tikzmarkin[set fill color=green!50!lime!30,set border color=green!40!black]{brdf}(0.0,-0.2)(-0.0,0.4)
+    f_{\text{r}}(\mathbf x,\, \omega_{\text{i}},\ \omega_{\text{o}})
+    \tikzmarkend{brdf}
+    \,
+    \tikzmarkin[set fill color=blue!50!lime!30,set border color=blue!40!black]{incoming}(0.0,-0.2)(-0.0,0.4)
+    L_{\text{i}}(\mathbf x,\, \omega_{\text{i}})
+    \tikzmarkend{incoming}
+    \,
+    \tikzmarkin[set fill color=magenta!100!lime!30,set border color=pink!40!black]{attenuation}(0.0,-0.2)(-0.0,0.4)
+    (\omega_{\text{i}}\,\cdot\,\mathbf n)
+    \tikzmarkend{attenuation}
+    \,
+    \operatorname d \omega_{\text{i}}
+    \tikzmarkend{integral}
+\]
+
+\(
+    \tikzmarkin[set fill color=red!50!brown!30,set border color=red!40!black]{outgoing'}(0.1,-0.15)(-0.1,0.35)
+    L_{\text{o}}(\mathbf x,\, \omega_{\text{o}})
+    \tikzmarkend{outgoing'}
+\)\, is the \textbf{outgoing light} with \(\mathbf x\) being a point on a surface from which the light is
+reflected from into direction \(\omega_{\text{o}}\).
+
+\(
+    \tikzmarkin[set fill color=cyan!70!lime!30,set border color=cyan!40!black]{emitted'}(0.1,-0.15)(-0.1,0.35)
+    L_{\text{e}}(\mathbf x,\, \omega_{\text{o}})
+    \tikzmarkend{emitted'}
+\)\, is the \textbf{emitted light} from point \(\mathbf x\).
+    \note{Usually surfaces don't emit light themselves unless they are area lights.}
+
+\smallskip
+\(
+    \tikzmarkin[set fill color=yellow!50!lime!30,set border color=yellow!40!black]{integral'}(0.1,-0.2)(-0.1,0.35)
+    \int_\Omega \, \ldots \, \operatorname d \omega_{\text{i}}
+    \tikzmarkend{integral'}
+\)\, is the integral over \(\Omega\) which is the hemisphere at \(\mathbf x\) (centered around \(\mathbf n\)). All possible values for \(\omega_{\text{i}}\) are therefore
+contained in \(\Omega\).
+
+\(
+    \tikzmarkin[set fill color=green!50!lime!30,set border color=green!40!black]{brdf'}(0.1,-0.15)(-0.1,0.35)
+        f_{\text{r}}(\mathbf x,\, \omega_{\text{i}},\ \omega_{\text{o}})
+    \tikzmarkend{brdf'}
+    \)\, is the \textbf{BRDF} which determines how much light is reflected from
+\(\omega_{\text{i}}\) to \(\omega_{\text{o}}\) at \(\mathbf x\).
+
+\(
+    \tikzmarkin[set fill color=blue!50!lime!30,set border color=blue!40!black]{incoming'}(0.1,-0.15)(-0.1,0.35)
+        L_{\text{i}}(\mathbf x,\, \omega_{\text{i}})
+    \tikzmarkend{incoming'}
+\)\, is the \textbf{incoming light} at \(\mathbf x\) from \(\omega_{\text{o}}\).
+    \note{It is not necessarily \emph{direct light}. The rendering equation also considers
+    \emph{indirect light} which is light that has already been reflected.}
+
+\smallskip
+\(
+    \tikzmarkin[set fill color=magenta!100!lime!30,set border color=pink!40!black]{attenuation'}(0.1,-0.15)(-0.1,0.35)
+        (\omega_{\text{i}}\,\cdot\,\mathbf n)
+    \tikzmarkend{attenuation'}
+\)\, is the \textbf{normal attenuation} at \(\mathbf x\).
+    \note{The incoming light \(\omega_{\text{i}}\) is
+    weakened depending on the cosine of the angle between \(\omega_{\text{i}}\) and the surface normal
+    \(\mathbf n\).}
+\end{frame}
+
+\subsection{Algorithm}
+\begin{frame}[fragile]
+    \frametitle{Algorithm part 1}
+    \scriptsize
+    \begin{minted}[linenos, autogobble]{python}
+        max_depth = 5
+        scene = [triangle_1, ..., triangle_n]  # Many triangles defined here
+
+        def trace_ray(ray, depth):
+            if depth >= max_depth:
+                # Return black since we haven't hit anything but we're
+                # at our limit for bounces
+                return RGB(0, 0, 0) 
+
+            intersection = None
+            for triangle in scene:
+                intersection = check_intersection(ray, triangle)
+                if intersection:  # Break at first intersection
+                    break
+
+            if not intersection:
+                # If we haven't hit anything, we can't bounce again so
+                # we return black
+                return RGB(0, 0, 0)
+    \end{minted}
+\end{frame}
+
+\begin{frame}[fragile]
+    \frametitle{Algorithm part 2}
+    \scriptsize
+    \begin{minted}[linenos, autogobble, firstnumber=20]{python}
+            material = intersection.material;
+            emittance = material.emittance
+
+            # Shoot a ray into random direction and recurse
+            next_ray = Ray()
+            next_ray.origin = intersection.position
+            next_ray.direction = random_vector_on_hemisphere(intersection.normal)
+
+            # BRDF for diffuse materials
+            reflectance_theta = dot(next_ray.direction, intersection.normal)
+            brdf = 2 * material.reflectance * reflectance_theta
+            reflected = trace_ray(next_ray, depth + 1)
+
+            return emittance + (brdf * reflected)
+
+        for sample in range(samples):
+            for pixel in pixels:
+                trace_path(ray_from_pixel(pixel), 0)
+    \end{minted}
 \end{frame}
 
 \subsection{History of Path Tracing}
