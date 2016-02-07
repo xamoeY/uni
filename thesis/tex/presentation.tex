@@ -52,6 +52,14 @@
 
 \section{Introduction}
 
+\subsection{Topic}
+\begin{frame}
+    \frametitle{Topic}
+    \begin{block}{Main topic of the thesis}
+        When will real time path tracing be viable on consumer grade hardware?
+    \end{block}
+\end{frame}
+
 \subsection{Motivation}
 \begin{frame}
     \frametitle{Motivation}
@@ -80,6 +88,29 @@
 \end{frame}
 
 \section{Real Time Path Tracing Explained}
+
+\subsection{History of Path Tracing}
+\begin{frame}
+    \frametitle{History of Path Tracing part 1}
+    \begin{itemize}
+        \item 1968: Ray casting by Arthur Appel
+        \item 1980: Ray tracing by Turner Whitted
+        \begin{figure}[H]
+            \includegraphics[scale=0.8]{early-raytracing-whitted}
+            \centering
+            \caption{Turner Whitted's original 1980 image}
+        \end{figure}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \frametitle{History of Path Tracing part 2}
+    \begin{itemize}
+        \item 1986: Monte Carlo ray tracing (path tracing) by James T. Kajiya
+        \item 1996: Bidirectional path tracing by Eric Lafortune
+        \item 1997: Metropolis Light Transport by Eric Veach and Leonidas J. Guibas
+    \end{itemize}
+\end{frame}
 
 \subsection{Physically Based Approach}
 \begin{frame}
@@ -148,6 +179,7 @@
     \operatorname d \omega_{\text{i}}
     \tikzmarkend{integral}
 \]
+\pause
 
 \(
     \tikzmarkin[set fill color=red!50!brown!30,set border color=red!40!black]{outgoing'}(0.1,-0.15)(-0.1,0.35)
@@ -155,6 +187,7 @@
     \tikzmarkend{outgoing'}
 \)\, is the \textbf{outgoing light} with \(\mathbf x\) being a point on a surface from which the light is
 reflected from into direction \(\omega_{\text{o}}\).
+\pause
 
 \(
     \tikzmarkin[set fill color=cyan!70!lime!30,set border color=cyan!40!black]{emitted'}(0.1,-0.15)(-0.1,0.35)
@@ -162,6 +195,7 @@ reflected from into direction \(\omega_{\text{o}}\).
     \tikzmarkend{emitted'}
 \)\, is the \textbf{emitted light} from point \(\mathbf x\).
     \note{Usually surfaces don't emit light themselves unless they are area lights.}
+\pause
 
 \smallskip
 \(
@@ -170,6 +204,7 @@ reflected from into direction \(\omega_{\text{o}}\).
     \tikzmarkend{integral'}
 \)\, is the integral over \(\Omega\) which is the hemisphere at \(\mathbf x\) (centered around \(\mathbf n\)). All possible values for \(\omega_{\text{i}}\) are therefore
 contained in \(\Omega\).
+\pause
 
 \(
     \tikzmarkin[set fill color=green!50!lime!30,set border color=green!40!black]{brdf'}(0.1,-0.15)(-0.1,0.35)
@@ -177,6 +212,7 @@ contained in \(\Omega\).
     \tikzmarkend{brdf'}
     \)\, is the \textbf{BRDF} which determines how much light is reflected from
 \(\omega_{\text{i}}\) to \(\omega_{\text{o}}\) at \(\mathbf x\).
+\pause
 
 \(
     \tikzmarkin[set fill color=blue!50!lime!30,set border color=blue!40!black]{incoming'}(0.1,-0.15)(-0.1,0.35)
@@ -185,6 +221,7 @@ contained in \(\Omega\).
 \)\, is the \textbf{incoming light} at \(\mathbf x\) from \(\omega_{\text{o}}\).
     \note{It is not necessarily \emph{direct light}. The rendering equation also considers
     \emph{indirect light} which is light that has already been reflected.}
+\pause
 
 \smallskip
 \(
@@ -249,29 +286,6 @@ contained in \(\Omega\).
     \end{minted}
 \end{frame}
 
-\subsection{History of Path Tracing}
-\begin{frame}
-    \frametitle{History of Path Tracing part 1}
-    \begin{itemize}
-        \item 1968: Ray casting by Arthur Appel
-        \item 1980: Ray tracing by Turner Whitted
-        \begin{figure}[H]
-            \includegraphics[scale=0.8]{early-raytracing-whitted}
-            \centering
-            \caption{Turner Whitted's original 1980 image}
-        \end{figure}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}
-    \frametitle{History of Path Tracing part 2}
-    \begin{itemize}
-        \item 1986: Monte Carlo ray tracing (path tracing) by James T. Kajiya
-        \item 1996: Bidirectional path tracing by Eric Lafortune
-        \item 1997: Metropolis Light Transport by Eric Veach and Leonidas J. Guibas
-    \end{itemize}
-\end{frame}
-
 \subsection{Current State of Technology}
 \begin{frame}
     \frametitle{Current State of Technology}
@@ -286,9 +300,18 @@ contained in \(\Omega\).
 \begin{frame}
     \frametitle{Current State of Technology}
     \begin{figure}[H]
+        \includegraphics[scale=0.3]{brigade}
+        \centering
+        \caption{Brigade Renderer}
+    \end{figure}
+\end{frame}
+
+\begin{frame}
+    \frametitle{Current State of Technology}
+    \begin{figure}[H]
         \includegraphics[scale=0.3]{webgl-pathtracer}
         \centering
-        \caption{Sfera real time path tracing video game.}
+        \caption{WebGL real time path tracer}
     \end{figure}
 \end{frame}
 
@@ -305,6 +328,7 @@ contained in \(\Omega\).
 \subsection{Implementation Design Overview}
 \begin{frame}
     \frametitle{Design Overview}
+    \pause
     Design goals:
     \begin{enumerate}
         \item \textbf{Speed}\note{In a real time path tracer, rendering speed is of utmost importance as one needs
@@ -627,5 +651,10 @@ contained in \(\Omega\).
         \end{itemize}
         \pause
         \(\Longrightarrow\) Real time path tracing possible within 4 years
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{Fin}
+        Thank you for your attention.
     \end{frame}
     \end{document}
